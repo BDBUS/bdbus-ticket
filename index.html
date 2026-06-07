@@ -62,7 +62,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 12px 20px;
             box-sizing: border-box;
-            display: none; /* 初期 অবস্থায় হাইড থাকবে */
+            display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
@@ -107,7 +107,6 @@
             margin-bottom: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: none; /* 初期 অবস্থায় হাইড থাকবে */
         }
         .clock-time { font-size: 22px; font-weight: 800; color: var(--primary); font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; text-shadow: 0 0 8px rgba(20, 184, 166, 0.4); }
         .clock-date { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.5px; }
@@ -251,7 +250,7 @@
         .foot-policy-links a { color: var(--text-muted); text-decoration: none; }
         .foot-policy-links a:hover { color: #fff; }
 
-        /* 👑 ডেভলপারカード এরিয়া */
+        /* 👑 ডেভলপার কার্ড এরিয়া */
         .dev-credit-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; width: 100%; box-sizing: border-box; text-align: center; }
         .dev-info-box { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; text-align: left; }
         .dev-img { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--primary); object-fit: cover; }
@@ -283,9 +282,9 @@
         <button onclick="closePopup()">OK</button>
     </div>
 
-    <nav class="navbar" id="topNavbar">
+    <nav class="navbar">
         <div class="nav-logo-area">
-            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS" onerror="this.src='https://placehold.co/30x30/111827/14b8a6?text=BD'">
+            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS">
             <span class="nav-title">BDBUS PANEL</span>
         </div>
         <div class="nav-menu">
@@ -305,14 +304,14 @@
 
     <div class="container">
         <div class="brand-section">
-            <img class="main-logo" src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" onerror="this.src='https://placehold.co/110x110/111827/14b8a6?text=BDBUS'">
+            <img class="main-logo" src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo">
             <div class="counter-main-title">BDBUS Online Ticket Counter</div>
             <div class="group-fullname" id="gName">Bangladesh Bussid Unique Society</div>
         </div>
 
         <div id="timeGreeting" class="greeting-text">Welcome to BDBUS Panel</div>
 
-        <div class="live-clock-card" id="mainClockCard">
+        <div class="live-clock-card">
             <div class="clock-time" id="liveClockDisplay">00:00:00 AM</div>
             <div class="clock-date" id="liveClockDate">LOADING DATE...</div>
         </div>
@@ -435,7 +434,7 @@
         <div id="ticketPage" class="ticket-wrapper-outer">
             <div class="ticket-card" id="printableTicketArea">
                 <div class="ticket-top-bar">
-                    <img class="ticket-top-logo" src="images/BDBUS Group Official Logo.png" alt="Logo" onerror="this.src='https://placehold.co/45x45/ffffff/111827?text=BDBUS'">
+                    <img class="ticket-top-logo" src="images/BDBUS Group Official Logo.png" alt="Logo">
                     <div class="ticket-top-title">
                         <h3>BDBUS DIGITAL TICKET</h3>
                         <p>Official Online Counter</p>
@@ -471,7 +470,7 @@
 
                 <div class="ticket-embedded-footer">
                     <div class="tk-embedded-dev-title">
-                        <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai" onerror="this.src='https://placehold.co/28x28/111827/14b8a6?text=M2'">
+                        <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai">
                         <div>
                             <span>Website Created By</span>
                             <h5>M2Vai</h5>
@@ -479,11 +478,11 @@
                     </div>
                     <div class="tk-embedded-btn-row">
                         <div class="tk-embedded-btn m1">
-                            <img src="images/M2Vai Official YouTube Channel Logo.png" alt="YT" onerror="this.src='https://placehold.co/16x16/ffffff/ff0000?text=Y'">
+                            <img src="images/M2Vai Official YouTube Channel Logo.png" alt="YT">
                             <span>M2Vai</span>
                         </div>
                         <div class="tk-embedded-btn m2">
-                            <img src="images/Traveller M2Vai.png" alt="Traveller" onerror="this.src='https://placehold.co/16x16/ffffff/dc2626?text=T'">
+                            <img src="images/Traveller M2Vai.png" alt="Traveller">
                             <span>Traveller</span>
                         </div>
                     </div>
@@ -497,7 +496,7 @@
                 <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="foot-circle-btn yt"><svg viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
                 <button onclick="showUpcoming()" class="foot-circle-btn ins"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></button>
                 <button onclick="showUpcoming()" class="foot-circle-btn x"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
-                <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="foot-circle-btn ds"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.4-5c.87-.64,1.71-1.32,2.51-2a75.43,75.43,0,0,0,72.6,0c.8,0.69,1.64,1.37,2.51,2a68.43,68.43,0,0,1-10.4,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.06-18.83C129.87,50.69,124.06,27.93,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.93,46,53.82,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.17,46,96.06,53,91,65.69,84.69,65.69z"/></svg></a>
+                <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="foot-circle-btn ds"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.4-5c.87-.64,1.71-1.32,2.51-2a75.43,75.43,0,0,0,72.6,0c.8,0.69,1.64,1.37,2.51,2a68.43,68.43,0,0,1-10.4,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.06-18.83C129.87,50.69,124.06,27.93,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.93,46,53.82,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.17,46,96.06,53,91,65.69,84.69,65.69Z"/></svg></a>
                 <a href="mailto:bdbusofficial@gmail.com" class="foot-circle-btn mail"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
             </div>
             
@@ -509,7 +508,7 @@
 
             <div class="dev-credit-card">
                 <div class="dev-info-box">
-                    <img class="dev-img" src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai" onerror="this.src='https://placehold.co/38x38/111827/14b8a6?text=M2'">
+                    <img class="dev-img" src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai">
                     <div class="dev-txt">
                         <p id="devLbl">Website Created By</p>
                         <h4>M2Vai</h4>
@@ -517,14 +516,14 @@
                 </div>
                 <div class="dev-channels-row">
                     <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="yt-card-btn main-ch">
-                        <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai" onerror="this.src='https://placehold.co/24x24/ffffff/ff0000?text=Y'"> 
+                        <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai"> 
                         <div class="btn-text">
                             <span class="ch-name">M2Vai</span>
                             <span class="ch-sub" id="sub1">Subscribe Now</span>
                         </div>
                     </a>
                     <a href="https://youtube.com/@travellerm2vai?si=vv90hoFIT4VYiy6r" target="_blank" class="yt-card-btn sub-ch">
-                        <img src="images/Traveller M2Vai.png" alt="Traveller" onerror="this.src='https://placehold.co/24x24/ffffff/dc2626?text=T'"> 
+                        <img src="images/Traveller M2Vai.png" alt="Traveller"> 
                         <div class="btn-text">
                             <span class="ch-name">Traveller</span>
                             <span class="ch-sub" id="sub2">Subscribe Now</span>
@@ -586,6 +585,7 @@
                 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                 let dateString = now.toLocaleDateString('en-US', options);
                 if (currentLang === 'bn') {
+                    // বাংলায় রূপান্তর (সহজ রাখার জন্য ইংরেজি ক্যারেক্টারই রিডেবল রাখা হলো, চাইলে টেক্সট চেঞ্জ করতে পারেন)
                     document.getElementById('liveClockDate').innerText = "আজকের তারিখ: " + dateString;
                 } else {
                     document.getElementById('liveClockDate').innerText = "LIVE DATE: " + dateString;
@@ -647,7 +647,7 @@
                 lDesc: "টিকিট বুকিং করতে আপনার অ্যাকাউন্ট লগইন করুন", lEmailLabel: "ইমেইল এড্রেস", lPassLabel: "পাসওয়ার্ড", lBtn: "লগইন করুন",
                 sDesc: "BDBUS অফিশিয়াল মেম্বার প্যানেলে রেজিস্ট্রেশন করুন", sNameLabel: "আপনার সম্পূর্ণ নাম", sGameLabel: "গেম ইউজার নেম / ID", sDobLabel: "জন্ম তারিখ", sPhoneLabel: "মোবাইল নম্বর (সচল)", sFbLabel: "ফেসবুক প্রোফাইল লিংক", sEmailLabel: "ইমেইল এড্রেস", sPassLabel: "পাসওয়ার্ড সেট করুন", sConfirmLabel: "পাসওয়ার্ড নিশ্চিত করুন", sBtn: "রেজিস্ট্রেশন নিশ্চিত করুন",
                 welcome: "স্বাগতম, প্লেয়ার!", stAvail: "খালি", stSel: "নির্বাচিত", stSold: "বুকড (লাল)", seatNone: "নির্বাচিত সিট: কোনো সিট সিলেক্ট করা হয়নি", seatSel: "নির্বাচিত সিট: ", cBtn: "টিকিট কনফার্ম ও ডাউনলোড",
-                tlId: "মেম্বার আইডি:", tlName: "যাত্রীর নাম:", tlGame: "গেম আইডি:", tlPhone: "মোবাইল নম্বর:", tlSeat: "আসন নম্বর:", tlRoom: "রুমের নাম:", tlPass: "রুম পাসওয়ার্ড:", tlFrom: "যাত্রা শুরু:", tlTo: "গন্তব্য:", tlDate: "তারিখ:", tlTime: "সময়:",
+                tlId: "মেম্বার আইডি:", tlName: "যাত্রীর নাম:", tlGame: "গেম আইডি:", tlPhone: "মোবাইল নম্বর:", tlSeat: "আसन নম্বর:", tlRoom: "রুমের নাম:", tlPass: "রুম পাসওয়ার্ড:", tlFrom: "যাত্রা শুরু:", tlTo: "গন্তব্য:", tlDate: "তারিখ:", tlTime: "সময়:",
                 tlIssue: "ক্রয়ের সময় ও তারিখ:",
                 devLbl: "ওয়েবসাইট তৈরি করেছেন", lblFrom: "কোথা থেকে (বোর্ডিং পয়েন্ট)", lblTo: "কোথায় (গন্তব্য পয়েন্ট)", lblDate: "যাত্রার তারিখ", lblTime: "যাত্রার সময়",
                 wHead: "গুরুত্বপূর্ণ সতর্কতা", wDesc: "<strong>EN:</strong> Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br><strong>বাংলা:</strong> আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।",
@@ -773,12 +773,7 @@
             document.getElementById('authPage').style.display = 'block';
             document.getElementById('counterPage').style.display = 'none';
             document.getElementById('birthdayWidget').style.display = 'none';
-            
-            // 🔒 লগইন এর আগে টপ বার এবং ঘড়ি হাইড
-            document.getElementById('topNavbar').style.display = 'none';
-            document.getElementById('mainClockCard').style.display = 'none';
             document.getElementById('logoutBtn').style.display = 'none';
-            
             document.getElementById('mHome').classList.add('active');
             document.getElementById('mCounter').classList.remove('active');
         }
@@ -786,12 +781,7 @@
         function showDashboard() {
             document.getElementById('authPage').style.display = 'none';
             document.getElementById('counterPage').style.display = 'block';
-            
-            // 🔓 লগইন এর পরে টপ বার, মেনুবার এবং ঘড়ি আনলক (ডিসপ্লে ব্লক/ফ্লেক্স)
-            document.getElementById('topNavbar').style.display = 'flex';
-            document.getElementById('mainClockCard').style.display = 'block';
             document.getElementById('logoutBtn').style.display = 'block';
-            
             document.getElementById('mHome').classList.remove('active');
             document.getElementById('mCounter').classList.add('active');
             document.getElementById('welcomeText').innerText = (currentLang === 'bn' ? "প্লেয়ার কাউন্টার ড্যাশবোর্ড (" : "Player Counter Dashboard (") + loggedInUser.gameId + ")";
