@@ -182,6 +182,7 @@
             text-align: center;
             margin-bottom: 25px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none; /* Hidden before login */
         }
 
         .greeting {
@@ -347,7 +348,7 @@
             padding: 20px;
             text-align: center;
             margin-bottom: 25px;
-            display: none;
+            display: none; /* Hidden before login */
             position: relative;
             overflow: hidden;
         }
@@ -585,10 +586,11 @@
             height: 42px;
             border-radius: 50%;
             border: 1px solid #00f2fe;
-            background: #0d1b2a;
+            background: url('https://i.ibb.co/6wYgLpY/bdbus-logo.png') no-repeat center/contain;
         }
 
-        .dev-text text-align: left; {
+        .dev-text {
+            text-align: left;
             font-size: 0.75rem;
             color: #64748b;
         }
@@ -657,14 +659,14 @@
             <h1>BDBUS PANEL</h1>
         </div>
         <nav>
-            <button id="nav-home" class="active" onclick="switchTab('home')">Home</button>
-            <button id="nav-counter" onclick="switchTab('counter')" style="display:none;">Counter</button>
-            <button id="nav-profile" onclick="switchTab('profile')" style="display:none;">Profile</button>
-            <button id="nav-logout" onclick="handleLogout()" style="display:none;">Logout</button>
-            <div class="lang-switch">
+            <div class="lang-switch" style="margin-right: 10px;">
                 <button id="lang-en" class="lang-btn active" onclick="setLanguage('en')">EN</button>
                 <button id="lang-bn" class="lang-btn" onclick="setLanguage('bn')">বাংলা</button>
             </div>
+            <button id="nav-home" class="active" onclick="switchTab('home')" style="display:none;">Home</button>
+            <button id="nav-counter" onclick="switchTab('counter')" style="display:none;">Counter</button>
+            <button id="nav-profile" onclick="switchTab('profile')" style="display:none;">Profile</button>
+            <button id="nav-logout" onclick="handleLogout()" style="display:none;">Logout</button>
         </nav>
     </header>
 
@@ -676,7 +678,7 @@
             <p id="text-sub-title">Bangladesh Bussid Unique Society</p>
         </div>
 
-        <div class="clock-card">
+        <div class="clock-card" id="clock-widget">
             <div class="greeting" id="live-greeting">Good Evening! 🌆</div>
             <div class="digital-clock" id="clock-display">00:00:00 PM</div>
             <div class="live-date" id="date-display">loading date...</div>
@@ -694,14 +696,14 @@
                     <label id="lbl-login-email">Email Address</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-envelope"></i>
-                        <input type="email" id="login-email" class="form-control" placeholder="example@mail.com">
+                        <input type="email" id="login-email" class="form-control" placeholder="example@mail.com" value="info.m2vai380@gmail.com">
                     </div>
                 </div>
                 <div class="form-group">
                     <label id="lbl-login-pass">Password</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="login-pass" class="form-control" placeholder="••••••••">
+                        <input type="password" id="login-pass" class="form-control" placeholder="••••••••" value="12345678">
                     </div>
                 </div>
             </div>
@@ -808,7 +810,7 @@
                 <strong id="warn-title"><i class="fa-solid fa-triangle-exclamation"></i> Important Notice / গুরুত্বপূর্ণ সতর্কতা</strong>
                 <span id="warn-desc">
                     <strong>EN:</strong> Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                    <strong>বাংলা:</strong> আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                    <strong>বাংলা:</strong> আপনার internet সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
                 </span>
             </div>
 
@@ -993,10 +995,9 @@
     </footer>
 
     <script>
-        // 64 Districts List Data
-        const bdDistricts = ["Bagerhat","Bandarban","Barguna","Barisal","Bhola","Bogra","Brahmanbaria","Chandpur","Chapai开放Nawabganj","Chattogram","Chuadanga","Comilla","Cox's Bazar","Dhaka","Dinajpur","Faridpur","Feni","Gaibandha","Gazipur","Gopalganj","Habiganj","Jamalpur","Jashore","Jhalokati","Jhenaidah","Joypurhat","Khagrachhari","Khulna","Kishoreganj","Kurigram","Kushtia","Lakshmipur","Lalmonirhat","Madaripur","Magura","Manikganj","Meherpur","Moulvibazar","Munshiganj","Mymensingh","Naogaon","Narail","Narayanganj","Narsingdi","Natore","Netrokona","Nilphamari","Noakhali","Pabna","Panchagarh","Patuakhali","Pirojpur","Rajbari","Rajshahi","Rangamati","Rangpur","Satkhira","Shariatpur","Sherpur","Sirajganj","Sunamganj","Sylhet","Tangail","Thakurgaon"];
+        const bdDistricts = ["Bagerhat","Bandarban","Barguna","Barisal","Bhola","Bogra","Brahmanbaria","Chandpur","Chapai Nawabganj","Chattogram","Chuadanga","Comilla","Cox's Bazar","Dhaka","Dinajpur","Faridpur","Feni","Gaibandha","Gazipur","Gopalganj","Habiganj","Jamalpur","Jashore","Jhalokati","Jhenaidah","Joypurhat","Khagrachhari","Khulna","Kishoreganj","Kurigram","Kushtia","Lakshmipur","Lalmonirhat","Madaripur","Magura","Manikganj","Meherpur","Moulvibazar","Munshiganj","Mymensingh","Naogaon","Narail","Narayanganj","Narsingdi","Natore","Netrokona","Nilphamari","Noakhali","Pabna","Panchagarh","Patuakhali","Pirojpur","Rajbari","Rajshahi","Rangamati","Rangpur","Satkhira","Shariatpur","Sherpur","Sirajganj","Sunamganj","Sylhet","Tangail","Thakurgaon"];
 
-        // Dummy/Initial Database for Demonstration Setup
+        // Setup User Database inside LocalStorage
         if(!localStorage.getItem('bdbus_users')) {
             const initialUsers = [
                 { id: "BDBUS-1001", name: "M2Vai Official", gameid: "M2VAI_BOSS", dob: "1998-06-07", phone: "01710123456", fb: "https://facebook.com/m2vai", email: "info.m2vai380@gmail.com", pass: "12345678" }
@@ -1009,7 +1010,6 @@
         let selectedSeat = null;
         let currentAuthMode = 'login'; 
 
-        // Language Dictionary Asset
         const langData = {
             en: {
                 mainTitle: "BDBUS ONLINE TICKET COUNTER", subTitle: "Bangladesh Bussid Unique Society",
@@ -1019,7 +1019,7 @@
                 tripTitle: "Select Your Trip Details", lblFrom: "From (Boarding Point)", lblTo: "To (Destination Point)", lblDate: "Journey Date", lblTime: "Journey Time", btnFindSeat: "Find Seats / সিট খুঁজুন",
                 seatTitle: "Choose Your Seat", indAvail: "Available", indSel: "Selected", indSold: "Sold", btnConfirm: "Confirm & Download Ticket",
                 textDriver: "Driver Steering", textDoor: "DOOR",
-                profTitle: "Update Your Personal Profile", lblProfId: "Member ID (Fixed)", lblProfEmail: "Email Address (Fixed)", btnSaveProf: "Update Profile / আপডেট করুন"
+                profTitle: "Update Your Personal Profile", lblProfId: "Member ID (Fixed)", lblProfEmail: "Email Address (Fixed)", btnSaveProf: "Update Profile / 업데이트 করুন"
             },
             bn: {
                 mainTitle: "বিডিবাস অনলাইন টিকিট কাউন্টার", subTitle: "বাংলাদেশ বুসিড ইউনিক সোসাইটি",
@@ -1033,18 +1033,13 @@
             }
         };
 
-        // App Initialization
         window.addEventListener('DOMContentLoaded', () => {
             initClock();
             populateDistricts();
             generateSeatLayout();
             
-            // Auto setup today's default date inside journey input
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('trip-date').value = today;
-
-            // Start check loop for active birthday display
-            checkBirthdays();
         });
 
         // 1. Live Digital Clock System
@@ -1060,12 +1055,11 @@
                 const timeStr = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
                 document.getElementById('clock-display').innerText = timeStr;
 
-                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                const months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
+                const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
                 const dateStr = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
                 document.getElementById('date-display').innerText = dateStr;
 
-                // Dynamic Greeting
                 let greet = "Good Evening! 🌆";
                 if(now.getHours() >= 5 && now.getHours() < 12) greet = "Good Morning! 🌅";
                 else if(now.getHours() >= 12 && now.getHours() < 17) greet = "Good Afternoon! ☀️";
@@ -1073,7 +1067,6 @@
             }, 1000);
         }
 
-        // Populate Dropdowns
         function populateDistricts() {
             const fromSelect = document.getElementById('trip-from');
             const toSelect = document.getElementById('trip-to');
@@ -1087,7 +1080,6 @@
             toSelect.value = "Cox's Bazar";
         }
 
-        // Multi Language Pill Handler
         function setLanguage(lang) {
             currentLanguage = lang;
             document.getElementById('lang-en').classList.toggle('active', lang === 'en');
@@ -1107,7 +1099,6 @@
             document.getElementById('lbl-reg-email').innerText = dictionary.lblEmail;
             document.getElementById('lbl-reg-pass').innerText = dictionary.lblCreatePass;
             
-            // Adjust texts inside tabs & headers
             document.getElementById('btn-tab-signup').innerText = dictionary.btnTabSignup;
             document.getElementById('text-trip-title').innerText = dictionary.tripTitle;
             document.getElementById('lbl-from').innerText = dictionary.lblFrom;
@@ -1135,7 +1126,6 @@
             }
         }
 
-        // Toggle Auth layout view seamlessly
         function toggleAuthMode(mode) {
             if(mode === 'signup') {
                 document.getElementById('login-fields').style.display = 'none';
@@ -1154,7 +1144,6 @@
             }
         }
 
-        // Core Authentication Engine
         function submitAuth(type) {
             const database = JSON.parse(localStorage.getItem('bdbus_users'));
 
@@ -1174,7 +1163,6 @@
                     alert(currentLanguage === 'en' ? 'Invalid credentials!' : 'ভুল ইমেইল অথবা পাসওয়ার্ড!');
                 }
             } else {
-                // Sign Up Logic Execution
                 const name = document.getElementById('reg-name').value.trim();
                 const gameid = document.getElementById('reg-gameid').value.trim();
                 const dob = document.getElementById('reg-dob').value;
@@ -1193,7 +1181,6 @@
                     return;
                 }
 
-                // Auto Sequential ID Generation
                 const newIdNumber = 1001 + database.length;
                 const generatedId = `BDBUS-${newIdNumber}`;
 
@@ -1208,16 +1195,21 @@
 
         function executeSuccessfulLogin(user) {
             currentUser = user;
-            document.getElementById('panel-auth').classList.remove('active');
-            document.getElementById('panel-home').classList.add('active');
+            
+            // Hide Auth Box and Show Widgets & Home
+            document.getElementById('panel-auth').style.display = 'none';
+            document.getElementById('clock-widget').style.display = 'block';
+            document.getElementById('panel-home').style.display = 'block';
 
-            // Map navigation buttons visible state
+            // Show Top Navigation items
+            document.getElementById('nav-home').style.display = 'inline-block';
             document.getElementById('nav-counter').style.display = 'inline-block';
             document.getElementById('nav-profile').style.display = 'inline-block';
             document.getElementById('nav-logout').style.display = 'inline-block';
+            
             document.getElementById('nav-home').classList.add('active');
 
-            // Pre-fill profile update options form mapping fields
+            // Setup Profile Fields Data
             document.getElementById('prof-id').value = user.id;
             document.getElementById('prof-email').value = user.email;
             document.getElementById('prof-name').value = user.name;
@@ -1225,39 +1217,44 @@
             document.getElementById('prof-phone').value = user.phone;
             document.getElementById('prof-fb').value = user.fb;
             document.getElementById('prof-pass').value = user.pass;
+
+            // Activate Birthday System inside Secure Zone
+            checkBirthdays();
         }
 
         function handleLogout() {
             currentUser = null;
             selectedSeat = null;
-            switchTab('auth');
+            
+            // Re-hide Widgets & Active Panels
+            document.getElementById('clock-widget').style.display = 'none';
+            document.getElementById('birthday-widget').style.display = 'none';
+            document.getElementById('panel-home').style.display = 'none';
+            document.getElementById('panel-counter').style.display = 'none';
+            document.getElementById('panel-profile').style.display = 'none';
+            
+            // Show Auth Form Back again
+            document.getElementById('panel-auth').style.display = 'block';
+            
+            // Hide Navigation Items completely
+            document.getElementById('nav-home').style.display = 'none';
             document.getElementById('nav-counter').style.display = 'none';
             document.getElementById('nav-profile').style.display = 'none';
             document.getElementById('nav-logout').style.display = 'none';
-            document.getElementById('nav-home').classList.add('active');
-            
-            // Clear inputs safely
-            document.getElementById('login-email').value = '';
-            document.getElementById('login-pass').value = '';
         }
 
-        // View tabs navigator toggler
         function switchTab(tabName) {
-            document.querySelectorAll('.app-card').forEach(card => card.classList.remove('active'));
+            document.getElementById('panel-home').style.display = 'none';
+            document.getElementById('panel-counter').style.display = 'none';
+            document.getElementById('panel-profile').style.display = 'none';
             document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
 
-            if(tabName === 'auth') {
-                document.getElementById('panel-auth').classList.add('active');
-                document.getElementById('nav-home').classList.add('active');
-            } else {
-                document.getElementById(`panel-${tabName}`).classList.add('active');
-                if(document.getElementById(`nav-${tabName}`)) {
-                    document.getElementById(`nav-${tabName}`).classList.add('active');
-                }
+            document.getElementById(`panel-${tabName}`).style.display = 'block';
+            if(document.getElementById(`nav-${tabName}`)) {
+                document.getElementById(`nav-${tabName}`).classList.add('active');
             }
         }
 
-        // Proceed Flow Handler to seat layout window
         function goToCounter() {
             const from = document.getElementById('trip-from').value;
             const to = document.getElementById('trip-to').value;
@@ -1268,7 +1265,6 @@
             switchTab('counter');
         }
 
-        // Profile Update Engine
         function updateUserProfile() {
             let database = JSON.parse(localStorage.getItem('bdbus_users'));
             const name = document.getElementById('prof-name').value.trim();
@@ -1282,7 +1278,6 @@
                 return;
             }
 
-            // Find match and override live reference data state mapping array
             const index = database.findIndex(u => u.id === currentUser.id);
             if(index !== -1) {
                 database[index].name = name;
@@ -1292,42 +1287,35 @@
                 database[index].pass = pass;
 
                 localStorage.setItem('bdbus_users', JSON.stringify(database));
-                currentUser = database[index]; // sync memory object data configuration
+                currentUser = database[index]; 
                 alert(currentLanguage === 'en' ? 'Profile updated successfully!' : 'আপনার প্রোফাইল সফলভাবে আপডেট করা হয়েছে!');
-                checkBirthdays(); // Refresh live widget instantly if needed
+                checkBirthdays(); 
             }
         }
 
-        // Real 1+2 Bus Premium Grid Structural Generator Layout Setup Engine
         function generateSeatLayout() {
             const layoutGrid = document.getElementById('seat-layout-grid');
             layoutGrid.innerHTML = '';
             const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-            
-            // Fixed sample sold items array configuration setup data
             const dummySoldSeats = ['A2', 'C1', 'F3', 'H2'];
 
             rows.forEach(row => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'bus-row';
 
-                // Seat Position 1: Single left window item column structure
                 const s1Name = `${row}1`;
                 const s1 = createSeatElement(s1Name, dummySoldSeats.includes(s1Name));
                 rowDiv.appendChild(s1);
 
-                // Aisle walking space channel division column row layout map marker
                 const aisle = document.createElement('div');
                 aisle.className = 'aisle-space';
                 aisle.innerText = '';
                 rowDiv.appendChild(aisle);
 
-                // Seat Position 2: Middle right seat item column mapping structure
                 const s2Name = `${row}2`;
                 const s2 = createSeatElement(s2Name, dummySoldSeats.includes(s2Name));
                 rowDiv.appendChild(s2);
 
-                // Seat Position 3: Outer window right item column structure
                 const s3Name = `${row}3`;
                 const s3 = createSeatElement(s3Name, dummySoldSeats.includes(s3Name));
                 rowDiv.appendChild(s3);
@@ -1358,17 +1346,14 @@
             return seat;
         }
 
-        // Process final booking data & Trigger HTML2Canvas automated screenshot image storage flow
         function processTicketBooking() {
             if(!selectedSeat) {
                 alert(currentLanguage === 'en' ? 'Please select a seat first!' : 'দয়া করে প্রথমে একটি আসন বা সিট নির্বাচন করুন!');
                 return;
             }
 
-            // Capture Instant Precise Time Stamp Data for Security
             const timeStampNow = document.getElementById('clock-display').innerText + ' | ' + document.getElementById('date-display').innerText.replace('LIVE DATE: ', '');
 
-            // Inject core transactional processing strings data mapping targets elements attributes inside printable node
             document.getElementById('tkt-id').innerText = currentUser.id;
             document.getElementById('tkt-name').innerText = currentUser.name;
             document.getElementById('tkt-gameid').innerText = currentUser.gameid;
@@ -1385,7 +1370,6 @@
                 document.getElementById('tkt-rules-title').innerText = "Rules & Regulations:";
             }
 
-            // Execute Canvas Rendering Engine Process Flow System
             const targetNode = document.getElementById('render-target');
             html2canvas(targetNode, { useCORS: true, scale: 2 }).then(canvas => {
                 const imageUri = canvas.toDataURL('image/png');
@@ -1400,17 +1384,16 @@
             });
         }
 
-        // Automatic Birthday Dynamic Slider Slider Tracker Feature
         function checkBirthdays() {
+            if(!currentUser) return; // Guard clause against unauthorized loads
+            
             const database = JSON.parse(localStorage.getItem('bdbus_users')) || [];
             const today = new Date();
             const currentMonthDay = `${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-            // Filter users array checking match condition
             const bdayUsers = database.filter(u => {
                 if(!u.dob) return false;
-                const userMD = u.dob.substring(5); // slices 'YYYY-MM-DD' to get 'MM-DD'
-                return userMD === currentMonthDay;
+                return u.dob.substring(5) === currentMonthDay;
             });
 
             const widget = document.getElementById('birthday-widget');
@@ -1424,15 +1407,13 @@
 
             widget.style.display = 'block';
             
-            // Build slides items tracking list mapping data
             bdayUsers.forEach((user, idx) => {
-                // Mask mobile numbers safely for secure community visibility standards
                 const phoneMasked = user.phone.substring(0, 5) + "******";
                 const slide = document.createElement('div');
                 slide.className = `bday-slider-item ${idx === 0 ? 'active' : ''}`;
                 slide.innerHTML = `
                     <div style="font-size:1.1rem; font-weight:bold; color:#ff2a6d; margin-bottom:10px;"><i class="fa-solid fa-gift"></i> Happy Birthday To Our Member! <i class="fa-solid fa-cake-candles"></i></div>
-                    <img src="https://graph.facebook.com/v12.0/${user.fb.split('/').pop()}/picture?type=large" class="bday-avatar" onerror="this.src='https://i.ibb.co/6wYgLpY/bdbus-logo.png'">
+                    <img src="https://i.ibb.co/6wYgLpY/bdbus-logo.png" class="bday-avatar">
                     <h3 style="font-size:1.05rem; color:#fff;">${user.name}</h3>
                     <p style="font-size:0.8rem; color:#ff85a7; margin-top:3px;">ID: ${user.id} | Role: Player</p>
                     <p style="font-size:0.75rem; color:#64748b;">Contact: ${phoneMasked}</p>
@@ -1440,7 +1421,6 @@
                 container.appendChild(slide);
             });
 
-            // Start automation slide execution cycle tracking every 3 seconds interval
             if(bdayUsers.length > 1) {
                 let currentSlideIdx = 0;
                 setInterval(() => {
