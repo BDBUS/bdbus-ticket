@@ -4,78 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDBUS Online Ticket Counter</title>
-    <style>
-        /* আপনার আগের সব স্টাইল এখানে রাখুন */
-        .admin-panel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#111; z-index:9999; padding:20px; color:#fff; overflow:auto; }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar">
-        <div class="nav-logo-area">
-            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS">
-            <span class="nav-title">BDBUS PANEL</span>
-        </div>
-        <div class="nav-menu">
-            <span class="nav-item" onclick="showMyProfile()">My Profile</span>
-            <span class="nav-item active" id="mHome" onclick="navClick('home')">Home</span>
-            <button class="nav-logout-btn" id="logoutBtn" onclick="handleLogout()" style="display:block;">Logout</button>
-        </div>
-    </nav>
-
-    <div id="adminPanel" class="admin-panel">
-        <h2>Admin Dashboard</h2>
-        <div id="adminData"></div>
-        <br>
-        <button onclick="resetBookings()" style="background:red; padding:10px; color:white; border:none; cursor:pointer;">Reset All Bookings</button>
-        <button onclick="document.getElementById('adminPanel').style.display='none'" style="padding:10px; cursor:pointer;">Close</button>
-    </div>
-
-    <script>
-        // আগের সব জাভাস্ক্রিপ্ট ফাংশন থাকবে এবং নিচে এগুলো যোগ করুন:
-
-        // ১. প্রোফাইল ফাংশন
-        function showMyProfile() {
-            if(!loggedInUser) { alert("Please login first!"); return; }
-            alert(`Name: ${loggedInUser.name}\nMember ID: ${loggedInUser.memberId}\nPhone: ${loggedInUser.phone}\nGame ID: ${loggedInUser.gameId}`);
-        }
-
-        // ২. অ্যাডমিন প্যানেল (লোগোতে ৩ বার ক্লিক)
-        let tapCount = 0;
-        document.querySelector('.main-logo').addEventListener('click', function() {
-            tapCount++;
-            if(tapCount >= 3) {
-                let pass = prompt("Enter Admin Password:");
-                if(pass === "admin123") {
-                    document.getElementById('adminPanel').style.display = 'block';
-                    loadAdminData();
-                }
-                tapCount = 0;
-            }
-        });
-
-        // ৩. অ্যাডমিন ডেটা লোড করা
-        function loadAdminData() {
-            let users = JSON.parse(localStorage.getItem('busUsers')) || {};
-            let bookings = JSON.parse(localStorage.getItem('busSoldSeats')) || [];
-            let html = `<h3>All Members:</h3><ul>`;
-            Object.values(users).forEach(u => html += `<li>${u.name} - ${u.memberId}</li>`);
-            html += `</ul><h3>Booked Seats: ${bookings.join(', ')}</h3>`;
-            document.getElementById('adminData').innerHTML = html;
-        }
-
-        // ৪. বুকিং রিসেট করা
-        function resetBookings() {
-            if(confirm("Are you sure to clear all bookings?")) {
-                localStorage.removeItem('busSoldSeats');
-                alert("Bookings Cleared!");
-                location.reload();
-            }
-        }
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS Online Ticket Counter</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -1053,9 +981,6 @@
                 });
             }, 500);
         }
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
