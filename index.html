@@ -4,58 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDBUS Online Ticket Counter</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* আপনার আগের স্টাইলসমূহ এখানে বিদ্যমান */
-        :root { --primary: #14b8a6; --bg-dark: #0a0f18; --card-bg: rgba(17, 24, 39, 0.75); --text-main: #f8fafc; --sold: #ef4444; }
-        body { background-color: var(--bg-dark); color: var(--text-main); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
-        .navbar { width: 100%; display: flex; justify-content: space-between; padding: 15px; background: #111; position: sticky; top:0; z-index: 100; }
-        .nav-item { cursor: pointer; color: var(--primary); font-weight: bold; margin-right: 15px; }
         .admin-panel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#111; z-index:9999; padding:20px; color:#fff; overflow:auto; }
-        .btn-premium { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        /* আপনার আগের CSS এখানে যোগ করুন */
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <span>BDBUS PANEL</span>
+        <div class="nav-logo-area">
+            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS" class="main-logo" style="width:30px; cursor:pointer;">
+            <span class="nav-title">BDBUS PANEL</span>
+        </div>
         <div class="nav-menu">
             <span class="nav-item" onclick="showMyProfile()">My Profile</span>
-            <button onclick="handleLogout()">Logout</button>
+            <span class="nav-item active" id="mHome" onclick="navClick('home')">Home</span>
+            <button class="nav-logout-btn" id="logoutBtn" onclick="handleLogout()" style="display:block;">Logout</button>
         </div>
     </nav>
-
-    <div class="container" style="text-align: center; margin-top: 20px;">
-        <img class="main-logo" src="images/BDBUS Group Official Logo.png" style="width:100px; cursor:pointer;">
-        <h1>BDBUS Ticket Counter</h1>
-        </div>
 
     <div id="adminPanel" class="admin-panel">
         <h2>Admin Dashboard</h2>
         <div id="adminData"></div>
         <br>
-        <button onclick="resetBookings()" style="background:red; color:white; padding:10px; border:none; cursor:pointer;">Reset All Bookings</button>
+        <button onclick="resetBookings()" style="background:red; padding:10px; color:white; border:none; cursor:pointer;">Reset All Bookings</button>
         <button onclick="document.getElementById('adminPanel').style.display='none'" style="padding:10px; cursor:pointer;">Close</button>
     </div>
 
-    <script>
-        // আগের সব ডাটা ও ভেরিয়েবল
-        let users = JSON.parse(localStorage.getItem('busUsers')) || {};
-        let loggedInUser = null;
-        
-        // সেশন চেক
-        window.onload = function() {
-            let session = localStorage.getItem('bdbusActiveSession');
-            if(session) loggedInUser = users[session];
-        }
+    <div class="container">
+        </div>
 
-        // ১. প্রোফাইল ফাংশন
+    <script>
+        // ১. আপনার আগের সব ফাংশন এখানে থাকবে
+        // ... (আগের সব কোড এখানে রাখুন)
+
+        // ২. নতুন ফাংশনসমূহ (যা আমি তৈরি করে দিয়েছি)
         function showMyProfile() {
-            if(!loggedInUser) { alert("Please login first!"); return; }
+            if(typeof loggedInUser === 'undefined' || !loggedInUser) { alert("Please login first!"); return; }
             alert(`Name: ${loggedInUser.name}\nMember ID: ${loggedInUser.memberId}\nPhone: ${loggedInUser.phone}\nGame ID: ${loggedInUser.gameId}`);
         }
 
-        // ২. অ্যাডমিন প্যানেল (লোগোতে ৩ বার ক্লিক)
+        // লোগোতে ৩ বার ক্লিক করলে অ্যাডমিন প্যানেল
         let tapCount = 0;
         document.querySelector('.main-logo').addEventListener('click', function() {
             tapCount++;
@@ -69,28 +58,21 @@
             }
         });
 
-        // ৩. অ্যাডমিন ডেটা লোড করা
         function loadAdminData() {
             let users = JSON.parse(localStorage.getItem('busUsers')) || {};
             let bookings = JSON.parse(localStorage.getItem('busSoldSeats')) || [];
-            let html = `<h3>All Members (${Object.keys(users).length}):</h3><ul>`;
-            Object.values(users).forEach(u => html += `<li>${u.name} (${u.memberId})</li>`);
-            html += `</ul><h3>Booked Seats:</h3><p>${bookings.join(', ') || 'No seats booked'}</p>`;
+            let html = `<h3>All Members:</h3><ul>`;
+            Object.values(users).forEach(u => html += `<li>${u.name} - ${u.memberId}</li>`);
+            html += `</ul><h3>Booked Seats: ${bookings.join(', ')}</h3>`;
             document.getElementById('adminData').innerHTML = html;
         }
 
-        // ৪. বুকিং রিসেট করা
         function resetBookings() {
             if(confirm("Are you sure to clear all bookings?")) {
                 localStorage.removeItem('busSoldSeats');
                 alert("Bookings Cleared!");
                 location.reload();
             }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('bdbusActiveSession');
-            location.reload();
         }
     </script>
 </body>
