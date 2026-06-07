@@ -7,17 +7,24 @@
     <style>
         body { background: #0b111e; color: white; font-family: sans-serif; margin: 0; padding: 0; }
         .navbar { display: flex; justify-content: space-between; padding: 15px 20px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); align-items: center; }
-        .menu-bar a { color: white; margin-left: 15px; text-decoration: none; cursor: pointer; }
-        .container { max-width: 420px; margin: 20px auto; padding: 20px; }
-        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
-        button { background: #00bfa5; color: white; cursor: pointer; }
+        .logo-nav { width: 30px; height: 30px; border-radius: 50%; }
+        .menu-bar a { color: white; margin-left: 15px; text-decoration: none; cursor: pointer; font-size: 14px; }
+        .container { max-width: 420px; margin: 20px auto; padding: 20px; text-align: center; }
+        .main-logo { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; border: 2px solid #00bfa5; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #1a2234; color: white; }
+        button { background: #00bfa5; cursor: pointer; font-weight: bold; }
+        .social-icons { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+        .social-icons img { width: 30px; cursor: pointer; }
         #authSection, #homeSection, #adminPanel { display: none; }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="logo">BDBUS PANEL</div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <img src="https://i.imgur.com/your-logo.png" class="logo-nav" alt="Logo">
+        <span>BDBUS PANEL</span>
+    </div>
     <div class="menu-bar" id="menuBar" style="display:none;">
         <a onclick="showSection('homeSection')">Home</a>
         <a onclick="alert('Profile Details...')">My Profile</a>
@@ -27,25 +34,32 @@
 </nav>
 
 <div class="container" id="authSection" style="display:block;">
+    <img src="https://i.imgur.com/your-logo.png" class="main-logo" alt="Logo">
     <h2>Please login to book your bus seat</h2>
     <input type="email" id="email" placeholder="Email Address">
     <input type="password" id="pass" placeholder="Password">
     <button onclick="login()">Login Now</button>
-    <button onclick="alert('Signup logic here')">Sign Up</button>
+    <button style="background:transparent; border:1px solid #00bfa5;">Sign Up</button>
+    
+    <div class="social-icons">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YT">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Insta">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Discord_Color.svg" alt="Discord">
+    </div>
 </div>
 
 <div class="container" id="homeSection">
     <h2>Issue Ticket</h2>
-    <input type="text" id="from" placeholder="From">
-    <input type="text" id="to" placeholder="To">
-    <input type="date" id="jDate">
-    <input type="time" id="jTime">
-    <button onclick="alert('Ticket Issued!')">Issue Ticket</button>
+    <input type="text" placeholder="From">
+    <input type="text" placeholder="To">
+    <input type="date">
+    <input type="time">
+    <button>Issue Ticket</button>
 </div>
 
 <div class="container" id="adminPanel">
     <h2>Admin Panel</h2>
-    <p>Manage bookings here.</p>
 </div>
 
 <script>
@@ -55,7 +69,6 @@
         document.getElementById('adminPanel').style.display = 'none';
         document.getElementById(id).style.display = 'block';
     }
-
     function login() {
         document.getElementById('menuBar').style.display = 'block';
         showSection('homeSection');
