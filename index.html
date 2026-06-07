@@ -33,21 +33,21 @@
             overflow-x: hidden;
         }
 
-        /* 🎯 ওয়াটারমার্ক ব্যাকগ্রাউন্ড লোগো */
+        /* 🎯 ২ নম্বর সমাধান: ওয়াটারমার্ক ব্যাকগ্রাউন্ড লোগো (সাইজ বড় ও স্পষ্ট করা হয়েছে) */
         body::before {
             content: "";
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 380px;
-            height: 380px;
+            width: 95%;
+            max-width: 440px;
+            height: 440px;
             background-image: url('images/BDBUS Group Official Logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.04;
+            opacity: 0.07;
             pointer-events: none;
             z-index: 0;
         }
@@ -64,11 +64,11 @@
         .brand-section {
             text-align: center;
             margin-top: 40px;
-            margin-bottom: -15px;
+            margin-bottom: 15px;
         }
         .main-logo {
-            width: 110px;
-            height: 110px;
+            width: 115px;
+            height: 115px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
@@ -76,29 +76,61 @@
             background: #111827;
         }
 
-        /* সোশ্যাল হাব বাটন */
+        /* ১ নম্বর সমাধান: BDBUS গ্রুপের ফুল নাম হেডার */
+        .group-fullname {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0 2px 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(20, 184, 166, 0.2);
+        }
+
+        /* 🎯 ৩ নম্বর সমাধান: সোশ্যাল হাব বাটন এবং ৩টি নতুন Up Coming বাটন */
         .social-hubs {
-            display: flex;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 12px;
             margin-bottom: 5px;
         }
         .social-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
-            padding: 8px 14px;
+            padding: 9px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             text-decoration: none;
             color: #fff;
             transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
         }
         .social-btn:hover { transform: translateY(-2px); }
-        .social-btn.ds { background: var(--discord); box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3); }
-        .social-btn.fb { background: var(--facebook); box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3); }
+        .social-btn.ds { background: var(--discord); box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2); }
+        .social-btn.fb { background: var(--facebook); box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2); }
+        .social-btn.upcoming {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        /* 🎯 ৪ নম্বর সমাধান: টাইম গ্রীটিংস টেক্সটের মার্জিন ও পজিশন ফিক্স */
+        .greeting-text { 
+            color: var(--primary); 
+            font-size: 16px; 
+            font-weight: 600; 
+            margin-top: 15px;
+            margin-bottom: -10px; 
+            letter-spacing: 0.5px; 
+            text-align: center; 
+            width: 100%; 
+        }
 
         /* ভাষা পরিবর্তনকারী প্যানেল */
         .lang-switch {
@@ -145,7 +177,6 @@
 
         h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 26px; font-weight: 700; text-shadow: 0 0 15px rgba(20, 184, 166, 0.3); }
         h2 { color: var(--text-main); margin-top: 0; font-size: 22px; font-weight: 600; }
-        .greeting-text { color: var(--primary); font-size: 18px; font-weight: 600; margin-bottom: 15px; letter-spacing: 0.5px; text-align: center; width: 100%; }
         p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
 
         .input-group {
@@ -278,7 +309,7 @@
         .ticket-info span.lbl { color: #cbd5e1; }
         .ticket-info span.val { color: var(--primary); font-weight: 600; text-align: right; max-width: 60%; word-break: break-all; }
 
-        /* 👑 মেকার কাস্টম ক্রেডিট এরিয়া */
+        /* 👑 ৫ নম্বর সমাধান: মেকার কাস্টম ক্রেডিট এরিয়া (ইউটিউব ও সাবস্ক্রাইব স্পষ্ট করা হয়েছে) */
         .dev-credit-container {
             background: rgba(15, 23, 42, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -315,21 +346,21 @@
         .yt-btn {
             color: white;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            padding: 8px 10px;
+            padding: 8px 6px;
             border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             transition: transform 0.2s;
             flex: 1;
             justify-content: center;
-            max-width: 140px;
+            max-width: 150px;
         }
         .yt-btn img {
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             object-fit: cover;
         }
@@ -337,18 +368,40 @@
         .yt-btn.main-yt { background: var(--youtube); box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2); }
         .yt-btn.secondary-yt { background: #b91c1c; box-shadow: 0 3px 8px rgba(185, 28, 28, 0.2); }
 
-        .privacy-footer {
-            margin-top: 15px;
-            font-size: 11px;
-            color: #4b5563;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        /* কাস্টম অ্যালার্ট পপ-আপ স্টাইল */
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #111827;
+            border: 2px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            z-index: 9999;
+            text-align: center;
+            width: 280px;
+        }
+        .custom-popup p { color: #fff; font-weight: bold; margin-bottom: 15px; }
+        .custom-popup button {
+            background: var(--primary);
+            border: none;
+            padding: 6px 18px;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+
+    <div id="upcomingPopup" class="custom-popup">
+        <p id="popupMsg">Up Coming...</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
 
     <div class="container">
         <div class="lang-switch">
@@ -359,9 +412,13 @@
         <div class="brand-section">
             <img class="main-logo" src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo">
             
+            <div class="group-fullname" id="gName">Bangladesh Bussid Unique Society</div>
+            
             <div class="social-hubs">
-                <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="social-btn ds">💬 Discord</a>
-                <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-btn fb">👥 FB Group</a>
+                <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="social-btn ds" id="btnDs">💬 Join Discord</a>
+                <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-btn fb" id="btnFb">👥 Join FB Group</a>
+                <button onclick="showUpcoming()" class="social-btn upcoming">📞 WhatsApp</button>
+                <button onclick="showUpcoming()" class="social-btn upcoming">📸 Instagram</button>
             </div>
         </div>
 
@@ -461,10 +518,10 @@
             </div>
             <div class="dev-channels">
                 <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="yt-btn main-yt">
-                    <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai"> M2Vai
+                    <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai"> M2Vai YT (Subscribe)
                 </a>
                 <a href="https://youtube.com/@travellerm2vai?si=vv90hoFIT4VYiy6r" target="_blank" class="yt-btn secondary-yt">
-                    <img src="images/Traveller M2Vai.png" alt="Traveller"> Traveller
+                    <img src="images/Traveller M2Vai.png" alt="Traveller"> Traveller YT (Subscribe)
                 </a>
             </div>
         </div>
@@ -484,6 +541,8 @@
 
         const langData = {
             en: {
+                gName: "Bangladesh Bussid Unique Society",
+                btnDs: "💬 Join Discord", btnFb: "👥 Join FB Group", popupMsg: "Up Coming...",
                 lTitle: "Player Login", lDesc: "Please login to book your bus seat", lEmailLabel: "Email Address", lPassLabel: "Password", lBtn: "Login Now", lToggle: "Create New Account (Sign Up)",
                 sTitle: "Create Account", sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Confirm Password", sBtn: "Confirm Registration", sToggle: "Already have an account? Login",
                 cTitle: "BDBUS COUNTER", welcome: "Welcome, Player!", stAvail: "Available", stSel: "Selected", stSold: "Booked", seatNone: "Selected Seat: None", seatSel: "Selected Seat: ", cBtn: "Confirm Ticket",
@@ -492,6 +551,8 @@
                 alertFill: "Please fill all the fields!", alertPassLen: "Password must be at least 6 characters!", alertNoMatch: "Passwords do not match!", alertExist: "Account already exists with this email!", alertSuccess: "Registration Successful! Your Member ID is ", alertLoginFail: "Invalid email or password! Please try again.", alertSelectSeat: "Please select your preferred seat!"
             },
             bn: {
+                gName: "বাংলাদেশ বুসিড ইউনিক সোসাইটি",
+                btnDs: "💬 ডিসকোর্ডে জয়েন করুন", btnFb: "👥 ফেসবুক গ্রুপে জয়েন করুন", popupMsg: "খুব শীঘ্রই আসছে...",
                 lTitle: "প্লেয়ার লগইন", lDesc: "টিকিট বুকিং করতে আপনার অ্যাকাউন্ট লগইন করুন", lEmailLabel: "ইমেইল এড্রেস", lPassLabel: "পাসওয়ার্ড", lBtn: "লগইন করুন", lToggle: "নতুন অ্যাকাউন্ট তৈরি করুন (Sign Up)",
                 sTitle: "নতুন অ্যাকাউন্ট তৈরি", sDesc: "BDBUS অফিশিয়াল মেম্বার প্যানেলে রেজিস্ট্রেশন করুন", sNameLabel: "আপনার সম্পূর্ণ নাম", sGameLabel: "গেম ইউজার নেম / ID", sPhoneLabel: "মোবাইল নম্বর (সচল)", sFbLabel: "ফেসবুক প্রোফাইল লিংক", sEmailLabel: "ইমেইল এড্রেস", sPassLabel: "পাসওয়ার্ড সেট করুন", sConfirmLabel: "পাসওয়ার্ড নিশ্চিত করুন", sBtn: "রেজিস্ট্রেশন নিশ্চিত করুন", sToggle: "আগের অ্যাকাউন্ট আছে? লগইন করুন",
                 cTitle: "BDBUS কাউন্টার", welcome: "স্বাগতম, প্লেয়ার!", stAvail: "খালি", stSel: "নির্বাচিত", stSold: "বুকড", seatNone: "নির্বাচিত সিট: কোনো সিট সিলেক্ট করা হয়নি", seatSel: "নির্বাচিত সিট: ", cBtn: "কনফার্ম টিকিট",
@@ -500,6 +561,15 @@
                 alertFill: "দয়া করে সবগুলো ঘর পূরণ করুন!", alertPassLen: "পাসওয়ার্ড সর্বনিম্ন ৬ ডিজিটের হতে হবে!", alertNoMatch: "দুটি পাসওয়ার্ড মেলেনি! আবার চেষ্টা করুন।", alertExist: "এই ইমেইল দিয়ে অলরেডি অ্যাকাউন্ট খোলা আছে!", alertSuccess: "অভিনন্দন! আপনার অ্যাকাউন্ট তৈরি সফল হয়েছে। মেম্বার আইডি: ", alertLoginFail: "ভুল ইমেইল অথবা পাসওয়ার্ড! আবার চেষ্টা করুন।", alertSelectSeat: "দয়া করে আপনার পছন্দের সিট সিলেক্ট করুন!"
             }
         };
+
+        /* ৩ নম্বর সমাধান: আপকামিং পপ-আপ লজিক */
+        function showUpcoming() {
+            document.getElementById('popupMsg').innerText = langData[currentLang].popupMsg;
+            document.getElementById('upcomingPopup').style.display = 'block';
+        }
+        function closePopup() {
+            document.getElementById('upcomingPopup').style.display = 'none';
+        }
 
         function changeLanguage(lang) {
             currentLang = lang;
