@@ -6,91 +6,271 @@
     <title>BDBUS Online Ticket Counter</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* আপনার আগের সব স্টাইল অপরিবর্তিত রাখা হয়েছে */
-        :root { --primary: #14b8a6; --primary-hover: #0d9488; --bg-dark: #0a0f18; --card-bg: rgba(17, 24, 39, 0.75); --text-main: #f8fafc; --text-muted: #94a3b8; --sold: #ef4444; }
-        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0; min-height: 100vh; background-image: radial-gradient(circle at top, #111827 0%, #05070c 80%); position: relative; overflow-x: hidden; }
-        /* বাকি সব স্টাইল আপনার কোড থেকে হুবহু বজায় রাখা হয়েছে... */
-        .admin-panel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; padding:20px; color:#fff; overflow:auto; }
+        :root {
+            --primary: #14b8a6;
+            --primary-hover: #0d9488;
+            --bg-dark: #0a0f18;
+            --card-bg: rgba(17, 24, 39, 0.75);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --sold: #ef4444; /* বুকড সিটের জন্য লাল কালার / Color for booked seats */
+            --facebook: #1877F2;
+            --youtube: #FF0000;
+            --instagram: #E1306C;
+            --discord: #5865F2;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top, #111827 0%, #05070c 80%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 🖼️ ব্যাকগ্রাউন্ড ওয়াটারমার্ক লোগো / Background watermark logo styling */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 380px;
+            height: 380px;
+            background-image: url('images/BDBUS Group Official Logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 📍 টপ নেভিগেশন মেনুবার / Top navigation bar settings */
+        .navbar {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 12px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-logo-area { display: flex; align-items: center; gap: 8px; }
+        .nav-logo-area img { width: 30px; height: 30px; border-radius: 50%; }
+        .nav-title { font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
         .nav-menu { display: flex; gap: 15px; align-items: center; }
-        .btn-profile { background: rgba(20, 184, 166, 0.2); color: var(--primary); border: 1px solid var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: none; }
-    </style>
-</head>
-<body>
+        .nav-item { font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+        .nav-item:hover, .nav-item.active { color: var(--primary); }
+        
+        /* 🚪 লগআউট বাটন স্টাইল / Logout button layout */
+        .nav-logout-btn { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: none; transition: all 0.2s; }
+        .nav-logout-btn:hover { background: #ef4444; color: #fff; }
 
-    <nav class="navbar">
-        <div class="nav-logo-area">
-            <span class="nav-title">BDBUS</span>
-        </div>
-        <div class="nav-menu">
-            <button id="profileBtn" class="btn-profile" onclick="showMyProfile()">My Profile</button>
-            <button id="logoutBtn" class="nav-logout-btn" onclick="handleLogout()">Logout</button>
-        </div>
-    </nav>
-
-    <div class="container" id="mainContainer">
-        <div class="brand-section">
-            <img class="main-logo" src="images/BDBUS Group Official Logo.png" onclick="checkSecretTap()">
-        </div>
-        </div>
-
-    <div id="adminPanel" class="admin-panel">
-        <h2>Admin Dashboard</h2>
-        <table id="adminTable" border="1" style="width:100%; border-collapse:collapse; color:#fff;">
-            <tr style="background:#333;"><th>ID</th><th>Name</th><th>Phone</th></tr>
-        </table>
-        <button onclick="document.getElementById('adminPanel').style.display='none'" style="margin-top:20px; padding:10px; width:100%; border:none; background:red; color:white;">Close</button>
-    </div>
-
-    <script>
-        // প্রোফাইল ফাংশন
-        function showMyProfile() {
-            let session = JSON.parse(localStorage.getItem('bdbusActiveSession'));
-            let allUsers = JSON.parse(localStorage.getItem('busUsers')) || {};
-            if (session && allUsers[session.email]) {
-                let u = allUsers[session.email];
-                document.getElementById('mainContainer').innerHTML = `
-                    <div class="glass-card">
-                        <h3>My Profile</h3>
-                        <p><strong>Name:</strong> ${u.name}</p>
-                        <p><strong>ID:</strong> ${u.memberId}</p>
-                        <p><strong>Phone:</strong> ${u.phone}</p>
-                        <button onclick="location.reload()" class="btn-premium">Back to Home</button>
-                    </div>
-                `;
-            }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
-        // অ্যাডমিন প্যানেল লজিক
-        let clickCount = 0;
-        function checkSecretTap() {
-            clickCount++;
-            if (clickCount === 3) {
-                clickCount = 0;
-                let pass = prompt("Enter Admin Password:");
-                if (pass === "admin123") {
-                    let allUsers = JSON.parse(localStorage.getItem('busUsers')) || {};
-                    let table = document.getElementById('adminTable');
-                    table.innerHTML = '<tr style="background:#333;"><th>ID</th><th>Name</th><th>Phone</th></tr>';
-                    Object.values(allUsers).forEach(u => {
-                        table.innerHTML += `<tr><td>${u.memberId}</td><td>${u.name}</td><td>${u.phone}</td></tr>`;
-                    });
-                    document.getElementById('adminPanel').style.display = 'block';
-                }
-            }
-        }
+        .brand-section { text-align: center; margin-top: 25px; margin-bottom: 10px; }
+        .main-logo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(20, 184, 166, 0.3); background: #111827; }
+        .counter-main-title { font-size: 20px; font-weight: 800; color: #fff; margin: 12px 0 2px 0; letter-spacing: 0.5px; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .group-fullname { font-size: 12px; font-weight: 600; color: var(--primary); margin: 0; letter-spacing: 0.3px; }
+        .greeting-text { color: #fff; font-size: 14px; font-weight: 600; margin-top: 10px; margin-bottom: 5px; text-align: center; }
 
-        // লগইন চেক
-        window.onload = function() {
-            if(localStorage.getItem('bdbusActiveSession')) {
-                document.getElementById('profileBtn').style.display = 'block';
-                document.getElementById('logoutBtn').style.display = 'block';
-            }
+        /* 🕒 লাইভ ডিজিটাল ঘড়ি স্টাইল / Live digital clock design */
+        .live-clock-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.5) 100%);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
+        .clock-time { font-size: 22px; font-weight: 800; color: var(--primary); font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; text-shadow: 0 0 8px rgba(20, 184, 166, 0.4); }
+        .clock-date { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.5px; }
 
-        function handleLogout() {
-            localStorage.removeItem('bdbusActiveSession');
-            location.reload();
+        /* 🎂 জন্মদিনের স্লাইডার / Birthday slider styling */
+        .birthday-container {
+            display: none;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(21, 94, 117, 0.6) 0%, rgba(30, 41, 59, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px 15px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
         }
-    </script>
-</body>
-</html>
+        .bday-title { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px; }
+        .bday-slider { position: relative; height: 75px; width: 100%; overflow: hidden; }
+        .bday-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; opacity: 0; transform: translateX(100%); transition: all 0.6s ease-in-out; }
+        .bday-card.active { opacity: 1; transform: translateX(0); }
+        .bday-card.exit { opacity: 0; transform: translateX(-100%); }
+        .bday-avatar-wrapper { position: relative; margin-right: 12px; }
+        .bday-avatar { width: 52px; height: 52px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; background: #27272a; }
+        .bday-balloon { position: absolute; top: -10px; right: -6px; font-size: 12px; animation: floatBalloon 2s ease-in-out infinite alternate; }
+        .bday-details { flex-grow: 1; text-align: left; }
+        .bday-name { font-size: 15px; font-weight: bold; color: #fff; margin: 0; }
+        .bday-role { font-size: 11px; color: rgba(255, 255, 255, 0.8); margin: 1px 0; }
+        .bday-id { font-size: 11px; color: #fff; font-weight: 500; margin: 0; }
+        .bday-phone { font-size: 11px; color: #38bdf8; font-weight: bold; margin: 1px 0 0 0; }
+        .bday-cake-icon { font-size: 28px; margin-left: 5px; }
+        @keyframes floatBalloon { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-4px) rotate(8deg); } }
+
+        /* 👥 গ্লাস কার্ড এবং ইনপুট সেটিংস / Glassmorphism layout and input field rules */
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 25px 22px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); margin-top: 15px; margin-bottom: 20px; }
+        .input-group { text-align: left; margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px; padding-left: 2px; }
+        .input-group input, .input-group select { width: 100%; padding: 11px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: all 0.3s; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(20, 184, 166, 0.2); background: rgba(15, 23, 42, 0.8); }
+        .input-group select option { background: #0f172a; color: #fff; }
+
+        /* 🔘 পাশাপাশি বাটন লেআউট / Authentication horizontal button row grid */
+        .auth-btn-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
+
+        .btn-premium { background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%); color: #000; border: none; width: 100%; padding: 13px; font-weight: 700; font-size: 15px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2); transition: all 0.3s; text-align: center; }
+        .btn-premium:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(20, 184, 166, 0.4); }
+        
+        /* 🔘 সেকেন্ডারি বাটন স্টাইল / Secondary dark action button style */
+        .btn-secondary { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-secondary:hover { border-color: var(--primary); box-shadow: 0 5px 18px rgba(20, 184, 166, 0.15); }
+
+        /* ⚠️ নেটওয়ার্ক ওয়ার্নিং বক্স / Network connection warning text container */
+        .network-warning-box { background: rgba(239, 68, 68, 0.15); border: 1px dashed var(--sold); border-radius: 8px; padding: 10px 12px; margin-bottom: 15px; text-align: left; }
+        .warning-heading { color: var(--sold); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+        .warning-desc { font-size: 12px; color: #fecaca; margin: 0; line-height: 1.4; }
+
+        .status-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; font-size: 12px; }
+        .status-item { display: flex; align-items: center; gap: 6px; }
+        .dot { width: 12px; height: 12px; border-radius: 3px; }
+        .dot.available { background-color: #1e293b; border: 1px solid #475569; }
+        .dot.selected { background-color: var(--primary); }
+        .dot.sold { background-color: var(--sold); }
+
+        /* 🚌 ১+২ প্রিমিয়াম ভিআইপি বাস লেআউট / 1+2 Premium VIP Bus Seat Grid System */
+        .bus-layout {
+            background: rgba(8, 12, 22, 0.9);
+            padding: 20px 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(20, 184, 166, 0.15);
+            display: grid;
+            grid-template-columns: 45px 30px 45px 45px; /* বাম সিট, গলি, ডান সিট ১, ডান সিট ২ / Left, Aisle, Right1, Right2 */
+            gap: 12px 0;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .seat {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: #cbd5e1; border: 1px solid rgba(255,255,255,0.08); height: 38px; width: 45px;
+            border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+            justify-self: center;
+        }
+        
+        .bus-aisle { width: 30px; height: 38px; }
+
+        /* 🚪 দরজা এবং 🎡 স্টিয়ারিং হুইল স্টাইল / Door text and Steering Wheel styling */
+        .bus-door { color: #f87171; font-size: 11px; font-weight: bold; text-transform: uppercase; border: 1px dashed rgba(239, 68, 68, 0.5); border-radius: 4px; display: flex; align-items: center; justify-content: center; width: 45px; height: 38px; background: rgba(239, 68, 68, 0.05); }
+        .seat.driver-steering { background: #1e293b; color: #94a3b8; cursor: default; border-color: transparent; }
+        .seat.driver-steering svg { width: 20px; height: 20px; fill: var(--primary); }
+        
+        .seat:hover:not(.sold):not(.selected):not(.driver-steering) { border-color: var(--primary); color: #fff; }
+        .seat.selected { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; box-shadow: 0 0 10px var(--primary); }
+        .seat.sold { background: var(--sold) !important; color: #fff !important; border-color: var(--sold) !important; font-weight: 700; cursor: not-allowed; box-shadow: inset 0 0 8px rgba(0,0,0,0.4); }
+
+        /* 🎫 ডিজিটাল টিকেট এরিয়া / Digital Ticket Card Styling */
+        .ticket-wrapper-outer { display: none; width: 100%; margin-top: 10px; margin-bottom: 25px; }
+        .ticket-card { background: #ffffff; color: #1e293b; padding: 22px; border-radius: 12px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.6); overflow: hidden; box-sizing: border-box; }
+        .ticket-card::before { content: ""; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); width: 170px; height: 170px; background-image: url('images/BDBUS Group Official Logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.12; pointer-events: none; z-index: 0; }
+        
+        .ticket-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 10px; margin-bottom: 12px; z-index: 1; position: relative; }
+        .ticket-top-logo { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .ticket-top-title { text-align: right; }
+        .ticket-top-title h3 { margin: 0; font-size: 15px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+        .ticket-top-title p { margin: 1px 0 0 0; font-size: 10px; color: #64748b; font-weight: 700; }
+        
+        .ticket-body { z-index: 1; position: relative; }
+        .ticket-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 13px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; }
+        .tk-lbl { font-weight: 600; color: #64748b; }
+        .tk-val { font-weight: 700; color: #0f172a; text-align: right; }
+
+        /* ⏳ টিকেটের ক্রয়ের সময় ডিজাইনের স্টাইল / Digital receipt timestamp row layout */
+        .ticket-row.purchase-timestamp { border-top: 1px solid #cbd5e1; background: #f8fafc; padding: 6px 8px; margin-top: 12px; border-radius: 4px; }
+
+        .ticket-rules-section { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 10px; text-align: left; font-size: 10px; color: #475569; line-height: 1.4; z-index: 1; position: relative; }
+        .rules-title { font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; }
+        .ticket-rules-section ol { margin: 0; padding-left: 14px; }
+
+        /* 🎫 টিকেটের এমবেডেড ফুটার / Embedded inside ticket card styling */
+        .ticket-embedded-footer { margin-top: 20px; padding-top: 12px; border-top: 2px solid #0f172a; background: #0b111e; color: #fff; border-radius: 8px; padding: 12px; text-align: center; box-sizing: border-box; }
+        .tk-embedded-dev-title { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 8px; }
+        .tk-embedded-dev-title img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--primary); }
+        .tk-embedded-dev-title div { text-align: left; }
+        .tk-embedded-dev-title span { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
+        .tk-embedded-dev-title h5 { margin: 0; font-size: 13px; color: #fff; font-weight: 700; }
+        
+        .tk-embedded-btn-row { display: flex; gap: 6px; margin-bottom: 5px; }
+        .tk-embedded-btn { color: white; text-decoration: none; padding: 5px 6px; border-radius: 6px; display: flex; align-items: center; gap: 4px; flex: 1; box-sizing: border-box; font-size: 10px; font-weight: 700; }
+        .tk-embedded-btn img { width: 16px; height: 16px; border-radius: 50%; }
+        .tk-embedded-btn.m1 { background: #FF0000; }
+        .tk-embedded-btn.m2 { background: #dc2626; }
+
+        /* 👥 BDBUS অফিশিয়াল ফুটার এরিয়া / BDBUS Official social footer design code */
+        .bdbus-official-footer { margin-top: auto; width: 100%; padding: 25px 0 15px 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .foot-social-row { display: flex; gap: 14px; justify-content: center; margin-bottom: 14px; }
+        .foot-circle-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s; }
+        .foot-circle-btn:hover { transform: scale(1.1); }
+        .foot-circle-btn.fb { background-color: var(--facebook); }
+        .foot-circle-btn.yt { background-color: var(--youtube); }
+        .foot-circle-btn.ins { background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .foot-circle-btn.x { background-color: #000; border: 1px solid rgba(255,255,255,0.2); }
+        .foot-circle-btn.ds { background-color: var(--discord); }
+        .foot-circle-btn.mail { background-color: #ea4335; }
+        .foot-circle-btn svg { width: 16px; height: 16px; fill: white; }
+        .foot-policy-links { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: center; gap: 8px; }
+        .foot-policy-links a { color: var(--text-muted); text-decoration: none; }
+        .foot-policy-links a:hover { color: #fff; }
+
+        /* 👑 ডেভলপার কার্ড এরিয়া / Developer profile and links container block */
+        .dev-credit-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; width: 100%; box-sizing: border-box; text-align: center; }
+        .dev-info-box { display: flex; align-items: center; gap: 10px; justify-content: center; margin-bottom: 10px; text-align: left; }
+        .dev-img { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--primary); object-fit: cover; }
+        .dev-txt p { margin: 0; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .dev-txt h4 { margin: 1px 0 0 0; font-size: 15px; color: #fff; font-weight: 700; }
+        .dev-channels-row { display: flex; gap: 8px; width: 100%; }
+        .yt-card-btn { color: white; text-decoration: none; padding: 6px 8px; border-radius: 8px; display: flex; align-items: center; gap: 6px; flex: 1; box-sizing: border-box; text-align: left; min-width: 0; transition: transform 0.2s; }
+        .yt-card-btn img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .yt-card-btn .btn-text { display: flex; flex-direction: column; min-width: 0; }
+        .yt-card-btn .ch-name { font-size: 12px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .yt-card-btn .ch-sub { font-size: 9px; color: rgba(255, 255, 255, 0.8); margin-top: 1px; }
+        .yt-card-btn:hover { transform: translateY(-1px); }
+        .yt-card-btn.main-ch { background: linear-gradient(135deg, #FF0000 0%, #b91c1c 100%); }
+        .yt-card-btn.sub-ch { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+
+        .custom-popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111827; border: 2px solid var(--primary); padding: 18px; border-radius: 10px; box-shadow: 0 0 25px rgba(0,0,0,0.8); z-index: 9999; text-align: center; width: 260px; }
+        .custom-popup p { color: #fff; font-weight: bold; margin-bottom: 12px; font-size: 14px; }
+        .custom-popup button { background: var(--primary); border: none; padding: 5px 15px; border-radius: 4px; color: #000; font-weight: bold; cursor: pointer; }
+        .language-top-container { display: flex; justify-content: flex-end; width: 100%; margin-top: 10px; margin-bottom: -5px; padding: 0 20px; box-sizing: border-box; }
+        .lang-pill-box { display: flex; gap: 3px; background: rgba(255,255,255,0.04); padding: 3px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.0
