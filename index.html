@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDBUS Official Ticket Counter</title>
+    <style>
+        :root {
+            --primary: #14b8a6;
+            --primary-hover: #0d9488;
+            --bg-dark: #070a0f;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --sold: #ef4444;
+            --discord: #5865F2;
+            --facebook: #1877F2;
+            --youtube: #FF0000;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top, #1e293b 0%, #070a0f 70%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 🎯 ওয়াটারমার্ক ব্যাকগ্রাউন্ড লোগো */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 380px;
+            height: 380px;
+            background-image: url('https://raw.githubusercontent.com/BDBUS/bdbus-ticket/main/1000000886.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.04; /* আবছা ভাব নিয়ন্ত্রণ করার জন্য */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* অফিশিয়াল লোগো ও ব্র্যান্ডিং */
+        .brand-section {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: -15px;
+        }
+        .main-logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+            background: #111827;
+        }
+
+        /* সোশ্যাল হাব বাটন */
+        .social-hubs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .social-btn:hover { transform: translateY(-2px); }
+        .social-btn.ds { background: var(--discord); box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3); }
+        .social-btn.fb { background: var(--facebook); box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3); }
+
+        /* ভাষা পরিবর্তনকারী প্যানেল */
+        .lang-switch {
+            position: absolute;
+            top: -5px;
+            right: 0;
+            display: flex;
+            gap: 5px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 10;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-btn.active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 25px;
+        }
+
+        h1 { color: var(--primary); margin: 0 0 5px 0; font-size: 26px; font-weight: 700; text-shadow: 0 0 15px rgba(20, 184, 166, 0.3); }
+        h2 { color: var(--text-main); margin-top: 0; font-size: 22px; font-weight: 600; }
+        .greeting-text { color: var(--primary); font-size: 18px; font-weight: 600; margin-bottom: 15px; letter-spacing: 0.5px; text-align: center; width: 100%; }
+        p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            padding-left: 4px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 11px 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(20, 184, 166, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%);
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(20, 184, 166, 0.5);
+            background: linear-gradient(135deg, #2dd4bf 0%, var(--primary) 100%);
+        }
+
+        .toggle-link {
+            color: var(--primary);
+            font-size: 13px;
+            margin-top: 18px;
+            display: block;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .toggle-link:hover { text-decoration: underline; }
+
+        #counterPage { display: none; }
+        
+        .status-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+        .status-item { display: flex; align-items: center; gap: 8px; }
+        .dot { width: 14px; height: 14px; border-radius: 4px; }
+        .dot.available { background-color: #1e293b; border: 1px solid #475569; }
+        .dot.selected { background-color: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .dot.sold { background-color: var(--sold); }
+
+        .bus-layout {
+            background: rgba(10, 15, 26, 0.8);
+            padding: 22px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            display: grid;
+            grid-template-columns: repeat(4, 55px);
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .bus-layout button:nth-child(4n-2) { margin-right: 30px; }
+        
+        .seat {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: #cbd5e1;
+            border: 1px solid rgba(255,255,255,0.1);
+            height: 42px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .seat:hover:not(.sold):not(.selected) { border-color: var(--primary); color: #fff; }
+        .seat.selected {
+            background: linear-gradient(180deg, var(--primary) 0%, #0f766e 100%);
+            color: #000;
+            border-color: var(--primary);
+            font-weight: 700;
+            box-shadow: 0 0 12px rgba(20, 184, 166, 0.4);
+        }
+        .seat.sold {
+            background: linear-gradient(180deg, #3f3f46 0%, #18181b 100%);
+            color: #71717a;
+            border-color: transparent;
+            cursor: not-allowed;
+        }
+
+        #ticketPage {
+            display: none;
+            background: radial-gradient(circle at top, #111827 0%, #030712 100%);
+            border: 2px dashed rgba(20, 184, 166, 0.4);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: left;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+        .ticket-header { text-align: center; color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; letter-spacing: 1px; }
+        .ticket-info { font-size: 15px; margin: 10px 0; color: #e2e8f0; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; }
+        .ticket-info span.lbl { color: #cbd5e1; }
+        .ticket-info span.val { color: var(--primary); font-weight: 600; text-align: right; max-width: 60%; word-break: break-all; }
+
+        /* 👑 মেকার কাস্টম ক্রেডিট এরিয়া (M2Vai VIP Card) */
+        .dev-credit-container {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .dev-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .dev-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+        }
+        .dev-title-text p { margin: 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .dev-title-text h4 { margin: 2px 0 0 0; font-size: 16px; color: #fff; font-weight: 700; }
+        
+        .dev-channels {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .yt-btn {
+            background: var(--youtube);
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2);
+            transition: transform 0.2s;
+            flex: 1;
+            justify-content: center;
+            max-width: 140px;
+        }
+        .yt-btn:hover { transform: scale(1.03); }
+        .yt-btn.secondary-yt { background: #b91c1c; }
+
+        .privacy-footer {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="lang-switch">
+            <button class="lang-btn active" id="btnEn" onclick="changeLanguage('en')">EN</button>
+            <button class="lang-btn" id="btnBn" onclick="changeLanguage('bn')">বাংলা</button>
+        </div>
+
+        <div class="brand-section">
+            <img class="main-logo" src="https://raw.githubusercontent.com/BDBUS/bdbus-ticket/main/1000000886.png" onerror="this.src='https://i.ibb.co/vzYp7v0/bdbus-logo.png'" alt="BDBUS Logo">
+            
+            <div class="social-hubs">
+                <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="social-btn ds">💬 Discord</a>
+                <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-btn fb">👥 FB Group</a>
+            </div>
+        </div>
+
+        <div id="timeGreeting" class="greeting-text">Welcome to BDBUS Panel</div>
+
+        <div id="authPage">
+            <div class="glass-card" id="loginBox">
+                <h2 id="lTitle">Player Login</h2>
+                <p id="lDesc">Please login to book your bus seat</p>
+                
+                <div class="input-group">
+                    <label id="lEmailLabel">Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="example@mail.com">
+                </div>
+                <div class="input-group">
+                    <label id="lPassLabel">Password</label>
+                    <input type="password" id="loginPass" placeholder="••••••••">
+                </div>
+                
+                <button class="btn-premium" id="lBtn" onclick="handleLogin()">Login Now</button>
+                <span class="toggle-link" id="lToggle" onclick="toggleAuth(false)">Create New Account (Sign Up)</span>
+            </div>
+
+            <div class="glass-card" id="signupBox" style="display: none;">
+                <h2 id="sTitle">Create Account</h2>
+                <p id="sDesc">Register to official BDBUS Player Panel</p>
+                
+                <div class="input-group">
+                    <label id="sNameLabel">Full Name</label>
+                    <input type="text" id="signupName" placeholder="e.g. Emon Talukder">
+                </div>
+                <div class="input-group">
+                    <label id="sGameLabel">In-Game Name / ID</label>
+                    <input type="text" id="signupGameId" placeholder="e.g. BDBUS_EMON">
+                </div>
+                <div class="input-group">
+                    <label id="sPhoneLabel">Mobile Number</label>
+                    <input type="tel" id="signupPhone" placeholder="e.g. 017XXXXXXXX">
+                </div>
+                <div class="input-group">
+                    <label id="sFbLabel">Facebook Profile Link</label>
+                    <input type="url" id="signupFb" placeholder="https://facebook.com/username">
+                </div>
+                <div class="input-group">
+                    <label id="sEmailLabel">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="example@mail.com">
+                </div>
+                <div class="input-group">
+                    <label id="sPassLabel">Set Password</label>
+                    <input type="password" id="signupPass" placeholder="Min 6 characters">
+                </div>
+                <div class="input-group">
+                    <label id="sConfirmLabel">Confirm Password</label>
+                    <input type="password" id="signupConfirmPass" placeholder="Type password again">
+                </div>
+                
+                <button class="btn-premium" id="sBtn" onclick="handleSignup()">Confirm Registration</button>
+                <span class="toggle-link" id="sToggle" onclick="toggleAuth(true)">Already have an account? Login</span>
+            </div>
+        </div>
+
+        <div id="counterPage" class="glass-card" style="padding: 25px 15px;">
+            <h1 id="cTitle">BDBUS COUNTER</h1>
+            <p id="welcomeText" style="margin-bottom: 15px; color: #cbd5e1;">Welcome, Player!</p>
+
+            <div class="status-container">
+                <div class="status-item"><div class="dot available"></div> <span id="stAvail">Available</span></div>
+                <div class="status-item"><div class="dot selected"></div> <span id="stSel">Selected</span></div>
+                <div class="status-item"><div class="dot sold"></div> <span id="stSold">Booked</span></div>
+            </div>
+
+            <div class="bus-layout" id="busGrid"></div>
+
+            <p id="selectedSeatText" style="color: var(--primary); font-weight: 600; margin: 15px 0; font-size: 15px;">Selected Seat: None</p>
+            <button class="btn-premium" id="cBtn" onclick="buyTicket()">Confirm Ticket</button>
+        </div>
+
+        <div id="ticketPage">
+            <div class="ticket-header" id="tHeader">BDBUS DIGITAL TICKET</div>
+            <div class="ticket-info"><span class="lbl" id="tlId">Member ID:</span><span class="val" id="tMemberId" style="color: #2dd4bf;"></span></div>
+            <div class="ticket-info"><span class="lbl" id="tlName">Player Name:</span><span class="val" id="tName"></span></div>
+            <div class="ticket-info"><span class="lbl" id="tlGame">Game ID:</span><span class="val" id="tGameId"></span></div>
+            <div class="ticket-info"><span class="lbl" id="tlPhone">Mobile No:</span><span class="val" id="tPhone"></span></div>
+            <div class="ticket-info"><span class="lbl" id="tlSeat">Seat Number:</span><span class="val" id="tSeat"></span></div>
+            <div class="ticket-info"><span class="lbl" id="tlRoom">Room Name:</span><span class="val">BDBUS_MEGA_TRIP</span></div>
+            <div class="ticket-info"><span class="lbl" id="tlPass">Room Password:</span><span class="val" style="color: var(--sold);">BDBUS77</span></div>
+            <p id="tFooter" style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px;">* Take a screenshot of this ticket to join the room *</p>
+        </div>
+
+        <div class="dev-credit-container">
+            <div class="dev-header-info">
+                <img class="dev-avatar" src="https://raw.githubusercontent.com/BDBUS/bdbus-ticket/main/1000000412.png" onerror="this.src='https://i.ibb.co/k2VwBf8/m2vai-logo.png'" alt="M2Vai Logo">
+                <div class="dev-title-text">
+                    <p id="devLbl">Website Created By</p>
+                    <h4>M2Vai</h4>
+                </div>
+            </div>
+            <div class="dev-channels">
+                <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="yt-btn">📺 M2Vai</a>
+                <a href="https://youtube.com/@travellerm2vai?si=vv90hoFIT4VYiy6r" target="_blank" class="yt-btn secondary-yt">🧭 Traveller</a>
+            </div>
+        </div>
+
+        <div class="privacy-footer">
+            <span>🔒</span>
+            <span id="privacyText">Maximum privacy of all members' personal data will be maintained.</span>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+        let users = JSON.parse(localStorage.getItem('busUsers')) || {};
+        let loggedInUser = null;
+        let currentSelectedSeat = null;
+        let soldSeats = ['A3', 'B2', 'C1', 'D4', 'F2']; 
+
+        const langData = {
+            en: {
+                lTitle: "Player Login", lDesc: "Please login to book your bus seat", lEmailLabel: "Email Address", lPassLabel: "Password", lBtn: "Login Now", lToggle: "Create New Account (Sign Up)",
+                sTitle: "Create Account", sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Confirm Password", sBtn: "Confirm Registration", sToggle: "Already have an account? Login",
+                cTitle: "BDBUS COUNTER", welcome: "Welcome, Player!", s
