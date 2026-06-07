@@ -7,9 +7,14 @@
     <style>
         body { background: #0b111e; color: white; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
         /* ওয়াটারমার্ক লোগো */
-        body::before { content: ""; position: fixed; top: 20%; left: 10%; width: 80%; height: 60%; background-image: url('images/BDBUS Group Official Logo.png'); background-repeat: no-repeat; background-position: center; opacity: 0.1; z-index: -1; }
+        body::before { 
+            content: ""; position: fixed; top: 20%; left: 10%; width: 80%; height: 60%; 
+            background-image: url('images/BDBUS Group Official Logo.png'); 
+            background-repeat: no-repeat; background-position: center; background-size: contain;
+            opacity: 0.1; z-index: -1; 
+        }
         .lang-switch { text-align: right; margin-bottom: 10px; }
-        .top-logo { width: 50px; border-radius: 50%; margin: 10px 0; }
+        .top-logo { width: 60px; height: 60px; border-radius: 50%; margin: 10px 0; border: 2px solid #00bfa5; }
         .clock-box { background: #1a2234; padding: 15px; border-radius: 10px; border: 1px solid #333; margin: 20px 0; }
         .login-box { background: #1a2234; padding: 20px; border-radius: 15px; border: 1px solid #00bfa5; max-width: 400px; margin: auto; }
         input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #0b111e; color: white; }
@@ -30,7 +35,7 @@
 
 <div class="clock-box">
     <p>Good Night! 🌌</p>
-    <h2 id="clock">11:34:52 PM</h2>
+    <h2 id="clock">11:39:34 PM</h2>
     <p>LIVE DATE: SUN, JUN 7, 2026</p>
 </div>
 
