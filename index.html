@@ -139,11 +139,7 @@
         .bday-cake-icon { font-size: 28px; margin-left: 5px; }
         @keyframes floatBalloon { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-4px) rotate(8deg); } }
 
-        /* 🔐 লগইন ও সাইন আপ ট্যাব */
-        .auth-tab-container { display: flex; background: rgba(0,0,0,0.4); border-radius: 10px; padding: 4px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .auth-tab { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 10px; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-        .auth-tab.active { background: var(--primary); color: #000; box-shadow: 0 2px 10px rgba(20, 184, 166, 0.3); }
-
+        /* 👥 গ্লাস কার্ড এবং ইনপুট সেটিংস */
         .glass-card { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 25px 22px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); margin-top: 15px; margin-bottom: 20px; }
         .input-group { text-align: left; margin-bottom: 12px; }
         .input-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px; padding-left: 2px; }
@@ -151,8 +147,15 @@
         .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(20, 184, 166, 0.2); background: rgba(15, 23, 42, 0.8); }
         .input-group select option { background: #0f172a; color: #fff; }
 
-        .btn-premium { background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%); color: #000; border: none; width: 100%; padding: 13px; font-weight: 700; font-size: 15px; border-radius: 8px; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2); transition: all 0.3s; }
+        /* 🔘 পাশাপাশি বাটন লেআউট গ্রিড */
+        .auth-btn-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
+
+        .btn-premium { background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%); color: #000; border: none; width: 100%; padding: 13px; font-weight: 700; font-size: 15px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2); transition: all 0.3s; text-align: center; }
         .btn-premium:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(20, 184, 166, 0.4); }
+        
+        /* 🔘 সেকেন্ডারি সাইন আপ বাটন স্টাইল */
+        .btn-secondary { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-secondary:hover { border-color: var(--primary); box-shadow: 0 5px 18px rgba(20, 184, 166, 0.15); }
 
         /* ⚠️ নেটওয়ার্ক ওয়ার্নিং باکس */
         .network-warning-box { background: rgba(239, 68, 68, 0.15); border: 1px dashed var(--sold); border-radius: 8px; padding: 10px 12px; margin-bottom: 15px; text-align: left; }
@@ -325,11 +328,6 @@
         </div>
 
         <div id="authPage">
-            <div class="auth-tab-container">
-                <button class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab(true)">Login</button>
-                <button class="auth-tab" id="tabSignupBtn" onclick="switchAuthTab(false)">Sign Up</button>
-            </div>
-
             <div class="glass-card" id="loginBox">
                 <p id="lDesc" style="text-align: center; margin-top:0;">Please login to book your bus seat</p>
                 <div class="input-group">
@@ -340,7 +338,11 @@
                     <label id="lPassLabel">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••">
                 </div>
-                <button class="btn-premium" id="lBtn" onclick="handleLogin()">Login Now</button>
+                
+                <div class="auth-btn-row">
+                    <button class="btn-premium" id="lBtn" onclick="handleLogin()">Login Now</button>
+                    <button class="btn-premium btn-secondary" id="switchToSignupBtn" onclick="toggleAuthView(false)">Sign Up</button>
+                </div>
             </div>
 
             <div class="glass-card" id="signupBox" style="display: none;">
@@ -377,7 +379,11 @@
                     <label id="sConfirmLabel">Confirm Password</label>
                     <input type="password" id="signupConfirmPass" placeholder="Type password again">
                 </div>
-                <button class="btn-premium" id="sBtn" onclick="handleSignup()">Confirm Registration</button>
+                
+                <div class="auth-btn-row">
+                    <button class="btn-premium" id="sBtn" onclick="handleSignup()">Confirm Registration</button>
+                    <button class="btn-premium btn-secondary" id="switchToLoginBtn" onclick="toggleAuthView(true)">Login</button>
+                </div>
             </div>
         </div>
 
@@ -585,7 +591,6 @@
                 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
                 let dateString = now.toLocaleDateString('en-US', options);
                 if (currentLang === 'bn') {
-                    // বাংলায় রূপান্তর (সহজ রাখার জন্য ইংরেজি ক্যারেক্টারই রিডেবল রাখা হলো, চাইলে টেক্সট চেঞ্জ করতে পারেন)
                     document.getElementById('liveClockDate').innerText = "আজকের তারিখ: " + dateString;
                 } else {
                     document.getElementById('liveClockDate').innerText = "LIVE DATE: " + dateString;
@@ -632,8 +637,8 @@
         const langData = {
             en: {
                 gName: "Bangladesh Bussid Unique Society", popupMsg: "Up Coming...", sub1: "Subscribe Now", sub2: "Subscribe Now", bdayTitleText: "Today's Birthday",
-                lDesc: "Please login to book your bus seat", lEmailLabel: "Email Address", lPassLabel: "Password", lBtn: "Login Now",
-                sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sDobLabel: "Date of Birth", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Confirm Password", sBtn: "Confirm Registration",
+                lDesc: "Please login to book your bus seat", lEmailLabel: "Email Address", lPassLabel: "Password", lBtn: "Login Now", switchToSignupBtn: "Sign Up",
+                sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sDobLabel: "Date of Birth", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Confirm Password", sBtn: "Confirm Registration", switchToLoginBtn: "Login",
                 welcome: "Welcome, Player!", stAvail: "Available", stSel: "Selected", stSold: "Booked", seatNone: "Selected Seat: None", seatSel: "Selected Seat: ", cBtn: "Confirm Ticket & Download",
                 tlId: "Member ID:", tlName: "Player Name:", tlGame: "Game ID:", tlPhone: "Mobile No:", tlSeat: "Seat Number:", tlRoom: "Room Name:", tlPass: "Room Password:", tlFrom: "From:", tlTo: "To:", tlDate: "Date:", tlTime: "Time:",
                 tlIssue: "Issue Time & Date:",
@@ -644,8 +649,8 @@
             },
             bn: {
                 gName: "বাংলাদেশ বুসিড ইউনিক সোসাইটি", popupMsg: "খুব শীঘ্রই আসছে...", sub1: "সাবস্ক্রাইব করুন", sub2: "সাবস্ক্রাইব করুন", bdayTitleText: "আজকের জন্মদিন 🎂",
-                lDesc: "টিকিট বুকিং করতে আপনার অ্যাকাউন্ট লগইন করুন", lEmailLabel: "ইমেইল এড্রেস", lPassLabel: "পাসওয়ার্ড", lBtn: "লগইন করুন",
-                sDesc: "BDBUS অফিশিয়াল মেম্বার প্যানেলে রেজিস্ট্রেশন করুন", sNameLabel: "আপনার সম্পূর্ণ নাম", sGameLabel: "গেম ইউজার নেম / ID", sDobLabel: "জন্ম তারিখ", sPhoneLabel: "মোবাইল নম্বর (সচল)", sFbLabel: "ফেসবুক প্রোফাইল লিংক", sEmailLabel: "ইমেইল এড্রেস", sPassLabel: "পাসওয়ার্ড সেট করুন", sConfirmLabel: "পাসওয়ার্ড নিশ্চিত করুন", sBtn: "রেজিস্ট্রেশন নিশ্চিত করুন",
+                lDesc: "টিকিট বুকিং করতে আপনার অ্যাকাউন্ট লগইন করুন", lEmailLabel: "ইমেইল এড্রেস", lPassLabel: "পাসওয়ার্ড", lBtn: "লগইন করুন", switchToSignupBtn: "সাইন আপ",
+                sDesc: "BDBUS অফিশিয়াল মেম্বার প্যানেলে রেজিস্ট্রেশন করুন", sNameLabel: "আপনার সম্পূর্ণ নাম", sGameLabel: "গেম ইউজার নেম / ID", sDobLabel: "জন্ম তারিখ", sPhoneLabel: "মোবাইল নম্বর (সচল)", sFbLabel: "ফেসবুক প্রোফাইল লিংক", sEmailLabel: "ইমেইল এড্রেস", sPassLabel: "পাসওয়ার্ড সেট করুন", sConfirmLabel: "পাসওয়ার্ড নিশ্চিত করুন", sBtn: "রেজিস্ট্রেশন নিশ্চিত করুন", switchToLoginBtn: "লগইন",
                 welcome: "স্বাগতম, প্লেয়ার!", stAvail: "খালি", stSel: "নির্বাচিত", stSold: "বুকড (লাল)", seatNone: "নির্বাচিত সিট: কোনো সিট সিলেক্ট করা হয়নি", seatSel: "নির্বাচিত সিট: ", cBtn: "টিকিট কনফার্ম ও ডাউনলোড",
                 tlId: "মেম্বার আইডি:", tlName: "যাত্রীর নাম:", tlGame: "গেম আইডি:", tlPhone: "মোবাইল নম্বর:", tlSeat: "আसन নম্বর:", tlRoom: "রুমের নাম:", tlPass: "রুম পাসওয়ার্ড:", tlFrom: "যাত্রা শুরু:", tlTo: "গন্তব্য:", tlDate: "তারিখ:", tlTime: "সময়:",
                 tlIssue: "ক্রয়ের সময় ও তারিখ:",
@@ -719,11 +724,10 @@
             document.getElementById('timeGreeting').innerText = greet;
         }
 
-        function switchAuthTab(isLogin) {
-            document.getElementById('tabLoginBtn').classList.toggle('active', isLogin);
-            document.getElementById('tabSignupBtn').classList.toggle('active', !isLogin);
-            document.getElementById('loginBox').style.display = isLogin ? 'block' : 'none';
-            document.getElementById('signupBox').style.display = isLogin ? 'none' : 'block';
+        /* 🔄 লগইন এবং সাইন আপ ভিউ টগল করার আপডেটেড ফাংশন */
+        function toggleAuthView(showLogin) {
+            document.getElementById('loginBox').style.display = showLogin ? 'block' : 'none';
+            document.getElementById('signupBox').style.display = showLogin ? 'none' : 'block';
         }
 
         function handleSignup() {
@@ -747,7 +751,7 @@
             localStorage.setItem('busUsers', JSON.stringify(users));
             
             alert(d.alertSuccess + generatedId);
-            switchAuthTab(true);
+            toggleAuthView(true);
         }
 
         function handleLogin() {
@@ -776,6 +780,7 @@
             document.getElementById('logoutBtn').style.display = 'none';
             document.getElementById('mHome').classList.add('active');
             document.getElementById('mCounter').classList.remove('active');
+            toggleAuthView(true); // ডিফল্টভাবে লগইন উইন্ডো শো করবে
         }
 
         function showDashboard() {
@@ -934,7 +939,7 @@
             document.getElementById('tDate').innerText = dateVal;
             document.getElementById('tTime').innerText = timeVal;
 
-            // 🕒 ডাউনলোডের ঠিক এই মুহূর্তের লাইভ সময় ও তারিখ টিকেটে সেট করা
+            // 🕒 ডাউনলোডের মুহূর্তের লাইভ সময় ও তারিখ টিকেটে সেট করা
             const currentLiveTimestamp = getLiveTimestampString();
             document.getElementById('tIssueTimestamp').innerText = currentLiveTimestamp;
 
