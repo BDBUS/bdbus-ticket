@@ -3,76 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS PANEL</title>
+    <title>BDBUS ONLINE TICKET COUNTER</title>
     <style>
-        body { background: #0b111e; color: white; font-family: sans-serif; margin: 0; padding: 0; }
-        .navbar { display: flex; justify-content: space-between; padding: 15px 20px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); align-items: center; }
-        .logo-nav { width: 30px; height: 30px; border-radius: 50%; }
-        .menu-bar a { color: white; margin-left: 15px; text-decoration: none; cursor: pointer; font-size: 14px; }
-        .container { max-width: 420px; margin: 20px auto; padding: 20px; text-align: center; }
-        .main-logo { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; border: 2px solid #00bfa5; }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #1a2234; color: white; }
-        button { background: #00bfa5; cursor: pointer; font-weight: bold; }
-        .social-icons { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
-        .social-icons img { width: 30px; cursor: pointer; }
-        #authSection, #homeSection, #adminPanel { display: none; }
+        body { background: #0b111e; color: white; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .lang-switch { text-align: right; margin-bottom: 10px; }
+        .main-logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #00bfa5; margin: 10px 0; }
+        .clock-box { background: #1a2234; padding: 15px; border-radius: 10px; border: 1px solid #333; margin: 20px 0; }
+        .login-box { background: #1a2234; padding: 20px; border-radius: 15px; border: 1px solid #00bfa5; max-width: 400px; margin: auto; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #0b111e; color: white; }
+        button { width: 95%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-login { background: #00bfa5; color: #0b111e; }
+        .btn-signup { background: transparent; border: 1px solid #00bfa5; color: white; }
+        .social-icons { margin: 20px 0; display: flex; justify-content: center; gap: 15px; }
+        .footer-card { background: #1a2234; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #333; }
+        .subscribe-btn { background: #e53935; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div style="display:flex; align-items:center; gap:10px;">
-        <img src="https://i.imgur.com/your-logo.png" class="logo-nav" alt="Logo">
-        <span>BDBUS PANEL</span>
-    </div>
-    <div class="menu-bar" id="menuBar" style="display:none;">
-        <a onclick="showSection('homeSection')">Home</a>
-        <a onclick="alert('Profile Details...')">My Profile</a>
-        <a onclick="showSection('adminPanel')">Admin Panel</a>
-        <a onclick="location.reload()">Logout</a>
-    </div>
-</nav>
+<div class="lang-switch"><button style="width:auto; padding:5px 10px; background:#00bfa5;">EN</button> বাংলা</div>
 
-<div class="container" id="authSection" style="display:block;">
-    <img src="https://i.imgur.com/your-logo.png" class="main-logo" alt="Logo">
-    <h2>Please login to book your bus seat</h2>
-    <input type="email" id="email" placeholder="Email Address">
-    <input type="password" id="pass" placeholder="Password">
-    <button onclick="login()">Login Now</button>
-    <button style="background:transparent; border:1px solid #00bfa5;">Sign Up</button>
-    
-    <div class="social-icons">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="FB">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YT">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Insta">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Discord_Color.svg" alt="Discord">
-    </div>
+<img src="https://i.imgur.com/your-logo.png" class="main-logo" alt="Logo">
+<h2>BDBUS ONLINE TICKET COUNTER</h2>
+<p style="color:#00bfa5;">Bangladesh Bussid Unique Society</p>
+
+<div class="clock-box">
+    <p>Good Night! 🌌</p>
+    <h2 id="clock">11:22:58 PM</h2>
+    <p>LIVE DATE: SUN, JUN 7, 2026</p>
 </div>
 
-<div class="container" id="homeSection">
-    <h2>Issue Ticket</h2>
-    <input type="text" placeholder="From">
-    <input type="text" placeholder="To">
-    <input type="date">
-    <input type="time">
-    <button>Issue Ticket</button>
+<div class="login-box">
+    <h3>Please login to book your bus seat</h3>
+    <input type="email" placeholder="example@mail.com">
+    <input type="password" placeholder="********">
+    <button class="btn-login">Login Now</button>
+    <button class="btn-signup">Sign Up</button>
 </div>
 
-<div class="container" id="adminPanel">
-    <h2>Admin Panel</h2>
+<div class="social-icons">
+    <span>FB</span> <span>YT</span> <span>IG</span> <span>X</span> <span>DC</span> <span>✉️</span>
+</div>
+
+<p>Privacy Policy | Terms & Conditions | Refund Policy</p>
+
+<div class="footer-card">
+    <p>WEBSITE CREATED BY</p>
+    <h3>M2Vai</h3>
+    <div style="display:flex; gap:10px; justify-content:center;">
+        <button class="subscribe-btn">M2Vai Subscribe Now</button>
+        <button class="subscribe-btn">Traveller Subscribe Now</button>
+    </div>
 </div>
 
 <script>
-    function showSection(id) {
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('homeSection').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById(id).style.display = 'block';
+    // ঘড়ির জন্য সিম্পল স্ক্রিপ্ট
+    function updateClock() {
+        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
     }
-    function login() {
-        document.getElementById('menuBar').style.display = 'block';
-        showSection('homeSection');
-    }
+    setInterval(updateClock, 1000);
 </script>
 
 </body>
