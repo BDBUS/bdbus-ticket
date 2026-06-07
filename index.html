@@ -33,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* 🎯 ওয়াটারমার্ক ব্যাকগ্রাউন্ড লোগো ফিক্সড */
+        /* 🎯 ওয়াটারমার্ক ব্যাকগ্রাউন্ড লোগো */
         body::before {
             content: "";
             position: fixed;
@@ -43,11 +43,11 @@
             width: 90%;
             max-width: 380px;
             height: 380px;
-            background-image: url('https://lh3.googleusercontent.com/d/1714b53a-44d7-4658-ae3c-9abcc1683f66');
+            background-image: url('images/BDBUS Group Official Logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.05;
+            opacity: 0.04;
             pointer-events: none;
             z-index: 0;
         }
@@ -278,7 +278,7 @@
         .ticket-info span.lbl { color: #cbd5e1; }
         .ticket-info span.val { color: var(--primary); font-weight: 600; text-align: right; max-width: 60%; word-break: break-all; }
 
-        /* 👑 মেকার কাস্টম ক্রেডিট এরিয়া ফিক্সড */
+        /* 👑 মেকার কাস্টম ক্রেডিট এরিয়া */
         .dev-credit-container {
             background: rgba(15, 23, 42, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -313,24 +313,29 @@
             justify-content: center;
         }
         .yt-btn {
-            background: var(--youtube);
             color: white;
             text-decoration: none;
             font-size: 11px;
             font-weight: bold;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 5px;
-            box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2);
             transition: transform 0.2s;
             flex: 1;
             justify-content: center;
             max-width: 140px;
         }
+        .yt-btn img {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         .yt-btn:hover { transform: scale(1.03); }
-        .yt-btn.secondary-yt { background: #b91c1c; }
+        .yt-btn.main-yt { background: var(--youtube); box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2); }
+        .yt-btn.secondary-yt { background: #b91c1c; box-shadow: 0 3px 8px rgba(185, 28, 28, 0.2); }
 
         .privacy-footer {
             margin-top: 15px;
@@ -352,7 +357,7 @@
         </div>
 
         <div class="brand-section">
-            <img class="main-logo" src="https://lh3.googleusercontent.com/d/1714b53a-44d7-4658-ae3c-9abcc1683f66" alt="BDBUS Logo">
+            <img class="main-logo" src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo">
             
             <div class="social-hubs">
                 <a href="https://discord.gg/C7jnVua2Tp" target="_blank" class="social-btn ds">💬 Discord</a>
@@ -448,15 +453,19 @@
 
         <div class="dev-credit-container">
             <div class="dev-header-info">
-                <img class="dev-avatar" src="https://lh3.googleusercontent.com/d/1e5654bc0-ad92-4f6c-b80a-24a9c3b0f17f" alt="M2Vai Logo">
+                <img class="dev-avatar" src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai Logo">
                 <div class="dev-title-text">
                     <p id="devLbl">Website Created By</p>
                     <h4>M2Vai</h4>
                 </div>
             </div>
             <div class="dev-channels">
-                <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="yt-btn">📺 M2Vai</a>
-                <a href="https://youtube.com/@travellerm2vai?si=vv90hoFIT4VYiy6r" target="_blank" class="yt-btn secondary-yt">🧭 Traveller</a>
+                <a href="https://youtube.com/@m2vai?si=g6qPsRiIdnSKTeWy" target="_blank" class="yt-btn main-yt">
+                    <img src="images/M2Vai Official YouTube Channel Logo.png" alt="M2Vai"> M2Vai
+                </a>
+                <a href="https://youtube.com/@travellerm2vai?si=vv90hoFIT4VYiy6r" target="_blank" class="yt-btn secondary-yt">
+                    <img src="images/Traveller M2Vai.png" alt="Traveller"> Traveller
+                </a>
             </div>
         </div>
 
@@ -476,5 +485,4 @@
         const langData = {
             en: {
                 lTitle: "Player Login", lDesc: "Please login to book your bus seat", lEmailLabel: "Email Address", lPassLabel: "Password", lBtn: "Login Now", lToggle: "Create New Account (Sign Up)",
-                sTitle: "Create Account", sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Confirm Password", sBtn: "Confirm Registration", sToggle: "Already have an account? Login",
-                cTitle: "BDBUS COUNTER", welcome: "Welcome, Player!", stAvail: "Available", stSel: "Selected", stSold: "Booked", seatNone: "Selected Seat: None", seatSel: "Selected Seat: ", cBtn: "Co
+                sTitle: "Create Account", sDesc: "Register to official BDBUS Player Panel", sNameLabel: "Full Name", sGameLabel: "In-Game Name / ID", sPhoneLabel: "Mobile Number", sFbLabel: "Facebook Profile Link", sEmailLabel: "Email Address", sPassLabel: "Set Password", sConfirmLabel: "Conf
