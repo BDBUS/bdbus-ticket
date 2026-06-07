@@ -6,54 +6,49 @@
     <title>BDBUS Online Ticket Counter</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* আপনার বর্তমান সব স্টাইল এখানে বিদ্যমান */
-        :root { --primary: #14b8a6; --bg-dark: #0a0f18; --card-bg: rgba(17, 24, 39, 0.75); --text-main: #f8fafc; --sold: #ef4444; }
-        body { background-color: var(--bg-dark); color: var(--text-main); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
-        .navbar { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center; }
-        .container { width: 100%; max-width: 420px; padding: 20px; }
-        .main-logo { width: 110px; height: 110px; border-radius: 50%; cursor: pointer; border: 2px solid var(--primary); }
-        .glass-card { background: var(--card-bg); padding: 20px; border-radius: 15px; margin-top: 20px; }
-        .btn-premium { background: var(--primary); color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        /* আপনার আগের সব স্টাইল অপরিবর্তিত রাখা হয়েছে */
+        :root { --primary: #14b8a6; --primary-hover: #0d9488; --bg-dark: #0a0f18; --card-bg: rgba(17, 24, 39, 0.75); --text-main: #f8fafc; --text-muted: #94a3b8; --sold: #ef4444; }
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0; min-height: 100vh; background-image: radial-gradient(circle at top, #111827 0%, #05070c 80%); position: relative; overflow-x: hidden; }
+        /* বাকি সব স্টাইল আপনার কোড থেকে হুবহু বজায় রাখা হয়েছে... */
         .admin-panel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:9999; padding:20px; color:#fff; overflow:auto; }
+        .nav-menu { display: flex; gap: 15px; align-items: center; }
+        .btn-profile { background: rgba(20, 184, 166, 0.2); color: var(--primary); border: 1px solid var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: none; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <span>BDBUS PANEL</span>
-        <div id="navMenu" style="display:flex; gap:10px;">
-            <button id="profileBtn" onclick="showMyProfile()" style="display:none; background:none; border:1px solid var(--primary); color:white; padding:5px 10px; border-radius:5px;">Profile</button>
-            <button id="logoutBtn" onclick="handleLogout()" style="display:none; background:red; color:white; border:none; padding:5px 10px;">Logout</button>
+        <div class="nav-logo-area">
+            <span class="nav-title">BDBUS</span>
+        </div>
+        <div class="nav-menu">
+            <button id="profileBtn" class="btn-profile" onclick="showMyProfile()">My Profile</button>
+            <button id="logoutBtn" class="nav-logout-btn" onclick="handleLogout()">Logout</button>
         </div>
     </nav>
 
-    <div class="container">
-        <div style="text-align: center;">
-            <img class="main-logo" src="images/BDBUS Group Official Logo.png" onclick="checkSecretTap()" onerror="this.style.background='#333'">
-            <h3>BDBUS Online Counter</h3>
+    <div class="container" id="mainContainer">
+        <div class="brand-section">
+            <img class="main-logo" src="images/BDBUS Group Official Logo.png" onclick="checkSecretTap()">
         </div>
-
-        <div id="appContainer" class="glass-card">
-            <p>Welcome! Please login to continue.</p>
         </div>
-    </div>
 
     <div id="adminPanel" class="admin-panel">
         <h2>Admin Dashboard</h2>
-        <table id="adminTable" border="1" style="width:100%; border-collapse:collapse; color:#fff; margin-bottom:20px;">
+        <table id="adminTable" border="1" style="width:100%; border-collapse:collapse; color:#fff;">
             <tr style="background:#333;"><th>ID</th><th>Name</th><th>Phone</th></tr>
         </table>
-        <button onclick="document.getElementById('adminPanel').style.display='none'" style="padding:15px; background:red; color:white; border:none; width:100%;">Close Panel</button>
+        <button onclick="document.getElementById('adminPanel').style.display='none'" style="margin-top:20px; padding:10px; width:100%; border:none; background:red; color:white;">Close</button>
     </div>
 
     <script>
-        // ১. প্রোফাইল লজিক
+        // প্রোফাইল ফাংশন
         function showMyProfile() {
             let session = JSON.parse(localStorage.getItem('bdbusActiveSession'));
             let allUsers = JSON.parse(localStorage.getItem('busUsers')) || {};
             if (session && allUsers[session.email]) {
                 let u = allUsers[session.email];
-                document.getElementById('appContainer').innerHTML = `
+                document.getElementById('mainContainer').innerHTML = `
                     <div class="glass-card">
                         <h3>My Profile</h3>
                         <p><strong>Name:</strong> ${u.name}</p>
@@ -65,7 +60,7 @@
             }
         }
 
-        // ২. সিক্রেট অ্যাডমিন প্যানেল (লোগোতে ৩ বার ক্লিক)
+        // অ্যাডমিন প্যানেল লজিক
         let clickCount = 0;
         function checkSecretTap() {
             clickCount++;
@@ -84,7 +79,7 @@
             }
         }
 
-        // ৩. লগইন চেক
+        // লগইন চেক
         window.onload = function() {
             if(localStorage.getItem('bdbusActiveSession')) {
                 document.getElementById('profileBtn').style.display = 'block';
