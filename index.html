@@ -981,51 +981,6 @@
                 });
             }, 500);
         }
-  <<<script type="module">
-    // ১. Firebase ইমপোর্ট
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-    // ২. কনফিগারেশন
-    const firebaseConfig = {
-      apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
-      authDomain: "bdbus-control-system.firebaseapp.com",
-      projectId: "bdbus-control-system",
-      storageBucket: "bdbus-control-system.firebasestorage.app",
-      messagingSenderId: "279853463516",
-      appId: "1:279853463516:web:9b5c4fe355b01a262e0119"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    // ৩. গ্লোবাল ফাংশনসমূহ (যেগুলো HTML বাটনে onclick হিসেবে আছে)
-    
-    window.startLiveClock = function() {
-        setInterval(() => {
-            const now = new Date();
-            const el = document.getElementById('liveClockDisplay');
-            if(el) el.innerText = now.toLocaleTimeString();
-        }, 1000);
-    };
-
-    window.handleLogin = function() {
-        // এখানে আপনার আগের লগইন কোডটি বসান
-        console.log("লগইন ফাংশন কাজ করছে");
-    };
-
-    window.buyTicket = function() {
-        // এখানে আপনার আগের টিকেট কেনার কোডটি বসান
-        console.log("টিকেট কেনার ফাংশন কাজ করছে");
-    };
-
-    // ৪. পেজ লোড হওয়ার সাথে সাথে সব সচল করা
-    window.onload = function() {
-        window.startLiveClock();
-        console.log("সিস্টেম সফলভাবে চালু হয়েছে।");
-    };
 </script>
 </body>
 </html>
