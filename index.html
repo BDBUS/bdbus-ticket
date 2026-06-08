@@ -1004,10 +1004,22 @@
 
     console.log("Firebase সংযোগ সফল!");
 
-    // এখন আপনার আগের সব ফাংশনগুলো এখানে নিয়ে আসুন যাতে কোনো conflict না হয়
-    // আপনার আগের সমস্ত JavaScript কোড (যেমন: startLiveClock, handleLogin, buyTicket) 
-    // এই <script type="module"> এর ভেতরেই বসিয়ে দিন।
-    
+ // সব ফাংশন এভাবে window এর সাথে যুক্ত করুন
+window.handleLogin = function() {
+    // আপনার আগের লগইন কোড এখানে
+};
+
+window.buyTicket = function() {
+    // আপনার আগের টিকেট কেনার কোড এখানে
+};
+
+window.goToCounterPage = function() {
+    // আপনার আগের সিট সিলেকশন পেজে যাওয়ার কোড এখানে
+};
+
+// এভাবে আপনার বাকি সব ফাংশনগুলোও (যেমন: showUpcoming, closePopup, toggleAuthView ইত্যাদি) 
+// window.ফাংশনেরনাম = function() { ... } ফরম্যাটে লিখে দিন।
+
     // উদাহরণ:
     window.startLiveClock = function() {
         setInterval(() => {
