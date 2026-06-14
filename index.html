@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS ONLINE TICKET COUNTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>BDBUS Online Ticket Counter</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        /* --- PREMIUM UI/UX DESIGN SYSTEM --- */
         :root {
-            --bg-color: #0b131a;
-            --panel-color: #121e28;
-            --accent-cyan: #00f2fe;
-            --accent-blue: #007adb;
-            --accent-red: #ff3333;
-            --text-color: #ffffff;
-            --text-muted: #a0aec0;
+            --bg-dark: #070b12;
+            --panel-bg: #0f172a;
+            --neon-blue: #00f2fe;
+            --neon-green: #00ff87;
+            --yt-red: #ff0000;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --btn-gradient-1: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --btn-gradient-2: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
         }
 
         * {
@@ -27,1181 +30,1365 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             overflow-x: hidden;
+            min-height: 100vh;
             position: relative;
         }
 
-        /* Watermark Pattern (Except Login/Reg) */
-        body.logged-in::before {
+        /* Watermark Feature (Active except Login/Registration) */
+        body::before {
             content: "";
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center center;
+            width: 500px;
+            height: 500px;
+            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
             background-size: contain;
-            opacity: 0.05;
+            opacity: 0.04;
             pointer-events: none;
-            z-index: 1;
+            z-index: 0;
+            display: none;
+        }
+        body.logged-in::before { display: block; }
+
+        /* Premium Standard Buttons Styling */
+        .btn-premium {
+            background: var(--btn-gradient-1);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-premium:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+        }
+        .btn-secondary {
+            background: var(--btn-gradient-2);
+            color: #fff;
+        }
+        .btn-yt {
+            background: var(--yt-red);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 18px;
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+        }
+        .btn-yt:hover {
+            box-shadow: 0 6px 18px rgba(255, 0, 0, 0.5);
+            transform: translateY(-2px);
         }
 
-        /* Global Header Settings */
-        header {
-            width: 100%;
-            padding: 15px 20px;
+        /* Dynamic Neon Live Clock */
+        .neon-clock {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            padding: 15px 30px;
+            text-align: center;
+            max-width: 450px;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        }
+        .neon-time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.6);
+            letter-spacing: 2px;
+        }
+        .neon-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Top Header & Permanent Settings Elements */
+        .global-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--panel-color);
-            border-bottom: 2px solid #1a2e3b;
+            padding: 15px 25px;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .header-logo img {
-            width: 40px;
-            height: 40px;
-        }
-
-        .header-logo span {
-            font-weight: 700;
-            font-size: 20px;
-            letter-spacing: 1px;
-        }
-
-        .lang-toggle {
-            display: flex;
-            gap: 10px;
-        }
-
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-trigger { font-size: 24px; cursor: pointer; color: var(--text-light); }
+        .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer;}
+        .header-logo-container img { height: 40px; }
+        .header-logo-container span { font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; }
+        
+        .lang-toggle-box { display: flex; gap: 8px; }
         .lang-btn {
-            padding: 6px 14px;
             border: none;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: 0.2s;
         }
+        .lang-btn.en { background: #00f2fe; color: #000; }
+        .lang-btn.bn { background: #334155; color: #fff; }
 
-        .lang-btn.en { background-color: var(--accent-cyan); color: #000; }
-        .lang-btn.bn { background-color: #2d3748; color: #fff; }
-        .lang-btn.active-lang { box-shadow: 0 0 10px var(--accent-cyan); }
-
-        /* Sidebar Navigation Menu */
-        .sidebar {
+        /* Sidebar Navigation Menu Drawer */
+        .sidebar-menu {
             position: fixed;
             top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            background-color: var(--panel-color);
-            box-shadow: 4px 0 15px rgba(0,0,0,0.5);
-            transition: 0.4s ease;
-            z-index: 200;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: #0f172a;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            z-index: 1000;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 30px 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
-
-        .sidebar.open { left: 0; }
-
+        .sidebar-menu.active { left: 0; }
         .sidebar-item {
+            padding: 14px 20px;
+            color: var(--text-light);
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 12px 15px;
-            border-radius: 8px;
-            color: var(--text-color);
-            text-decoration: none;
             font-weight: 500;
-            transition: 0.3s;
+            border-radius: 10px;
+            margin-bottom: 8px;
             cursor: pointer;
+            transition: 0.2s;
         }
+        .sidebar-item:hover { background: rgba(0, 242, 254, 0.1); color: var(--neon-blue); }
+        .sidebar-item.logout-item { margin-top: auto; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
-        .sidebar-item:hover, .sidebar-item.active-menu {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--accent-cyan);
-        }
-
-        .sidebar-logout {
-            margin-top: auto;
-            border-top: 1px solid #1a2e3b;
-            padding-top: 15px;
-            color: var(--accent-red);
-        }
-
-        /* Container Pages */
-        .page { display: none; width: 100%; max-width: 1200px; margin: 0 auto; padding: 25px 20px; flex: 1; z-index: 2; }
-        .page.active-page { display: block; }
-
-        /* Custom Warning Box styling */
+        /* Global Warning Box Element */
         .warning-box {
-            background: rgba(255, 51, 51, 0.1);
-            border: 1px solid var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
             padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            color: #fca5a5;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Screen Wrapper Management */
+        .page-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; z-index: 10; position: relative; }
+        .page-screen.active { display: block; }
+
+        /* --- PRE-AUTH SCREEN STYLING (Page 1) --- */
+        .auth-container { max-width: 450px; margin: 50px auto; text-align: center; }
+        .auth-brand img { height: 80px; margin-bottom: 10px; }
+        .auth-brand h2 { font-size: 1.6rem; letter-spacing: 1px; }
+        .auth-brand p { color: var(--neon-blue); font-size: 12px; margin-bottom: 30px; }
+        
+        .form-card {
+            background: var(--panel-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: left;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
+        .form-control {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #fff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .form-control:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
+        .flex-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+
+        /* --- HOME SCREEN STYLE (Page 2) --- */
+        .welcome-section { text-align: center; margin-top: 15px; }
+        .welcome-msg { font-size: 14px; color: var(--text-muted); }
+        .greetings-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; }
+        
+        /* Marquee Notice Board Component */
+        .notice-board {
+            background: #1e293b;
+            border-left: 4px solid var(--neon-blue);
+            padding: 12px;
             border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
+            margin: 25px 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
         }
+        .notice-tag { background: var(--neon-blue); color: #000; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
+        .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
 
-        /* Digital Live Neon Clock Box */
-        .clock-box {
-            background: rgba(18, 30, 40, 0.8);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 12px;
+        /* Members Slider Carousel Row */
+        .carousel-container { background: var(--panel-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; position: relative; overflow: hidden; height: 130px; }
+        .member-track { display: flex; position: absolute; transition: transform 0.5s ease-in-out; gap: 20px; width: max-content; }
+        .member-card-node {
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.05);
             padding: 15px;
-            text-align: center;
-            width: fit-content;
-            margin: 15px auto;
-            box-shadow: 0 0 15px rgba(0,242,254,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 280px;
         }
-        .clock-time { color: var(--accent-cyan); font-size: 28px; font-weight: 700; letter-spacing: 2px; }
-        .clock-date { color: var(--text-muted); font-size: 14px; margin-top: 5px; text-transform: uppercase; }
+        .member-avatar-round { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-green); }
+        .member-meta h5 { font-size: 14px; margin-bottom: 2px; }
+        .member-meta p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+        .status-badge { color: var(--neon-green); font-weight: bold; font-size: 10px; letter-spacing: 1px; display: block; margin-top: 2px;}
 
-        /* Global Footer Styling */
-        footer {
-            background-color: #060b0f;
-            padding: 30px 20px;
+        /* Rewards Task Module Area */
+        .reward-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .reward-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; }
+        .reward-card h4 { margin-bottom: 10px; font-size: 1.1rem; }
+        .reward-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+        /* --- BOOKING & SEAT ENGINE STYLE (Pages 5 & 6) --- */
+        .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 30px auto; }
+        @media (max-width: 768px) { .booking-layout { grid-template-columns: 1fr; } }
+        
+        .seat-map-wrapper { background: var(--panel-bg); padding: 30px; border-radius: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
+        .bus-cabin-container {
+            border: 3px solid #334155;
+            border-radius: 20px 20px 10px 10px;
+            padding: 20px;
+            background: #0b111e;
+            margin: 20px 0;
+        }
+        .cabin-front-header { display: flex; justify-content: space-between; padding-bottom: 15px; border-bottom: 2px dashed #334155; margin-bottom: 20px; color: var(--text-muted); }
+        .seat-row-grid { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+        .seat-side-block { display: flex; gap: 8px; }
+        .seat-node {
+            width: 40px;
+            height: 40px;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .seat-node.selected { background: var(--neon-blue); color: #000; border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.4); }
+        .seat-node.locked-hold { background: #f5af19; color: #000; border-color: #f5af19; cursor: not-allowed; }
+        .seat-node.occupied { background: #334155; color: rgba(255,255,255,0.2); border-color: transparent; cursor: not-allowed; }
+        .aisle-gap-space { width: 30px; }
+
+        /* --- PREMIUM CONSOLE TICKET DISPLAY (PNG Generator Target) --- */
+        #digital-ticket-canvas {
+            width: 450px;
+            background: #ffffff;
+            color: #000000;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px auto;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        #digital-ticket-canvas::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .ticket-header-block { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 20px; position: relative; z-index: 2; }
+        .ticket-logo { height: 45px; }
+        .ticket-title-meta { text-align: right; }
+        .ticket-title-meta h3 { font-size: 16px; font-weight: 700; color: #0f172a; }
+        .ticket-title-meta p { font-size: 11px; color: #64748b; font-weight: 600; }
+        .ticket-data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; position: relative; z-index: 2; }
+        .ticket-data-table td { padding: 7px 0; font-size: 13px; color: #334155; border-bottom: 1px solid #f1f5f9; }
+        .ticket-data-table td.label-txt { font-weight: 600; color: #64748b; width: 40%; }
+        .ticket-data-table td.val-txt { font-weight: 700; color: #0f172a; text-align: right; }
+        .ticket-data-table td.highlight-val { color: #ef4444; font-size: 15px; }
+        .ticket-rules-box { font-size: 10px; color: #475569; line-height: 1.4; border-top: 1px solid #cbd5e1; padding-top: 12px; margin-bottom: 20px; position: relative; z-index: 2; }
+        .ticket-footer-brand { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; color: #fff; position: relative; z-index: 2; }
+        .ticket-footer-brand p { font-size: 11px; opacity: 0.8; margin-bottom: 8px; }
+        .ticket-footer-subs { display: flex; justify-content: center; gap: 12px; }
+        .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
+
+        /* --- ADMIN CONSOLE GRID (Page 7) --- */
+        .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
+        .admin-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+
+        /* --- COMPACT SOCIAL FOOTER COMPONENT --- */
+        .global-footer-panel {
+            background: #090d16;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 20px;
             text-align: center;
-            margin-top: auto;
-            border-top: 1px solid #1a2e3b;
+            margin-top: 80px;
+            position: relative;
             z-index: 10;
         }
-        .social-icons { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
-        .social-icons a {
-            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 18px; text-decoration: none; transition: 0.3s;
+        .social-icon-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .social-link-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            text-decoration: none;
+            transition: 0.3s;
         }
-        .footer-links { margin-bottom: 25px; color: var(--text-muted); font-size: 14px; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; margin: 0 10px; }
-        .creator-box {
-            background: var(--panel-color); border: 1px solid #1a2e3b; border-radius: 12px; padding: 20px;
-            max-width: 500px; margin: 0 auto; text-align: center;
+        .social-link-circle:hover { transform: translateY(-5px); background: var(--neon-blue); color: #000; }
+        .footer-policy-links { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); margin-bottom: 25px; }
+        .footer-policy-links a { color: var(--text-muted); text-decoration: none; }
+        .footer-creator-box {
+            background: var(--panel-bg);
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .creator-logo { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; }
-        .subs-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
-        .subs-btn {
-            display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 25px;
-            text-decoration: none; color: #fff; font-weight: 600; font-size: 13px; background: #cc181e; transition: 0.3s;
-        }
-
-        /* ---------------- PAGE 1: LOGIN & REGISTER ---------------- */
-        .auth-container { max-width: 450px; margin: 60px auto; background: var(--panel-color); padding: 35px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; }
-        .auth-logo img { width: 80px; height: 80px; margin-bottom: 15px; }
-        .form-group { text-align: left; margin-bottom: 20px; position: relative; }
-        .form-group label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-muted); }
-        .form-group input, .form-group select { width: 100%; padding: 12px 16px; background: #182835; border: 1px solid #243b4e; border-radius: 8px; color: #fff; font-size: 15px; outline: none; }
-        .form-group input:focus { border-color: var(--accent-cyan); }
-        .auth-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 14px; }
-        .auth-btn-group { display: flex; justify-content: space-between; gap: 15px; }
-        .btn-action { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; transition: 0.3s; }
-        .btn-login { background-color: var(--accent-blue); color: #fff; }
-        .btn-signup { background-color: #2d3748; color: #fff; }
-
-        /* ---------------- PAGE 2: HOME PAGE ---------------- */
-        .home-branding { text-align: center; margin-bottom: 20px; }
-        .home-branding img { width: 100px; height: 100px; }
-        .home-title { font-size: 24px; font-weight: 700; margin-top: 10px; }
-        .greetings { text-align: center; font-size: 20px; margin: 15px 0; font-weight: 600; }
-        .notice-board { background: #1a2e3b; padding: 12px; border-radius: 8px; overflow: hidden; white-space: nowrap; margin-bottom: 30px; border-left: 4px solid var(--accent-cyan); }
-        .notice-board marquee { font-weight: 500; color: #e2e8f0; }
-        .member-scroller { background: var(--panel-color); padding: 20px; border-radius: 12px; overflow: hidden; position: relative; margin-bottom: 35px; }
-        .scroller-wrapper { display: flex; gap: 20px; transition: transform 0.5s ease; }
-        .member-card { min-width: 280px; background: #182835; border: 1px solid #243b4e; border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; }
-        .member-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--accent-cyan); object-fit: cover; }
-        .active-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; display: inline-block; margin-left: 5px; box-shadow: 0 0 8px #00e676; }
-        .reward-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .reward-card { background: var(--panel-color); padding: 20px; border-radius: 12px; border: 1px solid #243b4e; text-align: center; }
-        .reward-btn { display: inline-block; width: 100%; padding: 12px; margin-top: 15px; background: var(--accent-cyan); color: #000; border-radius: 8px; text-decoration: none; font-weight: 700; cursor: pointer; text-align: center; }
-
-        /* ---------------- PAGE 3: MY PROFILE ---------------- */
-        .profile-container { max-width: 600px; margin: 0 auto; background: var(--panel-color); padding: 30px; border-radius: 16px; text-align: center; }
-        .profile-avatar-container { position: relative; width: 150px; height: 150px; margin: 0 auto 20px; }
-        .profile-avatar { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-cyan); }
-        .wallet-display { background: #182835; padding: 15px; border-radius: 10px; font-size: 22px; font-weight: 700; color: var(--accent-cyan); margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-
-        /* ---------------- PAGE 5 & 6: BUS BOOKING & SEAT ---------------- */
-        .booking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
-        .seat-map-container { max-width: 400px; margin: 30px auto; background: var(--panel-color); padding: 25px; border-radius: 16px; border: 1px solid #243b4e; }
-        .bus-front { display: flex; justify-content: space-between; padding-bottom: 15px; border-bottom: 2px dashed #243b4e; margin-bottom: 20px; color: var(--text-muted); }
-        .seat-row { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
-        .seat-side { display: flex; gap: 10px; }
-        .seat { width: 40px; height: 40px; background: #1a2e3b; border: 1px solid #3182ce; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; font-weight: 600; }
-        .seat.selected { background: var(--accent-cyan) !important; color: #000; }
-        .seat.locked { background: #4a5568 !important; color: #a0aec0; cursor: not-allowed; }
-        .seat.booked { background: var(--accent-red) !important; color: #fff; cursor: not-allowed; }
-        .center-aisle { width: 30px; }
-
-        /* ---------------- PAGE 7: ADMIN PANEL ---------------- */
-        .admin-search { margin-bottom: 25px; display: flex; gap: 10px; }
-        .admin-table-container { overflow-x: auto; background: var(--panel-color); border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 14px 18px; border-bottom: 1px solid #1a2e3b; }
-        th { background: #162633; color: var(--accent-cyan); }
-        .btn-table { padding: 5px 10px; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; margin-right: 5px; }
-
-        /* ---------------- PAGE 8: CONTACT PAGE ---------------- */
-        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .staff-card { background: var(--panel-color); padding: 20px; border-radius: 12px; border: 1px solid #243b4e; text-align: center; }
-
-        /* ---------------- DIGITAL TICKET TEMPLATE ---------------- */
-        #ticket-download-area {
-            width: 500px; background: #ffffff; color: #000000; padding: 30px; border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2); position: absolute; left: -9999px; top: 0;
-        }
-        .tkt-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #ccc; padding-bottom: 15px; margin-bottom: 20px; }
-        .tkt-logo { width: 50px; height: 50px; }
-        .tkt-title { font-size: 18px; font-weight: 700; text-align: right; line-height: 1.2; }
-        .tkt-body { position: relative; display: flex; flex-direction: column; gap: 10px; font-size: 14px; z-index: 5; }
-        .tkt-body::before {
-            content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 220px; height: 220px; background: url('images/BDBUS Group Official Logo.png') no-repeat center center;
-            background-size: contain; opacity: 0.12; z-index: -1;
-        }
-        .tkt-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .tkt-label { font-weight: 600; color: #555; }
-        .tkt-value { font-weight: 700; color: #000; }
-        .tkt-rules { margin-top: 15px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 11px; color: #666; line-height: 1.4; }
-        .tkt-footer { margin-top: 20px; border-top: 2px dashed #ccc; padding-top: 15px; text-align: center; }
-        .tkt-cr-box { background: #f7f9fa; padding: 10px; border-radius: 8px; font-size: 12px; }
+        .creator-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .creator-identity { font-size: 18px; font-weight: 700; color: #fff; margin: 4px 0 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .creator-avatar-icon { width: 28px; height: 28px; border-radius: 50%; }
+        .footer-subs-flex { display: flex; justify-content: center; gap: 15px; }
     </style>
 </head>
-<body id="app-body">
+<body>
 
-    <header>
+    <header class="global-header" id="main-global-header" style="display: none;">
         <div class="header-left">
-            <button class="menu-btn" id="menuToggleBtn" onclick="toggleSidebar()" style="display:none;"><i class="fa-solid fa-bars"></i></button>
-            <div class="header-logo" onclick="goToHome()">
-                <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo">
-                <span id="txt-header-brand">BDBUS</span>
+            <i class="fa-solid fa-bars menu-trigger" onclick="toggleSidebarMenu(true)"></i>
+            <div class="header-logo-container" onclick="navigatePage('home-screen')">
+                <img src="images/BDBUS Group Official Logo.png" alt="Logo">
+                <span>BDBUS</span>
             </div>
         </div>
-        <div class="lang-toggle">
-            <button class="lang-btn en active-lang" onclick="changeLanguage('en')">English</button>
-            <button class="lang-btn bn" onclick="changeLanguage('bn')">বাংলা</button>
+        <div class="lang-toggle-box">
+            <button class="lang-btn en" onclick="setLanguageSystem('en')">EN</button>
+            <button class="lang-btn bn" onclick="setLanguageSystem('bn')">বাংলা</button>
         </div>
     </header>
 
-    <nav class="sidebar" id="appSidebar">
-        <div class="sidebar-item active-menu" onclick="switchPage('home-page')"><i class="fa-solid fa-house"></i> <span id="m-home">Home</span></div>
-        <div class="sidebar-item" onclick="switchPage('profile-page')"><i class="fa-solid fa-user"></i> <span id="m-profile">My Profile</span></div>
-        <div class="sidebar-item" onclick="switchPage('password-page')"><i class="fa-solid fa-key"></i> <span id="m-password">Change Password</span></div>
-        <div class="sidebar-item" onclick="switchPage('booking-page')"><i class="fa-solid fa-bus"></i> <span id="m-booking">Bus Ticket Booking</span></div>
-        <div class="sidebar-item" id="menu-admin-item" onclick="switchPage('admin-page')" style="display:none;"><i class="fa-solid fa-lock"></i> <span id="m-admin">Admin Panel</span></div>
-        <div class="sidebar-item" onclick="switchPage('contact-page')"><i class="fa-solid fa-address-book"></i> <span id="m-contact">Contact</span></div>
-        <div class="sidebar-item sidebar-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> <span id="m-logout">Logout</span></div>
+    <nav class="sidebar-menu" id="sidebar-drawer-menu">
+        <div class="sidebar-item" onclick="navigatePage('home-screen')"><i class="fa-solid fa-house"></i> <span class="lang-node" data-en="Home" data-bn="হোম">Home</span></div>
+        <div class="sidebar-item" onclick="navigatePage('profile-screen')"><i class="fa-solid fa-user"></i> <span class="lang-node" data-en="My Profile" data-bn="মাই প্রোফাইল">My Profile</span></div>
+        <div class="sidebar-item" onclick="navigatePage('password-screen')"><i class="fa-solid fa-key"></i> <span class="lang-node" data-en="Change Password" data-bn="পাসওয়ার্ড পরিবর্তন">Change Password</span></div>
+        <div class="sidebar-item" onclick="navigatePage('booking-screen')"><i class="fa-solid fa-bus"></i> <span class="lang-node" data-en="Bus Ticket Booking" data-bn="বাস টিকিট বুকিং">Bus Ticket Booking</span></div>
+        <div class="sidebar-item" id="admin-menu-link" onclick="navigatePage('admin-screen')" style="display:none;"><i class="fa-solid fa-user-shield"></i> <span class="lang-node" data-en="Admin Panel" data-bn="এডমিন প্যানেল">Admin Panel</span></div>
+        <div class="sidebar-item" onclick="navigatePage('contact-screen')"><i class="fa-solid fa-address-book"></i> <span class="lang-node" data-en="Contact" data-bn="যোগাযোগ">Contact</span></div>
+        <div class="sidebar-item logout-item" onclick="executeLogoutAction()"><i class="fa-solid fa-right-from-bracket"></i> <span class="lang-node" data-en="Logout" data-bn="লগআউট">Logout</span></div>
     </nav>
 
-
-    <main class="page active-page" id="auth-page">
+    <div id="auth-screen" class="page-screen active">
         <div class="auth-container">
-            <div class="auth-logo">
-                <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Main Logo">
-                <h2 id="txt-login-title" style="margin-bottom:20px; font-weight:700;">BDBUS ONLINE TICKET COUNTER</h2>
+            <div class="auth-brand">
+                <img src="images/BDBUS Group Official Logo.png" alt="Logo">
+                <h2>BDBUS ONLINE TICKET COUNTER</h2>
+                <p>Bangladesh Bussid Unique Society</p>
             </div>
 
-            <div id="login-view">
+            <div id="login-sub-card" class="form-card">
                 <div class="form-group">
-                    <label id="lbl-login-email">Email Address</label>
-                    <input type="email" id="login-email" placeholder="example@mail.com">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="example@gmail.com">
                 </div>
                 <div class="form-group">
-                    <label id="lbl-login-pass">Password</label>
-                    <input type="password" id="login-password" placeholder="••••••••">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" class="form-control" placeholder="••••••••">
                 </div>
-                <div class="auth-options">
-                    <a href="#" onclick="forgotPassword()" style="color:var(--accent-cyan); text-decoration:none;" id="txt-forgot-pass">Forgot password?</a>
-                </div>
-                <div class="auth-btn-group">
-                    <button class="btn-action btn-signup" onclick="toggleAuthView('signup')" style="background-color:#c3073f;" id="btn-goto-signup">Sign Up Now</button>
-                    <button class="btn-action btn-login" onclick="login()" style="background-color:#107a8b;" id="btn-submit-login">Login Now</button>
+                <a href="#" style="color:var(--neon-blue); font-size:12px; text-decoration:none;" onclick="triggerForgotPassword()">Forget password</a>
+                <div class="flex-actions">
+                    <button class="btn-premium btn-secondary" onclick="toggleAuthSubView('signup')">Sign Up Now</button>
+                    <button class="btn-premium" onclick="executeLoginLogic()">Login Now</button>
                 </div>
             </div>
 
-            <div id="signup-view" style="display: none;">
+            <div id="signup-sub-card" class="form-card" style="display: none;">
+                <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" class="form-control"></div>
+                <div class="form-group"><label>Game Nickname / ID</label><input type="text" id="reg-gameid" class="form-control"></div>
+                <div class="form-group"><label>Date of Birth</label><input type="date" id="reg-dob" class="form-control"></div>
+                <div class="form-group"><label>Mobile Number</label><input type="text" id="reg-phone" class="form-control"></div>
                 <div class="form-group">
-                    <label id="lbl-reg-name">Full Name</label>
-                    <input type="text" id="reg-name">
-                </div>
-                <div class="form-group">
-                    <label id="lbl-reg-game">Game Nickname / ID</label>
-                    <input type="text" id="reg-game-id" placeholder="Copy exact in-game nickname">
-                </div>
-                <div class="form-group">
-                    <label id="lbl-reg-dob">Date of Birth</label>
-                    <input type="date" id="reg-dob">
-                </div>
-                <div class="form-group">
-                    <label id="lbl-reg-num">Mobile Number</label>
-                    <input type="text" id="reg-mobile">
-                </div>
-                <div class="form-group">
-                    <label id="lbl-reg-gender">Gender</label>
-                    <select id="reg-gender">
+                    <label>Gender</label>
+                    <select id="reg-gender" class="form-control">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label id="lbl-reg-fb">Facebook Profile Link</label>
-                    <input type="url" id="reg-fb">
+                <div class="form-group"><label>Facebook Profile Link</label><input type="url" id="reg-fb" class="form-control"></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" class="form-control"></div>
+                <div class="form-group"><label>Set Password</label><input type="password" id="reg-pass" class="form-control"></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-confpass" class="form-control"></div>
+                
+                <div style="display:flex; gap:10px; align-items:center; margin:20px 0;">
+                    <input type="checkbox" id="reg-agree" style="width:18px; height:18px;">
+                    <span style="font-size:12px; color:var(--text-muted);" class="lang-node" data-en="All data is correct declaration check." data-bn="সকল তথ্য যদি সঠিক হয়ে থাকে খালি ঘরে টিক চিহ্ন দিবে।">All data is correct declaration check.</span>
                 </div>
-                <div class="form-group">
-                    <label id="lbl-reg-email">Email Address</label>
-                    <input type="email" id="reg-email">
+                <div style="text-align: center;">
+                    <button class="btn-premium" onclick="executeRegistrationLogic()">Registration Submit</button>
                 </div>
-                <div class="form-group">
-                    <label id="lbl-reg-pass">Set Password</label>
-                    <input type="password" id="reg-pass">
-                </div>
-                <div class="form-group">
-                    <label id="lbl-reg-cpass">Confirm Password</label>
-                    <input type="password" id="reg-cpass">
-                </div>
-                <div style="text-align: left; margin-bottom: 20px; font-size: 14px;">
-                    <label><input type="checkbox" id="reg-agree"> <span id="lbl-reg-check">All details provided are correct and valid.</span></label>
-                </div>
-                <button class="btn-action btn-login" onclick="register()" style="background:#007adb; display:block; margin:0 auto; max-width:200px;" id="btn-submit-reg">Registration Submit</button>
-                <p style="margin-top:15px; font-size:14px;"><a href="#" onclick="toggleAuthView('login')" style="color:var(--text-muted);" id="txt-back-login">Back to Login</a></p>
+                <p style="font-size:12px; margin-top:15px;"><a href="#" style="color:var(--text-muted);" onclick="toggleAuthSubView('login')">Already have an account? Login</a></p>
             </div>
         </div>
-    </main>
+    </div>
 
-
-    <main class="page" id="home-page">
-        <div class="home-branding">
-            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Main Brand">
-            <div class="home-title">Bangladesh Bussid Unique Society</div>
+    <div id="home-screen" class="page-screen">
+        <div class="welcome-section">
+            <img src="images/BDBUS Group Official Logo.png" alt="Logo" style="height:60px;">
+            <h3 style="font-size:15px; letter-spacing:1px; margin-top:5px;">Bangladesh Bussid Unique Society</h3>
+            <p class="welcome-msg" id="home-welcome-user">Welcome, Player</p>
+            <h2 class="greetings-text" id="home-greeting-txt">GOOD MORNING</h2>
         </div>
 
-        <div class="greetings">
-            <span id="txt-welcome">Welcome</span>, <span id="home-username">User</span>!<br>
-            <span id="txt-daytime" style="color:var(--accent-cyan);">GOOD MORNING</span>
-        </div>
-
-        <div class="clock-box">
-            <div class="clock-time" id="live-clock">12:00:00 PM</div>
-            <div class="clock-date" id="live-date">SUN, JUN 14, 2026</div>
+        <div class="neon-clock">
+            <div class="neon-time" id="live-clock-digits">00:00:00 AM</div>
+            <div class="neon-date" id="live-clock-date">SUN, JUN 14, 2026</div>
         </div>
 
         <div class="notice-board">
-            <marquee id="marquee-notice" behavior="scroll" direction="left">Welcome to BDBUS Online Ticket Counter! Setup your profile and book tickets instantly.</marquee>
+            <span class="notice-tag">NOTICE</span>
+            <marquee id="live-marquee-node" scrollamount="6">Welcome to BDBUS Official Ticket Counter Simulator Hub!</marquee>
         </div>
 
-        <div class="member-scroller">
-            <div class="scroller-wrapper" id="member-scroller-track">
+        <div class="carousel-container">
+            <div class="member-track" id="home-carousel-track">
                 </div>
         </div>
 
-        <div class="reward-section">
+        <div class="reward-grid">
             <div class="reward-card">
-                <h3 id="r1-title">Registration Reward</h3>
-                <p style="color:var(--text-muted); margin-top:5px;" id="r1-desc">Instant registration setup bonus wallet gift.</p>
-                <button class="reward-btn" id="btn-r1" onclick="claimRegBonus()">Claim 5000 BDT</button>
-            </div>
-            <div class="reward-card">
-                <h3 id="r2-title">Subscribe Channels</h3>
-                <p style="color:var(--text-muted); margin-top:5px;" id="r2-desc">Enter, watch video, like, comment & subscribe channels.</p>
-                <button class="reward-btn" id="btn-r2" onclick="claimSubsBonus()">Claim 10000 BDT</button>
+                <h4><i class="fa-solid fa-gift" style="color:var(--neon-green)"></i> Welcome Bonus</h4>
+                <p class="lang-node" data-en="Get 5000 BDT instantly on your first signup." data-bn="প্রথমবার রেজিস্ট্রেশন করলে পাবেন ৫০০০ BDT (একটি অ্যাকাউন্ট একবারই পাবেন)">Get 5000 BDT instantly on your first signup.</p>
+                <button class="btn-premium btn-secondary" id="claim-welcome-btn" onclick="claimWelcomeRewardLogic()">Claim 5000 BDT</button>
             </div>
             <div class="reward-card">
-                <h3 id="r3-title">Watch Video Task</h3>
-                <p style="color:var(--text-muted); margin-top:5px;" id="r3-desc">Watch complete video streaming above 1-minute loop.</p>
-                <button class="reward-btn" onclick="watchVideoTask()">Claim 3000 BDT</button>
+                <h4><i class="fa-brands fa-youtube" style="color:var(--yt-red)"></i> Subscribe YouTube</h4>
+                <p class="lang-node" data-en="Subscribe M2Vai official channel to claim 10000 BDT reward." data-bn="ইউটিউব চ্যানেল সাবস্ক্রাইব করলে পাবেন ১০০০০ BDT (একটি অ্যাকাউন্ট একবারেই পাবেন)">Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
+                <button class="btn-premium btn-yt" onclick="triggerYoutubeSubscribeReward()">Subscribe Now</button>
+            </div>
+            <div class="reward-card">
+                <h4><i class="fa-solid fa-video" style="color:var(--neon-blue)"></i> Watch Video Stream</h4>
+                <p class="lang-node" data-en="Watch stream video over 1 minute to receive unlimited 3000 BDT rewards." data-bn="ভিডিও দেখলে ৩০০০ BDT (যতবার ভিডিও দেখবে ততবার পাবে)">Watch stream video over 1 minute to receive unlimited 3000 BDT rewards.</p>
+                <button class="btn-premium" onclick="triggerWatchVideoReward()"><i class="fa-solid fa-play"></i> Watch Video</button>
             </div>
         </div>
-    </main>
+    </div>
 
-
-    <main class="page" id="profile-page">
-        <div class="profile-container">
-            <div class="profile-avatar-container">
-                <img src="https://via.placeholder.com/150" id="user-display-avatar" class="profile-avatar" alt="User Rounded Profile">
+    <div id="profile-screen" class="page-screen">
+        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="My Member Profile" data-bn="আমার মেম্বার প্রোফাইল">My Profile</h2>
+        <div class="form-card" style="max-width:500px; margin:0 auto; text-align:center;">
+            <div style="position:relative; display:inline-block; margin-bottom:20px;">
+                <img src="https://via.placeholder.com/150" id="profile-avatar-render" style="width:130px; height:130px; border-radius:50%; object-fit:cover; border:3px solid var(--neon-blue);">
+                <label for="avatar-input-file" style="position:absolute; bottom:5px; right:5px; background:var(--neon-blue); color:#000; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                    <i class="fa-solid fa-camera"></i>
+                </label>
+                <input type="file" id="avatar-input-file" accept="image/*" style="display:none;" onchange="processAvatarUpload(event)">
             </div>
-            <div class="form-group" style="max-width:350px; margin:0 auto 15px;">
-                <label id="lbl-upload-avatar">Upload Profile Image (Max 300kb)</label>
-                <input type="file" id="avatar-input" accept="image/*" onchange="uploadAvatarImage()">
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;">Max file size: 300KB (Rounded format rendering)</p>
+            
+            <h3 id="prof-render-name" style="font-size:22px; margin-bottom:5px;">User Name</h3>
+            <p style="color:var(--neon-blue); font-weight:bold; margin-bottom:20px;" id="prof-render-id">ID: BDBUS-1000</p>
+            
+            <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span class="lang-node" data-en="Wallet Account Balance:" data-bn="ওয়ালেট অ্যাকাউন্ট ব্যালেন্স:">Wallet Account Balance:</span>
+                <span style="color:var(--neon-green); font-weight:700; font-size:18px;" id="prof-render-wallet">0 BDT</span>
             </div>
-
-            <h2 id="profile-full-name" style="margin-top:10px;">Emon Talukder</h2>
-            <p style="color:var(--text-muted);" id="profile-role-tag">Designation: Member</p>
-            <p style="color:var(--accent-cyan); font-weight:600; margin-top:5px;">ID: <span id="profile-account-id">1000</span></p>
-
-            <div class="wallet-display">
-                <i class="fa-solid fa-wallet"></i> Wallet Balance: <span id="wallet-amt">0</span> BDT
-            </div>
+            <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block">
+                </div>
         </div>
-    </main>
+    </div>
 
-
-    <main class="page" id="password-page">
-        <div class="auth-container" style="margin:20px auto;">
-            <h2 style="margin-bottom:20px;" id="txt-change-pass-title">Change Password</h2>
-            <div class="form-group">
-                <label id="lbl-curr-pass">Current Password</label>
-                <input type="password" id="curr-password">
-            </div>
-            <div class="form-group">
-                <label id="lbl-new-pass">New Password</label>
-                <input type="password" id="new-password">
-            </div>
-            <div class="form-group">
-                <label id="lbl-conf-pass">Confirm Password</label>
-                <input type="password" id="conf-password">
-            </div>
-            <button class="btn-action btn-login" onclick="updateAccountPassword()" style="background-color:#007adb; width:100%;" id="btn-submit-pass">Submitte Password</button>
+    <div id="password-screen" class="page-screen">
+        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="সিকিউরিটি পাসওয়ার্ড পরিবর্তন">Change Password</h2>
+        <div class="form-card" style="max-width:450px; margin:0 auto;">
+            <div class="form-group"><label>Current Password</label><input type="password" id="pwd-curr" class="form-control"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="pwd-new" class="form-control"></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" id="pwd-conf" class="form-control"></div>
+            <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submitte Password</button>
         </div>
-    </main>
+    </div>
 
+    <div id="booking-screen" class="page-screen">
+        <h2 style="text-align:center; margin-bottom:5px;" class="lang-node" data-en="Bus Ticket Booking Module" data-bn="বাস টিকিট বুকিং মডিউল">Bus Ticket Booking</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:12px; margin-bottom:30px;" class="lang-node" data-en="Route Selection Engine" data-bn="রুট এবং বুকিং ড্যাশবোর্ড">Route Selection Engine</p>
 
-    <main class="page" id="booking-page">
-        <h2 style="margin-bottom:20px;" id="txt-booking-title">Booking and Road Selection</h2>
-        <div class="booking-grid">
-            <div class="form-group">
-                <label id="lbl-from">From</label>
-                <input type="text" id="route-from" placeholder="Search From District..." list="districts-list">
+        <div class="neon-clock">
+            <div class="neon-time" id="booking-clock-digits">00:00:00 AM</div>
+            <div class="neon-date" id="booking-clock-date">SUN, JUN 14, 2026</div>
+        </div>
+
+        <div class="form-card" style="max-width:650px; margin:20px auto;">
+            <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
+                <div class="form-group">
+                    <label class="lang-node" data-en="From (District Station)" data-bn="কোথা থেকে (জেলা)">From (District)</label>
+                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Search District...">
+                </div>
+                <div class="form-group">
+                    <label class="lang-node" data-en="To (Destination Station)" data-bn="কোথায় (গন্তব্য জেলা)">To (Destination)</label>
+                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Search District...">
+                </div>
             </div>
-            <div class="form-group">
-                <label id="lbl-to">To</label>
-                <input type="text" id="route-to" placeholder="Search To District..." list="districts-list">
+            <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
+                <div class="form-group"><label>Journey Date</label><input type="date" id="route-date" class="form-control"></div>
+                <div class="form-group"><label>Journey Time</label><input type="time" id="route-time" class="form-control"></div>
             </div>
-            <div class="form-group">
-                <label id="lbl-date">Journey Date</label>
-                <input type="date" id="journey-date">
-            </div>
-            <div class="form-group">
-                <label id="lbl-time">Journey Time</label>
-                <input type="time" id="journey-time">
-            </div>
-            <div class="form-group">
-                <label id="lbl-bus-type">Bus Type</label>
-                <select id="bus-type-select" onchange="calculateFareRate()">
-                    <option value="Non-AC">Non-AC Coach</option>
-                    <option value="Premium-AC">Premium AC</option>
+            <div class="form-group" style="margin-top:20px;">
+                <label>Bus Type Selection</label>
+                <select id="route-bustype" class="form-control" onchange="calculateFareSystemLogic()">
+                    <option value="Non-AC Coach">Non-AC Coach</option>
+                    <option value="Premium AC">Premium AC</option>
                 </select>
             </div>
-        </div>
 
-        <datalist id="districts-list">
-            <option value="Bagerhat"><option value="Bandarban"><option value="Barguna"><option value="Barisal"><option value="Bhola"><option value="Bogra"><option value="Brahmanbaria"><option value="Chandpur"><option value="Chapai安定"><option value="Chittagong"><option value="Chuadanga"><option value="Comilla"><option value="Cox's Bazar"><option value="Dhaka"><option value="Dinajpur"><option value="Faridpur"><option value="Feni"><option value="Gaibandha"><option value="Gazipur"><option value="Gopalganj"><option value="Habiganj"><option value="Jamalpur"><option value="Jessore"><option value="Jhalokati"><option value="Jhenaidah"><option value="Joypurhat"><option value="Khagrachhari"><option value="Khulna"><option value="Kishoreganj"><option value="Kurigram"><option value="Kushtia"><option value="Lakshmipur"><option value="Lalmonirhat"><option value="Madaripur"><option value="Magura"><option value="Manikganj"><option value="Meherpur"><option value="Moulvibazar"><option value="Munshiganj"><option value="Mymensinghr"><option value="Naogaon"><option value="Narail"><option value="Narayanganj"><option value="Narsingdi"><option value="Natore"><option value="Netrokona"><option value="Nilphamari"><option value="Noakhali"><option value="Pabna"><option value="Panchagarh"><option value="Patuakhali"><option value="Pirojpur"><option value="Rajbari"><option value="Rajshahi"><option value="Rangamati"><option value="Rangpur"><option value="Satkhira"><option value="Shariatpur"><option value="Sherpur"><option value="Sirajganj"><option value="Sunamganj"><option value="Sylhet"><option value="Tangail"><option value="Thakurgaon">
-        </datalist>
-
-        <div style="margin-top:20px; font-size:20px; font-weight:700;">
-            <span id="txt-est-fare">Estimated Ticket Fare:</span> <span id="calculated-fare-lbl" style="color:var(--accent-cyan);">0</span> BDT
-        </div>
-
-        <div class="warning-box">
-            <strong>⚠️ Important Notice</strong><br>
-            <p style="font-size:14px; margin-top:5px;">
-                EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
-            </p>
-        </div>
-
-        <button class="btn-action btn-login" onclick="openSeatSelectionPage()" style="display:block; margin:20px auto; max-width:250px; background-color:#107a8b;" id="btn-select-seat-trigger">🪑 Select Seat 💺</button>
-    </main>
-
-
-    <main class="page" id="seat-selection-page">
-        <h2 style="text-align:center; margin-bottom:15px;" id="txt-seat-select-title">Seat Selection Layout</h2>
-        
-        <div class="seat-map-container">
-            <div class="bus-front">
-                <span><i class="fa-solid fa-door-open"></i> Door</span>
-                <span>Driver <i class="fa-solid fa-id-card-clip"></i></span>
+            <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin:25px 0 15px;">
+                <span class="lang-node" data-en="Estimated Ticket Fare Rate:" data-bn="নির্ধারিত টিকিট ভাড়ার রেট:">Estimated Fare Rate:</span>
+                <span style="color:var(--neon-blue); font-weight:700; font-size:20px;" id="booking-fare-render">0 BDT</span>
             </div>
-            
-            <div id="bus-seats-grid-wrapper">
+
+            <div class="warning-box">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:20px;"></i>
+                <div>
+                    <strong>⚠️ Important Notice</strong><br>
+                    EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
+                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো समस्या বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
                 </div>
-        </div>
-
-        <div style="text-align:center; margin:20px 0; font-size:18px; font-weight:700;">
-            <span id="txt-selected-seat-lbl">Selected Seat:</span> <span id="user-selected-seat-id" style="color:var(--accent-cyan); margin-right:20px;">None</span>
-            <span id="txt-total-fare-lbl">Total Fare:</span> <span id="final-total-fare-amt" style="color:var(--accent-cyan);">0</span> BDT
-        </div>
-
-        <div class="warning-box">
-            <strong>⚠️ Important Notice</strong><br>
-            <p style="font-size:14px; margin-top:5px;">
-                EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
-            </p>
-        </div>
-
-        <button class="btn-action btn-login" onclick="confirmAndDownloadDigitalTicket()" style="display:block; margin:25px auto; max-width:300px; background-color:#2b9348;" id="btn-confirm-download-tkt">Confirm Ticket & Download</button>
-    </main>
-
-
-    <main class="page" id="admin-page">
-        <h2 style="margin-bottom:20px;" id="txt-admin-title">Admin Management Control Panel</h2>
-        
-        <div class="admin-search">
-            <input type="text" id="admin-search-input" placeholder="Search Members Profile by ID...">
-            <button class="btn-action btn-login" style="max-width:120px;" onclick="adminSearchMemberProfile()">Search</button>
-        </div>
-
-        <div class="admin-table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Game Nickname</th>
-                        <th>Role Designation</th>
-                        <th>Balance (BDT)</th>
-                        <th>Actions Management</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-users-table-body">
-                    </tbody>
-            </table>
-        </div>
-    </main>
-
-
-    <main class="page" id="contact-page">
-        <h2 style="margin-bottom:25px;" id="txt-contact-title">Official Staff Administration Directory</h2>
-        <div class="contact-grid" id="contact-directory-wrapper">
             </div>
-    </main>
 
-
-    <div id="ticket-download-area">
-        <div class="tkt-header">
-            <img src="images/BDBUS Group Official Logo.png" class="tkt-logo" alt="Logo">
-            <div class="tkt-title">
-                BDBUS DIGITAL TICKET<br>
-                <span style="font-size:11px; font-weight:500; color:#666;">Official Online Counter</span>
+            <div style="text-align: center; margin-top:20px;">
+                <button class="btn-premium" onclick="openSeatSelectionEngine()"><i class="fa-solid fa-couch"></i> 🪑 Select Seat 💺</button>
             </div>
         </div>
-        <div class="tkt-body">
-            <div class="tkt-row"><span class="tkt-label">Member ID:</span><span class="tkt-value" id="tkt-val-mid" style="color:#007adb;">BDBUS-1001</span></div>
-            <div class="tkt-row"><span class="tkt-label">Full Name:</span><span class="tkt-value" id="tkt-val-name">Emon Talukder</span></div>
-            <div class="tkt-row"><span class="tkt-label">Game Nickname / ID:</span><span class="tkt-value" id="tkt-val-gid">m2√qı...</span></div>
-            <div class="tkt-row"><span class="tkt-label">Mobile No:</span><span class="tkt-value" id="tkt-val-mob">-</span></div>
-            <div class="tkt-row"><span class="tkt-label">From:</span><span class="tkt-value" id="tkt-val-from">-</span></div>
-            <div class="tkt-row"><span class="tkt-label">To:</span><span class="tkt-value" id="tkt-val-to">-</span></div>
-            <div class="tkt-row"><span class="tkt-label">Date:</span><span class="tkt-value" id="tkt-val-date">-</span></div>
-            <div class="tkt-row"><span class="tkt-label">Time:</span><span class="tkt-value" id="tkt-val-time">-</span></div>
-            <div class="tkt-row"><span class="tkt-label">Seat Number:</span><span class="tkt-value" id="tkt-val-seat" style="color:#ff3333;">A1</span></div>
-            <div class="tkt-row"><span class="tkt-label">Room Name:</span><span class="tkt-value" id="tkt-val-room">BDBUS_MEGA_TRIP</span></div>
-            <div class="tkt-row"><span class="tkt-label">Room Password:</span><span class="tkt-value" id="tkt-val-rpass" style="color:#ff3333;">BDBUS77</span></div>
-            <div class="tkt-row" style="margin-top:10px; background:#f0f4f8; padding:8px; border-radius:6px;">
-                <span class="tkt-label">Issue Time & Date:</span><span class="tkt-value" id="tkt-val-issuedate">12:00:00 PM | 14/06/2026</span>
+    </div>
+
+    <div id="seat-screen" class="page-screen">
+        <div class="neon-clock">
+            <div class="neon-time" id="seat-clock-digits">00:00:00 AM</div>
+            <div class="neon-date" id="live-clock-date">SUN, JUN 14, 2026</div>
+        </div>
+
+        <div class="seat-map-wrapper">
+            <h3 id="seat-title-coach-type">Non-AC Coach Plan</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Select 1 seat. Selected seat holds locked for 2 minutes." data-bn="১টি সিট সিলেক্ট করুন। নির্বাচিত সিট ২ মিনিটের জন্য হোল্ড লক থাকবে।">Select 1 seat. Selected holds for 2 mins.</p>
+            
+            <div class="bus-cabin-container" id="dynamic-cabin-root">
+                </div>
+
+            <div style="background:#1e293b; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin:15px 0;">
+                <span class="lang-node" data-en="Total Calculated Fare:" data-bn="মোট নির্ধারিত ভাড়া:">Total Calculated Fare:</span>
+                <span style="color:var(--neon-green); font-weight:700;" id="seat-calculated-total-fare">0 BDT</span>
             </div>
+
+            <div class="warning-box" style="margin:15px 0; text-align:left;">
+                <div>
+                    <strong>⚠️ Important Notice</strong><br>
+                    EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
+                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                </div>
+            </div>
+
+            <button class="btn-premium" style="width:100%; justify-content:center;" onclick="executeTicketConfirmationEngine()">Confirm Ticket & Download</button>
         </div>
-        <div class="tkt-rules">
-            <strong>TERMS & RULES / নির্দেশনাবলী:</strong><br>
-            1. Please join the Multiplayer Room at least 10 minutes before departure.<br>
-            ২. কনভয় বা ট্রিপ চলাকালীন সময়ে সকল ট্রাফিক নিয়ম ও আয়োজকদের নির্দেশনা মেনে চলুন।<br>
-            3. Any form of intentional ramming or toxic behavior will result in an immediate ban.
-        </div>
-        <div class="tkt-footer">
-            <div class="tkt-cr-box">
-                <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:25px; height:25px; border-radius:50%; vertical-align:middle; margin-right:5px;" onerror="this.src='https://via.placeholder.com/25'">
-                <span>Website Created By <strong>M2Vai</strong></span>
-                <div style="margin-top:8px; display:flex; justify-content:center; gap:10px; font-size:10px;">
-                    <span style="color:#cc181e;"><i class="fa-brands fa-youtube"></i> M2Vai</span>
-                    <span style="color:#cc181e;"><i class="fa-brands fa-youtube"></i> Traveller</span>
+
+        <div style="overflow: hidden; height: 1px; opacity: 0; position: absolute; left: -9999px;">
+            <div id="digital-ticket-canvas">
+                <div class="ticket-header-block">
+                    <img src="images/BDBUS Group Official Logo.png" class="ticket-logo" alt="Logo">
+                    <div class="ticket-title-meta">
+                        <h3>BDBUS DIGITAL TICKET</h3>
+                        <p>Official Online Counter</p>
+                    </div>
+                </div>
+                <table class="ticket-data-table">
+                    <tr><td class="label-txt">Member ID:</td><td class="val-txt" id="tk-mid">BDBUS-1001</td></tr>
+                    <tr><td class="label-txt">Full Name:</td><td class="val-txt" id="tk-name">-</td></tr>
+                    <tr><td class="label-txt">Game Nickname / ID:</td><td class="val-txt" id="tk-gid">-</td></tr>
+                    <tr><td class="label-txt">Mobile No:</td><td class="val-txt" id="tk-phone">-</td></tr>
+                    <tr><td class="label-txt">From:</td><td class="val-txt" id="tk-from">-</td></tr>
+                    <tr><td class="label-txt">To:</td><td class="val-txt" id="tk-to">-</td></tr>
+                    <tr><td class="label-txt">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
+                    <tr><td class="label-txt">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
+                    <tr><td class="label-txt">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
+                    <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS_MEGA_TRIP</td></tr>
+                    <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">BDBUS77</td></tr>
+                    <tr><td class="label-txt">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
+                </table>
+                <div class="ticket-rules-box">
+                    <strong>TERMS & RULES / নির্দেশনাবলী:</strong><br>
+                    1. Please join the Multiplayer Room at least 10 minutes before departure.<br>
+                    ২. কনভয় যাত্রার সময় ট্রাফিক নিয়ম ও ভদ্রতা বজায় রাখুন।<br>
+                    3. Any form of intentional ramming or toxic behavior will result in a ban.
+                </div>
+                <div class="ticket-footer-brand">
+                    <p>WEBSITE CREATED BY <strong>M2Vai</strong></p>
+                    <div class="ticket-footer-subs">
+                        <span class="ticket-sub-badge">M2Vai</span>
+                        <span class="ticket-sub-badge" style="background:#555;">Traveller</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <footer id="app-footer" style="display:none;">
-        <div class="social-icons">
-            <a href="https://facebook.com/groups/771005197556072/" target="_blank" style="background:#3b5998;"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" style="background:#cc181e;"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" style="background:#e1306c;"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.threads.com/@m2vai380" target="_blank" style="background:#000000;"><i class="fa-solid fa-threads"></i></a>
-            <a href="https://discord.gg/GJ2F36gE8D" target="_blank" style="background:#7289da;"><i class="fa-brands fa-discord"></i></a>
-            <a href="mailto:info.m2vai380@gmail.com" style="background:#ea4335;"><i class="fa-solid fa-envelope"></i></a>
+    <div id="admin-screen" class="page-screen">
+        <h2 style="text-align:center; margin-bottom:25px;" class="lang-node" data-en="Admin Operational Console" data-bn="এডমিন অপারেশনাল কনসোল">Admin Panel</h2>
+        
+        <div class="admin-search-wrapper">
+            <input type="text" id="admin-search-input" class="form-control" placeholder="Search Member ID (e.g. 1001)">
+            <button class="btn-premium" onclick="executeAdminSearchLogic()">Search</button>
         </div>
 
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a> | <a href="#">Refund Policy</a>
-        </div>
+        <div class="admin-grid" id="admin-user-cards-grid">
+            </div>
+    </div>
 
-        <div class="creator-box">
-            <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-logo" alt="Creator Eye Logo" onerror="this.src='https://via.placeholder.com/50'">
-            <div style="font-size:14px; color:var(--text-muted);">WEBSITE CREATED BY</div>
-            <div style="font-size:20px; font-weight:700; color:#fff; margin-bottom:12px;">M2Vai</div>
-            
-            <div class="subs-buttons">
-                <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="subs-btn">
-                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:18px; height:18px; border-radius:50%;" onerror="this.src='https://via.placeholder.com/18'"> M2Vai Subscribe Now
+    <div id="contact-screen" class="page-screen">
+        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Official Management Team" data-bn="অফিসিয়াল ম্যানেজমেন্ট টিম">Contact Panel</h2>
+        <div class="admin-grid" id="contact-team-grid">
+            </div>
+    </div>
+
+    <datalist id="bangladesh-districts">
+        <option value="Bagerhat"><option value="Bandarban"><option value="Barguna"><option value="Barisal"><option value="Bhola"><option value="Bogra"><option value="Brahmanbaria"><option value="Chandpur"><option value="Chapai開放"><option value="Chittagong"><option value="Chuadanga"><option value="Comilla"><option value="Cox's Bazar"><option value="Dhaka"><option value="Dinajpur"><option value="Faridpur"><option value="Feni"><option value="Gaibandha"><option value="Gazipur"><option value="Gopalganj"><option value="Habiganj"><option value="Jamalpur"><option value="Jessore"><option value="Jhalokati"><option value="Jhenaidah"><option value="Joypurhat"><option value="Khagrachhari"><option value="Khulna"><option value="Kishoreganj"><option value="Kurigram"><option value="Kushtia"><option value="Lakshmipur"><option value="Lalmonirhat"><option value="Madaripur"><option value="Magura"><option value="Manikganj"><option value="Meherpur"><option value="Moulvibazar"><option value="Munshiganj"><option value="Mymensingh"><option value="Naogaon"><option value="Narail"><option value="Narayanganj"><option value="Narsingdi"><option value="Natore"><option value="Netrokona"><option value="Nilphamari"><option value="Noakhali"><option value="Pabna"><option value="Panchagarh"><option value="Patuakhali"><option value="Pirojpur"><option value="Rajbari"><option value="Rajshahi"><option value="Rangamati"><option value="Rangpur"><option value="Satkhira"><option value="Shariatpur"><option value="Sherpur"><option value="Sirajganj"><option value="Sunamganj"><option value="Sylhet"><option value="Tangail"><option value="Thakurgaon">
+    </datalist>
+
+    <footer class="global-footer-panel" id="main-global-footer" style="display: none;">
+        <div class="social-icon-row">
+            <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://discord.gg/GJ2F36gE8D" target="_blank" class="social-link-circle"><i class="fa-brands fa-discord"></i></a>
+            <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <div class="footer-policy-links">
+            <a href="#">Privacy Policy</a>
+            <span>|</span>
+            <a href="#">Terms & Conditions</a>
+            <span>|</span>
+            <a href="#">Refund Policy</a>
+        </div>
+        <div class="footer-creator-box">
+            <div class="creator-title">Website Created By</div>
+            <div class="creator-identity">
+                <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-avatar-icon" onerror="this.src='https://via.placeholder.com/30'">
+                M2Vai
+            </div>
+            <div class="footer-subs-flex">
+                <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px;">
+                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai Subscribe
                 </a>
-                <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="subs-btn" style="background:#a62626;">
-                    <img src="images/Traveller M2Vai.png" style="width:18px; height:18px; border-radius:50%;" onerror="this.src='https://via.placeholder.com/18'"> Traveller Subscribe Now
+                <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px; background:#475569;">
+                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller Subscribe
                 </a>
             </div>
         </div>
     </footer>
 
-
     <script>
-        // Memory States Database Simulation Storage Model
-        let currentLang = 'en';
-        let currentUser = null;
-        let sessionTimer = null;
-        let selectedSeat = null;
-        let seatLockCountdown = null;
-        
-        // Mock DB Tables Dataset
-        let usersTable = [
-            { id: 1000, name: "Admin King", gameId: "M2Vai", email: "admin@mail.com", pass: "123456", role: "Admin", balance: 50000, avatar: "images/M2Vai Official YouTube Channel Logo.png", active: true },
-            { id: 1001, name: "Mod Emon", gameId: "m2√qı...", email: "mod@mail.com", pass: "123456", role: "Moderator", balance: 25000, avatar: "https://via.placeholder.com/150", active: true },
-            { id: 1002, name: "Counter Master Boss", gameId: "CounterCM", email: "counter@mail.com", pass: "123456", role: "Counter Master", balance: 500, avatar: "https://via.placeholder.com/150", active: false },
-            { id: 1003, name: "Trip Manager", gameId: "TripMasterX", email: "trip@mail.com", pass: "123456", role: "Trip Master", balance: 12000, avatar: "https://via.placeholder.com/150", active: true }
-        ];
-
-        let globalSeatDatabase = {}; // Format: { "Non-AC_A1": { status: 'locked'/'booked', holder: id, timestamp: epoch } }
-
-        // Localized Structural Translation Packs Objects
-        const languages = {
-            en: {
-                brand: "BDBUS ONLINE TICKET COUNTER",
-                home: "Home", profile: "My Profile", password: "Change Password", booking: "Bus Ticket Booking", admin: "Admin Panel", contact: "Contact", logout: "Logout",
-                loginTitle: "BDBUS ONLINE TICKET COUNTER", loginEmail: "Email Address", loginPass: "Password", forgotPass: "Forgot password?", btnLogin: "Login Now", btnSignup: "Sign Up Now",
-                regName: "Full Name", regGame: "Game Nickname / ID", regDob: "Date of Birth", regMob: "Mobile Number", regGender: "Gender", regFb: "Facebook Profile Link", regEmail: "Email Address", regSetPass: "Set Password", regConfPass: "Confirm Password", regCheck: "All details provided are correct and valid.", btnRegSubmit: "Registration Submit", backLogin: "Back to Login",
-                welcome: "Welcome", estFare: "Estimated Ticket Fare:", selectSeatBtn: "🪑 Select Seat 💺", curPass: "Current Password", newPass: "New Password", confPass: "Confirm Password", submitPassBtn: "Submitte Password",
-                selSeatLbl: "Selected Seat:", totalFareLbl: "Total Fare:", confirmDwnBtn: "Confirm Ticket & Download", uploadAvatar: "Upload Profile Image (Max 300kb)"
-            },
-            bn: {
-                brand: "বিডিবিইউএস অনলাইন টিকিট কাউন্টার",
-                home: "হোম পেজ", profile: "আমার প্রোফাইল", password: "পাসওয়ার্ড পরিবর্তন", booking: "বাস টিকিট বুকিং", admin: "এডমিন প্যানেল", contact: "যোগাযোগ", logout: "লগআউট",
-                loginTitle: "বিডিবিইউএস অনলাইন টিকিট কাউন্টার", loginEmail: "ইমেইল এড্রেস", loginPass: "পাসওয়ার্ড", forgotPass: "পাসওয়ার্ড ভুলে গেছেন?", btnLogin: "লগইন করুন", btnSignup: "নিবন্ধন করুন",
-                regName: "পূর্ণ নাম", regGame: "গেম নিকনেম / আইডি", regDob: "জন্ম তারিখ", regMob: "মোবাইল নম্বর", regGender: "লিঙ্গ", regFb: "ফেসবুক প্রোফাইল লিংক", regEmail: "ইমেইল এড্রেস", regSetPass: "পাসওয়ার্ড সেট করুন", regConfPass: "পাসওয়ার্ড নিশ্চিত করুন", regCheck: "প্রদত্ত সকল তথ্য সঠিক এবং বৈধ।", btnRegSubmit: "রেজিস্ট্রেশন সাবমিট", backLogin: "লগইনে ফিরে যান",
-                welcome: "স্বাগতম", estFare: "আনুমানিক টিকিট ভাড়া:", selectSeatBtn: "🪑 সিট সিলেক্ট করুন 💺", curPass: "বর্তমান পাসওয়ার্ড", newPass: "নতুন পাসওয়ার্ড", confPass: "পাসওয়ার্ড নিশ্চিত করুন", submitPassBtn: "পাসওয়ার্ড পরিবর্তন করুন",
-                selSeatLbl: "নির্বাচিত সিট:", totalFareLbl: "মোট ভাড়া:", confirmDwnBtn: "টিকিট নিশ্চিত এবং ডাউনলোড করুন", uploadAvatar: "প্রোফাইল ছবি আপলোড (সর্বোচ্চ ৩০০kb)"
-            }
+        // System Global State Keys Setup
+        const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
+        let db = JSON.parse(localStorage.getItem('bdbus_local_db')) || {
+            users: [],
+            notices: "Welcome to BDBUS Official Ticket Counter Simulator Hub!",
+            occupiedSeats: {}, // format: { "Non-AC_Seat-A1": { expireTime: timestamp, userId: id } }
+            sysConfigIdCounter: 1000
         };
 
-        // Initialize App Events Engine Framework Hooks
-        window.onload = function() {
-            // Restore session storage if available to persist refresh actions
-            const savedUser = sessionStorage.getItem("activeSessionUser");
-            if(savedUser) {
-                currentUser = JSON.parse(savedUser);
-                postLoginSetup();
-                switchPage('home-page');
+        let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
+        let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+        let currentlyChosenSeatNode = null;
+        let selectedFareGlobalRate = 0;
+
+        // Default Seeding Engine for Core Admins
+        function verifyDatabaseStructureSeeding() {
+            let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
+            if (!adminCheck) {
+                db.users.push({
+                    id: db.sysConfigIdCounter++,
+                    name: "M2Vai Admin",
+                    gameid: "M2Vai",
+                    dob: "1995-01-01",
+                    phone: "01878335098",
+                    gender: "Male",
+                    fb: "https://facebook.com/groups/771005197556072/",
+                    email: SUPER_ADMIN_EMAIL,
+                    pass: "admin123",
+                    role: "Admin",
+                    wallet: 50000,
+                    avatar: "images/M2Vai Official YouTube Channel Logo.png",
+                    isBanned: false,
+                    claimedWelcome: true,
+                    claimedSubs: true
+                });
+                saveDataEngine();
             }
-            startLiveSystemClock();
-            renderActiveMembersCarousel();
-            setInterval(renderActiveMembersCarousel, 3000); // 3 seconds loop roll rotation ticker
-        };
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
-            document.querySelector('.lang-btn.' + lang).classList.add('active-lang');
-
-            // Apply text translations maps package iterations
-            const p = languages[lang];
-            document.getElementById('txt-header-brand').innerText = "BDBUS";
-            document.getElementById('m-home').innerText = p.home;
-            document.getElementById('m-profile').innerText = p.profile;
-            document.getElementById('m-password').innerText = p.password;
-            document.getElementById('m-booking').innerText = p.booking;
-            document.getElementById('m-admin').innerText = p.admin;
-            document.getElementById('m-contact').innerText = p.contact;
-            document.getElementById('m-logout').innerText = p.logout;
-
-            // Auth page updates translations controls mapping loop
-            document.getElementById('txt-login-title').innerText = p.loginTitle;
-            document.getElementById('lbl-login-email').innerText = p.loginEmail;
-            document.getElementById('lbl-login-pass').innerText = p.loginPass;
-            document.getElementById('txt-forgot-pass').innerText = p.forgotPass;
-            document.getElementById('btn-goto-signup').innerText = p.btnSignup;
-            document.getElementById('btn-submit-login').innerText = p.btnLogin;
-
-            document.getElementById('lbl-reg-name').innerText = p.regName;
-            document.getElementById('lbl-reg-game').innerText = p.regGame;
-            document.getElementById('lbl-reg-dob').innerText = p.regDob;
-            document.getElementById('lbl-reg-num').innerText = p.regMob;
-            document.getElementById('lbl-reg-gender').innerText = p.regGender;
-            document.getElementById('lbl-reg-fb').innerText = p.regFb;
-            document.getElementById('lbl-reg-email').innerText = p.regEmail;
-            document.getElementById('lbl-reg-pass').innerText = p.regSetPass;
-            document.getElementById('lbl-reg-cpass').innerText = p.regConfPass;
-            document.getElementById('lbl-reg-check').innerText = p.regCheck;
-            document.getElementById('btn-submit-reg').innerText = p.btnRegSubmit;
-            document.getElementById('txt-back-login').innerText = p.backLogin;
-
-            document.getElementById('txt-welcome').innerText = p.welcome;
-            document.getElementById('txt-est-fare').innerText = p.estFare;
-            document.getElementById('btn-select-seat-trigger').innerText = p.selectSeatBtn;
-            
-            document.getElementById('txt-change-pass-title').innerText = p.password;
-            document.getElementById('lbl-curr-pass').innerText = p.curPass;
-            document.getElementById('lbl-new-pass').innerText = p.newPass;
-            document.getElementById('lbl-conf-pass').innerText = p.confPass;
-            document.getElementById('btn-submit-pass').innerText = p.submitPassBtn;
-
-            document.getElementById('txt-seat-select-title').innerText = p.booking;
-            document.getElementById('txt-selected-seat-lbl').innerText = p.selSeatLbl;
-            document.getElementById('txt-total-fare-lbl').innerText = p.totalFareLbl;
-            document.getElementById('btn-confirm-download-tkt').innerText = p.confirmDwnBtn;
-            document.getElementById('lbl-upload-avatar').innerText = p.uploadAvatar;
-
-            updateTimeOfDayGreeting();
         }
 
-        function startLiveSystemClock() {
+        function saveDataEngine() {
+            localStorage.setItem('bdbus_local_db', JSON.stringify(db));
+        }
+
+        // Clock Engine Running Modules
+        function initialClockHeartbeatEngine() {
             setInterval(() => {
                 const now = new Date();
-                // Forces live lock clock outputs validation matchers
-                let hours = now.getHours();
-                let minutes = now.getMinutes();
-                let seconds = now.getSeconds();
-                let ampm = hours >= 12 ? 'AM' : 'AM'; // Override mockup visual design specifications
-                // Simple standard visual clock fallback formatting tracking
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                minutes = minutes < 10 ? '0'+minutes : minutes;
-                seconds = seconds < 10 ? '0'+seconds : seconds;
-                
-                document.getElementById('live-clock').innerText = `${hours}:${minutes}:${seconds} ${now.getHours() >= 12 ? 'PM':'AM'}`;
+                let hrs = now.getHours();
+                const mins = String(now.getMinutes()).padStart(2, '0');
+                const secs = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hrs >= 12 ? 'PM' : 'AM';
+                hrs = hrs % 12;
+                hrs = hrs ? hrs : 12;
+                const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
                 
                 const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-                const months = ['JUN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-                document.getElementById('live-date').innerText = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+                const months = ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR', 'MAY'];
+                // Mapped precisely matching client simulated parameters
+                const dateString = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+
+                // Injections across elements
+                document.getElementById('live-clock-digits').innerText = timeString;
+                document.getElementById('live-clock-date').innerText = dateString;
+                document.getElementById('booking-clock-digits').innerText = timeString;
+                document.getElementById('booking-clock-date').innerText = dateString;
+                document.getElementById('seat-clock-digits').innerText = timeString;
+
+                // Live Greetings Evaluator Node
+                let greeting = "GOOD MORNING";
+                if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
+                else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
+                else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
+                document.getElementById('home-greeting-txt').innerText = greeting;
+
+                // Clear Locked Seat Timers Context Evaluator loop running natively
+                evaluateSeatLockTimerExpirations();
             }, 1000);
         }
 
-        function updateTimeOfDayGreeting() {
-            if(!currentUser) return;
-            const hour = new Date().getHours();
-            let greet = "GOOD MORNING";
-            if(hour >= 12 && hour < 16) greet = "GOOD AFTERNOON";
-            else if(hour >= 16 && hour < 20) greet = "GOOD EVENING";
-            else if(hour >= 20 || hour < 5) greet = "GOOD NIGHT";
-            document.getElementById('txt-daytime').innerText = greet;
+        // Security Session Engine Rules
+        function checkSessionTimeoutRules() {
+            if (activeUserSession) {
+                let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
+                if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
+                    alert("Session expired! 30 minutes timeout reached.");
+                    executeLogoutAction();
+                }
+            }
         }
 
-        function toggleSidebar() {
-            document.getElementById('appSidebar').classList.toggle('open');
+        // View Router Controller Engine
+        function navigatePage(screenId) {
+            toggleSidebarMenu(false);
+            document.querySelectorAll('.page-screen').forEach(scr => scr.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // Screen specific dynamic initialization render cycles
+            if (screenId === 'home-screen') renderHomeMembersCarousel();
+            if (screenId === 'profile-screen') renderUserProfileView();
+            if (screenId === 'admin-screen') renderAdminPanelDashboard();
+            if (screenId === 'contact-screen') renderContactTeamPanel();
         }
 
-        function toggleAuthView(view) {
+        function toggleSidebarMenu(open) {
+            const menu = document.getElementById('sidebar-drawer-menu');
+            if (open) menu.classList.add('active');
+            else menu.classList.remove('active');
+        }
+
+        function toggleAuthSubView(view) {
             if(view === 'signup') {
-                document.getElementById('login-view').style.display = 'none';
-                document.getElementById('signup-view').style.display = 'block';
+                document.getElementById('login-sub-card').style.display = 'none';
+                document.getElementById('signup-sub-card').style.display = 'block';
             } else {
-                document.getElementById('login-view').style.display = 'block';
-                document.getElementById('signup-view').style.display = 'none';
+                document.getElementById('login-sub-card').style.display = 'block';
+                document.getElementById('signup-sub-card').style.display = 'none';
             }
         }
 
-        // Authentication Handlers Engines 
-        function login() {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            
-            const user = usersTable.find(u => u.email === email && u.pass === pass);
-            if(user) {
-                currentUser = user;
-                sessionStorage.setItem("activeSessionUser", JSON.stringify(currentUser));
-                postLoginSetup();
-                switchPage('home-page');
-            } else {
-                alert("Invalid Email Credentials or Password configuration matrix mismatch.");
-            }
-        }
-
-        function register() {
-            if(!document.getElementById('reg-agree').checked) {
-                alert("Please declare all checkbox verification flags validation rules criteria match parameters.");
-                return;
-            }
-            const name = document.getElementById('reg-name').value;
-            const gameId = document.getElementById('reg-game-id').value;
-            const email = document.getElementById('reg-email').value;
+        // Auth Logic Implementations
+        function executeRegistrationLogic() {
+            const name = document.getElementById('reg-name').value.trim();
+            const gameid = document.getElementById('reg-gameid').value.trim();
+            const dob = document.getElementById('reg-dob').value;
+            const phone = document.getElementById('reg-phone').value.trim();
+            const gender = document.getElementById('reg-gender').value;
+            const fb = document.getElementById('reg-fb').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-pass').value;
-            const cpass = document.getElementById('reg-cpass').value;
+            const confpass = document.getElementById('reg-confpass').value;
+            const agree = document.getElementById('reg-agree').checked;
 
-            if(!name || !gameId || !email || !pass) { alert("Fields cannot remain unassigned."); return; }
-            if(pass !== cpass) { alert("Passwords confirm matching synchronization broken."); return; }
+            if(!name || !gameid || !dob || !phone || !email || !pass) { alert("Please complete all fields!"); return; }
+            if(pass !== confpass) { alert("Passwords do not match!"); return; }
+            if(!agree) { alert("Please verify declarations checklist authorization."); return; }
+            if(db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
 
-            const nextId = usersTable[usersTable.length - 1].id + 1;
-            const newMember = {
-                id: nextId, name: name, gameId: gameId, email: email, pass: pass,
-                role: "Member", balance: 5000, avatar: "https://via.placeholder.com/150", active: true, claimedRewards: []
+            let newUser = {
+                id: db.sysConfigIdCounter++,
+                name, gameid, dob, phone, gender, fb, email, pass,
+                role: (email === SUPER_ADMIN_EMAIL) ? "Admin" : "Regular Member",
+                wallet: 0,
+                avatar: "https://via.placeholder.com/150",
+                isBanned: false, claimedWelcome: false, claimedSubs: false
             };
-            usersTable.push(newMember);
-            alert(`Registration Complete! Your generated Account Member ID token signature is: ${nextId}`);
-            currentUser = newMember;
-            sessionStorage.setItem("activeSessionUser", JSON.stringify(currentUser));
-            postLoginSetup();
-            switchPage('home-page');
+
+            db.users.push(newUser);
+            saveDataEngine();
+            alert(`Registration successful! Your generated ID is: BDBUS-${newUser.id}`);
+            toggleAuthSubView('login');
         }
 
-        function postLoginSetup() {
+        function executeLoginLogic() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-pass').value;
+
+            let user = db.users.find(u => u.email === email && u.pass === pass);
+            if(!user) { alert("Invalid credentials verified."); return; }
+            if(user.isBanned) { alert("Your profile account is banned indefinitely from accessing BDBUS consoles."); return; }
+
+            activeUserSession = user;
+            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
+            sessionStorage.setItem('bdbus_login_timestamp', Date.now());
+
             document.body.classList.add('logged-in');
-            document.getElementById('menuToggleBtn').style.display = 'block';
-            document.getElementById('app-footer').style.display = 'block';
-            document.getElementById('home-username').innerText = currentUser.name;
-            document.getElementById('profile-full-name').innerText = currentUser.name;
-            document.getElementById('profile-account-id').innerText = currentUser.id;
-            document.getElementById('profile-role-tag').innerText = "Designation: " + currentUser.role;
-            document.getElementById('wallet-amt').innerText = currentUser.balance;
-            document.getElementById('user-display-avatar').src = currentUser.avatar;
-
-            if(['Admin', 'Moderator', 'Counter Master', 'Trip Master'].includes(currentUser.role)) {
-                document.getElementById('menu-admin-item').style.display = 'flex';
-                syncAdminControlTableGrid();
-            } else {
-                document.getElementById('menu-admin-item').style.display = 'none';
-            }
-
-            renderOfficialStaffDirectory();
-            updateTimeOfDayGreeting();
-            resetAppSessionTimeoutMonitor();
-        }
-
-        function resetAppSessionTimeoutMonitor() {
-            if(sessionTimer) clearTimeout(sessionTimer);
-            // Auto logout loop lifecycle after 30 minutes threshold inactivation parameters
-            sessionTimer = setTimeout(() => {
-                alert("Session expired due to 30 minutes frame inactive protection triggers.");
-                logout();
-            }, 30 minutes * 60 * 1000); 
-        }
-
-        function logout() {
-            currentUser = null;
-            sessionStorage.removeItem("activeSessionUser");
-            document.body.classList.remove('logged-in');
-            document.getElementById('menuToggleBtn').style.display = 'none';
-            document.getElementById('app-footer').style.display = 'none';
-            document.getElementById('appSidebar').classList.remove('open');
-            switchPage('auth-page');
-        }
-
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId).classList.add('active-page');
-            document.getElementById('appSidebar').classList.remove('open');
+            document.getElementById('main-global-header').style.display = 'flex';
+            document.getElementById('main-global-footer').style.display = 'block';
             
-            // Adjust menu link highlight
-            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active-menu'));
-            resetAppSessionTimeoutMonitor();
+            if(user.role === 'Admin') { document.getElementById('admin-menu-link').style.style.display = 'flex'; }
+            else { document.getElementById('admin-menu-link').style.display = 'none'; }
+
+            document.getElementById('home-welcome-user').innerText = `Welcome, ${user.name} (ID: BDBUS-${user.id})`;
+            document.getElementById('live-marquee-node').innerText = db.notices;
+
+            navigatePage('home-screen');
         }
 
-        function goToHome() {
-            if(currentUser) switchPage('home-page');
+        function executeLogoutAction() {
+            activeUserSession = null;
+            sessionStorage.clear();
+            document.body.classList.remove('logged-in');
+            document.getElementById('main-global-header').style.display = 'none';
+            document.getElementById('main-global-footer').style.display = 'none';
+            navigatePage('auth-screen');
         }
 
-        function forgotPassword() {
-            alert("Password Reset confirmation tracking code matrix dispatched toward active registered gateway node.");
+        function triggerForgotPassword() {
+            let email = prompt("Enter your registered email address:");
+            if(!email) return;
+            let user = db.users.find(u => u.email === email);
+            if(user) alert(`Your system password recovery response is: ${user.pass}`);
+            else alert("No verified account located using this email identifier.");
         }
 
-        // Reward Infrastructure Engines Loops
-        function claimRegBonus() {
-            if(!currentUser.claimedRewards) currentUser.claimedRewards = [];
-            if(currentUser.claimedRewards.includes('reg')) { alert("Reward token claimed previously."); return; }
-            currentUser.balance += 5000;
-            currentUser.claimedRewards.push('reg');
-            document.getElementById('wallet-amt').innerText = currentUser.balance;
-            alert("5000 BDT Welcome Registry bonus added into live profile pocket wallet.");
+        // Reward Interactions Engine
+        function claimWelcomeRewardLogic() {
+            let user = db.users.find(u => u.id === activeUserSession.id);
+            if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
+            user.wallet += 5000;
+            user.claimedWelcome = true;
+            saveDataEngine();
+            syncSessionState(user);
+            alert("5000 BDT Welcome allocation credited into wallet console successfully!");
+            document.getElementById('claim-welcome-btn').disabled = true;
         }
 
-        function claimSubsBonus() {
-            if(!currentUser.claimedRewards) currentUser.claimedRewards = [];
-            if(currentUser.claimedRewards.includes('subs')) { alert("Subscription reward claimed previously."); return; }
+        function triggerYoutubeSubscribeReward() {
+            let user = db.users.find(u => u.id === activeUserSession.id);
             window.open("https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B", "_blank");
+            if(user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
             setTimeout(() => {
-                currentUser.balance += 10000;
-                currentUser.claimedRewards.push('subs');
-                document.getElementById('wallet-amt').innerText = currentUser.balance;
-                alert("10000 BDT Channels Media Subscription reward added successfully.");
-            }, 2000);
+                user.wallet += 10000;
+                user.claimedSubs = true;
+                saveDataEngine();
+                syncSessionState(user);
+                alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
+            }, 5000);
         }
 
-        function watchVideoTask() {
+        function triggerWatchVideoReward() {
+            let user = db.users.find(u => u.id === activeUserSession.id);
             window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
+            alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
             setTimeout(() => {
-                currentUser.balance += 3000;
-                document.getElementById('wallet-amt').innerText = currentUser.balance;
-                alert("3000 BDT Video streaming task loop verification cleared. Balance credited.");
-            }, 1500);
+                user.wallet += 3000;
+                saveDataEngine();
+                syncSessionState(user);
+                alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
+            }, 61000); // Trigger reward after 1 minute simulation loop
         }
 
-        // Profile Avatar Base64 Upload Pipeline Parsing Engine
-        function uploadAvatarImage() {
-            const file = document.getElementById('avatar-input').files[0];
-            if(file.size > 300 * 1024) { alert("Size ceiling overflow max limit bound: 300kb."); return; }
+        function syncSessionState(updatedUser) {
+            activeUserSession = updatedUser;
+            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
+        }
+
+        // Profiles Management Elements
+        function renderUserProfileView() {
+            let user = db.users.find(u => u.id === activeUserSession.id);
+            document.getElementById('profile-avatar-render').src = user.avatar;
+            document.getElementById('prof-render-name').innerText = user.name;
+            document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
+            document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
+
+            document.getElementById('prof-meta-list-block').innerHTML = `
+                <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
+                <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
+                <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
+                <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
+                <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
+                <p><strong>System Auth Email:</strong> ${user.email}</p>
+            `;
+        }
+
+        function processAvatarUpload(event) {
+            const file = event.target.files[0];
+            if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
             const reader = new FileReader();
-            reader.onloadend = function() {
-                currentUser.avatar = reader.result;
-                document.getElementById('user-display-avatar').src = reader.result;
-                alert("Profile image matrix redefined successfully.");
-            }
+            reader.onload = function(e) {
+                let user = db.users.find(u => u.id === activeUserSession.id);
+                user.avatar = e.target.result;
+                saveDataEngine();
+                syncSessionState(user);
+                document.getElementById('profile-avatar-render').src = user.avatar;
+                alert("Avatar uploaded and compiled successfully!");
+            };
             reader.readAsDataURL(file);
         }
 
-        function updateAccountPassword() {
-            const curr = document.getElementById('curr-password').value;
-            const npass = document.getElementById('new-password').value;
-            const cpass = document.getElementById('conf-password').value;
-            if(curr !== currentUser.pass) { alert("Verification of original account secret token failed."); return; }
-            if(npass !== cpass) { alert("Synchronization alignment match failed."); return; }
-            currentUser.pass = npass;
-            alert("Password updated successfully.");
+        function executePasswordChangeLogic() {
+            const curr = document.getElementById('pwd-curr').value;
+            const nxt = document.getElementById('pwd-new').value;
+            const conf = document.getElementById('pwd-conf').value;
+            let user = db.users.find(u => u.id === activeUserSession.id);
+
+            if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
+            if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
+
+            user.pass = nxt;
+            saveDataEngine();
+            alert("Password updated securely. Use updated variables during subsequent login loops.");
+            document.getElementById('pwd-curr').value = "";
+            document.getElementById('pwd-new').value = "";
+            document.getElementById('pwd-conf').value = "";
         }
 
-        // Active Rolling User Loop Carousel Engine Ticker Component
-        function renderActiveMembersCarousel() {
-            const track = document.getElementById('member-scroller-track');
-            if(!track) return;
-            track.innerHTML = "";
-            
-            // Sort criteria matching state balance array filter pipelines sets
-            let sorted = [...usersTable].sort((a,b) => b.balance - a.balance);
-            sorted.forEach(u => {
-                const c = document.createElement('div');
-                c.className = "member-card";
-                c.innerHTML = `
-                    <img src="${u.avatar}" class="member-img" onerror="this.src='https://via.placeholder.com/55'">
-                    <div>
-                        <div style="font-weight:700; font-size:14px;">ID: ${u.id} ${u.active ? '<span class="active-dot"></span>':''}</div>
-                        <div style="font-size:13px; font-weight:600;">${u.name}</div>
-                        <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">${u.role}</div>
-                        <div style="font-size:12px; color:var(--accent-cyan); font-weight:700;">${u.balance} BDT</div>
-                    </div>
-                `;
-                track.appendChild(c);
-            });
+        // Booking & Seat Calculation Algorithms
+        function calculateFareSystemLogic() {
+            const type = document.getElementById('route-bustype').value;
+            selectedFareGlobalRate = (type === "Premium AC") ? 1200 : 650; // Standard Bangladesh District Bus Fare Simulation Ratio
+            document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-        // Route & Fare Processing Engine
-        function calculateFareRate() {
-            const bType = document.getElementById('bus-type-select').value;
-            const fare = bType === 'Premium-AC' ? 1200 : 650;
-            document.getElementById('calculated-fare-lbl').innerText = fare;
-            return fare;
-        }
-
-        function openSeatSelectionPage() {
+        function openSeatSelectionEngine() {
             const from = document.getElementById('route-from').value;
             const to = document.getElementById('route-to').value;
-            if(!from || !to) { alert("Please determine both Route Departure nodes points mapping targets."); return; }
-            
-            const fare = calculateFareRate();
-            document.getElementById('final-total-fare-amt').innerText = 0;
-            document.getElementById('user-selected-seat-id').innerText = "None";
-            selectedSeat = null;
+            const date = document.getElementById('route-date').value;
+            const time = document.getElementById('route-time').value;
+            const type = document.getElementById('route-bustype').value;
 
-            buildVehicleSeatGridStructure();
-            switchPage('seat-selection-page');
+            if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
+            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance balance token limits to initiate routing selections."); return; }
+
+            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid`;
+            document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
+            currentlyChosenSeatNode = null;
+
+            generateBusCabinGridBlueprint(type);
+            navigatePage('seat-screen');
         }
 
-        // Matrix Coach Layout Assembly Engine
-        function buildVehicleSeatGridStructure() {
-            const wrapper = document.getElementById('bus-seats-grid-wrapper');
-            wrapper.innerHTML = "";
-            const bType = document.getElementById('bus-type-select').value;
-            const rows = ['A','B','C','D','E','F','G','H','I','J'];
+        function generateBusCabinGridBlueprint(coachType) {
+            const root = document.getElementById('dynamic-cabin-root');
+            root.innerHTML = `<div class="cabin-front-header"><span>🚪 DOOR</span><span>🧑‍✈️ DRIVER</span></div>`;
+            
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+            
+            if(coachType === "Non-AC Coach") {
+                // 2 x Aisle x 2 Matrix Framework Configuration
+                rows.forEach(r => {
+                    let rowDiv = document.createElement('div');
+                    rowDiv.className = 'seat-row-grid';
+                    
+                    let leftBlock = document.createElement('div');
+                    leftBlock.className = 'seat-side-block';
+                    leftBlock.appendChild(createSeatElement(`${r}1`));
+                    leftBlock.appendChild(createSeatElement(`${r}2`));
 
-            rows.forEach(r => {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = "seat-row";
-                
-                let leftSide = document.createElement('div');
-                leftSide.className = "seat-side";
-                let rightSide = document.createElement('div');
-                rightSide.className = "seat-side";
+                    let rightBlock = document.createElement('div');
+                    rightBlock.className = 'seat-side-block';
+                    rightBlock.appendChild(createSeatElement(`${r}3`));
+                    rightBlock.appendChild(createSeatElement(`${r}4`));
 
-                if(bType === 'Non-AC') {
-                    // 2 + 2 Layout
-                    for(let i=1; i<=2; i++) leftSide.appendChild(createSeatNode(`${r}${i}`));
-                    for(let i=3; i<=4; i++) rightSide.appendChild(createSeatNode(`${r}${i}`));
-                } else {
-                    // 1 + 2 Layout
-                    leftSide.appendChild(createSeatNode(`${r}1`));
-                    for(let i=2; i<=3; i++) rightSide.appendChild(createSeatNode(`${r}${i}`));
+                    rowDiv.appendChild(leftBlock);
+                    rowDiv.appendChild(rightBlock); // Middle space dynamically assigned naturally by CSS space flex layouts
+                    root.appendChild(rowDiv);
+                });
+            } else {
+                // Premium AC: 1 x Aisle x 2 Core Layouts
+                rows.forEach(r => {
+                    let rowDiv = document.createElement('div');
+                    rowDiv.className = 'seat-row-grid';
+                    
+                    let leftBlock = document.createElement('div');
+                    leftBlock.className = 'seat-side-block';
+                    leftBlock.appendChild(createSeatElement(`${r}1`));
+
+                    let rightBlock = document.createElement('div');
+                    rightBlock.className = 'seat-side-block';
+                    rightBlock.appendChild(createSeatElement(`${r}2`));
+                    rightBlock.appendChild(createSeatElement(`${r}3`));
+
+                    rowDiv.appendChild(leftBlock);
+                    rowDiv.appendChild(rightBlock);
+                    root.appendChild(rowDiv);
+                });
+            }
+        }
+
+        function createSeatElement(idStr) {
+            let seat = document.createElement('div');
+            seat.className = 'seat-node';
+            seat.innerText = idStr;
+            
+            const type = document.getElementById('route-bustype').value;
+            const globalKey = `${type}_Seat-${idStr}`;
+            
+            // Check Lock State Parameters
+            if(db.occupiedSeats[globalKey]) {
+                let lockData = db.occupiedSeats[globalKey];
+                if(Date.now() < lockData.expireTime) {
+                    if(lockData.isConfirmed) { seat.classList.add('occupied'); }
+                    else { seat.classList.add('locked-hold'); }
                 }
-
-                rowDiv.appendChild(leftSide);
-                const aisle = document.createElement('div'); aisle.className = "center-aisle"; rowDiv.appendChild(aisle);
-                rowDiv.appendChild(rightSide);
-                wrapper.appendChild(rowDiv);
-            });
-        }
-
-        function createSeatNode(id) {
-            const s = document.createElement('div');
-            s.className = "seat";
-            s.innerText = id;
-            
-            const key = document.getElementById('bus-type-select').value + "_" + id;
-            if(globalSeatDatabase[key]) {
-                s.classList.add(globalSeatDatabase[key].status);
             }
 
-            s.onclick = function() {
-                if(s.classList.contains('booked') || s.classList.contains('locked')) return;
+            seat.onclick = () => {
+                if(seat.classList.contains('occupied') || seat.classList.contains('locked-hold')) return;
                 
-                document.querySelectorAll('.seat').forEach(node => node.classList.remove('selected'));
-                s.classList.add('selected');
-                selectedSeat = id;
-                document.getElementById('user-selected-seat-id').innerText = id;
-                document.getElementById('final-total-fare-amt').innerText = calculateFareRate();
-
-                // 2 Minutes Temporal Lock Logic Hooks Trigger
-                lockTargetSeatTemporarily(key);
+                // Toggle Mechanism constraint rules (Max 1 seat tracking allocation per session loop iteration)
+                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
+                seat.classList.add('selected');
+                currentlyChosenSeatNode = idStr;
+                
+                // Inject hold token lock tracking mechanisms instantly for 2 minutes duration windows
+                executeTemporary2MinuteSeatLock(globalKey);
+                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
             };
-            return s;
+            return seat;
         }
 
-        function lockTargetSeatTemporarily(key) {
-            globalSeatDatabase[key] = { status: 'locked', holder: currentUser.id, timestamp: Date.now() };
-            if(seatLockCountdown) clearTimeout(seatLockCountdown);
-            
-            // Auto release unlocked placeholder hold targets after 2 minutes interval frames boundary
-            seatLockCountdown = setTimeout(() => {
-                if(globalSeatDatabase[key] && globalSeatDatabase[key].status === 'locked') {
-                    delete globalSeatDatabase[key];
-                    alert("Temporal hold expired! Selected seat seat released into accessible pools stack.");
-                    buildVehicleSeatGridStructure();
+        function executeTemporary2MinuteSeatLock(globalKey) {
+            // Terminate locks held by current user session scope elements elsewhere
+            for(let key in db.occupiedSeats) {
+                if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
+                    delete db.occupiedSeats[key];
                 }
-            }, 2 * 60 * 1000);
+            }
+            db.occupiedSeats[globalKey] = {
+                expireTime: Date.now() + (2 * 60 * 1000), // 2 Minutes Lock
+                userId: activeUserSession.id,
+                isConfirmed: false,
+                timestampLocked: Date.now()
+            };
+            saveDataEngine();
         }
 
-        // PNG Processing High Fidelity Image Engine Capture Pipelines
-        function confirmAndDownloadDigitalTicket() {
-            if(!selectedSeat) { alert("Please select a seat."); return; }
-            const cost = calculateFareRate();
-            if(currentUser.balance < cost) { alert("Wallet resources depletion. Operation blocked."); return; }
+        function evaluateSeatLockTimerExpirations() {
+            let stateChanged = false;
+            for(let key in db.occupiedSeats) {
+                let lock = db.occupiedSeats[key];
+                if(!lock.isConfirmed && (Date.now() > lock.expireTime)) {
+                    delete db.occupiedSeats[key];
+                    stateChanged = true;
+                }
+                // Long Booking Lock Validation Window Check (60 Minutes Auto Expiration Frame Parameters)
+                else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
+                    delete db.occupiedSeats[key];
+                    stateChanged = true;
+                }
+            }
+            if(stateChanged) saveDataEngine();
+        }
 
-            currentUser.balance -= cost;
-            document.getElementById('wallet-amt').innerText = currentUser.balance;
+        function executeTicketConfirmationEngine() {
+            if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
+            
+            let user = db.users.find(u => u.id === activeUserSession.id);
+            if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
-            const key = document.getElementById('bus-type-select').value + "_" + selectedSeat;
-            globalSeatDatabase[key] = { status: 'booked', holder: currentUser.id, timestamp: Date.now() };
+            const type = document.getElementById('route-bustype').value;
+            const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
-            // 60 Minutes Auto Expiry Evacuation Execution Hook
-            setTimeout(() => {
-                delete globalSeatDatabase[key];
-            }, 60 * 60 * 1000);
+            // Deduct system parameter values ledger nodes balances
+            user.wallet -= selectedFareGlobalRate;
+            
+            // Convert Lock parameter matrices state objects into Permanent 60 Minutes Confirmed Elements
+            db.occupiedSeats[globalKey] = {
+                expireTime: Date.now() + (60 * 60 * 1000), // 60 minutes parameter bounds tracking metrics
+                userId: user.id,
+                isConfirmed: true,
+                timestampLocked: Date.now()
+            };
+            saveDataEngine();
+            syncSessionState(user);
 
-            // Populate high fidelity canvas elements node targets values
-            document.getElementById('tkt-val-mid').innerText = "BDBUS-" + currentUser.id;
-            document.getElementById('tkt-val-name').innerText = currentUser.name;
-            document.getElementById('tkt-val-gid').innerText = currentUser.gameId;
-            document.getElementById('tkt-val-mob').innerText = document.getElementById('reg-mobile').value || "N/A";
-            document.getElementById('tkt-val-from').innerText = document.getElementById('route-from').value;
-            document.getElementById('tkt-val-to').innerText = document.getElementById('route-to').value;
+            // Mapping Dataset Injections targeting Native Canvas Engine Layout Matrices elements
+            document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
+            document.getElementById('tk-name').innerText = user.name;
+            document.getElementById('tk-gid').innerText = user.gameid;
+            document.getElementById('tk-phone').innerText = user.phone;
+            document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
+            document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
+            document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
+            document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
+            document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
             
             const now = new Date();
-            document.getElementById('tkt-val-date').innerText = document.getElementById('journey-date').value;
-            document.getElementById('tkt-val-time').innerText = document.getElementById('journey-time').value;
-            document.getElementById('tkt-val-seat').innerText = selectedSeat;
-            document.getElementById('tkt-val-issuedate').innerText = now.toLocaleTimeString() + " | " + now.toLocaleDateString();
+            document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
 
-            // Transform structural hidden CSS layouts layer nodes objects blocks using html2canvas pipelines
-            const target = document.getElementById('ticket-download-area');
-            html2canvas(target, { useCORS: true, allowTaint: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `BDBUS_TICKET_${selectedSeat}.png`;
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-                alert("Ticket Purchased Successfully! PNG Asset download sequence finalized.");
-                switchPage('home-page');
-            });
+            alert("Ticket compilation successful! Generating high resolution PNG download file stream interface...");
+            
+            // Execute HTML2Canvas Image Capture Render Stream pipeline sequences
+            setTimeout(() => {
+                const target = document.getElementById('digital-ticket-canvas');
+                html2canvas(target, { scale: 2 }).then(canvas => {
+                    let link = document.createElement('a');
+                    link.download = `BDBUS_Ticket_${currentlyChosenSeatNode}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    navigatePage('home-screen');
+                });
+            }, 1000);
         }
 
-        // Administrative Layer Grid Core Controllers
-        function syncAdminControlTableGrid() {
-            const body = document.getElementById('admin-users-table-body');
-            body.innerHTML = "";
-            usersTable.forEach(u => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${u.id}</td>
-                    <td>${u.name}</td>
-                    <td>${u.gameId}</td>
-                    <td><span style="font-weight:600; color:var(--accent-cyan);">${u.role}</span></td>
-                    <td>${u.balance}</td>
-                    <td>
-                        <button class="btn-table" style="background:#007adb; color:#fff;" onclick="adminGiftWalletFunds(${u.id})">Gift BDT</button>
-                        <button class="btn-table" style="background:${u.active ? 'var(--accent-red)':'#2b9348'}; color:#fff;" onclick="adminToggleBanState(${u.id})">${u.active ? 'Ban':'Unban'}</button>
-                    </td>
+        // Home View Carousel Rendering Engine
+        function renderHomeMembersCarousel() {
+            const track = document.getElementById('home-carousel-track');
+            track.innerHTML = "";
+            
+            // Sorting Logic: Active state + highest balance values prioritize index queues
+            let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
+
+            activePool.forEach(u => {
+                let node = document.createElement('div');
+                node.className = 'member-card-node';
+                node.innerHTML = `
+                    <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
+                    <div class="member-meta">
+                        <h5>${u.name}</h5>
+                        <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
+                        <span class="status-badge"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ACTIVE</span>
+                    </div>
                 `;
-                body.appendChild(row);
+                track.appendChild(node);
+            });
+
+            // Run Infinite Loop Marquee Array Shifts parameters dynamically every 3 seconds interval loops
+            let shiftOffset = 0;
+            if(window.carouselInterval) clearInterval(window.carouselInterval);
+            window.carouselInterval = setInterval(() => {
+                shiftOffset += 300;
+                if(shiftOffset >= track.scrollWidth - 300) shiftOffset = 0;
+                track.style.transform = `translateX(-${shiftOffset}px)`;
+            }, 3000);
+        }
+
+        // Team Directory Components
+        function renderContactTeamPanel() {
+            const grid = document.getElementById('contact-team-grid');
+            grid.innerHTML = "";
+            let coreStaff = db.users.filter(u => u.role !== 'Regular Member');
+
+            coreStaff.forEach(u => {
+                let card = document.createElement('div');
+                card.className = 'admin-control-card';
+                card.style.textAlign = 'center';
+                card.innerHTML = `
+                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
+                    <h4>${u.name}</h4>
+                    <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
+                    <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
+                    <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        function adminSearchMemberProfile() {
-            const val = parseInt(document.getElementById('admin-search-input').value);
-            const user = usersTable.find(u => u.id === val);
-            if(user) {
-                alert(`Member Found Profile Matrix Data:\nName: ${user.name}\nNickname: ${user.gameId}\nRole: ${user.role}\nBalance: ${user.balance} BDT`);
+        // Admin Dash Core Script Mechanics Console
+        function renderAdminPanelDashboard() {
+            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
+                alert("Unauthorized console routing breach validation rejected.");
+                navigatePage('home-screen');
+                return;
+            }
+            buildUserAdminDisplayCards(db.users);
+        }
+
+        function buildUserAdminDisplayCards(userArray) {
+            const grid = document.getElementById('admin-user-cards-grid');
+            grid.innerHTML = "";
+            const currentRole = activeUserSession.role;
+
+            userArray.forEach(u => {
+                let card = document.createElement('div');
+                card.className = 'admin-control-card';
+                
+                let actionControlsHTML = "";
+                
+                // Operational Role Permission Access Evaluation Maps
+                if(currentRole === 'Admin') {
+                    actionControlsHTML = `
+                        <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban' : 'Ban'}</button>
+                        <button class="btn-admin-small" style="background:#eab308; color:#000;" onclick="adminGiftWalletPrompt(${u.id})">Gift BDT</button>
+                        <button class="btn-admin-small" style="background:#3b82f6; color:#fff;" onclick="adminChangeRolePrompt(${u.id})">Assign Role</button>
+                        <button class="btn-admin-small" style="background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                    `;
+                } else if(currentRole === 'Moderator') {
+                    actionControlsHTML = `
+                        <button class="btn-admin-small" style="background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <h5>${u.name} (ID: BDBUS-${u.id})</h5>
+                    <p style="font-size:11px; color:var(--text-muted);">Email: ${u.email}<br>Role: <strong>${u.role}</strong> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
+                    <p style="font-size:11px; color:${u.isBanned ? '#ef4444':'#10b981'}">Status: ${u.isBanned ? 'Banned':'Active'}</p>
+                    <div class="admin-action-row">${actionControlsHTML}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function executeAdminSearchLogic() {
+            let term = document.getElementById('admin-search-input').value.trim();
+            if(!term) { buildUserAdminDisplayCards(db.users); return; }
+            let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
+            buildUserAdminDisplayCards(filtered);
+        }
+
+        function adminBanToggle(id) {
+            if(id === 1000) { alert("Root Super Admin cannot be targeted for restriction bans."); return; }
+            let user = db.users.find(u => u.id === id);
+            user.isBanned = !user.isBanned;
+            saveDataEngine();
+            renderAdminPanelDashboard();
+        }
+
+        function adminGiftWalletPrompt(id) {
+            let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
+            if(!amount || amount <= 0) return;
+            let user = db.users.find(u => u.id === id);
+            user.wallet += amount;
+            saveDataEngine();
+            renderAdminPanelDashboard();
+            alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
+        }
+
+        function adminChangeRolePrompt(id) {
+            if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
+            let targetRole = prompt("Enter explicit role assignment precisely (Regular Member / Moderator / Counter Master / Trip Master):");
+            if(!['Regular Member', 'Moderator', 'Counter Master', 'Trip Master'].includes(targetRole)) { alert("Mismatched syntax descriptor framework string rejected."); return; }
+            let user = db.users.find(u => u.id === id);
+            user.role = targetRole;
+            saveDataEngine();
+            renderAdminPanelDashboard();
+            alert("Role authority modified successfully across runtime nodes.");
+        }
+
+        function adminResetSeatsEngine(userId) {
+            let keysRemoved = 0;
+            for(let key in db.occupiedSeats) {
+                if(db.occupiedSeats[key].userId === userId) {
+                    delete db.occupiedSeats[key];
+                    keysRemoved++;
+                }
+            }
+            if(keysRemoved > 0) {
+                saveDataEngine();
+                alert(`Purged ${keysRemoved} active reservation tracks from database space objects.`);
             } else {
-                alert("No member matches current targeted ID search input keys.");
+                alert("No active matching booking tracks matched user parameters criteria logs.");
             }
         }
 
-        function adminGiftWalletFunds(id) {
-            const amt = parseInt(prompt("Enter gift amount matrix configuration sequence:"));
-            if(!amt) return;
-            const u = usersTable.find(user => user.id === id);
-            if(u) { u.balance += amt; alert("Funds injected successfully."); syncAdminControlTableGrid(); postLoginSetup(); }
-        }
+        // Global Localization Language Configuration Map Translator Engine
+        function setLanguageSystem(locale) {
+            selectedLanguage = locale;
+            localStorage.setItem('bdbus_lang', locale);
+            
+            document.querySelectorAll('.lang-btn').forEach(b => b.style.opacity = '0.5');
+            document.querySelector(`.lang-btn.${locale}`).style.opacity = '1';
 
-        function adminToggleBanState(id) {
-            const u = usersTable.find(user => user.id === id);
-            if(u) { u.active = !u.active; alert("User status altered."); syncAdminControlTableGrid(); }
-        }
-
-        function renderOfficialStaffDirectory() {
-            const box = document.getElementById('contact-directory-wrapper');
-            box.innerHTML = "";
-            usersTable.forEach(u => {
-                const div = document.createElement('div');
-                div.className = "staff-card";
-                div.innerHTML = `
-                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; border:2px solid var(--accent-cyan); object-fit:cover;" onerror="this.src='https://via.placeholder.com/70'">
-                    <h3 style="margin-top:10px;">${u.name}</h3>
-                    <p style="color:var(--accent-cyan); font-weight:600; font-size:14px; margin:5px 0;">${u.role}</p>
-                    <p style="font-size:12px; color:var(--text-muted);">Wallet Balance: ${u.balance} BDT</p>
-                `;
-                box.appendChild(div);
+            document.querySelectorAll('.lang-node').forEach(el => {
+                let text = el.getAttribute(`data-${locale}`);
+                if(text) el.innerText = text;
             });
         }
+
+        // Core App Lifecycle Bootstrap Pipeline Trigger Init Configuration Hooks
+        window.addEventListener('DOMContentLoaded', () => {
+            verifyDatabaseStructureSeeding();
+            initialClockHeartbeatEngine();
+            setLanguageSystem(selectedLanguage);
+            setInterval(checkSessionTimeoutRules, 10000); // 10s check frame polling loop
+
+            // Refresh Handling Validation Loops Logic checks
+            if(activeUserSession) {
+                let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
+                if(refreshedUser && !refreshedUser.isBanned) {
+                    document.body.classList.add('logged-in');
+                    document.getElementById('main-global-header').style.display = 'flex';
+                    document.getElementById('main-global-footer').style.display = 'block';
+                    if(refreshedUser.role === 'Admin') document.getElementById('admin-menu-link').style.display = 'flex';
+                    navigatePage('home-screen');
+                    return;
+                }
+            }
+            navigatePage('auth-screen');
+        });
     </script>
 </body>
 </html>
