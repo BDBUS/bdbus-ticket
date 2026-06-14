@@ -250,10 +250,15 @@
         .form-control:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
         .flex-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
 
+        /* --- CENTRALIZED HIGH INTENSITY LOGO MODULE --- */
+        .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 20px; }
+        .central-branded-header img { height: 110px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
+        .central-branded-header h2 { font-size: 22px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .central-branded-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
         /* --- HOME SCREEN STYLE (Page 2) --- */
-        .welcome-section { text-align: center; margin-top: 15px; }
-        .welcome-msg { font-size: 14px; color: var(--text-muted); }
-        .greetings-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; }
+        .welcome-msg { font-size: 15px; color: var(--neon-blue); font-weight: 600; text-align: center; margin-bottom: 5px; }
+        .greetings-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; text-align: center; }
         
         /* Marquee Notice Board Component */
         .notice-board {
@@ -269,9 +274,25 @@
         .notice-tag { background: var(--neon-blue); color: #000; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
         .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
 
-        /* Members Slider Carousel Row */
-        .carousel-container { background: var(--panel-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; position: relative; overflow: hidden; height: 130px; }
-        .member-track { display: flex; position: absolute; transition: transform 0.5s ease-in-out; gap: 20px; width: max-content; }
+        /* Smooth Right-To-Left Continuous Horizontal Members Slider Carousel Row */
+        .carousel-container { 
+            background: var(--panel-bg); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 30px; 
+            position: relative; 
+            overflow: hidden; 
+            height: 130px; 
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+        .member-track { 
+            display: flex; 
+            position: absolute; 
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+            gap: 20px; 
+            width: max-content; 
+            left: 0;
+        }
         .member-card-node {
             background: #1e293b;
             border: 1px solid rgba(255,255,255,0.05);
@@ -520,16 +541,18 @@
     </div>
 
     <div id="home-screen" class="page-screen">
-        <div class="welcome-section">
-            <img src="images/BDBUS Group Official Logo.png" alt="Logo" style="height:60px;">
-            <h3 style="font-size:15px; letter-spacing:1px; margin-top:5px;">Bangladesh Bussid Unique Society</h3>
-            <p class="welcome-msg" id="home-welcome-user">Welcome, Player</p>
-            <h2 class="greetings-text" id="home-greeting-txt">GOOD MORNING</h2>
+        <div class="central-branded-header">
+            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
+            <h2>Bangladesh Bussid Unique Society</h2>
+            <p>Official Online Ticket Hub Terminal</p>
         </div>
+
+        <p class="welcome-msg" id="home-welcome-user">Welcome, Player</p>
+        <h2 class="greetings-text" id="home-greeting-txt">GOOD MORNING</h2>
 
         <div class="neon-clock">
             <div class="neon-time" id="live-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="live-clock-date">SUN, JUN 14, 2026</div>
+            <div class="neon-date" id="live-clock-date">MON, JUN 15, 2026</div>
         </div>
 
         <div class="notice-board">
@@ -581,7 +604,7 @@
                 <span style="color:var(--neon-green); font-weight:700; font-size:18px;" id="prof-render-wallet">0 BDT</span>
             </div>
             <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block">
-                </div>
+            </div>
         </div>
     </div>
 
@@ -596,23 +619,26 @@
     </div>
 
     <div id="booking-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:5px;" class="lang-node" data-en="Bus Ticket Booking Module" data-bn="বাস টিকিট বুকিং মডিউল">Bus Ticket Booking</h2>
-        <p style="text-align:center; color:var(--text-muted); font-size:12px; margin-bottom:30px;" class="lang-node" data-en="Route Selection Engine" data-bn="রুট এবং বুকিং ড্যাশবোর্ড">Route Selection Engine</p>
+        <div class="central-branded-header">
+            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
+            <h2>Bangladesh Bussid Unique Society</h2>
+            <p class="lang-node" data-en="Bus Ticket Booking Module" data-bn="বাস টিকিট বুকিং মডিউল">Bus Ticket Booking Module</p>
+        </div>
 
         <div class="neon-clock">
             <div class="neon-time" id="booking-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="booking-clock-date">SUN, JUN 14, 2026</div>
+            <div class="neon-date" id="booking-clock-date">MON, JUN 15, 2026</div>
         </div>
 
         <div class="form-card" style="max-width:650px; margin:20px auto;">
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
                 <div class="form-group">
-                    <label class="lang-node" data-en="From (District Station)" data-bn="কোথা থেকে (জেলা)">From (District)</label>
-                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Search District...">
+                    <label class="lang-node" data-en="From (District Station)" data-bn="কোথা থেকে (জেলা)">From (District Station)</label>
+                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Search District Name...">
                 </div>
                 <div class="form-group">
-                    <label class="lang-node" data-en="To (Destination Station)" data-bn="কোথায় (গন্তব্য জেলা)">To (Destination)</label>
-                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Search District...">
+                    <label class="lang-node" data-en="To (Destination Station)" data-bn="কোথায় (গন্তব্য জেলা)">To (Destination Station)</label>
+                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Search District Name...">
                 </div>
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
@@ -637,7 +663,7 @@
                 <div>
                     <strong>⚠️ Important Notice</strong><br>
                     EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো समस्या বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
                 </div>
             </div>
 
@@ -648,14 +674,18 @@
     </div>
 
     <div id="seat-screen" class="page-screen">
+        <div class="central-branded-header">
+            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
+            <h2>Bangladesh Bussid Unique Society</h2>
+            <p id="seat-title-coach-type">Seating Plan Configuration Layout</p>
+        </div>
+
         <div class="neon-clock">
             <div class="neon-time" id="seat-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="seat-live-date-node">SUN, JUN 14, 2026</div>
+            <div class="neon-date" id="seat-live-date-node">MON, JUN 15, 2026</div>
         </div>
 
         <div class="seat-map-wrapper">
-            <h3 id="seat-title-coach-type" style="margin-bottom: 10px;">Non-AC Coach Plan</h3>
-            
             <div class="seat-legend-row">
                 <div class="legend-item"><div class="legend-box l-avail"></div><span>Available</span></div>
                 <div class="legend-item"><div class="legend-box l-select"></div><span>Selected</span></div>
@@ -665,7 +695,7 @@
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Select 1 seat. Selected seat holds locked for 2 minutes." data-bn="১টি সিট সিলেক্ট করুন। নির্বাচিত সিট ২ মিনিটের জন্য হোল্ড লক থাকবে।">Select 1 seat. Selected holds for 2 mins.</p>
             
             <div class="bus-cabin-container" id="dynamic-cabin-root">
-                </div>
+            </div>
 
             <div style="background:#1e293b; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin:15px 0;">
                 <span class="lang-node" data-en="Total Calculated Fare:" data-bn="মোট নির্ধারিত ভাড়া:">Total Calculated Fare:</span>
@@ -714,7 +744,7 @@
                 <div class="ticket-rules-box">
                     <strong>⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:</strong><br>
                     • <b>EN:</b> Gaming room passwords must not be shared under any circumstances. Ensure a stable internet connection. Intentional ramming, toxic behavior, or hacking tools will result in a permanent account ban. Drive realistically.<br>
-                    • <b>বাংলা:</b> গেম রুমের পাসওয়ার্ড কোনোভাবেই কারো কাছে শেয়ার করা যাবে না। ইন্টারনেট কানেকশন অবশ্যই ভালো থাকতে হবে। খেলার সময় কোনো প্রকার গালিগালাজ বা বাজে ব্যবহার করা যাবে না। রিয়েল ড্রাইভিং করতে হবে এবং কোনো ধরনের হ্যাক বা স্ক্রিপ্ট ব্যবহার করে খেলা সম্পূর্ণ নিষিদ্ধ।
+                    • <b>বাংলা:</b> গেম রুমের পাসওয়ার্ড কোনোভাবেই কারো কাছে শেয়ার করা যাবে না। ইন্টারনেট কানেকশন অবশ্যই ভালো থাকতে হবে। খেলার সময় কোনো প্রকার গালিগালাজ বা বাজে ব্যবহার করা যাবে না। রিয়েল ড্রাইভিং করতে হবে এবং কোন ধরনের হ্যাক বা স্ক্রিপ্ট ব্যবহার করে খেলা সম্পূর্ণ নিষিদ্ধ।
                 </div>
                 <div class="ticket-footer-brand">
                     <p>WEBSITE CREATED BY <strong>M2Vai</strong></p>
@@ -747,17 +777,17 @@
         </div>
 
         <div class="admin-grid" id="admin-user-cards-grid">
-            </div>
+        </div>
     </div>
 
     <div id="contact-screen" class="page-screen">
         <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Official Management Team" data-bn="অফিসিয়াল ম্যানেজমেন্ট টিম">Contact Panel</h2>
         <div class="admin-grid" id="contact-team-grid">
-            </div>
+        </div>
     </div>
 
     <datalist id="bangladesh-districts">
-        <option value="Bagerhat"><option value="Bandarban"><option value="Barguna"><option value="Barisal"><option value="Bhola"><option value="Bogra"><option value="Brahmanbaria"><option value="Chandpur"><option value="Chapai開放 / Chapainawabganj"><option value="Chittagong"><option value="Chuadanga"><option value="Comilla"><option value="Cox's Bazar"><option value="Dhaka"><option value="Dinajpur"><option value="Faridpur"><option value="Feni"><option value="Gaibandha"><option value="Gazipur"><option value="Gopalganj"><option value="Habiganj"><option value="Jamalpur"><option value="Jessore"><option value="Jhalokati"><option value="Jhenaidah"><option value="Joypurhat"><option value="Khagrachhari"><option value="Khulna"><option value="Kishoreganj"><option value="Kurigram"><option value="Kushtia"><option value="Lakshmipur"><option value="Lalmonirhat"><option value="Madaripur"><option value="Magura"><option value="Manikganj"><option value="Meherpur"><option value="Moulvibazar"><option value="Munshiganj"><option value="Mymensingh"><option value="Naogaon"><option value="Narail"><option value="Narayanganj"><option value="Narsingdi"><option value="Natore"><option value="Netrokona"><option value="Nilphamari"><option value="Noakhali"><option value="Pabna"><option value="Panchagarh"><option value="Patuakhali"><option value="Pirojpur"><option value="Rajbari"><option value="Rajshahi"><option value="Rangamati"><option value="Rangpur"><option value="Satkhira"><option value="Shariatpur"><option value="Sherpur"><option value="Sirajganj"><option value="Sunamganj"><option value="Sylhet"><option value="Tangail"><option value="Thakurgaon">
+        <option value="BAGERHAT"><option value="BANDARBAN"><option value="BARGUNA"><option value="BARISAL"><option value="BHOLA"><option value="BOGRA"><option value="BRAHMANBARIA"><option value="CHANDPUR"><option value="CHAPAINAWABGANJ"><option value="CHITTAGONG"><option value="CHUADANGA"><option value="COMILLA"><option value="COX'S BAZAR"><option value="DHAKA"><option value="DINAJPUR"><option value="FARIDPUR"><option value="FENI"><option value="GAIBANDHA"><option value="GAZIPUR"><option value="GOPALGANJ"><option value="HABIGANJ"><option value="JAMALPUR"><option value="JESSORE"><option value="JHALOKATI"><option value="JHENAIDAH"><option value="JOYPURHAT"><option value="KHAGRACHHARI"><option value="KHULNA"><option value="KISHOREGANJ"><option value="KURIGRAM"><option value="KUSHTIA"><option value="LAKSHMIPUR"><option value="LALMONIRHAT"><option value="MADARIPUR"><option value="MAGURA"><option value="MANIKGANJ"><option value="MEHERPUR"><option value="MOULVIBAZAR"><option value="MUNSHIGANJ"><option value="MYMENSINGH"><option value="NAOGAON"><option value="NARAIL"><option value="NARAYANGANJ"><option value="NARSINGDI"><option value="NATORE"><option value="NETROKONA"><option value="NILPHAMARI"><option value="NOAKHALI"><option value="PABNA"><option value="PANCHAGARH"><option value="PATUAKHALI"><option value="PIROJPUR"><option value="RAJBARI"><option value="RAJSHAHI"><option value="RANGAMATI"><option value="RANGPUR"><option value="SATKHIRA"><option value="SHARIATPUR"><option value="SHERPUR"><option value="SIRAJGANJ"><option value="SUNAMGANJ"><option value="SYLHET"><option value="TANGAIL"><option value="THAKURGAON">
     </datalist>
 
     <footer class="global-footer-panel" id="main-global-footer" style="display: none;">
@@ -808,7 +838,6 @@
         let currentlyChosenSeatNode = null;
         let selectedFareGlobalRate = 0;
         
-        // Navigation Stack Trace Frame Array to track internal back activities natively
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
 
         // Default Seeding Engine for Core Admins
@@ -873,7 +902,6 @@
             }, 1000);
         }
 
-        // Security Session Engine Rules
         function checkSessionTimeoutRules() {
             if (activeUserSession) {
                 let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
@@ -887,14 +915,11 @@
         // View Router Controller Engine With State Persistence Fixes
         function navigatePage(screenId, saveHistory = true) {
             toggleSidebarMenu(false);
-            
-            // Track dynamic rendering active viewport targets inside browser state maps
             sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
             
             const backBtn = document.getElementById('global-back-nav-btn');
             const menuBtn = document.getElementById('global-menu-trigger-btn');
 
-            // Manage conditional interface visibility maps for structural elements
             if(!activeUserSession || screenId === 'auth-screen') {
                 if(backBtn) backBtn.style.display = 'none';
                 if(menuBtn) menuBtn.style.display = 'none';
@@ -903,7 +928,7 @@
                 if(menuBtn) menuBtn.style.display = 'block';
                 if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
             } else {
-                if(backBtn) backBtn.style.display = 'flex'; // Enable manual control context trigger maps
+                if(backBtn) backBtn.style.display = 'flex'; 
                 if(menuBtn) menuBtn.style.display = 'block';
                 
                 if(saveHistory) {
@@ -925,12 +950,11 @@
             if (screenId === 'contact-screen') renderContactTeamPanel();
         }
 
-        // Hardware state pop loop hooks mapping back requests elegantly
         function executeHardwareBackTrigger() {
             if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
-                return; // Hold focus inside application frame safely
+                return; 
             }
-            internalNavigationHistoryArray.pop(); // Remove running active view map layer
+            internalNavigationHistoryArray.pop(); 
             const targetPreviousScreenId = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] || 'home-screen';
             navigatePage(targetPreviousScreenId, false);
         }
@@ -1069,7 +1093,7 @@
             sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
         }
 
-        // Profiles Management Elements
+        // Profile View Logic
         function renderUserProfileView() {
             let user = db.users.find(u => u.id === activeUserSession.id);
             document.getElementById('profile-avatar-render').src = user.avatar;
@@ -1119,7 +1143,7 @@
             document.getElementById('pwd-conf').value = "";
         }
 
-        // Booking & Seat Calculation Algorithms
+        // Booking & Seating Mechanics
         function calculateFareSystemLogic() {
             const type = document.getElementById('route-bustype').value;
             selectedFareGlobalRate = (type === "Premium AC") ? 1200 : 650; 
@@ -1136,7 +1160,7 @@
             if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
             if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance balance token limits to initiate routing selections."); return; }
 
-            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid`;
+            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
             document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
             currentlyChosenSeatNode = null;
 
@@ -1250,7 +1274,6 @@
             if(stateChanged) saveDataEngine();
         }
 
-        // Modified Confirmation Engine: Opens a dedicated premium ticket page layout view instead of instant downloading pipeline streams
         function executeTicketConfirmationEngine() {
             if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
             
@@ -1271,7 +1294,6 @@
             saveDataEngine();
             syncSessionState(user);
 
-            // Populate data sheet fields
             document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
             document.getElementById('tk-name').innerText = user.name;
             document.getElementById('tk-gid').innerText = user.gameid;
@@ -1289,13 +1311,12 @@
             navigatePage('ticket-view-screen');
         }
 
-        // New pipeline action logic: Renders high-def PNG file stream, triggers save dialog then automatically hooks back route vectors onto home page
         function executeTicketDownloadAndRedirect() {
             alert("Compiling extreme high resolution ticket graphics assets...");
             const target = document.getElementById('digital-ticket-canvas');
             
             html2canvas(target, { 
-                scale: 3, // Premium high definitions matrix scalability configuration
+                scale: 3, 
                 useCORS: true,
                 logging: false
             }).then(canvas => {
@@ -1309,7 +1330,7 @@
             });
         }
 
-        // Home View Carousel Rendering Engine
+        // Home View Carousel Rendering Engine with fixed Right-To-Left Continuous Animation Logic
         function renderHomeMembersCarousel() {
             const track = document.getElementById('home-carousel-track');
             if(!track) return;
@@ -1331,12 +1352,19 @@
                 track.appendChild(node);
             });
 
-            let shiftOffset = 0;
+            let currentLeftShift = 0;
             if(window.carouselInterval) clearInterval(window.carouselInterval);
+            
+            // 3 Seconds interval looping right to left shifts securely
             window.carouselInterval = setInterval(() => {
-                shiftOffset += 300;
-                if(shiftOffset >= track.scrollWidth - 300) shiftOffset = 0;
-                track.style.transform = `translateX(-${shiftOffset}px)`;
+                const totalScrollableWidth = track.scrollWidth;
+                const containerParentWidth = track.parentElement.clientWidth;
+                
+                currentLeftShift += 300; // Shift block by 300px chunk steps
+                if(currentLeftShift >= (totalScrollableWidth - containerParentWidth + 100)) {
+                    currentLeftShift = 0; // Return gracefully to index 0 point
+                }
+                track.style.transform = `translateX(-${currentLeftShift}px)`;
             }, 3000);
         }
 
@@ -1361,7 +1389,7 @@
             });
         }
 
-        // Admin Dash Core Script Mechanics Console
+        // Admin Operational Dash Controls
         function renderAdminPanelDashboard() {
             if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
                 alert("Unauthorized console routing breach validation rejected.");
@@ -1369,7 +1397,6 @@
                 return;
             }
             
-            // Toggle notice broadcaster privileges visibility matching validation matrix parameters
             const noticeBox = document.getElementById('admin-notice-manager-wrapper');
             if(activeUserSession.role === 'Admin') {
                 noticeBox.style.display = 'block';
@@ -1381,7 +1408,6 @@
             buildUserAdminDisplayCards(db.users);
         }
 
-        // Notice Update Saver execution block
         function executeAdminNoticeBroadcastSave() {
             if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
             const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
@@ -1496,23 +1522,20 @@
             });
         }
 
-        // Window popping popstate hardware button hook to capture android browser back gestures
         window.addEventListener('popstate', (event) => {
             if(activeUserSession && internalNavigationHistoryArray.length > 1) {
-                // Block full browser history escape closure pipeline, instead handle internally
                 history.pushState(null, null, window.location.pathname);
                 executeHardwareBackTrigger();
             }
         });
 
-        // Core App Lifecycle Bootstrap Pipeline Trigger Init Configuration Hooks
+        // Core App Lifecycle Bootstrap Pipeline
         window.addEventListener('DOMContentLoaded', () => {
             verifyDatabaseStructureSeeding();
             initialClockHeartbeatEngine();
             setLanguageSystem(selectedLanguage);
             setInterval(checkSessionTimeoutRules, 10000); 
 
-            // Intercept history pop states natively to create fake layer boundaries for mobile platforms
             history.pushState(null, null, window.location.pathname);
 
             if(activeUserSession) {
@@ -1523,7 +1546,6 @@
                     document.getElementById('main-global-footer').style.display = 'block';
                     if(refreshedUser.role === 'Admin') document.getElementById('admin-menu-link').style.display = 'flex';
                     
-                    // FIXED PERSISTENCE LOGIC: Read last recorded viewport token layer key
                     const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
                     navigatePage(savedScreenTargetPersistedId);
                     return;
