@@ -351,6 +351,36 @@
         .seat-node.occupied { background: #334155; color: rgba(255,255,255,0.2); border-color: transparent; cursor: not-allowed; }
         .aisle-gap-space { width: 30px; }
 
+        /* --- SEARCHABLE DROPDOWN STYLE --- */
+        .custom-dropdown-container {
+            position: absolute;
+            z-index: 50;
+            left: 0;
+            right: 0;
+            max-height: 180px;
+            overflow-y: auto;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .custom-dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #21262d;
+            font-size: 13px;
+            color: #c9d1d9;
+            transition: 0.2s;
+        }
+        .custom-dropdown-item:hover {
+            background: var(--neon-blue);
+            color: #000;
+            font-weight: 600;
+        }
+        .custom-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
         .ticket-preview-wrapper { max-width: 500px; margin: 0 auto; text-align: center; }
         #digital-ticket-canvas {
             width: 450px;
@@ -396,7 +426,7 @@
         .ticket-footer-subs { display: flex; justify-content: center; gap: 12px; }
         .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
 
-        /* --- ADMIN UPDATES STYLING --- */
+        /* --- PREMIUM UI/UX CONTINUED --- */
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
@@ -405,7 +435,6 @@
         
         .admin-notice-update-box { background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 auto 30px; }
 
-        /* Real-time Booking Monitor Styles */
         .admin-booking-monitor-card {
             background: var(--panel-bg);
             border: 1px solid rgba(0, 242, 254, 0.15);
@@ -651,13 +680,15 @@
 
         <div class="form-card" style="max-width:650px; margin:20px auto;">
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
-                <div class="form-group">
+                <div class="form-group" style="position: relative;">
                     <label>From</label>
-                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Select or Type District" onfocus="this.value=''" onclick="if(typeof this.showPicker === 'function') this.showPicker();">
+                    <input type="text" id="route-from" autocomplete="off" class="form-control" placeholder="জেলা খুঁজুন বা টাইপ করুন...">
+                    <div id="from-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="position: relative;">
                     <label>To</label>
-                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Select or Type District" onfocus="this.value=''" onclick="if(typeof this.showPicker === 'function') this.showPicker();">
+                    <input type="text" id="route-to" autocomplete="off" class="form-control" placeholder="জেলা খুঁজুন বা টাইপ করুন...">
+                    <div id="to-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
                 </div>
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
@@ -824,73 +855,6 @@
         <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Official Management Team" data-bn="অফিসিয়াল ম্যানেজমেন্ট টিম">Contact Panel</h2>
         <div class="admin-grid" id="contact-team-grid"></div>
     </div>
-
-    <datalist id="bangladesh-districts">
-        <option value="Dhaka">
-        <option value="Chittagong">
-        <option value="Sylhet">
-        <option value="Rajshahi">
-        <option value="Khulna">
-        <option value="Barisal">
-        <option value="Rangpur">
-        <option value="Mymensingh">
-        <option value="Bagerhat">
-        <option value="Bandarban">
-        <option value="Barguna">
-        <option value="Bhola">
-        <option value="Bogra">
-        <option value="Brahmanbaria">
-        <option value="Chandpur">
-        <option value="Chapainawabganj">
-        <option value="Chuadanga">
-        <option value="Comilla">
-        <option value="Cox's Bazar">
-        <option value="Dinajpur">
-        <option value="Faridpur">
-        <option value="Feni">
-        <option value="Gaibandha">
-        <option value="Gazipur">
-        <option value="Gopalganj">
-        <option value="Habiganj">
-        <option value="Jamalpur">
-        <option value="Jessore">
-        <option value="Jhalokati">
-        <option value="Jhenaidah">
-        <option value="Joypurhat">
-        <option value="Khagrachhari">
-        <option value="Kishoreganj">
-        <option value="Kurigram">
-        <option value="Kushtia">
-        <option value="Lakshmipur">
-        <option value="Lalmonirhat">
-        <option value="Madaripur">
-        <option value="Magura">
-        <option value="Manikganj">
-        <option value="Meherpur">
-        <option value="Moulvibazar">
-        <option value="Munshiganj">
-        <option value="Naogaon">
-        <option value="Narail">
-        <option value="Narayanganj">
-        <option value="Narsingdi">
-        <option value="Natore">
-        <option value="Netrokona">
-        <option value="Nilphamari">
-        <option value="Noakhali">
-        <option value="Pabna">
-        <option value="Panchagarh">
-        <option value="Patuakhali">
-        <option value="Pirojpur">
-        <option value="Rajbari">
-        <option value="Rangamati">
-        <option value="Satkhira">
-        <option value="Shariatpur">
-        <option value="Sherpur">
-        <option value="Sirajganj">
-        <option value="Sunamganj">
-        <option value="Tangail">
-        <option value="Thakurgaon">
-    </datalist>
 
     <footer class="global-footer-panel" id="main-global-footer" style="display: none;">
         <div class="social-icon-row">
@@ -1673,10 +1637,68 @@
             }
         });
 
+        // --- SEARCHABLE DROPDOWN ENGINE IMPLEMENTATION ---
+        const bangladeshDistricts = [
+            "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
+            "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", 
+            "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", 
+            "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", 
+            "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", 
+            "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", 
+            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
+        ];
+
+        function initSearchableDropdownSystem() {
+            setupCustomDropdown('route-from', 'from-custom-dropdown');
+            setupCustomDropdown('route-to', 'to-custom-dropdown');
+        }
+
+        function setupCustomDropdown(inputId, dropdownId) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+
+            if(!input || !dropdown) return;
+
+            input.addEventListener('focus', () => filterDistrictDataNodes(input, dropdown));
+            input.addEventListener('input', () => filterDistrictDataNodes(input, dropdown));
+
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function filterDistrictDataNodes(input, dropdown) {
+            const val = input.value.toLowerCase().trim();
+            dropdown.innerHTML = '';
+
+            const filtered = bangladeshDistricts.filter(d => d.toLowerCase().includes(val));
+
+            if (filtered.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            dropdown.style.display = 'block';
+            filtered.forEach(dist => {
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                item.innerText = dist;
+
+                item.onclick = () => {
+                    input.value = dist;
+                    dropdown.style.display = 'none';
+                };
+                dropdown.appendChild(item);
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             verifyDatabaseStructureSeeding();
             initialClockHeartbeatEngine();
             setLanguageSystem(selectedLanguage);
+            initSearchableDropdownSystem(); // ড্রপডাউন সার্ভিস চালু করার কল
             setInterval(checkSessionTimeoutRules, 10000); 
 
             history.pushState(null, null, window.location.pathname);
