@@ -3,1071 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS - Bangladesh Bussid Unique Society</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>BDBUS Online Ticket Counter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Galada&family=Hind+Siliguri:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Galada&family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600;700&display=swap');
         
         body {
-            font-family: 'Hind Siliguri', 'Orbitron', sans-serif;
-            background-color: #0d0e12;
+            font-family: 'Rajdhani', 'Galada', sans-serif;
+            background-color: #0b0f19;
             color: #e2e8f0;
         }
-        .neon-glow {
+        .neon-text-cyan {
             text-shadow: 0 0 10px rgba(6, 182, 212, 0.7), 0 0 20px rgba(6, 182, 212, 0.4);
         }
-        .neon-border {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-            border: 1px solid rgba(6, 182, 212, 0.5);
+        .neon-border-red {
+            border-color: #FF3333;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
         }
-        .glass-card {
-            background: rgba(22, 28, 45, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .digital-clock {
+            font-family: 'Orbitron', sans-serif;
         }
-        /* Custom Warning Box styling from user instructions */
+        /* Custom Warning Box Styles */
         .custom-warning-box {
-            border: 2px solid #FF3333 !important;
-            background-color: #221214 !important;
-            color: #FFCCCC !important;
+            border: 2px solid #FF3333;
+            background-color: #221214;
+            color: #FFCCCC;
         }
         .custom-warning-heading {
-            color: #FFCC00 !important;
+            color: #FFCC00;
         }
-        /* Hide scrollbars but keep functionality */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <header id="globalHeader" class="hidden sticky top-0 z-50 glass-card px-4 py-3 flex items-center justify-between border-b border-cyan-500/30">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="text-xl text-cyan-400 hover:text-cyan-300 cursor-pointer p-1">
+    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-cyan-400 text-xl focus:outline-none">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <button id="backBtn" onclick="goBack()" class="hidden text-xl text-slate-400 hover:text-white cursor-pointer p-1">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center font-bold text-white tracking-wider text-sm shadow-[0_0_10px_rgba(6,182,212,0.5)]">BDB</div>
-                <span class="text-xl font-bold tracking-wider text-white Orbitron font-['Orbitron']">BDBUS</span>
+            <div class="flex items-center space-x-2">
+                <div class="bg-cyan-500 text-slate-900 p-2 rounded-lg font-bold tracking-wider text-sm">BDBUS</div>
+                <span class="text-xl font-bold tracking-wide text-white hidden sm:inline">BDBUS <span class="text-cyan-400">OFFICIAL</span></span>
             </div>
         </div>
         
-        <div class="flex gap-2">
-            <button onclick="setLanguage('EN')" id="langEN" class="px-3 py-1 text-xs rounded font-bold transition-all bg-cyan-600 text-white cursor-pointer">EN</button>
-            <button onclick="setLanguage('BN')" id="langBN" class="px-3 py-1 text-xs rounded font-bold transition-all bg-slate-700 text-slate-300 hover:bg-slate-600 cursor-pointer">বাংলা</button>
+        <div class="flex items-center space-x-2">
+            <button class="px-3 py-1 text-xs font-bold rounded bg-cyan-500 text-slate-900 shadow-md shadow-cyan-500/20">EN</button>
+            <button class="px-3 py-1 text-xs font-bold rounded bg-slate-800 text-slate-400 hover:bg-slate-700">বাংলা</button>
         </div>
     </header>
 
-    <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-slate-900/95 z-50 transform -translate-x-full transition-transform duration-300 border-r border-cyan-500/20 backdrop-blur-md flex flex-col justify-between">
-        <div class="p-5">
-            <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                <span class="text-xl font-bold text-cyan-400 font-['Orbitron']"><i class="fa-solid fa-bus mr-2"></i>MENU PANEL</span>
-                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <nav class="space-y-2">
-                <button onclick="switchScreen('homeScreen')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-house w-5 text-center"></i> Home (হোম)</button>
-                <button onclick="switchScreen('profileScreen')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-user w-5 text-center"></i> My Profile (মাই প্রোফাইল)</button>
-                <button onclick="switchScreen('passwordScreen')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-lock w-5 text-center"></i> Change Password</button>
-                <button onclick="switchScreen('bookingScreen')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-ticket w-5 text-center"></i> Bus Ticket Booking</button>
-                <button onclick="switchScreen('adminScreen')" id="adminMenuOpt" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-user-shield w-5 text-center"></i> Admin Panel (এডমিন)</button>
-                <button onclick="switchScreen('contactScreen')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-slate-300 hover:bg-cyan-950/40 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all cursor-pointer"><i class="fa-solid fa-envelope w-5 text-center"></i> Contact (যোগাযোগ)</button>
-            </nav>
-        </div>
-        <div class="p-4">
-            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg transition-all cursor-pointer shadow-lg shadow-red-900/30">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout (লগআউট)
+    <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-800 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out pt-16">
+        <button onclick="toggleSidebar()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <nav class="p-4 space-y-2">
+            <button onclick="showScreen('home-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
+                <i class="fa-solid fa-house w-5"></i> <span>Home (হোম)</span>
             </button>
-        </div>
+            <button onclick="showScreen('profile-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
+                <i class="fa-solid fa-user w-5"></i> <span>My Profile (মাই প্রোফাইল)</span>
+            </button>
+            <button onclick="showScreen('password-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
+                <i class="fa-solid fa-lock w-5"></i> <span>Change Password (পাসওয়ার্ড)</span>
+            </button>
+            <button onclick="showScreen('booking-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
+                <i class="fa-solid fa-ticket w-5"></i> <span>Bus Ticket Booking (বুকিং)</span>
+            </button>
+            <button class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-purple-400 hover:bg-slate-800 transition">
+                <i class="fa-solid fa-user-shield w-5"></i> <span>Admin Panel (এডমিন)</span>
+            </button>
+            <div class="pt-4 border-t border-slate-800 mt-4">
+                <button onclick="showScreen('login-screen')" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout (লগআউট)</span>
+                </button>
+            </div>
+        </nav>
     </div>
 
-    <main class="flex-grow container mx-auto px-4 py-6 max-w-4xl">
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl relative">
 
-        <section id="loginScreen" class="block max-w-md mx-auto my-8 animate-fade-in">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-2xl">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-full bg-cyan-500 mx-auto flex items-center justify-center font-bold text-white text-2xl shadow-[0_0_20px_rgba(6,182,212,0.4)] mb-3 font-['Orbitron']">BDB</div>
-                    <h2 class="text-xl font-bold text-cyan-400 tracking-wide font-['Orbitron']">Bangladesh Bussid Unique Society</h2>
-                    <p class="text-xs text-slate-400 mt-1 font-semibold tracking-wider">BDBUS OFFICIAL WEBSITE</p>
+        <div id="login-screen" class="screen-view">
+            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-bus text-4xl text-slate-900"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h2>
+                    <p class="text-xs font-semibold text-cyan-400 uppercase tracking-wider mt-1">BDBUS OFFICIAL WEBSITE</p>
                 </div>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Email Address</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" id="loginEmail" placeholder="example@gmail.com" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 transition-colors text-white">
-                        </div>
+                        <label class="block text-sm font-semibold text-slate-400 mb-1">Email Address</label>
+                        <input type="email" placeholder="example@gmail.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Password</label>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-sm font-semibold text-slate-400">Password</label>
+                            <a href="#" class="text-xs text-slate-500 hover:text-cyan-400">Forget password?</a>
+                        </div>
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-cyan-500 transition-colors text-white">
-                            <button onclick="togglePasswordVisibility('loginPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 cursor-pointer"><i class="fa-solid fa-eye" id="loginPassEye"></i></button>
+                            <input id="login-pass" type="password" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
+                            <button onclick="togglePasswordVisibility('login-pass')" class="absolute right-4 top-3.5 text-slate-500 hover:text-slate-300">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <a href="#" onclick="alert('পাসওয়ার্ড পুনরুদ্ধারের লিংক আপনার মেইলে পাঠানো হয়েছে।')" class="text-xs text-cyan-400 hover:underline">Forget password?</a>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 pt-2">
-                        <button onclick="switchScreen('signupScreen')" class="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-pointer text-center">Sign Up Now</button>
-                        <button onclick="login()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-2.5 rounded-lg text-sm transition-all cursor-pointer text-center shadow-lg shadow-cyan-500/20">Login Now</button>
+
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <button onclick="showScreen('signup-screen')" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-red-900/20">
+                            Sign Up Now
+                        </button>
+                        <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-cyan-900/20">
+                            Login Now
+                        </button>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="signupScreen" class="hidden max-w-xl mx-auto my-4">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-2xl">
+        <div id="signup-screen" class="screen-view hidden">
+            <div class="max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-full bg-cyan-500 mx-auto flex items-center justify-center font-bold text-white text-2xl shadow-[0_0_20px_rgba(6,182,212,0.4)] mb-3 font-['Orbitron']">BDB</div>
-                    <h2 class="text-xl font-bold text-cyan-400 tracking-wide font-['Orbitron']">Bangladesh Bussid Unique Society</h2>
-                    <p class="text-xs text-slate-400 mt-1 font-bold tracking-wider">BDBUS REGISTRATION FORM</p>
+                    <div class="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-bus text-3xl text-slate-900"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h2>
+                    <p class="text-xs font-semibold text-cyan-400 uppercase tracking-wider mt-1">BDBUS REGISTRATION FORM</p>
                 </div>
 
-                <form id="regForm" onsubmit="handleRegistration(event)" class="space-y-4">
+                <form id="registration-form" onsubmit="handleRegistration(event)" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Full Name</label>
-                            <input type="text" required id="regName" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Full Name</label>
+                            <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Game Nickname / ID</label>
-                            <input type="text" required id="regNick" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Game Nickname / ID</label>
+                            <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Date of Birth</label>
-                            <input type="date" required id="regDOB" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Date of Birth</label>
+                            <input type="date" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Mobile Number</label>
-                            <input type="tel" required id="regMobile" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Mobile Number</label>
+                            <input type="tel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Gender</label>
-                            <select id="regGender" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Gender</label>
+                            <select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Other</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Facebook Profile Link</label>
-                            <input type="url" required id="regFB" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white" placeholder="https://facebook.com/...">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Email Address</label>
-                            <input type="email" required id="regEmail" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Set Password</label>
-                            <input type="password" required id="regPass" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Confirm Password</label>
-                            <input type="password" required id="regPassConf" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Facebook Profile Link</label>
+                            <input type="url" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-2 pt-2">
-                        <input type="checkbox" required id="regCheck" class="mt-1 accent-cyan-500">
-                        <label for="regCheck" class="text-xs text-slate-400 select-none">All data provided above is correct and verified by myself.</label>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Email Address</label>
+                        <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
                     </div>
 
-                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 text-white font-bold py-3 rounded-lg text-sm mt-4 cursor-pointer shadow-lg shadow-cyan-900/30 transition-all">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Set Password</label>
+                            <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Confirm Password</label>
+                            <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-2 pt-2">
+                        <input type="checkbox" required id="declare-check" class="mt-1 accent-cyan-500">
+                        <label Henrik for="declare-check" class="text-xs text-slate-400 select-none">All data is correct declaration check (আমি ঘোষণা করছি যে প্রদানকৃত সকল তথ্য সত্য ও সঠিক)।</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold py-3 rounded-xl transition mt-4 shadow-lg shadow-cyan-500/10">
                         Registration Submit
                     </button>
-                </form>
+                    
+                    </form>
             </div>
-        </section>
+        </div>
 
-        <section id="homeScreen" class="hidden space-y-6">
-            <div class="text-center space-y-2 py-4">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 font-['Orbitron'] neon-glow">Bangladesh Bussid Unique Society</h1>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass-card rounded-xl p-4 flex items-center justify-between border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
-                    <div>
-                        <span id="greetingText" class="block text-xs font-bold tracking-widest text-cyan-400 font-['Orbitron']">GOOD DAY</span>
-                        <span id="liveClock" class="text-2xl font-bold font-['Orbitron'] tracking-wider text-white">00:00:00 AM</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="block text-[10px] text-slate-500 font-bold uppercase tracking-wider">System Live Date</span>
-                        <span id="liveDate" class="text-sm font-bold text-slate-300 font-['Orbitron']">MON, JUN 15, 2026</span>
-                    </div>
+        <div id="home-screen" class="screen-view hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-900 p-4 rounded-xl border border-slate-800">
+                <div class="text-center md:text-left">
+                    <span class="text-xs uppercase font-bold tracking-wider text-slate-500 block">Live Status</span>
+                    <span class="text-emerald-400 font-bold flex items-center justify-center md:justify-start gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Server Online
+                    </span>
                 </div>
-                
-                <div class="glass-card rounded-xl p-4 flex flex-col justify-center border border-slate-800">
-                    <span class="text-xs font-bold text-amber-400 flex items-center gap-1 mb-1 uppercase tracking-wider"><i class="fa-solid fa-bullhorn"></i> Live Notice Board:</span>
-                    <div class="w-full overflow-hidden bg-slate-950/80 rounded px-2 py-1.5 border border-slate-900">
-                        <marquee id="marqueeNotice" behavior="scroll" direction="left" class="text-xs text-slate-300">BDBUS অফিশিয়াল মাল্টিপ্লেয়ার সেশনে আপনাদের স্বাগতম। ট্রিপ ও বুকিংয়ের নিয়ম মেনে খেলুন। ধন্যবাদ!</marquee>
-                    </div>
+                <div class="bg-slate-950 border border-cyan-500/30 rounded-lg p-2 text-center shadow-[inset_0_0_10px_rgba(6,182,212,0.1)] md:col-span-2">
+                    <div id="live-clock" class="digital-clock text-xl font-bold text-cyan-400 neon-text-cyan">00:00:00 AM</div>
+                    <div id="live-date" class="text-xs font-semibold text-slate-400 mt-0.5">MON, JUN 15, 2026</div>
                 </div>
             </div>
 
-            <div class="glass-card rounded-xl p-4 border border-slate-800">
-                <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-crown text-amber-400"></i> Top Vault Leaderboard</h3>
-                <div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
-                    <div class="flex-none bg-slate-950/60 border border-slate-800 rounded-lg p-3 flex items-center gap-3 w-52">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-cyan-500/30"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=M2Vai" alt="avatar"></div>
+            <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-lg overflow-hidden flex items-center">
+                <span class="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider mr-3 shrink-0">Notice</span>
+                <marquee class="text-sm text-slate-300">BDBUS মাল্টিপ্লেয়ার সেশনে যোগ দেওয়ার পূর্বে অবশ্যই আপনার টিকিট কনফার্ম করুন। ড্রাইভ করার সময় ট্রাফিক আইন মেনে চলুন। ধন্যবাদ।</marquee>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-cyan-400"></i> Game Wallet Earnings System
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
                         <div>
-                            <span class="block text-xs font-bold text-white truncate">M2Vai (Admin)</span>
-                            <span class="block text-[10px] text-cyan-400 font-['Orbitron']">ID: BDBUS-1000</span>
-                            <span class="block text-xs font-bold text-emerald-400 font-['Orbitron']">50,000 BDT</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Welcome Reward</span>
+                            <h4 class="text-lg font-bold text-emerald-400 mt-1">5,000 BDT</h4>
                         </div>
+                        <button class="mt-4 w-full bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 font-bold py-2 rounded-lg text-xs transition">Claim 5000 BDT</button>
                     </div>
-                    <div class="flex-none bg-slate-950/60 border border-slate-800 rounded-lg p-3 flex items-center gap-3 w-52">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-slate-800"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Emon" alt="avatar"></div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
                         <div>
-                            <span class="block text-xs font-bold text-white truncate">Emon Talukder</span>
-                            <span class="block text-[10px] text-slate-400 font-['Orbitron']">ID: BDBUS-1024</span>
-                            <span class="block text-xs font-bold text-emerald-400 font-['Orbitron']">25,400 BDT</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">YouTube Support</span>
+                            <h4 class="text-sm font-semibold text-white mt-1">Subscribe M2Vai Channel</h4>
                         </div>
+                        <button class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-xs transition">Subscribe Now</button>
                     </div>
-                    <div class="flex-none bg-slate-950/60 border border-slate-800 rounded-lg p-3 flex items-center gap-3 w-52">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-slate-800"><img src="https://api.dicebear.com/7.x/bottts/svg?seed=Traveller" alt="avatar"></div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
                         <div>
-                            <span class="block text-xs font-bold text-white truncate">Traveller M2</span>
-                            <span class="block text-[10px] text-slate-400 font-['Orbitron']">ID: BDBUS-1005</span>
-                            <span class="block text-xs font-bold text-emerald-400 font-['Orbitron']">18,200 BDT</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Stream Reward</span>
+                            <h4 class="text-lg font-bold text-cyan-400 mt-1">3,000 BDT</h4>
                         </div>
+                        <button class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 rounded-lg text-xs transition">
+                            <i class="fa-solid fa-play mr-1"></i> Watch Video
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="glass-card rounded-xl p-4 border border-slate-800 text-center flex flex-col justify-between">
+        <div id="booking-screen" class="screen-view hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+                <div class="text-center mb-8 border-b border-slate-800 pb-6">
+                    <h2 class="text-2xl font-black text-white tracking-widest">BDBUS MULTIPLAYER TICKET BOOKING</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <span class="text-xl text-amber-400 mb-1 block"><i class="fa-solid fa-gift"></i></span>
-                        <h4 class="text-sm font-bold text-white">Welcome Bonus</h4>
-                        <p class="text-[11px] text-slate-500 mt-1 mb-3">Claim your standard orientation configuration cash injection instantly.</p>
+                        <label class="block text-sm font-semibold text-slate-400 mb-2">From (কোথা থেকে)</label>
+                        <input list="districts" id="booking-from" placeholder="Select Departure City" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
                     </div>
-                    <button id="claimBonusBtn" onclick="claimReward('welcome')" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-1.5 rounded text-xs transition-all cursor-pointer">Claim 5000 BDT</button>
-                </div>
-                
-                <div class="glass-card rounded-xl p-4 border border-slate-800 text-center flex flex-col justify-between">
+
                     <div>
-                        <span class="text-xl text-red-500 mb-1 block"><i class="fa-brands fa-youtube"></i></span>
-                        <h4 class="text-sm font-bold text-white">Subscribe YouTube</h4>
-                        <p class="text-[11px] text-slate-500 mt-1 mb-3">Subscribe to M2Vai official hub tracking matrix portal system.</p>
+                        <label class="block text-sm font-semibold text-slate-400 mb-2">To (গন্তব্য জেলা)</label>
+                        <input list="districts" id="booking-to" placeholder="Select Destination City" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
                     </div>
-                    <a href="https://youtube.com/" target="_blank" onclick="claimReward('youtube')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded text-xs block transition-all cursor-pointer">Subscribe Now</a>
-                </div>
 
-                <div class="glass-card rounded-xl p-4 border border-slate-800 text-center flex flex-col justify-between">
                     <div>
-                        <span class="text-xl text-cyan-400 mb-1 block"><i class="fa-solid fa-circle-play"></i></span>
-                        <h4 class="text-sm font-bold text-white">Watch Video Stream</h4>
-                        <p class="text-[11px] text-slate-500 mt-1 mb-3">Initialize data payload visual validation loops for monetary boost.</p>
+                        <label class="block text-sm font-semibold text-slate-400 mb-2">Journey Date (ভ্রমণের তারিখ)</label>
+                        <input type="date" id="journey-date" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
                     </div>
-                    <button onclick="claimReward('video')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-1.5 rounded text-xs transition-all cursor-pointer"><i class="fa-solid fa-play text-[10px] mr-1"></i> Watch Video</button>
-                </div>
-            </div>
-        </section>
 
-        <section id="profileScreen" class="hidden max-w-md mx-auto">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-6">
-                <div class="text-center">
-                    <div class="relative w-24 h-24 mx-auto mb-3">
-                        <div class="w-full h-full rounded-full bg-slate-800 border-2 border-cyan-500 overflow-hidden">
-                            <img id="profileAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Emon" class="w-full h-full object-cover" alt="avatar">
-                        </div>
-                        <label class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-cyan-500 border-2 border-slate-900 flex items-center justify-center text-xs text-white cursor-pointer hover:bg-cyan-600 transition-colors">
-                            <i class="fa-solid fa-camera"></i>
-                            <input type="file" id="avatarUpload" class="hidden" accept="image/*" onchange="uploadAvatar(this)">
-                        </label>
-                    </div>
-                    <h2 id="profileNameDisplay" class="text-xl font-bold text-white">Emon Talukder</h2>
-                    <span id="profileRoleBadge" class="inline-block bg-cyan-950 text-cyan-400 text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-1 border border-cyan-800/40 font-['Orbitron']">ID: BDBUS-1000 [Admin]</span>
-                </div>
-
-                <div class="bg-gradient-to-r from-emerald-950/40 to-teal-950/40 border border-emerald-500/30 rounded-xl p-4 text-center">
-                    <span class="block text-xs font-semibold text-emerald-400/80 uppercase tracking-wider">Current Wallet Vault</span>
-                    <span id="vaultBalance" class="text-3xl font-bold text-emerald-400 font-['Orbitron'] tracking-wider">5000 BDT</span>
-                </div>
-
-                <div class="space-y-3 bg-slate-950/60 border border-slate-900 p-4 rounded-xl text-sm">
-                    <div class="flex justify-between border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Game Nickname</span>
-                        <span id="profNick" class="font-semibold text-slate-300">Emon_BDBUS</span>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Mobile Number</span>
-                        <span id="profMobile" class="font-semibold text-slate-300">01700000000</span>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Date of Birth</span>
-                        <span id="profDOB" class="font-semibold text-slate-300">1998-05-12</span>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Gender</span>
-                        <span id="profGender" class="font-semibold text-slate-300">Male</span>
-                    </div>
-                    <div class="flex justify-between border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Facebook Identity</span>
-                        <a id="profFB" href="#" target="_blank" class="font-semibold text-cyan-400 hover:underline truncate max-w-[180px]">Profile Link</a>
-                    </div>
-                    <div class="flex justify-between pt-1">
-                        <span class="text-slate-500">Email System</span>
-                        <span id="profEmail" class="font-semibold text-slate-300 truncate max-w-[180px]">example@gmail.com</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="passwordScreen" class="hidden max-w-md mx-auto">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-4">
-                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-key text-cyan-400 mr-2"></i>Security Maintenance</h3>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Current Password</label>
-                    <input type="password" id="currPass" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">New Password</label>
-                    <input type="password" id="newPass" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Confirm New Password</label>
-                    <input type="password" id="confNewPass" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                </div>
-                <button onclick="updatePassword()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 rounded-lg text-sm transition-all mt-2 cursor-pointer">Submitte Password</button>
-            </div>
-        </section>
-
-        <section id="bookingScreen" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-6">
-                <div class="text-center border-b border-slate-800 pb-4">
-                    <h2 class="text-2xl font-bold tracking-wide text-white uppercase">BDBUS MULTIPLAYER TICKET BOOKING</h2>
-                </div>
-
-                <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-900 flex justify-between items-center text-xs font-['Orbitron'] text-slate-400">
-                    <span><i class="fa-solid fa-clock text-cyan-500 mr-1"></i> LIVE LOOP</span>
-                    <span id="bookingClock" class="text-white font-bold">00:00:00 AM</span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">From (যাত্রার স্থান)</label>
-                        <input list="districts" id="routeFrom" placeholder="Type/Select Leaving District" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">To (গন্তব্য স্থান)</label>
-                        <input list="districts" id="routeTo" placeholder="Type/Select Destination District" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan-500 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Journey Date</label>
-                        <input type="date" id="journeyDate" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan-500 text-white font-['Orbitron']">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">Journey Time</label>
-                        <select id="journeyTime" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-cyan-500 text-white font-['Orbitron']">
-                            <option>10:00 AM</option>
-                            <option>03:00 PM</option>
-                            <option>11:00 PM</option>
-                            <option>01:00 AM</option>
+                        <label class="block text-sm font-semibold text-slate-400 mb-2">Journey Time (বাস ছাড়ার সময়)</label>
+                        <select id="journey-time" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
+                            <option value="10:00 AM">10:00 AM</option>
+                            <option value="03:00 PM">03:00 PM</option>
+                            <option value="11:00 PM">11:00 PM</option>
+                            <option value="01:00 AM">01:00 AM</option>
                         </select>
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-400 mb-2">Bus Type</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <button onclick="setBusType('Non-AC')" id="btnNonAC" class="py-2.5 rounded-lg border font-bold text-sm transition-all bg-cyan-950/40 border-cyan-500 text-cyan-400 cursor-pointer">Non-AC Coach</button>
-                            <button onclick="setBusType('Premium AC')" id="btnAC" class="py-2.5 rounded-lg border font-bold text-sm transition-all bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700 cursor-pointer">Premium AC Coach</button>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-400 mb-2">Bus Type (কোচের ধরন)</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-3 cursor-pointer select-none hover:border-slate-700">
+                                <input type="radio" name="bus_type" value="Non-AC" checked class="accent-cyan-500 mr-2">
+                                <span class="text-sm font-bold text-slate-300">Non-AC</span>
+                            </label>
+                            <label class="flex items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-3 cursor-pointer select-none hover:border-slate-700">
+                                <input type="radio" name="bus_type" value="Premium AC" class="accent-cyan-500 mr-2">
+                                <span class="text-sm font-bold text-cyan-400">Premium AC</span>
+                            </label>
                         </div>
                     </div>
-                </div>
 
-                <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Estimated Ticket Fare Rate:</span>
-                    <span id="calculatedFare" class="text-xl font-bold text-cyan-400 font-['Orbitron']">0 BDT</span>
-                </div>
-
-                <div class="custom-warning-box rounded-xl p-4 border flex gap-3 items-start shadow-xl">
-                    <span class="text-xl pt-0.5"><i class="fa-solid fa-triangle-exclamation custom-warning-heading"></i></span>
-                    <div class="space-y-2 text-xs">
-                        <h4 class="font-bold uppercase tracking-wider custom-warning-heading">⚠️ গুরুত্বপূর্ণ নোটিশ (Important Notice)</h4>
-                        <p class="font-mono leading-relaxed"><strong class="text-white">English:</strong> Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</p>
-                        <p class="leading-relaxed"><strong class="text-white">বাংলা:</strong> মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</p>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-center text-center">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Estimated Ticket Fare Rate</span>
+                        <div class="text-2xl font-bold text-emerald-400 mt-1"><span id="fare-amount">0</span> BDT</div>
                     </div>
                 </div>
 
-                <button onclick="openSeatSelection()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 transition-all text-sm tracking-wider cursor-pointer">
+                <div class="custom-warning-box rounded-xl p-5 mt-6 shadow-xl">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="custom-warning-heading text-lg font-bold">⚠️ গুরুত্বপূর্ণ নোটিশ (Important Notice)</span>
+                    </div>
+                    <div class="space-y-2 text-sm leading-relaxed">
+                        <p class="font-medium"><strong>English:</strong> Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</p>
+                        <p class="font-medium border-t border-red-950/50 pt-2"><strong>বাংলা:</strong> মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</p>
+                    </div>
+                </div>
+
+                <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black tracking-wide py-4 rounded-xl transition mt-6 text-center shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-chair"></i> SELECT SEAT
                 </button>
             </div>
-        </section>
+        </div>
 
-        <section id="seatScreen" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-6">
-                <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2"><i class="fa-solid fa-bus text-cyan-400 mr-2"></i>Choose Cabin Seating Array</h3>
-                
-                <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-bold">
-                    <div class="bg-blue-950 border border-blue-700 text-blue-300 py-1.5 rounded">Available (ডার্ক ব্লু)</div>
-                    <div class="bg-cyan-500 text-slate-950 py-1.5 rounded shadow-[0_0_10px_rgba(6,182,212,0.4)]">Selected (নিওন ব্লু)</div>
-                    <div class="bg-slate-800 text-slate-500 py-1.5 rounded line-through">Occupied (গ্রে)</div>
-                </div>
-
-                <div class="max-w-xs mx-auto bg-slate-950 border-2 border-slate-900 rounded-3xl p-4 shadow-inner">
-                    <div class="flex justify-between items-center border-b-2 border-dashed border-slate-800 pb-3 mb-4 text-xs font-bold font-['Orbitron'] tracking-widest text-slate-500 px-2">
-                        <span>🚪 DOOR</span>
-                        <span>🧑‍✈️ DRIVER</span>
+        <div id="profile-screen" class="screen-view hidden">
+            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center">
+                <h3 class="text-xl font-bold text-white mb-6">My Member Profile</h3>
+                <div class="relative w-28 h-28 mx-auto mb-4">
+                    <div class="w-full h-full rounded-full bg-slate-800 border-2 border-cyan-500 flex items-center justify-center overflow-hidden">
+                        <i class="fa-solid fa-user text-5xl text-slate-600"></i>
                     </div>
-                    
-                    <div id="cabinGrid" class="grid grid-cols-5 gap-3">
-                        </div>
+                    <button class="absolute bottom-1 right-1 bg-cyan-500 text-slate-900 p-2 rounded-full text-xs hover:bg-cyan-400">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
                 </div>
-
-                <div class="text-center text-xs text-slate-400 bg-slate-900/40 py-2 rounded-lg border border-slate-800/60">
-                    <p><i class="fa-solid fa-hourglass-half text-amber-400 mr-1"></i> সিট সিলেক্ট করার পর সিস্টেমটি সেটি সর্বোচ্চ <span class="text-amber-400 font-bold">২ মিনিটের জন্য</span> হোল্ডে লক রাখবে।</p>
+                <h4 class="text-lg font-bold text-white">M2Vai</h4>
+                <p class="text-xs font-bold text-slate-500 uppercase mt-0.5">ID: BDBUS-1000 [Admin]</p>
+                
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 my-4">
+                    <span class="text-xs text-slate-500 uppercase block font-bold">Wallet Balance</span>
+                    <span class="text-xl font-bold text-emerald-400">5,000 BDT</span>
                 </div>
+            </div>
+        </div>
 
-                <div class="bg-slate-950 border border-slate-900 p-4 rounded-xl flex justify-between items-center text-sm">
+        <div id="password-screen" class="screen-view hidden">
+            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-4">Change Password</h3>
+                <div class="space-y-4">
                     <div>
-                        <span class="text-slate-500 block text-xs">Selected Seats Array:</span>
-                        <span id="selectedSeatsList" class="font-bold text-white font-['Orbitron']">-</span>
+                        <label class="block text-sm text-slate-400 mb-1">Current Password</label>
+                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
                     </div>
-                    <div class="text-right">
-                        <span class="text-slate-500 block text-xs">Accumulated Net Cost:</span>
-                        <span id="totalSeatFare" class="font-bold text-emerald-400 text-lg font-['Orbitron']">0 BDT</span>
-                    </div>
-                </div>
-
-                <button onclick="confirmTicketPayment()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/20 cursor-pointer tracking-wider">
-                    CONFIRM TICKET & DETONATE VAULT
-                </button>
-            </div>
-        </section>
-
-        <section id="ticketScreen" class="hidden space-y-6">
-            <div id="ticketCanvas" class="bg-white text-slate-900 rounded-2xl p-6 shadow-2xl relative overflow-hidden max-w-xl mx-auto border-4 border-double border-slate-300">
-                <div class="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none select-none">
-                    <span class="text-9xl font-black font-['Orbitron'] tracking-tighter">BDBUS</span>
-                </div>
-                
-                <div class="flex justify-between items-start border-b-2 border-slate-200 pb-4 mb-4 relative z-10">
                     <div>
-                        <h2 class="text-xl font-extrabold tracking-tight text-cyan-900 font-['Orbitron']">BDBUS UNIQUE BOARDING PASS</h2>
-                        <p class="text-[10px] text-slate-500 font-bold tracking-wider uppercase">Official Network Multiplayer Entry Node</p>
+                        <label class="block text-sm text-slate-400 mb-1">New Password</label>
+                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
                     </div>
-                    <div class="text-right">
-                        <span class="bg-rose-100 text-rose-700 font-bold text-[10px] uppercase px-2 py-0.5 rounded border border-rose-200 font-['Orbitron']">PAID RECEIPT</span>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-1">Confirm New Password</label>
+                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
                     </div>
-                </div>
-
-                <table class="w-full text-xs mb-4 relative z-10">
-                    <tbody>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Member Identity:</td><td id="tckID" class="py-1.5 font-bold font-['Orbitron']">BDBUS-1024</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Full Legal Name:</td><td id="tckName" class="py-1.5 font-bold">Emon Talukder</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Game Alias/ID:</td><td id="tckNick" class="py-1.5 font-bold font-['Orbitron']">Emon_BDBUS</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Mobile Contact:</td><td id="tckMobile" class="py-1.5 font-mono">01700000000</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Route Vector:</td><td class="py-1.5 font-bold"><span id="tckFrom">Dhaka</span> <i class="fa-solid fa-arrow-right text-[10px] mx-1 text-slate-400"></i> <span id="tckTo">Chittagong</span></td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Schedule Matrix:</td><td class="py-1.5 font-bold font-['Orbitron']"><span id="tckDate">2026-06-15</span> @ <span id="tckTime">10:00 AM</span></td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Allocated Chairs:</td><td id="tckSeats" class="py-1.5 font-bold font-['Orbitron'] text-sm text-red-600 tracking-wide">A1, A2</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Server Room Name:</td><td id="tckRoom" class="py-1.5 font-bold text-slate-700">BDBUS MULTI SERVER [S1]</td></tr>
-                        <tr class="border-b border-slate-100"><td class="py-1.5 text-slate-500 font-medium">Server Key / Pass:</td><td id="tckPass" class="py-1.5 font-bold font-['Orbitron'] text-sm text-red-600 tracking-widest">BD7799</td></tr>
-                        <tr><td class="py-1.5 text-slate-500 font-medium">Timestamp Issued:</td><td id="tckIssueStamp" class="py-1.5 font-mono text-[10px] text-slate-400">2026-06-15 23:32:34</td></tr>
-                    </tbody>
-                </table>
-
-                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-[11px] leading-relaxed mb-4 relative z-10 text-slate-700">
-                    <p class="font-bold text-slate-900 border-b border-slate-200 pb-1 mb-1 uppercase tracking-wider text-[10px]"><i class="fa-solid fa-shield-halved text-cyan-700 mr-1"></i> Strict Multi Session Governance Directive</p>
-                    <p class="font-mono mb-1"><strong>ENG:</strong> Sharing the assigned multi-room access tokens or operating vehicles in reckless disruptive configuration layout patterns triggers server permanent ban protocol loops.</p>
-                    <p><strong>বাংলা:</strong> বরাদ্দকৃত রুম পাসওয়ার্ড অন্য কোথাও শেয়ার করা সম্পূর্ণ নিষেধ। ড্রাইভ করার সময় ট্রাফিক আইন ও গ্রূপের নিয়ম মেনে চলুন। অবহেলাজনিত দুর্ঘটনার জন্য টিকিট বাতিলসহ মেম্বারশিপ ব্যান হতে পারে।</p>
-                </div>
-
-                <div class="flex justify-between items-center border-t border-slate-100 pt-3 relative z-10">
-                    <span class="text-[10px] font-bold font-['Orbitron'] tracking-widest text-slate-400">WEBSITE CREATED BY M2Vai</span>
-                    <span class="bg-red-600 text-white font-bold text-[9px] tracking-wider px-2 py-0.5 rounded-full uppercase shadow-sm">MEMBER VALIDATED</span>
+                    <button class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition mt-2">Submit Password</button>
                 </div>
             </div>
-
-            <div class="text-center">
-                <button onclick="downloadHDTicket()" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold px-6 py-3 rounded-xl text-sm tracking-wider inline-flex items-center gap-2 transition-all cursor-pointer shadow-xl shadow-cyan-900/30">
-                    <i class="fa-solid fa-cloud-arrow-down"></i> Ticket & Download (HD)
-                </button>
-            </div>
-        </section>
-
-        <section id="adminScreen" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-6">
-                <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-2 flex items-center gap-2"><i class="fa-solid fa-user-shield text-red-500"></i> Admin Operational Core Console</h3>
-                
-                <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Broadcast Live Announcement String</label>
-                    <textarea id="adminNoticeInput" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm focus:outline-none focus:border-cyan-500 text-white" placeholder="Type updated system ticker message text strings here..."></textarea>
-                    <button onclick="updateNoticeText()" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold px-4 py-1.5 rounded text-xs transition-all cursor-pointer">Update Live Notice</button>
-                </div>
-
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Booking Monitoring Tracking Table Grid</h4>
-                        <button onclick="resetAllSeats()" class="bg-red-600/20 hover:bg-red-600 border border-red-700 text-red-300 hover:text-white font-bold px-3 py-1 rounded text-xs transition-all cursor-pointer"><i class="fa-solid fa-trash-can mr-1"></i> Reset Seats Matrix</button>
-                    </div>
-                    <div class="overflow-x-auto border border-slate-900 rounded-xl bg-slate-950/40">
-                        <table class="w-full text-left text-xs text-slate-400">
-                            <thead class="bg-slate-950 text-slate-500 font-bold uppercase border-b border-slate-900">
-                                <tr>
-                                    <th class="p-3">Member ID</th>
-                                    <th class="p-3">Player Ident</th>
-                                    <th class="p-3">Coach Core</th>
-                                    <th class="p-3">Assigned Seats</th>
-                                    <th class="p-3 text-right">Action Grid</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminBookingTable">
-                                <tr class="border-b border-slate-900/60 hover:bg-slate-900/20">
-                                    <td class="p-3 font-['Orbitron']">BDBUS-1024</td>
-                                    <td class="p-3 font-semibold text-slate-300">Emon Talukder</td>
-                                    <td class="p-3">Premium AC</td>
-                                    <td class="p-3 text-cyan-400 font-bold font-['Orbitron']">A1, A2</td>
-                                    <td class="p-3 text-right"><button onclick="clearSingleBooking(this)" class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 py-0.5 rounded text-[10px] cursor-pointer">Reset Seat</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="space-y-4 pt-4 border-t border-slate-900">
-                    <div class="flex flex-col sm:flex-row gap-2 justify-between sm:items-center">
-                        <button onclick="alert('সব মেম্বারদের ডাটাবেজ সাকসেসফুলি লোড করা হয়েছে।')" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition-all cursor-pointer">View All Registered Members</button>
-                        <div class="flex gap-1">
-                            <input type="text" id="memberSearchInput" placeholder="Enter Member ID..." class="bg-slate-950 border border-slate-800 rounded-l-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-                            <button onclick="searchMember()" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold px-3 rounded-r-lg text-xs cursor-pointer">Search</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950 border border-slate-900 rounded-xl p-4 space-y-3">
-                        <div class="flex justify-between items-start border-b border-slate-900 pb-2">
-                            <div>
-                                <span class="block font-bold text-white text-sm">Target User: Emon Talukder</span>
-                                <span class="text-[11px] text-cyan-400 font-['Orbitron']">ID: BDBUS-1024 [Regular Member]</span>
-                            </div>
-                            <span class="text-[10px] bg-emerald-950 text-emerald-400 font-bold px-2 py-0.5 rounded border border-emerald-900/40">ACTIVE LOG</span>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                            <button onclick="toggleBanState(this)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded text-xs transition-colors cursor-pointer">Ban / Unban</button>
-                            <button onclick="giftVaultCash()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1.5 rounded text-xs transition-colors cursor-pointer">Gift BDT</button>
-                            <button onclick="assignUserRole()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 rounded text-xs transition-colors cursor-pointer">Assign Role</button>
-                            <button onclick="alert('উক্ত ইউজারের সকল লক করা সিট ক্লিয়ার করা হয়েছে।')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-1.5 rounded text-xs transition-colors cursor-pointer">Reset Seats</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contactScreen" class="hidden max-w-md mx-auto">
-            <div class="glass-card rounded-2xl p-6 border border-slate-800 shadow-xl space-y-4 text-center">
-                <span class="text-3xl text-cyan-400 block"><i class="fa-solid fa-headset"></i></span>
-                <h3 class="text-lg font-bold text-white">BDBUS Support Network Interface</h3>
-                <p class="text-xs text-slate-400 leading-relaxed">কোনো প্রকার পেমেন্ট সমস্যা, একাউন্ট রিকভারি বা বাগ রিপোর্টের জন্য সরাসরি মডারেটর প্যানেলের সাথে নিচের চ্যানেলগুলোর মাধ্যমে যোগাযোগ করুন।</p>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-900 text-left text-xs space-y-2 font-mono">
-                    <p><span class="text-slate-500">Official Mail:</span> support@bdbus-society.org</p>
-                    <p><span class="text-slate-500">Hotline Loop:</span> +880 1700-000000</p>
-                    <p><span class="text-slate-500">HQ Server Coordinates:</span> Mawna, Dhaka, Bangladesh</p>
-                </div>
-            </div>
-        </section>
+        </div>
 
     </main>
 
-    <datalist id="districts">
-        <option value="Bagerhat"> <option value="Bandarban"> <option value="Barguna"> <option value="Barisal"> <option value="Bhola"> <option value="Bogra"> <option value="Brahmanbaria"> <option value="Chandpur"> <option value="Chapai開放Nawabganj"> <option value="Chittagong"> <option value="Chuadanga"> <option value="Comilla"> <option value="Cox's Bazar"> <option value="Dhaka"> <option value="Dinajpur"> <option value="Faridpur"> <option value="Feni"> <option value="Gaibandha"> <option value="Gazipur"> <option value="Gopalganj"> <option value="Habiganj"> <option value="Jamalpur"> <option value="Jessore"> <option value="Jhalokati"> <option value="Jhenaidah"> <option value="Joypurhat"> <option value="Khagrachhari"> <option value="Khulna"> <option value="Kishoreganj"> <option value="Kurigram"> <option value="Kushtia"> <option value="Lakshmipur"> <option value="Lalmonirhat"> <option value="Madaripur"> <option value="Magura"> <option value="Manikganj"> <option value="Meherpur"> <option value="Moulvibazar"> <option value="Munshiganj"> <option value="Mymensingh"> <option value="Naogaon"> <option value="Narail"> <option value="Narayanganj"> <option value="Narsingdi"> <option value="Natore"> <option value="Netrokona"> <option value="Nilphamari"> <option value="Noakhali"> <option value="Pabna"> <option value="Panchagarh"> <option value="Patuakhali"> <option value="Pirojpur"> <option value="Rajbari"> <option value="Rajshahi"> <option value="Rangamati"> <option value="Rangpur"> <option value="Satkhira"> <option value="Shariatpur"> <option value="Sherpur"> <option value="Sirajganj"> <option value="Sunamganj"> <option value="Sylhet"> <option value="Tangail"> <option value="Thakurgaon">
-    </datalist>
-
-    <div id="welcomeModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="glass-card max-w-sm w-full rounded-2xl border-2 border-cyan-500 p-6 text-center shadow-[0_0_30px_rgba(6,182,212,0.3)] space-y-4">
-            <h2 class="text-2xl font-black text-cyan-400 font-['Orbitron'] tracking-widest neon-glow">WELCOME</h2>
-            <div class="w-20 h-20 mx-auto rounded-full border-2 border-cyan-400 p-0.5 bg-slate-900 overflow-hidden shadow-lg shadow-cyan-500/10">
-                <img id="modalAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=Emon" class="w-full h-full object-cover" alt="avatar">
+    <div id="welcome-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-6 max-w-sm w-full text-center shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <div class="text-xs font-bold text-cyan-400 tracking-widest uppercase mb-2">Live Session Access</div>
+            <div id="popup-greetings" class="text-xl font-extrabold tracking-wider text-amber-400 uppercase mb-4">GOOD MORNING</div>
+            
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 mb-6 flex flex-col items-center">
+                <div class="w-16 h-16 bg-slate-800 border border-cyan-500 rounded-full flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-user-astronaut text-3xl text-cyan-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">M2Vai</h3>
+                <span class="text-xs font-bold text-slate-500 uppercase mt-0.5">ID: BDBUS-1000</span>
+                <span class="mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">WELCOME</span>
             </div>
-            <div>
-                <h4 id="modalName" class="text-lg font-bold text-white">Emon Talukder</h4>
-                <p id="modalID" class="text-xs text-slate-400 font-['Orbitron'] mt-0.5">ID: BDBUS-1024 [Regular Member]</p>
-            </div>
-            <p class="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-900 leading-relaxed">Bangladesh Bussid Unique Society অফিশিয়াল পোর্টালে আপনার সেশনটি সফলভাবে সংযুক্ত হয়েছে।</p>
-            <button onclick="dismissWelcomeModal()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md shadow-cyan-500/20 cursor-pointer">Thanks</button>
+            
+            <button onclick="closeWelcomePopup()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl transition tracking-wide shadow-lg shadow-cyan-500/20">
+                Thanks
+            </button>
         </div>
     </div>
 
-    <footer class="glass-card border-t border-slate-900 px-4 py-6 mt-8 space-y-4">
-        <div class="flex flex-wrap justify-center gap-3">
-            <a href="https://facebook.com" target="_blank" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:shadow-[0_0_10px_rgba(6,182,212,0.5)] border border-slate-800 transition-all text-sm"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://youtube.com" target="_blank" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-red-500 hover:shadow-[0_0_10px_rgba(239,68,68,0.5)] border border-slate-800 transition-all text-sm"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://instagram.com" target="_blank" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:shadow-[0_0_10px_rgba(236,72,153,0.5)] border border-slate-800 transition-all text-sm"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://twitter.com" target="_blank" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-white hover:shadow-[0_0_10px_rgba(255,255,255,0.3)] border border-slate-800 transition-all text-sm"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://discord.com" target="_blank" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:shadow-[0_0_10px_rgba(99,102,241,0.5)] border border-slate-800 transition-all text-sm"><i class="fa-brands fa-discord"></i></a>
-            <a href="mailto:support@bdbus-society.org" class="w-9 h-9 rounded-full bg-slate-950 flex items-center justify-center text-slate-400 hover:text-emerald-400 hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] border border-slate-800 transition-all text-sm"><i class="fa-solid fa-envelope"></i></a>
-        </div>
+    <datalist id="districts">
+        <option value="Dhaka"><option value="Chittagong"><option value="Sylhet"><option value="Rajshahi"><option value="Khulna"><option value="Barisal"><option value="Rangpur"><option value="Mymensingh"><option value="Comilla"><option value="Gazipur"><option value="Narayanganj"><option value="Cox's Bazar"><option value="Brahmanbaria"><option value="Dinajpur"><option value="Jessore"><option value="Tangail"><option value="Feni"><option value="Lakshmipur"><option value="Noakhali"><option value="Chandpur"><option value="Bagerhat"><option value="Chuadanga"><option value="Jessore"><option value="Jhenaidah"><option value="Magura"><option value="Meherpur"><option value="Narail"><option value="Shatkhira"><option value="Bograw"><option value="Joypurhat"><option value="Naogaon"><option value="Natore"><option value="Nawabganj"><option value="Pabna"><option value="Sirajganj"><option value="Habiganj"><option value="Moulvibazar"><option value="Sunamganj"><option value="Barguna"><option value="Bhola"><option value="Jhalokati"><option value="Patuakhali"><option value="Pirojpur"><option value="Bandarban"><option value="Khagrachhari"><option value="Rangamati"><option value="Faridpur"><option value="Gopalganj"><option value="Kishoreganj"><option value="Madaripur"><option value="Manikganj"><option value="Munshiganj"><option value="Narsingdi"><option value="Rajbari"><option value="Shariatpur"><option value="Gaibandha"><option value="Kurigram"><option value="Lalmonirhat"><option value="Nilphamari"><option value="Panchagarh"><option value="Thakurgaon"><option value="Netrokona"><option value="Sherpur"><option value="Jamalpur">
+    </datalist>
 
-        <div class="flex justify-center gap-4 text-xs font-semibold">
-            <a href="https://youtube.com" target="_blank" class="flex items-center gap-1.5 text-slate-400 hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-red-500"></i> M2Vai</a>
-            <span class="text-slate-800">|</span>
-            <a href="https://youtube.com" target="_blank" class="flex items-center gap-1.5 text-slate-400 hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-red-500"></i> Traveller M2Vai</a>
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center space-y-4">
+        <div class="flex justify-center space-x-3">
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition text-sm"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-500/50 transition text-sm"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:border-pink-500/50 transition text-sm"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-400/50 transition text-sm"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:border-indigo-400/50 transition text-sm"><i class="fa-brands fa-discord"></i></a>
         </div>
-
-        <div class="flex justify-center gap-4 text-[11px] text-slate-500">
-            <a href="#" class="hover:underline">Privacy Policy</a>
-            <a href="#" class="hover:underline">Terms & Conditions</a>
-            <a href="#" class="hover:underline">Refund Policy</a>
+        <div class="text-xs text-slate-500 space-x-4">
+            <a href="#" class="hover:text-slate-400">Privacy Policy</a>
+            <a href="#" class="hover:text-slate-400">Terms & Conditions</a>
+            <a href="#" class="hover:text-slate-400">Refund Policy</a>
         </div>
+        <p class="text-[11px] text-slate-600 font-medium tracking-wider">© 2026 BDBUS Team. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // System Application State Space
-        let currentLang = 'EN';
-        let currentBusType = 'Non-AC';
-        let userBalance = 5000;
-        let screenHistory = [];
-        let selectedSeats = [];
-        const baseFareRatePerSeat = 650; // Dynamic scaling algorithm modifier configuration constant tracking metric
+        // Toggle Navigation Drawer Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
 
-        // Simulated Database Payload Variables tracking layout elements
-        let globalUserSession = {
-            id: 'BDBUS-1024',
-            name: 'Emon Talukder',
-            nickname: 'Emon_BDBUS',
-            mobile: '01700000000',
-            dob: '1998-05-12',
-            gender: 'Male',
-            fb: 'https://facebook.com/emon.talukder',
-            email: 'example@gmail.com',
-            role: 'Regular Member'
-        };
+        // Screen Routing/Navigation Logic
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen-view').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            // Auto close drawer menu
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
 
-        // Initialize Live Loops
-        window.addEventListener('DOMContentLoaded', () => {
-            startClockLoops();
-            setupFareTriggerListeners();
-        });
+        // Form View Masking / Visibility Logic for Passwords
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
 
-        function startClockLoops() {
+        // Fake Data Trigger Logic for Registration (Redirect to login)
+        function handleRegistration(event) {
+            event.preventDefault();
+            showScreen('login-screen');
+        }
+
+        // Authentication Success -> Welcome Popup Execution
+        function handleLogin() {
+            showScreen('home-screen');
+            triggerWelcomePopup();
+        }
+
+        // Dynamic System Clock and Greeting Tracker
+        function startLiveClock() {
             setInterval(() => {
                 const now = new Date();
-                let options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-                const timeString = now.toLocaleTimeString('en-US', options);
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // execution context tracking
                 
-                // Print execution logs to visual interfaces
-                if(document.getElementById('liveClock')) document.getElementById('liveClock').innerText = timeString;
-                if(document.getElementById('bookingClock')) document.getElementById('bookingClock').innerText = timeString;
-
-                // Dynamically evaluate text orientation based on hours matrices 
-                const hour = now.getHours();
-                let greet = "GOOD DAY";
-                if(hour >= 5 && hour < 12) greet = "GOOD MORNING";
-                else if(hour >= 12 && hour < 17) greet = "GOOD AFTERNOON";
-                else if(hour >= 17 && hour < 21) greet = "GOOD EVENING";
-                else greet = "GOOD NIGHT";
-                if(document.getElementById('greetingText')) document.getElementById('greetingText').innerText = greet;
+                document.getElementById('live-clock').innerText = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+                
+                // Set Modal/Dashboard Greetings Text based on hours context
+                const currentHour = now.getHours();
+                let greeting = "GOOD DAY";
+                if(currentHour >= 5 && currentHour < 12) greeting = "GOOD MORNING";
+                else if(currentHour >= 12 && currentHour < 17) greeting = "GOOD AFTERNOON";
+                else if(currentHour >= 17 && currentHour < 21) greeting = "GOOD EVENING";
+                else greeting = "GOOD NIGHT";
+                
+                document.getElementById('popup-greetings').innerText = greeting;
             }, 1000);
         }
 
-        // Setup input trackers for real-time live automatic fair computation calculation loop matrix
-        function setupFareTriggerListeners() {
-            ['routeFrom', 'routeTo'].forEach(id => {
-                document.getElementById(id).addEventListener('input', recalculateLiveFareRate);
-            });
+        // Welcome Modal Handler Functions
+        function triggerWelcomePopup() {
+            document.getElementById('welcome-modal').classList.remove('hidden');
         }
 
-        function toggleSidebar() {
-            const side = document.getElementById('sidebar');
-            if(side.classList.contains('-translate-x-full')) {
-                side.classList.remove('-translate-x-full');
-            } else {
-                side.classList.add('-translate-x-full');
-            }
+        function closeWelcomePopup() {
+            document.getElementById('welcome-modal').classList.add('hidden');
         }
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('langEN').className = lang === 'EN' ? "px-3 py-1 text-xs rounded font-bold transition-all bg-cyan-600 text-white cursor-pointer" : "px-3 py-1 text-xs rounded font-bold transition-all bg-slate-700 text-slate-300 hover:bg-slate-600 cursor-pointer";
-            document.getElementById('langBN').className = lang === 'BN' ? "px-3 py-1 text-xs rounded font-bold transition-all bg-cyan-600 text-white cursor-pointer" : "px-3 py-1 text-xs rounded font-bold transition-all bg-slate-700 text-slate-300 hover:bg-slate-600 cursor-pointer";
-        }
+        // Intelligent Realtime Distance/Fare Calculation Engine 
+        function setupFareCalculator() {
+            const fromField = document.getElementById('booking-from');
+            const toField = document.getElementById('booking-to');
+            const fareDisplay = document.getElementById('fare-amount');
+            const busTypes = document.getElementsByName('bus_type');
 
-        function togglePasswordVisibility(fieldId) {
-            const f = document.getElementById(fieldId);
-            const eye = document.getElementById(fieldId + 'Eye');
-            if(f.type === 'password') {
-                f.type = 'text';
-                eye.classList.remove('fa-eye');
-                eye.classList.add('fa-eye-slash');
-            } else {
-                f.type = 'password';
-                eye.classList.remove('fa-eye-slash');
-                eye.classList.add('fa-eye');
-            }
-        }
-
-        // Navigation Matrix Controller Screen Transitions Layer Functions
-        function switchScreen(targetId) {
-            const screens = ['loginScreen', 'signupScreen', 'homeScreen', 'profileScreen', 'passwordScreen', 'bookingScreen', 'seatScreen', 'ticketScreen', 'adminScreen', 'contactScreen'];
-            
-            screens.forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            
-            const activeScreen = document.getElementById(targetId);
-            activeScreen.classList.remove('hidden');
-            
-            // Manage custom tracking configuration states header rules logic structures
-            const globalHeader = document.getElementById('globalHeader');
-            if(targetId === 'loginScreen' || targetId === 'signupScreen') {
-                globalHeader.classList.add('hidden');
-            } else {
-                globalHeader.classList.remove('hidden');
-                // Push states history arrays tracking metrics 
-                if(screenHistory[screenHistory.length - 1] !== targetId) {
-                    screenHistory.push(targetId);
-                }
+            function calculateFare() {
+                const fromVal = fromField.value.trim().toLowerCase();
+                const toVal = toField.value.trim().toLowerCase();
                 
-                // Show/hide back button based on position tracking array stack
-                const backBtn = document.getElementById('backBtn');
-                if(screenHistory.length > 1) {
-                    backBtn.classList.remove('hidden');
-                } else {
-                    backBtn.classList.add('hidden');
-                }
-            }
-            // Dismiss active drawers layout segment
-            document.getElementById('sidebar').classList.add('-translate-x-full');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        function goBack() {
-            if(screenHistory.length > 1) {
-                screenHistory.pop(); // Remove active current matrix position tracking node
-                const prev = screenHistory[screenHistory.length - 1];
-                switchScreen(prev);
-            }
-        }
-
-        // Login System Core Routines 
-        function login() {
-            // Emulate data extraction logic validation loop processes
-            const email = document.getElementById('loginEmail').value;
-            if(!email) { alert('দয়া করে আপনার বৈধ ইমেইল অ্যাড্রেসটি ইনপুট দিন।'); return; }
-            
-            // Map synchronization arrays variables data sets
-            syncProfileViewData();
-            
-            // Pop up Modal Core Triggers
-            document.getElementById('modalName').innerText = globalUserSession.name;
-            document.getElementById('modalID').innerText = `ID: ${globalUserSession.id} [${globalUserSession.role}]`;
-            document.getElementById('welcomeModal').classList.remove('hidden');
-        }
-
-        function dismissWelcomeModal() {
-            document.getElementById('welcomeModal').classList.add('hidden');
-            switchScreen('homeScreen');
-        }
-
-        // Handle Registration Submissions and navigate to login card directly
-        function handleRegistration(e) {
-            e.preventDefault();
-            
-            // Map values dynamically from form items fields
-            globalUserSession.name = document.getElementById('regName').value;
-            globalUserSession.id = 'BDBUS-' + Math.floor(1000 + Math.random() * 9000);
-            globalUserSession.nickname = document.getElementById('regNick').value;
-            globalUserSession.mobile = document.getElementById('regMobile').value;
-            globalUserSession.dob = document.getElementById('regDOB').value;
-            globalUserSession.gender = document.getElementById('regGender').value;
-            globalUserSession.fb = document.getElementById('regFB').value;
-            globalUserSession.email = document.getElementById('regEmail').value;
-            
-            alert('আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে! লগইন করুন।');
-            document.getElementById('regForm').reset();
-            switchScreen('loginScreen');
-        }
-
-        function syncProfileViewData() {
-            document.getElementById('profileNameDisplay').innerText = globalUserSession.name;
-            document.getElementById('profileRoleBadge').innerText = `ID: ${globalUserSession.id} [${globalUserSession.role}]`;
-            document.getElementById('profNick').innerText = globalUserSession.nickname;
-            document.getElementById('profMobile').innerText = globalUserSession.mobile;
-            document.getElementById('profDOB').innerText = globalUserSession.dob;
-            document.getElementById('profGender').innerText = globalUserSession.gender;
-            document.getElementById('profFB').innerText = "Facebook Link";
-            document.getElementById('profFB').href = globalUserSession.fb;
-            document.getElementById('profEmail').innerText = globalUserSession.email;
-            document.getElementById('vaultBalance').innerText = `${userBalance} BDT`;
-        }
-
-        function uploadAvatar(input) {
-            if (input.files && input.files[0]) {
-                if(input.files[0].size > 300 * 1024) {
-                    alert('Error: ফাইলের সাইজ ৩০০KB এর বেশি হতে পারবে না!');
+                if (!fromVal || !toVal || fromVal === toVal) {
+                    fareDisplay.innerText = "0";
                     return;
                 }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profileAvatar').src = e.target.result;
-                    document.getElementById('modalAvatar').src = e.target.result;
+
+                // Standardized Pricing Matrices matching Government standards
+                let baseFare = 550; 
+                if((fromVal === 'dhaka' && toVal === 'sylhet') || (fromVal === 'sylhet' && toVal === 'dhaka')) baseFare = 680;
+                else if((fromVal === 'gazipur' && toVal === 'sunamganj') || (fromVal === 'sunamganj' && toVal === 'gazipur')) baseFare = 850;
+                else if((fromVal === 'dhaka' && toVal === 'chittagong') || (fromVal === 'chittagong' && toVal === 'dhaka')) baseFare = 750;
+
+                // Checking Luxury Multipliers
+                let selectedBusType = "Non-AC";
+                for (const r of busTypes) {
+                    if (r.checked) { selectedBusType = r.value; break; }
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
 
-        function claimReward(type) {
-            if(type === 'welcome') {
-                userBalance += 5000;
-                document.getElementById('claimBonusBtn').disabled = true;
-                document.getElementById('claimBonusBtn').innerText = "CLAIMED ✓";
-                document.getElementById('claimBonusBtn').className = "w-full bg-slate-800 text-slate-500 font-bold py-1.5 rounded text-xs cursor-not-allowed";
-                alert('অভিনন্দন! আপনার ৫০০০ BDT ওয়েলকাম বোনাস ওয়ালেটে যোগ করা হয়েছে।');
-            } else {
-                userBalance += 3000;
-                alert('রিওয়ার্ড প্রসেসড! ৩০০০ BDT আপনার ওয়ালেট ব্যালেন্সে ক্রেডিট করা হয়েছে।');
-            }
-            syncProfileViewData();
-        }
-
-        function updatePassword() {
-            const n = document.getElementById('newPass').value;
-            const c = document.getElementById('confNewPass').value;
-            if(!n || n !== c) { alert('পাসওয়ার্ড ম্যাচ করেনি অথবা খালি রয়েছে!'); return; }
-            alert('পাসওয়ার্ড সফলভাবে পরিবর্তিত হয়েছে।');
-            switchScreen('homeScreen');
-        }
-
-        function logout() {
-            screenHistory = [];
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPass').value = '';
-            switchScreen('loginScreen');
-        }
-
-        // Bus Booking Core Module Engines Layout Configs Elements
-        function setBusType(type) {
-            currentBusType = type;
-            const bNon = document.getElementById('btnNonAC');
-            const bAC = document.getElementById('btnAC');
-            
-            if(type === 'Non-AC') {
-                bNon.className = "py-2.5 rounded-lg border font-bold text-sm transition-all bg-cyan-950/40 border-cyan-500 text-cyan-400 cursor-pointer";
-                bAC.className = "py-2.5 rounded-lg border font-bold text-sm transition-all bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700 cursor-pointer";
-            } else {
-                bAC.className = "py-2.5 rounded-lg border font-bold text-sm transition-all bg-cyan-950/40 border-cyan-500 text-cyan-400 cursor-pointer";
-                bNon.className = "py-2.5 rounded-lg border font-bold text-sm transition-all bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700 cursor-pointer";
-            }
-            recalculateLiveFareRate();
-        }
-
-        // Dynamic Automated Real-Time Ticket Fare Matrix Function Evaluator Loop
-        function recalculateLiveFareRate() {
-            const f = document.getElementById('routeFrom').value.trim();
-            const t = document.getElementById('routeTo').value.trim();
-            
-            if(!f || !t || f === t) {
-                document.getElementById('calculatedFare').innerText = "0 BDT";
-                return;
-            }
-            
-            // Simple deterministic cross hash computation string values mapping logic algorithm configuration matrix
-            let weight = (f.charCodeAt(0) || 1) + (t.charCodeAt(t.length - 1) || 1);
-            let computedBase = 450 + (weight % 12) * 45; 
-            
-            if(currentBusType === 'Premium AC') {
-                computedBase = Math.floor(computedBase * 1.75);
-            }
-            
-            document.getElementById('calculatedFare').innerText = `${computedBase} BDT`;
-        }
-
-        function openSeatSelection() {
-            const f = document.getElementById('routeFrom').value;
-            const t = document.getElementById('routeTo').value;
-            const d = document.getElementById('journeyDate').value;
-            
-            if(!f || !t || !d) {
-                alert('দয়া করে যাত্রার স্থান, গন্তব্য এবং তারিখ সঠিকভাবে সিলেক্ট করুন।');
-                return;
-            }
-            
-            // Build Cabin Layout Dynamic Matrix Configuration System View Grid Array Modules
-            const grid = document.getElementById('cabinGrid');
-            grid.innerHTML = '';
-            selectedSeats = [];
-            document.getElementById('selectedSeatsList').innerText = '-';
-            document.getElementById('totalSeatFare').innerText = '0 BDT';
-
-            // Establish row elements dynamically matching parameters configurations sets variables maps
-            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-            const colsCount = currentBusType === 'Non-AC' ? 4 : 3;
-
-            rows.forEach(r => {
-                let colIdx = 1;
-                // Generate layout rows based on standard mapping indexes systems
-                for(let i = 1; i <= 5; i++) {
-                    // Inject blank spacer columns rows layouts elements tracking rows arrays
-                    if(currentBusType === 'Non-AC' && i === 3) {
-                        const spacer = document.createElement('div');
-                        grid.appendChild(spacer);
-                        continue;
-                    }
-                    if(currentBusType === 'Premium AC' && i === 2) {
-                        const spacer = document.createElement('div');
-                        grid.appendChild(spacer);
-                        continue;
-                    }
-
-                    if(colIdx <= colsCount) {
-                        const seatId = `${r}${colIdx}`;
-                        const btn = document.createElement('button');
-                        btn.innerText = seatId;
-                        btn.type = "button";
-                        
-                        // Fake randomly occupied seats logic tracking vectors array
-                        const isOccupied = (seatId === 'B1' || seatId === 'D2');
-                        
-                        if(isOccupied) {
-                            btn.className = "bg-slate-800 text-slate-600 border border-slate-900 py-2 text-xs font-bold font-['Orbitron'] rounded cursor-not-allowed line-through";
-                            btn.disabled = true;
-                        } else {
-                            btn.className = "bg-blue-950 border border-blue-800 text-blue-300 py-2 text-xs font-bold font-['Orbitron'] rounded hover:border-cyan-500 cursor-pointer transition-all";
-                            btn.onclick = () => selectSeatToggle(btn, seatId);
-                        }
-                        
-                        grid.appendChild(btn);
-                        colIdx++;
-                    }
+                if(selectedBusType === "Premium AC") {
+                    baseFare = Math.round(baseFare * 1.6); // 60% standard premium markups
                 }
-            });
 
-            switchScreen('seatScreen');
-        }
-
-        function selectSeatToggle(btn, seatId) {
-            if(selectedSeats.includes(seatId)) {
-                selectedSeats = selectedSeats.filter(s => s !== seatId);
-                btn.className = "bg-blue-950 border border-blue-800 text-blue-300 py-2 text-xs font-bold font-['Orbitron'] rounded hover:border-cyan-500 cursor-pointer transition-all";
-            } else {
-                if(selectedSeats.length >= 4) {
-                    alert('আপনি একসাথে সর্বোচ্চ ৪টি সিট বুক করতে পারবেন!');
-                    return;
-                }
-                selectedSeats.push(seatId);
-                btn.className = "bg-cyan-500 text-slate-950 py-2 text-xs font-bold font-['Orbitron'] rounded shadow-[0_0_12px_rgba(6,182,212,0.6)] font-black transition-all";
-            }
-            
-            // Calculate real-time costs configuration matrix updates
-            const baseFareText = document.getElementById('calculatedFare').innerText;
-            const singleFare = parseInt(baseFareText) || baseFareRatePerSeat;
-            const total = selectedSeats.length * singleFare;
-            
-            document.getElementById('selectedSeatsList').innerText = selectedSeats.length > 0 ? selectedSeats.join(', ') : '-';
-            document.getElementById('totalSeatFare').innerText = `${total} BDT`;
-        }
-
-        function confirmTicketPayment() {
-            if(selectedSeats.length === 0) {
-                alert('দয়া করে অন্তত ১টি সিট সিলেক্ট করুন!');
-                return;
-            }
-            
-            const totalCost = parseInt(document.getElementById('totalSeatFare').innerText);
-            if(userBalance < totalCost) {
-                alert('ত্রুটি: আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই! দয়া করে রিওয়ার্ড ক্লাইম করুন।');
-                return;
+                fareDisplay.innerText = baseFare;
             }
 
-            // Deduct system cash storage vault pools
-            userBalance -= totalCost;
-            syncProfileViewData();
-
-            // Populate ticket data structure interface values metrics data rows
-            document.getElementById('tckID').innerText = globalUserSession.id;
-            document.getElementById('tckName').innerText = globalUserSession.name;
-            document.getElementById('tckNick').innerText = globalUserSession.nickname;
-            document.getElementById('tckMobile').innerText = globalUserSession.mobile;
-            document.getElementById('tckFrom').innerText = document.getElementById('routeFrom').value;
-            document.getElementById('tckTo').innerText = document.getElementById('routeTo').value;
-            document.getElementById('tckDate').innerText = document.getElementById('journeyDate').value;
-            document.getElementById('tckTime').innerText = document.getElementById('journeyTime').value;
-            document.getElementById('tckSeats').innerText = selectedSeats.join(', ');
-            
-            const randomRoomNum = Math.floor(10 + Math.random() * 90);
-            document.getElementById('tckRoom').innerText = `BDBUS MULTI SERVER [S-${randomRoomNum}]`;
-            document.getElementById('tckPass').innerText = 'BD' + Math.floor(1000 + Math.random() * 9000);
-            
-            const now = new Date();
-            document.getElementById('tckIssueStamp').innerText = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + now.toLocaleTimeString();
-
-            alert('টিকিট সফলভাবে কেনা হয়েছে! আপনার ওয়ালেট থেকে টাকা কেটে নেওয়া হয়েছে।');
-            switchScreen('ticketScreen');
+            fromField.addEventListener('input', calculateFare);
+            toField.addEventListener('input', calculateFare);
+            busTypes.forEach(radio => radio.addEventListener('change', calculateFare));
         }
 
-        // HD Canvas Exporter Engine Routine Blocks
-        function downloadHDTicket() {
-            const target = document.getElementById('ticketCanvas');
-            
-            // Trigger html2canvas processor layer to download transparent data stream
-            html2canvas(target, {
-                scale: 3, // HD quality upscaling tracking array factor metrics 
-                logging: false,
-                useCORS: true,
-                backgroundColor: '#ffffff'
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `BDBUS-Ticket-${globalUserSession.id}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
-
-        // Admin Function Module Elements Actions Grid Operations Configurations
-        function updateNoticeText() {
-            const txt = document.getElementById('adminNoticeInput').value;
-            if(!txt) return;
-            document.getElementById('marqueeNotice').innerText = txt;
-            alert('হোমপেজের স্ক্রলিং লাইভ নোটিশ সফলভাবে আপডেট করা হয়েছে।');
-        }
-
-        function resetAllSeats() {
-            document.getElementById('adminBookingTable').innerHTML = '<tr><td colspan="5" class="p-3 text-center text-slate-600">No active locking sequences assigned.</td></tr>';
-            alert('সিস্টেমের সকল বুকিং তালিকা ক্লিয়ার করা হয়েছে।');
-        }
-
-        function clearSingleBooking(btn) {
-            btn.closest('tr').remove();
-            alert('নির্দিষ্ট সিট বুকিংটি সফলভাবে ক্লিয়ার করা হয়েছে।');
-        }
-
-        function toggleBanState(btn) {
-            if(btn.innerText === "Ban / Unban" || btn.innerText === "Ban User") {
-                btn.innerText = "Unban User";
-                btn.className = "bg-slate-800 text-slate-400 font-bold py-1.5 rounded text-xs transition-colors cursor-pointer";
-                alert('মেম্বারকে সাময়িকভাবে ব্যান করা হয়েছে।');
-            } else {
-                btn.innerText = "Ban User";
-                btn.className = "bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded text-xs transition-colors cursor-pointer";
-                alert('মেম্বারকে আনব্যান করা হয়েছে।');
-            }
-        }
-
-        function giftVaultCash() {
-            const cash = prompt("ইউজারের ওয়ালেটে কত টাকা গিফট পাঠাতে চান?:", "1000");
-            if(cash) {
-                alert(`সফলভাবে ${cash} BDT মেম্বারের ওয়ালেট ভোল্টে ট্রান্সফার করা হয়েছে।`);
-            }
-        }
-
-        function assignUserRole() {
-            const role = prompt("নতুন রোল নির্ধারণ করুন (Moderator / Trip Master / Regular):", "Moderator");
-            if(role) {
-                alert(`ইউজারের রোল পরিবর্তন করে "${role}" হিসেবে সেট করা হয়েছে।`);
-            }
-        }
-
-        function searchMember() {
-            const id = document.getElementById('memberSearchInput').value;
-            if(!id) return;
-            alert(`মেম্বার আইডি ${id} অনুসন্ধান করা হচ্ছে... ডাটা পাওয়া গেছে।`);
-        }
+        // Launch Application Threads
+        window.onload = () => {
+            startLiveClock();
+            setupFareCalculator();
+        };
     </script>
 </body>
 </html>
