@@ -92,7 +92,7 @@
             transform: translateY(-2px);
         }
 
-        /* FIXED Compact Neon Live Clock */
+        /* Compact Neon Live Clock */
         .neon-clock {
             background: rgba(15, 23, 42, 0.8);
             border: 2px solid var(--neon-blue);
@@ -167,7 +167,7 @@
         .lang-btn.en { background: #00f2fe; color: #000; }
         .lang-btn.bn { background: #334155; color: #fff; }
 
-        /* Sidebar Navigation Menu Drawer with Close Cross Icon */
+        /* Sidebar Navigation Menu Drawer */
         .sidebar-menu {
             position: fixed;
             top: 0;
@@ -275,7 +275,7 @@
         .notice-tag { background: var(--neon-blue); color: #000; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
         .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
 
-        /* FIXED CSS-Only Smooth Continuous Horizontal Members Slider Carousel Row */
+        /* CSS-Only Smooth Continuous Horizontal Members Slider Carousel Row */
         .carousel-container { 
             background: var(--panel-bg); 
             padding: 20px 0; 
@@ -294,7 +294,6 @@
             width: max-content; 
             animation: continuousMarqueeAnimation 25s linear infinite;
         }
-        /* Pause scroll on hover for premium UX feel */
         .carousel-container:hover .member-track {
             animation-play-state: paused;
         }
@@ -368,7 +367,7 @@
         .seat-node.occupied { background: #334155; color: rgba(255,255,255,0.2); border-color: transparent; cursor: not-allowed; }
         .aisle-gap-space { width: 30px; }
 
-        /* --- PREMIUM CONSOLE TICKET DISPLAY (Dedicated Screen View) --- */
+        /* --- PREMIUM CONSOLE TICKET DISPLAY --- */
         .ticket-preview-wrapper { max-width: 500px; margin: 0 auto; text-align: center; }
         #digital-ticket-canvas {
             width: 450px;
@@ -407,7 +406,6 @@
         .ticket-data-table td.val-txt { font-weight: 700; color: #0f172a; text-align: right; }
         .ticket-data-table td.highlight-val { color: #ef4444; font-size: 15px; }
         
-        /* Fixed Gaming Strict Notice Module Inside Canvas */
         .ticket-rules-box { font-size: 10px; color: #1e293b; line-height: 1.4; border-top: 1px solid #cbd5e1; padding-top: 12px; margin-bottom: 20px; position: relative; z-index: 2; background: #fef2f2; border: 1px solid #fee2e2; padding: 10px; border-radius: 6px; }
         
         .ticket-footer-brand { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; color: #fff; position: relative; z-index: 2; }
@@ -415,14 +413,13 @@
         .ticket-footer-subs { display: flex; justify-content: center; gap: 12px; }
         .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
 
-        /* --- ADMIN CONSOLE GRID (Page 7) --- */
+        /* --- ADMIN CONSOLE GRID --- */
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
         .admin-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         
-        /* Live Notice Update Form Component */
         .admin-notice-update-box { background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 auto 30px; }
 
         /* --- COMPACT SOCIAL FOOTER COMPONENT --- */
@@ -643,12 +640,12 @@
         <div class="form-card" style="max-width:650px; margin:20px auto;">
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
                 <div class="form-group">
-                    <label class="lang-node" data-en="From (District Station)" data-bn="কোথা থেকে (জেলা)">From (District Station)</label>
-                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Search District Name...">
+                    <label>From</label>
+                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="এইখানে ক্লিক করলে সকল জেলার নাম আসবে, অথবা যেকোনো জেলার নাম দিয়ে সার্চ করলে জেলার নাম চলে আসবে">
                 </div>
                 <div class="form-group">
-                    <label class="lang-node" data-en="To (Destination Station)" data-bn="কোথায় (গন্তব্য জেলা)">To (Destination Station)</label>
-                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Search District Name...">
+                    <label>To</label>
+                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="এইখানে ক্লিক করলে সকল জেলার নাম আসবে, অথবা যেকোনো জেলার নাম দিয়ে সার্চ করলে জেলার নাম চলে আসবে">
                 </div>
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
@@ -658,13 +655,13 @@
             <div class="form-group" style="margin-top:20px;">
                 <label>Bus Type Selection</label>
                 <select id="route-bustype" class="form-control" onchange="calculateFareSystemLogic()">
-                    <option value="Non-AC Coach">Non-AC Coach</option>
-                    <option value="Premium AC">Premium AC</option>
+                    <option value="Non-AC Coach">Non - AC Coach</option>
+                    <option value="Premium AC Coach">Premium AC Coach</option>
                 </select>
             </div>
 
             <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin:25px 0 15px;">
-                <span class="lang-node" data-en="Estimated Ticket Fare Rate:" data-bn="নির্ধারিত টিকিট ভাড়ার রেট:">Estimated Fare Rate:</span>
+                <span>Estimated Ticket Fare Rate:</span>
                 <span style="color:var(--neon-blue); font-weight:700; font-size:20px;" id="booking-fare-render">0 BDT</span>
             </div>
 
@@ -673,7 +670,7 @@
                 <div>
                     <strong>⚠️ Important Notice</strong><br>
                     EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                    বাংলা: আপনার internet সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
                 </div>
             </div>
 
@@ -1086,6 +1083,7 @@
             }, 5000);
         }
 
+        // Watch Video Reward Module
         function triggerWatchVideoReward() {
             let user = db.users.find(u => u.id === activeUserSession.id);
             window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
@@ -1156,7 +1154,7 @@
         // Booking & Seating Mechanics
         function calculateFareSystemLogic() {
             const type = document.getElementById('route-bustype').value;
-            selectedFareGlobalRate = (type === "Premium AC") ? 1200 : 650; 
+            selectedFareGlobalRate = (type === "Premium AC Coach") ? 1200 : 650; 
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
@@ -1168,7 +1166,7 @@
             const type = document.getElementById('route-bustype').value;
 
             if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance balance token limits to initiate routing selections."); return; }
+            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
 
             document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
             document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
@@ -1340,7 +1338,7 @@
             });
         }
 
-        // FIXED Perfect Continuous CSS Seamless Infinite Loop Marquee Renderer
+        // Perfect Continuous CSS Seamless Infinite Loop Marquee Renderer
         function renderHomeMembersCarousel() {
             const track = document.getElementById('home-carousel-track');
             if(!track) return;
@@ -1348,7 +1346,6 @@
             
             let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
 
-            // Generate layout node loop elements
             let cardsHTML = "";
             activePool.forEach(u => {
                 cardsHTML += `
@@ -1363,7 +1360,6 @@
                 `;
             });
 
-            // Duplicate content seamlessly to guarantee seamless non-breaking CSS continuous scrolling layout
             track.innerHTML = cardsHTML + cardsHTML;
         }
 
@@ -1483,7 +1479,7 @@
         function adminChangeRolePrompt(id) {
             if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
             let targetRole = prompt("Enter explicit role assignment precisely (Regular Member / Moderator / Counter Master / Trip Master):");
-            if(!['Regular Member', 'Moderator', 'Counter Master', 'Trip Master'].includes(targetRole)) { alert("Mismatched syntax descriptor framework string rejected."); return; }
+            if(!['Regular Member', 'Moderator', 'Counter Master', 'Trip Master'].includes(targetRole)) { alert("Mismatched syntax framework string rejected."); return; }
             let user = db.users.find(u => u.id === id);
             user.role = targetRole;
             saveDataEngine();
