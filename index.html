@@ -3,530 +3,625 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS Online Ticket Counter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>BDBUS Official Website - Online Ticket Counter</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Galada&family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Galada&family=Hind+Siliguri:wght@400;600;700&display=swap');
         
         body {
-            font-family: 'Rajdhani', 'Galada', sans-serif;
+            font-family: 'Hind Siliguri', sans-serif;
             background-color: #0b0f19;
             color: #e2e8f0;
         }
-        .neon-text-cyan {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.7), 0 0 20px rgba(6, 182, 212, 0.4);
-        }
-        .neon-border-red {
-            border-color: #FF3333;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-        }
         .digital-clock {
             font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.7);
         }
-        /* Custom Warning Box Styles */
-        .custom-warning-box {
+        .neon-border {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            border: 1px solid rgba(6, 182, 212, 0.6);
+        }
+        .custom-notice-box {
             border: 2px solid #FF3333;
             background-color: #221214;
             color: #FFCCCC;
         }
-        .custom-warning-heading {
-            color: #FFCC00;
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        /* Hide scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 3px;
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <div class="flex items-center space-x-3">
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-cyan-400 text-xl focus:outline-none">
+    <header id="global-header" class="hidden sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-cyan-500/30 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleSidebar()" class="text-cyan-400 text-xl hover:text-cyan-300 focus:outline-none">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <div class="flex items-center space-x-2">
-                <div class="bg-cyan-500 text-slate-900 p-2 rounded-lg font-bold tracking-wider text-sm">BDBUS</div>
-                <span class="text-xl font-bold tracking-wide text-white hidden sm:inline">BDBUS <span class="text-cyan-400">OFFICIAL</span></span>
+            <button id="back-btn" onclick="navigateTo('home')" class="hidden text-slate-400 hover:text-white">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-between justify-center text-white font-bold text-sm shadow-[0_0_10px_rgba(6,182,212,0.5)]">B</div>
+                <span class="text-xl font-bold tracking-wider text-cyan-400 font-['Orbitron']">BDBUS</span>
             </div>
         </div>
         
-        <div class="flex items-center space-x-2">
-            <button class="px-3 py-1 text-xs font-bold rounded bg-cyan-500 text-slate-900 shadow-md shadow-cyan-500/20">EN</button>
-            <button class="px-3 py-1 text-xs font-bold rounded bg-slate-800 text-slate-400 hover:bg-slate-700">বাংলা</button>
+        <div class="flex items-center gap-3">
+            <div class="flex bg-slate-800 rounded-lg p-1 text-xs border border-slate-700">
+                <button class="px-2 py-1 rounded bg-cyan-500 text-slate-950 font-bold">EN</button>
+                <button class="px-2 py-1 rounded text-slate-400">বাংলা</button>
+            </div>
         </div>
     </header>
 
-    <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-800 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out pt-16">
-        <button onclick="toggleSidebar()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-            <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-        <nav class="p-4 space-y-2">
-            <button onclick="showScreen('home-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
-                <i class="fa-solid fa-house w-5"></i> <span>Home (হোম)</span>
-            </button>
-            <button onclick="showScreen('profile-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
-                <i class="fa-solid fa-user w-5"></i> <span>My Profile (মাই প্রোফাইল)</span>
-            </button>
-            <button onclick="showScreen('password-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
-                <i class="fa-solid fa-lock w-5"></i> <span>Change Password (পাসওয়ার্ড)</span>
-            </button>
-            <button onclick="showScreen('booking-screen')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-cyan-400 transition">
-                <i class="fa-solid fa-ticket w-5"></i> <span>Bus Ticket Booking (বুকিং)</span>
-            </button>
-            <button class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-purple-400 hover:bg-slate-800 transition">
-                <i class="fa-solid fa-user-shield w-5"></i> <span>Admin Panel (এডমিন)</span>
-            </button>
-            <div class="pt-4 border-t border-slate-800 mt-4">
-                <button onclick="showScreen('login-screen')" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition">
-                    <i class="fa-solid fa-right-from-bracket"></i> <span>Logout (লগআউট)</span>
-                </button>
+    <div id="sidebar-drawer" class="fixed inset-y-0 left-0 w-64 bg-slate-950/95 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out border-r border-cyan-500/20 backdrop-blur-lg flex flex-col justify-between">
+        <div class="p-5">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold tracking-wider text-cyan-400 font-['Orbitron']">BDBUS MENU</span>
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-        </nav>
+            <nav class="flex flex-col gap-2">
+                <button onclick="navigateTo('home')" class="w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/10 transition flex items-center gap-3"><i class="fa-solid fa-house"></i> Home</button>
+                <button onclick="navigateTo('profile')" class="w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-900 transition flex items-center gap-3"><i class="fa-solid fa-user"></i> My Profile</button>
+                <button onclick="navigateTo('change-password')" class="w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-900 transition flex items-center gap-3"><i class="fa-solid fa-key"></i> Change Password</button>
+                <button onclick="navigateTo('booking')" class="w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-900 transition flex items-center gap-3"><i class="fa-solid fa-bus"></i> Bus Ticket Booking</button>
+                <button onclick="navigateTo('admin')" class="w-full text-left px-4 py-3 rounded-lg text-amber-400 hover:bg-slate-900 transition flex items-center gap-3 border border-amber-500/10"><i class="fa-solid fa-user-shield"></i> Admin Panel</button>
+                <button onclick="navigateTo('contact')" class="w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-900 transition flex items-center gap-3"><i class="fa-solid fa-envelope"></i> Contact</button>
+            </nav>
+        </div>
+        <div class="p-5">
+            <button onclick="logout()" class="w-full py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-red-600/20"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
     </div>
 
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl relative">
 
-        <div id="login-screen" class="screen-view">
-            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-500/20">
-                        <i class="fa-solid fa-bus text-4xl text-slate-900"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h2>
-                    <p class="text-xs font-semibold text-cyan-400 uppercase tracking-wider mt-1">BDBUS OFFICIAL WEBSITE</p>
-                </div>
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-4xl flex items-center justify-center">
 
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-1">Email Address</label>
-                        <input type="email" placeholder="example@gmail.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
-                    </div>
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="text-sm font-semibold text-slate-400">Password</label>
-                            <a href="#" class="text-xs text-slate-500 hover:text-cyan-400">Forget password?</a>
-                        </div>
-                        <div class="relative">
-                            <input id="login-pass" type="password" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
-                            <button onclick="togglePasswordVisibility('login-pass')" class="absolute right-4 top-3.5 text-slate-500 hover:text-slate-300">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 pt-4">
-                        <button onclick="showScreen('signup-screen')" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-red-900/20">
-                            Sign Up Now
-                        </button>
-                        <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl transition shadow-lg shadow-cyan-900/20">
-                            Login Now
-                        </button>
-                    </div>
-                </div>
+        <section id="screen-login" class="w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-3 shadow-[0_0_20px_rgba(6,182,212,0.4)]">B</div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h1>
+                <p class="text-xs text-cyan-400 tracking-widest uppercase mt-1">BDBUS OFFICIAL WEBSITE</p>
             </div>
-        </div>
-
-        <div id="signup-screen" class="screen-view hidden">
-            <div class="max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-cyan-500/20">
-                        <i class="fa-solid fa-bus text-3xl text-slate-900"></i>
-                    </div>
-                    <h2 class="text-xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h2>
-                    <p class="text-xs font-semibold text-cyan-400 uppercase tracking-wider mt-1">BDBUS REGISTRATION FORM</p>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">Email Address</label>
+                    <input type="email" placeholder="example@gmail.com" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition">
                 </div>
-
-                <form id="registration-form" onsubmit="handleRegistration(event)" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Full Name</label>
-                            <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Game Nickname / ID</label>
-                            <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Date of Birth</label>
-                            <input type="date" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Mobile Number</label>
-                            <input type="tel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Gender</label>
-                            <select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Facebook Profile Link</label>
-                            <input type="url" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <input type="password" id="login-password" placeholder="••••••••" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition">
+                        <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute right-3 top-3.5 text-slate-500 hover:text-slate-300"><i class="fa-solid fa-eye"></i></button>
                     </div>
+                </div>
+                <div class="text-right">
+                    <a href="#" class="text-xs text-cyan-400 hover:underline">Forget password?</a>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <button type="button" onclick="switchToAuthCard('signup')" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold text-sm shadow-md transition transform active:scale-95">Sign Up Now</button>
+                    <button type="submit" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm shadow-md transition transform active:scale-95">Login Now</button>
+                </div>
+            </form>
+        </section>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Email Address</label>
-                        <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Set Password</label>
-                            <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Confirm Password</label>
-                            <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500">
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-2 pt-2">
-                        <input type="checkbox" required id="declare-check" class="mt-1 accent-cyan-500">
-                        <label Henrik for="declare-check" class="text-xs text-slate-400 select-none">All data is correct declaration check (আমি ঘোষণা করছি যে প্রদানকৃত সকল তথ্য সত্য ও সঠিক)।</label>
-                    </div>
-
-                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold py-3 rounded-xl transition mt-4 shadow-lg shadow-cyan-500/10">
-                        Registration Submit
-                    </button>
-                    
-                    </form>
+        <section id="screen-signup" class="hidden w-full max-w-xl bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center text-white text-3xl font-bold mx-auto mb-3 shadow-[0_0_20px_rgba(6,182,212,0.4)]">B</div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Bangladesh Bussid Unique Society</h1>
+                <p class="text-xs text-cyan-400 tracking-widest uppercase mt-1">BDBUS REGISTRATION FORM</p>
             </div>
-        </div>
-
-        <div id="home-screen" class="screen-view hidden space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-900 p-4 rounded-xl border border-slate-800">
-                <div class="text-center md:text-left">
-                    <span class="text-xs uppercase font-bold tracking-wider text-slate-500 block">Live Status</span>
-                    <span class="text-emerald-400 font-bold flex items-center justify-center md:justify-start gap-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Server Online
-                    </span>
-                </div>
-                <div class="bg-slate-950 border border-cyan-500/30 rounded-lg p-2 text-center shadow-[inset_0_0_10px_rgba(6,182,212,0.1)] md:col-span-2">
-                    <div id="live-clock" class="digital-clock text-xl font-bold text-cyan-400 neon-text-cyan">00:00:00 AM</div>
-                    <div id="live-date" class="text-xs font-semibold text-slate-400 mt-0.5">MON, JUN 15, 2026</div>
-                </div>
-            </div>
-
-            <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-lg overflow-hidden flex items-center">
-                <span class="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider mr-3 shrink-0">Notice</span>
-                <marquee class="text-sm text-slate-300">BDBUS মাল্টিপ্লেয়ার সেশনে যোগ দেওয়ার পূর্বে অবশ্যই আপনার টিকিট কনফার্ম করুন। ড্রাইভ করার সময় ট্রাফিক আইন মেনে চলুন। ধন্যবাদ।</marquee>
-            </div>
-
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-wallet text-cyan-400"></i> Game Wallet Earnings System
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-bold text-slate-500 uppercase">Welcome Reward</span>
-                            <h4 class="text-lg font-bold text-emerald-400 mt-1">5,000 BDT</h4>
-                        </div>
-                        <button class="mt-4 w-full bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 font-bold py-2 rounded-lg text-xs transition">Claim 5000 BDT</button>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-bold text-slate-500 uppercase">YouTube Support</span>
-                            <h4 class="text-sm font-semibold text-white mt-1">Subscribe M2Vai Channel</h4>
-                        </div>
-                        <button class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-xs transition">Subscribe Now</button>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-bold text-slate-500 uppercase">Stream Reward</span>
-                            <h4 class="text-lg font-bold text-cyan-400 mt-1">3,000 BDT</h4>
-                        </div>
-                        <button class="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 rounded-lg text-xs transition">
-                            <i class="fa-solid fa-play mr-1"></i> Watch Video
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="booking-screen" class="screen-view hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                <div class="text-center mb-8 border-b border-slate-800 pb-6">
-                    <h2 class="text-2xl font-black text-white tracking-widest">BDBUS MULTIPLAYER TICKET BOOKING</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onsubmit="handleSignup(event)" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-2">From (কোথা থেকে)</label>
-                        <input list="districts" id="booking-from" placeholder="Select Departure City" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
+                        <label class="block text-xs text-slate-400 mb-1">Full Name</label>
+                        <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
                     </div>
-
                     <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-2">To (গন্তব্য জেলা)</label>
-                        <input list="districts" id="booking-to" placeholder="Select Destination City" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
+                        <label class="block text-xs text-slate-400 mb-1">Game Nickname / ID</label>
+                        <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
                     </div>
-
                     <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-2">Journey Date (ভ্রমণের তারিখ)</label>
-                        <input type="date" id="journey-date" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
+                        <label class="block text-xs text-slate-400 mb-1">Date of Birth</label>
+                        <input type="date" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
                     </div>
-
                     <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-2">Journey Time (বাস ছাড়ার সময়)</label>
-                        <select id="journey-time" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition">
-                            <option value="10:00 AM">10:00 AM</option>
-                            <option value="03:00 PM">03:00 PM</option>
-                            <option value="11:00 PM">11:00 PM</option>
-                            <option value="01:00 AM">01:00 AM</option>
+                        <label class="block text-xs text-slate-400 mb-1">Mobile Number</label>
+                        <input type="tel" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Gender</label>
+                        <select class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
                         </select>
                     </div>
-
                     <div>
-                        <label class="block text-sm font-semibold text-slate-400 mb-2">Bus Type (কোচের ধরন)</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <label class="flex items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-3 cursor-pointer select-none hover:border-slate-700">
-                                <input type="radio" name="bus_type" value="Non-AC" checked class="accent-cyan-500 mr-2">
-                                <span class="text-sm font-bold text-slate-300">Non-AC</span>
-                            </label>
-                            <label class="flex items-center justify-center bg-slate-950 border border-slate-800 rounded-xl p-3 cursor-pointer select-none hover:border-slate-700">
-                                <input type="radio" name="bus_type" value="Premium AC" class="accent-cyan-500 mr-2">
-                                <span class="text-sm font-bold text-cyan-400">Premium AC</span>
-                            </label>
+                        <label class="block text-xs text-slate-400 mb-1">Facebook Profile Link</label>
+                        <input type="url" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs text-slate-400 mb-1">Email Address</label>
+                        <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Set Password</label>
+                        <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Confirm Password</label>
+                        <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                    </div>
+                </div>
+                <div class="flex items-start gap-2 pt-2">
+                    <input type="checkbox" id="data-declaration" required class="mt-1 accent-cyan-500">
+                    <label for="data-declaration" class="text-xs text-slate-400 leading-tight">All data is correct declaration check (আমি ঘোষণা করছি যে উপরে প্রদত্ত সকল তথ্য সত্য ও সঠিক)।</label>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-lg bg-cyan-500 text-slate-950 font-bold text-sm tracking-wider uppercase transition shadow-lg shadow-cyan-500/20 active:scale-98 mt-4">Registration Submit</button>
+            </form>
+        </section>
+
+        <section id="screen-home" class="hidden w-full space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-slate-900/60 p-4 rounded-xl border border-slate-800 neon-border">
+                <div>
+                    <h2 class="text-lg font-bold text-white font-['Orbitron'] tracking-wide">LIVE CHRONO</h2>
+                    <p class="text-xs text-slate-400">Bangladesh Unique System Clock</p>
+                </div>
+                <div class="p-3 bg-slate-950 rounded-lg text-center border border-cyan-500/30">
+                    <div id="live-time" class="digital-clock text-2xl font-bold text-cyan-400 tracking-wider">00:00:00 AM</div>
+                    <div id="live-date" class="text-xs font-bold text-slate-400 tracking-widest uppercase mt-0.5">MON, JUN 15, 2026</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 flex items-center gap-3 overflow-hidden">
+                <span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider animate-pulse flex-shrink-0">Notice</span>
+                <marquee class="text-sm text-slate-300" scrollamount="5">Welcome to Bangladesh Bussid Unique Society Official Terminal. Maintain driving protocols during multiplayer matching sequences.</marquee>
+            </div>
+
+            <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-4">
+                <h3 class="text-xs font-bold text-slate-400 tracking-wider uppercase mb-3"><i class="fa-solid fa-trophy text-amber-400 mr-1"></i> Top Assets Leaderboard</h3>
+                <div class="flex gap-4 overflow-x-auto pb-2 hide-scrollbar">
+                    <div class="flex-shrink-0 bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center gap-3 w-48">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-sm font-bold text-cyan-400 border border-cyan-500/30">M2</div>
+                        <div>
+                            <div class="text-xs font-bold text-white truncate">M2Vai Admin</div>
+                            <div class="text-[10px] text-slate-500">ID: BDBUS-1000</div>
+                            <div class="text-xs font-bold text-emerald-400 mt-0.5">55,000 BDT</div>
                         </div>
                     </div>
-
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-center text-center">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Estimated Ticket Fare Rate</span>
-                        <div class="text-2xl font-bold text-emerald-400 mt-1"><span id="fare-amount">0</span> BDT</div>
+                    <div class="flex-shrink-0 bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center gap-3 w-48">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-sm font-bold text-slate-400">ET</div>
+                        <div>
+                            <div class="text-xs font-bold text-white truncate">Emon Talukder</div>
+                            <div class="text-[10px] text-slate-500">ID: BDBUS-1024</div>
+                            <div class="text-xs font-bold text-emerald-400 mt-0.5">32,500 BDT</div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="custom-warning-box rounded-xl p-5 mt-6 shadow-xl">
-                    <div class="flex items-center space-x-2 mb-3">
-                        <span class="custom-warning-heading text-lg font-bold">⚠️ গুরুত্বপূর্ণ নোটিশ (Important Notice)</span>
-                    </div>
-                    <div class="space-y-2 text-sm leading-relaxed">
-                        <p class="font-medium"><strong>English:</strong> Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</p>
-                        <p class="font-medium border-t border-red-950/50 pt-2"><strong>বাংলা:</strong> মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</p>
-                    </div>
-                </div>
-
-                <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black tracking-wide py-4 rounded-xl transition mt-6 text-center shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-chair"></i> SELECT SEAT
-                </button>
-            </div>
-        </div>
-
-        <div id="profile-screen" class="screen-view hidden">
-            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center">
-                <h3 class="text-xl font-bold text-white mb-6">My Member Profile</h3>
-                <div class="relative w-28 h-28 mx-auto mb-4">
-                    <div class="w-full h-full rounded-full bg-slate-800 border-2 border-cyan-500 flex items-center justify-center overflow-hidden">
-                        <i class="fa-solid fa-user text-5xl text-slate-600"></i>
-                    </div>
-                    <button class="absolute bottom-1 right-1 bg-cyan-500 text-slate-900 p-2 rounded-full text-xs hover:bg-cyan-400">
-                        <i class="fa-solid fa-camera"></i>
-                    </button>
-                </div>
-                <h4 class="text-lg font-bold text-white">M2Vai</h4>
-                <p class="text-xs font-bold text-slate-500 uppercase mt-0.5">ID: BDBUS-1000 [Admin]</p>
-                
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 my-4">
-                    <span class="text-xs text-slate-500 uppercase block font-bold">Wallet Balance</span>
-                    <span class="text-xl font-bold text-emerald-400">5,000 BDT</span>
                 </div>
             </div>
-        </div>
 
-        <div id="password-screen" class="screen-view hidden">
-            <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h3 class="text-lg font-bold text-white mb-4">Change Password</h3>
-                <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-400 mb-1">Current Password</label>
-                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+                        <span class="text-[10px] bg-cyan-500/10 text-cyan-400 font-bold px-2 py-0.5 rounded-full uppercase">Starter Pack</span>
+                        <h4 class="text-sm font-bold text-white mt-2">Welcome Bonus</h4>
+                        <p class="text-xs text-slate-400 mt-1">Claim your initialization standard credit allowance.</p>
                     </div>
+                    <button onclick="alert('5000 BDT Credited!')" class="w-full py-2 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 font-bold text-xs rounded transition uppercase tracking-wider">Claim 5000 BDT</button>
+                </div>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-400 mb-1">New Password</label>
-                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+                        <span class="text-[10px] bg-red-500/10 text-red-400 font-bold px-2 py-0.5 rounded-full uppercase">Community</span>
+                        <h4 class="text-sm font-bold text-white mt-2">Subscribe YouTube</h4>
+                        <p class="text-xs text-slate-400 mt-1">Join the official M2Vai streaming media deployment network.</p>
                     </div>
+                    <a href="https://youtube.com" target="_blank" class="w-full text-center py-2 bg-slate-800 hover:bg-red-600 hover:text-white text-red-400 font-bold text-xs rounded transition uppercase tracking-wider block">Subscribe Now</a>
+                </div>
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-400 mb-1">Confirm New Password</label>
-                        <input type="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+                        <span class="text-[10px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded-full uppercase">Stream Rewards</span>
+                        <h4 class="text-sm font-bold text-white mt-2">Watch Video Stream</h4>
+                        <p class="text-xs text-slate-400 mt-1">Unlock micro-balancing rewards through telemetry sync data.</p>
                     </div>
-                    <button class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition mt-2">Submit Password</button>
+                    <button onclick="alert('Buffering Stream Segment...')" class="w-full py-2 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 font-bold text-xs rounded transition uppercase tracking-wider flex items-center justify-center gap-1"><i class="fa-solid fa-play text-[10px]"></i> Watch Video</button>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section id="screen-profile" class="hidden w-full max-w-xl bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col items-center border-b border-slate-800 pb-6 mb-6">
+                <div class="relative w-24 h-24 mb-4">
+                    <div class="w-full h-full rounded-full bg-slate-800 border-2 border-cyan-500 flex items-center justify-center text-3xl text-slate-600 overflow-hidden">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <label class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center cursor-pointer shadow-lg shadow-cyan-500/30 transition">
+                        <input type="file" class="hidden" accept="image/*">
+                        <i class="fa-solid fa-camera text-sm"></i>
+                    </label>
+                </div>
+                <h2 class="text-lg font-bold text-white">M2Vai Admin</h2>
+                <p class="text-xs text-slate-400 font-['Orbitron'] mt-0.5">ID: BDBUS-1000 <span class="text-cyan-400 ml-1 bg-cyan-500/10 px-1.5 py-0.5 rounded text-[10px]">Admin</span></p>
+                <div class="mt-4 px-6 py-2 bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 rounded-full text-sm font-bold font-['Orbitron'] tracking-wider">
+                    WALLET: 5,000 BDT
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Nickname</span><span class="text-xs text-slate-200 font-bold">M2Vai</span></div>
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Mobile No</span><span class="text-xs text-slate-200 font-bold">+880 1700-000000</span></div>
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Date of Birth</span><span class="text-xs text-slate-200 font-bold">15 June 2000</span></div>
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Gender</span><span class="text-xs text-slate-200 font-bold">Male</span></div>
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Facebook</span><a href="#" class="text-xs text-cyan-400 underline truncate max-w-[200px]">fb.com/m2vai.official</a></div>
+                <div class="flex justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/60"><span class="text-xs text-slate-500">Email Contact</span><span class="text-xs text-slate-200 font-bold">admin@bdbus.com</span></div>
+            </div>
+        </section>
+
+        <section id="screen-change-password" class="hidden w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-cyan-400"></i> Change Password</h2>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Current Password</label>
+                    <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">New Password</label>
+                    <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Confirm New Password</label>
+                    <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500">
+                </div>
+                <button type="button" onclick="alert('Password updated safely.')" class="w-full py-2.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-sm tracking-wide transition shadow-md active:scale-95">Submitte Password</button>
+            </form>
+        </section>
+
+        <section id="screen-booking" class="hidden w-full space-y-6">
+            <div class="text-center">
+                <h1 class="text-2xl font-black text-white tracking-wider font-['Orbitron']">BDBUS MULTIPLAYER TICKET BOOKING</h1>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">From (যাত্রার স্থান)</label>
+                    <input type="text" list="districts" id="booking-from" placeholder="Select departure district" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-500" onchange="calculateFare()">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">To (গন্তব্য স্থল)</label>
+                    <input type="text" list="districts" id="booking-to" placeholder="Select destination district" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-500" onchange="calculateFare()">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">Journey Date</label>
+                    <input type="date" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase tracking-wider">Journey Time</label>
+                    <select class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-500">
+                        <option>10:00 AM</option>
+                        <option>03:00 PM</option>
+                        <option>11:00 PM</option>
+                        <option>01:00 AM</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs text-slate-400 mb-2 uppercase tracking-wider">Bus Type</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="flex items-center justify-center gap-2 bg-slate-950 border border-slate-800 p-3 rounded-lg cursor-pointer hover:border-cyan-500 transition">
+                            <input type="radio" name="bus_type" value="non_ac" checked class="accent-cyan-500" onchange="calculateFare()">
+                            <span class="text-sm font-medium text-slate-300">Non-AC Coach</span>
+                        </label>
+                        <label class="flex items-center justify-center gap-2 bg-slate-950 border border-slate-800 p-3 rounded-lg cursor-pointer hover:border-cyan-500 transition">
+                            <input type="radio" name="bus_type" value="ac" class="accent-cyan-500" onchange="calculateFare()">
+                            <span class="text-sm font-medium text-slate-300">Premium AC Coach</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 bg-slate-950 border border-slate-800 p-4 rounded-xl flex justify-between items-center mt-2">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Estimated Ticket Fare Rate:</span>
+                    <span id="fare-display" class="text-xl font-bold font-['Orbitron'] text-emerald-400">0 BDT</span>
+                </div>
+            </div>
+
+            <div class="custom-notice-box p-4 rounded-xl">
+                <div class="flex items-center gap-2 mb-2 text-[#FFCC00] font-bold text-sm">
+                    <span>⚠️ গুরুত্বপূর্ণ নোটিশ (Important Notice)</span>
+                </div>
+                <div class="space-y-1 text-xs">
+                    <p class="font-sans"><strong class="text-[#FFCC00]">English:</strong> Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</p>
+                    <p class="font-sans mt-1"><strong class="text-[#FFCC00]">বাংলা:</strong> মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</p>
+                </div>
+            </div>
+
+            <button onclick="navigateTo('seating')" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 transition transform active:scale-98">
+                <i class="fa-solid fa-chair"></i> Select Seat
+            </button>
+        </section>
+
+        <section id="screen-seating" class="hidden w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+            <h2 class="text-base font-bold text-white text-center tracking-wider">SELECT SEATING CONFIGURATION</h2>
+            
+            <div class="grid grid-cols-3 gap-2 text-[10px] uppercase font-bold text-center">
+                <div class="p-2 rounded bg-slate-950 text-slate-400 border border-slate-800">Available (Dark Blue)</div>
+                <div class="p-2 rounded bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.4)]">Selected (Neon)</div>
+                <div class="p-2 rounded bg-slate-700 text-slate-500 line-through">Occupied (Grey)</div>
+            </div>
+
+            <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 space-y-4">
+                <div class="flex justify-between items-center text-xs text-slate-500 px-2 border-b border-slate-800 pb-2">
+                    <span>🚪 DOOR</span>
+                    <span>🧑‍✈️ DRIVER</span>
+                </div>
+                <div class="grid grid-cols-4 gap-3">
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-900 border border-slate-800 rounded text-xs text-slate-300 font-['Orbitron'] transition hover:border-cyan-400">A1</button>
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-900 border border-slate-800 rounded text-xs text-slate-300 font-['Orbitron'] transition hover:border-cyan-400">A2</button>
+                    <div class="col-span-1"></div>
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-900 border border-slate-800 rounded text-xs text-slate-300 font-['Orbitron'] transition hover:border-cyan-400">A3</button>
+                    
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-900 border border-slate-800 rounded text-xs text-slate-300 font-['Orbitron'] transition hover:border-cyan-400">B1</button>
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-700 text-slate-500 line-through rounded text-xs font-['Orbitron']" disabled>B2</button>
+                    <div class="col-span-1"></div>
+                    <button onclick="selectSeat(this)" class="p-2.5 bg-slate-900 border border-slate-800 rounded text-xs text-slate-300 font-['Orbitron'] transition hover:border-cyan-400">B3</button>
+                </div>
+            </div>
+
+            <div class="space-y-1 bg-slate-950 p-3 rounded-lg border border-slate-800 text-center">
+                <p class="text-[11px] text-amber-400"><i class="fa-solid fa-clock"></i> Selected seats are hold explicitly for 2 minutes.</p>
+                <p class="text-xs font-bold text-slate-300 mt-1">Total Payable Fare: <span id="seating-fare" class="text-cyan-400 font-['Orbitron']">0 BDT</span></p>
+            </div>
+
+            <button onclick="navigateTo('ticket')" class="w-full py-3 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm tracking-wide uppercase transition shadow-lg shadow-emerald-500/20">Confirm Ticket</button>
+        </section>
+
+        <section id="screen-ticket" class="hidden w-full max-w-md space-y-6">
+            <div id="ticket-canvas" class="bg-white text-slate-900 rounded-2xl p-5 shadow-2xl relative overflow-hidden border border-slate-200">
+                <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none">
+                    <span class="text-8xl font-black font-['Orbitron'] text-slate-900">BDBUS</span>
+                </div>
+
+                <div class="border-b-2 border-dashed border-slate-300 pb-3 mb-4 text-center">
+                    <h2 class="text-base font-black tracking-wider text-slate-900 font-['Orbitron']">BANGLADESH BUSSID UNIQUE SOCIETY</h2>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Official E-Ticket Passenger Receipt</p>
+                </div>
+
+                <table class="w-full text-xs text-left border-collapse">
+                    <tbody>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Member ID</td><td class="py-1.5 font-bold text-slate-800 text-right">BDBUS-1000</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Full Name</td><td class="py-1.5 font-bold text-slate-800 text-right">M2Vai Admin</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Game Nickname</td><td class="py-1.5 font-bold text-slate-800 text-right">M2Vai</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Route</td><td class="py-1.5 font-medium text-slate-700 text-right"><span id="ticket-from">Dhaka</span> to <span id="ticket-to">Chittagong</span></td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Schedule</td><td class="py-1.5 font-medium text-slate-700 text-right">June 16, 2026 @ 10:00 AM</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Seat Number</td><td class="py-1.5 font-extrabold text-red-600 text-right text-sm">A1, A2</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Room Name</td><td class="py-1.5 font-medium text-slate-700 text-right">BDBUS MULTI STAGE 1</td></tr>
+                        <tr class="border-b border-slate-100"><td class="py-1.5 font-bold text-slate-400">Room Password</td><td class="py-1.5 font-extrabold text-red-600 text-right text-sm">9921</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-4 p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] leading-relaxed text-slate-600 space-y-1">
+                    <p><strong>Notice:</strong> Do not share room passwords with outsiders. Maintain traffic parameters inside multiplayer instances.</p>
+                    <p><strong>নির্দেশনা:</strong> গেমের রুম পাসওয়ার্ড শেয়ার করা সম্পূর্ণ নিষেধ। নিয়ম মেনে গাড়ি ড্রাইভ করুন।</p>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px]">
+                    <div>
+                        <span class="font-bold text-slate-400">DEVELOPER BRANDING:</span>
+                        <div class="font-extrabold text-slate-800">WEBSITE CREATED BY M2Vai</div>
+                    </div>
+                    <span class="bg-red-600 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[9px]">Member Badge</span>
+                </div>
+            </div>
+
+            <button onclick="alert('Downloading high definition canvas image...')" class="w-full py-3 rounded-xl bg-slate-100 hover:bg-white text-slate-950 font-bold text-sm tracking-wide transition shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-down"></i> Ticket & Download (HD)</button>
+        </section>
+
+        <section id="screen-admin" class="hidden w-full space-y-6">
+            <h2 class="text-xl font-bold text-amber-400 font-['Orbitron'] flex items-center gap-2 border-b border-slate-800 pb-2"><i class="fa-solid fa-user-shield"></i> Admin Operational Console</h2>
+            
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3">
+                <label class="block text-xs font-bold text-slate-400 uppercase">Live Notice Update Box</label>
+                <textarea class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-amber-500 h-20" placeholder="Type updated notice parameters here..."></textarea>
+                <button onclick="alert('Notice Feed Refreshed Systemwide.')" class="px-4 py-2 bg-amber-500 text-slate-950 text-xs font-bold rounded hover:bg-amber-400 transition">Update Live Notice</button>
+            </div>
+        </section>
 
     </main>
 
-    <div id="welcome-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-6 max-w-sm w-full text-center shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-            <div class="text-xs font-bold text-cyan-400 tracking-widest uppercase mb-2">Live Session Access</div>
-            <div id="popup-greetings" class="text-xl font-extrabold tracking-wider text-amber-400 uppercase mb-4">GOOD MORNING</div>
+
+    <footer class="bg-slate-950 border-t border-slate-900 py-6 px-4 space-y-4">
+        <div class="flex flex-wrap justify-center gap-4 text-xs">
+            <a href="#" class="px-4 py-2 bg-slate-900 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg border border-slate-800 font-bold transition flex items-center gap-2"><i class="fa-brands fa-youtube text-red-500"></i> M2Vai Official</a>
+            <a href="#" class="px-4 py-2 bg-slate-900 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg border border-slate-800 font-bold transition flex items-center gap-2"><i class="fa-brands fa-youtube text-red-500"></i> Traveller M2Vai</a>
+        </div>
+
+        <div class="flex justify-center gap-3">
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 text-sm transition"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-500/50 text-sm transition"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:border-pink-500/50 text-sm transition"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-500/50 text-sm transition"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:border-indigo-500/50 text-sm transition"><i class="fa-brands fa-discord"></i></a>
+        </div>
+
+        <div class="flex justify-center gap-4 text-[11px] text-slate-600 font-semibold">
+            <a href="#" class="hover:text-slate-400 transition">Privacy Policy</a>
+            <span>•</span>
+            <a href="#" class="hover:text-slate-400 transition">Terms & Conditions</a>
+            <span>•</span>
+            <a href="#" class="hover:text-slate-400 transition">Refund Policy</a>
+        </div>
+    </footer>
+
+
+    <div id="welcome-popup" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-slate-900 border-2 border-cyan-500 rounded-2xl p-6 text-center space-y-5 shadow-[0_0_30px_rgba(6,182,212,0.3)] animate-scaleUp">
+            <div id="popup-greetings" class="text-xs font-black tracking-widest text-cyan-400 uppercase font-['Orbitron']">GOOD DAY</div>
             
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 mb-6 flex flex-col items-center">
-                <div class="w-16 h-16 bg-slate-800 border border-cyan-500 rounded-full flex items-center justify-center mb-3">
-                    <i class="fa-solid fa-user-astronaut text-3xl text-cyan-400"></i>
+            <div class="relative w-20 h-20 mx-auto">
+                <div class="w-full h-full rounded-full bg-slate-800 border-2 border-cyan-500 flex items-center justify-center text-2xl text-cyan-400">
+                    <i class="fa-solid fa-user-astronaut"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white">M2Vai</h3>
-                <span class="text-xs font-bold text-slate-500 uppercase mt-0.5">ID: BDBUS-1000</span>
-                <span class="mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">WELCOME</span>
             </div>
-            
-            <button onclick="closeWelcomePopup()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl transition tracking-wide shadow-lg shadow-cyan-500/20">
-                Thanks
-            </button>
+
+            <div>
+                <h3 class="text-lg font-black text-white">WELCOME, M2Vai</h3>
+                <p class="text-xs text-slate-400 font-['Orbitron'] mt-0.5">ID: BDBUS-1000 [Admin]</p>
+            </div>
+
+            <button onclick="closeWelcomePopup()" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/20 hover:bg-cyan-400 transition">Thanks</button>
         </div>
     </div>
 
+
     <datalist id="districts">
-        <option value="Dhaka"><option value="Chittagong"><option value="Sylhet"><option value="Rajshahi"><option value="Khulna"><option value="Barisal"><option value="Rangpur"><option value="Mymensingh"><option value="Comilla"><option value="Gazipur"><option value="Narayanganj"><option value="Cox's Bazar"><option value="Brahmanbaria"><option value="Dinajpur"><option value="Jessore"><option value="Tangail"><option value="Feni"><option value="Lakshmipur"><option value="Noakhali"><option value="Chandpur"><option value="Bagerhat"><option value="Chuadanga"><option value="Jessore"><option value="Jhenaidah"><option value="Magura"><option value="Meherpur"><option value="Narail"><option value="Shatkhira"><option value="Bograw"><option value="Joypurhat"><option value="Naogaon"><option value="Natore"><option value="Nawabganj"><option value="Pabna"><option value="Sirajganj"><option value="Habiganj"><option value="Moulvibazar"><option value="Sunamganj"><option value="Barguna"><option value="Bhola"><option value="Jhalokati"><option value="Patuakhali"><option value="Pirojpur"><option value="Bandarban"><option value="Khagrachhari"><option value="Rangamati"><option value="Faridpur"><option value="Gopalganj"><option value="Kishoreganj"><option value="Madaripur"><option value="Manikganj"><option value="Munshiganj"><option value="Narsingdi"><option value="Rajbari"><option value="Shariatpur"><option value="Gaibandha"><option value="Kurigram"><option value="Lalmonirhat"><option value="Nilphamari"><option value="Panchagarh"><option value="Thakurgaon"><option value="Netrokona"><option value="Sherpur"><option value="Jamalpur">
+        <option value="Dhaka"><option value="Chittagong"><option value="Sylhet"><option value="Rajshahi"><option value="Khulna"><option value="Barisal"><option value="Rangpur"><option value="Mymensingh"><option value="Gazipur"><option value="Narayanganj"><option value="Comilla"><option value="Cox's Bazar"><option value="Brahmanbaria"><option value="Chandpur"><option value="Lakshmipur"><option value="Noakhali"><option value="Feni"><option value="Khagrachhari"><option value="Rangamati"><option value="Bandarban"><option value="Narsingdi"><option value="Manikganj"><option value="Munshiganj"><option value="Faridpur"><option value="Gopalganj"><option value="Madaripur"><option value="Rajbari"><option value="Shariatpur"><option value="Tangail"><option value="Sherpur"><option value="Jamalpur"><option value="Netrokona"><option value="Kishoreganj"><option value="Boguria"><option value="Joypurhat"><option value="Naogaon"><option value="Natore"><option value="Nawabganj"><option value="Pabna"><option value="Sirajganj"><option value="Dinajpur"><option value="Gaibandha"><option value="Kurigram"><option value="Lalmonirhat"><option value="Nilphamari"><option value="Panchagarh"><option value="Thakurgaon"><option value="Bagerhat"><option value="Jessore"><option value="Jhenaidah"><option value="Magura"><option value="Narail"><option value="Satkhira"><option value="Chuadanga"><option value="Meherpur"><option value="Kushtia"><option value="Bhola"><option value="Jhalokati"><option value="Patuakhali"><option value="Pirojpur"><option value="Barguna"><option value="Habiganj"><option value="Moulvibazar"><option value="Sunamganj")">
     </datalist>
 
-    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center space-y-4">
-        <div class="flex justify-center space-x-3">
-            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition text-sm"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-500/50 transition text-sm"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-pink-500 hover:border-pink-500/50 transition text-sm"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-400/50 transition text-sm"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" class="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-indigo-400 hover:border-indigo-400/50 transition text-sm"><i class="fa-brands fa-discord"></i></a>
-        </div>
-        <div class="text-xs text-slate-500 space-x-4">
-            <a href="#" class="hover:text-slate-400">Privacy Policy</a>
-            <a href="#" class="hover:text-slate-400">Terms & Conditions</a>
-            <a href="#" class="hover:text-slate-400">Refund Policy</a>
-        </div>
-        <p class="text-[11px] text-slate-600 font-medium tracking-wider">© 2026 BDBUS Team. All Rights Reserved.</p>
-    </footer>
 
     <script>
-        // Toggle Navigation Drawer Sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
+        // রিয়েল-টাইম ক্লক ও তারিখ ট্র্যাকিং লজিক
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            const timeString = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            
+            const timeElement = document.getElementById('live-time');
+            if (timeElement) timeElement.textContent = timeString;
+
+            // ডাইনামিক গ্রীটিংস টেক্সট ক্যালকুলেশন
+            const currentHour = now.getHours();
+            let greeting = "GOOD DAY";
+            if (currentHour >= 5 && currentHour < 12) greeting = "GOOD MORNING";
+            else if (currentHour >= 12 && currentHour < 17) greeting = "GOOD AFTERNOON";
+            else if (currentHour >= 17 && currentHour < 21) greeting = "GOOD EVENING";
+            else greeting = "GOOD NIGHT";
+            
+            const popupGreeting = document.getElementById('popup-greetings');
+            if (popupGreeting) popupGreeting.textContent = greeting;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // রাউটিং / স্ক্রিন নেভিগেশন কন্ট্রোল (SPA)
+        function navigateTo(screenId) {
+            const screens = ['login', 'signup', 'home', 'profile', 'change-password', 'booking', 'seating', 'ticket', 'admin'];
+            screens.forEach(id => {
+                const el = document.getElementById(`screen-${id}`);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const targetScreen = document.getElementById(`screen-${screenId}`);
+            if (targetScreen) targetScreen.classList.remove('hidden');
+
+            // হেডার ভিউ কনফিগারেশন
+            const header = document.getElementById('global-header');
+            if (screenId === 'login' || screenId === 'signup') {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+
+            // ব্যাক বাটন ট্রিপল স্টেট লজিক
+            const backBtn = document.getElementById('back-btn');
+            if (screenId !== 'home') {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+
+            // ড্রয়ার ক্লোজ মেকানিজম
+            document.getElementById('sidebar-drawer').classList.add('-translate-x-full');
         }
 
-        // Screen Routing/Navigation Logic
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen-view').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            document.getElementById(screenId).classList.remove('hidden');
-            
-            // Auto close drawer menu
-            const sidebar = document.getElementById('sidebar');
-            if (!sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.add('-translate-x-full');
+        // সাইডবার টগল
+        function toggleSidebar() {
+            const drawer = document.getElementById('sidebar-drawer');
+            drawer.classList.toggle('-translate-x-full');
+        }
+
+        // পাসওয়ার্ড ভিজিবিলিটি লজিক
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
             }
         }
 
-        // Form View Masking / Visibility Logic for Passwords
-        function togglePasswordVisibility(inputId) {
-            const input = document.getElementById(inputId);
-            input.type = input.type === 'password' ? 'text' : 'password';
+        // ডাইনামিক ফেয়ার ক্যালকুলেটর (জেলা ভিত্তিক ভাড়া নির্ধারণ লজিক)
+        function calculateFare() {
+            const from = document.getElementById('booking-from').value;
+            const to = document.getElementById('booking-to').value;
+            const busType = document.querySelector('input[name="bus_type"]:checked').value;
+            const fareDisplay = document.getElementById('fare-display');
+            const seatingFare = document.getElementById('seating-fare');
+
+            if (!from || !to || from === to) {
+                fareDisplay.textContent = "0 BDT";
+                seatingFare.textContent = "0 BDT";
+                return;
+            }
+
+            // ডেমো সরকারি ট্যাক্স ও ডিস্টেন্স রেট সিমুলেশন ম্যাট্রিক্স
+            let baseFare = 500; 
+            if ((from === "Dhaka" && to === "Sylhet") || (from === "Sylhet" && to === "Dhaka")) baseFare = 680;
+            else if ((from === "Gazipur" && to === "Sunamganj") || (from === "Sunamganj" && to === "Gazipur")) baseFare = 850;
+            else if ((from === "Dhaka" && to === "Chittagong") || (from === "Chittagong" && to === "Dhaka")) baseFare = 750;
+
+            if (busType === "ac") {
+                baseFare = Math.round(baseFare * 1.8); // প্রিমিয়াম এসি কোচের জন্য ১.৮ গুণ ভাড়া
+            }
+
+            fareDisplay.textContent = `${baseFare} BDT`;
+            seatingFare.textContent = `${baseFare} BDT`;
+
+            // টিকিট ডেটা ইন্টিগ্রেশন রিফ্লেকশন
+            document.getElementById('ticket-from').textContent = from;
+            document.getElementById('ticket-to').textContent = to;
         }
 
-        // Fake Data Trigger Logic for Registration (Redirect to login)
-        function handleRegistration(event) {
+        // সিট সিলেকশন ইন্টারঅ্যাকশন
+        function selectSeat(btn) {
+            btn.classList.toggle('bg-slate-900');
+            btn.classList.toggle('text-slate-300');
+            btn.classList.toggle('bg-cyan-500');
+            btn.classList.toggle('text-slate-950');
+            btn.classList.toggle('neon-border');
+        }
+
+        // অথেনটিকেশন মেকানিজম ও পপ-আপ ফায়ারিং
+        function handleLogin(event) {
             event.preventDefault();
-            showScreen('login-screen');
-        }
-
-        // Authentication Success -> Welcome Popup Execution
-        function handleLogin() {
-            showScreen('home-screen');
-            triggerWelcomePopup();
-        }
-
-        // Dynamic System Clock and Greeting Tracker
-        function startLiveClock() {
-            setInterval(() => {
-                const now = new Date();
-                let hours = now.getHours();
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12; // execution context tracking
-                
-                document.getElementById('live-clock').innerText = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
-                
-                // Set Modal/Dashboard Greetings Text based on hours context
-                const currentHour = now.getHours();
-                let greeting = "GOOD DAY";
-                if(currentHour >= 5 && currentHour < 12) greeting = "GOOD MORNING";
-                else if(currentHour >= 12 && currentHour < 17) greeting = "GOOD AFTERNOON";
-                else if(currentHour >= 17 && currentHour < 21) greeting = "GOOD EVENING";
-                else greeting = "GOOD NIGHT";
-                
-                document.getElementById('popup-greetings').innerText = greeting;
-            }, 1000);
-        }
-
-        // Welcome Modal Handler Functions
-        function triggerWelcomePopup() {
-            document.getElementById('welcome-modal').classList.remove('hidden');
+            document.getElementById('welcome-popup').classList.remove('hidden');
         }
 
         function closeWelcomePopup() {
-            document.getElementById('welcome-modal').classList.add('hidden');
+            document.getElementById('welcome-popup').classList.add('hidden');
+            navigateTo('home');
         }
 
-        // Intelligent Realtime Distance/Fare Calculation Engine 
-        function setupFareCalculator() {
-            const fromField = document.getElementById('booking-from');
-            const toField = document.getElementById('booking-to');
-            const fareDisplay = document.getElementById('fare-amount');
-            const busTypes = document.getElementsByName('bus_type');
-
-            function calculateFare() {
-                const fromVal = fromField.value.trim().toLowerCase();
-                const toVal = toField.value.trim().toLowerCase();
-                
-                if (!fromVal || !toVal || fromVal === toVal) {
-                    fareDisplay.innerText = "0";
-                    return;
-                }
-
-                // Standardized Pricing Matrices matching Government standards
-                let baseFare = 550; 
-                if((fromVal === 'dhaka' && toVal === 'sylhet') || (fromVal === 'sylhet' && toVal === 'dhaka')) baseFare = 680;
-                else if((fromVal === 'gazipur' && toVal === 'sunamganj') || (fromVal === 'sunamganj' && toVal === 'gazipur')) baseFare = 850;
-                else if((fromVal === 'dhaka' && toVal === 'chittagong') || (fromVal === 'chittagong' && toVal === 'dhaka')) baseFare = 750;
-
-                // Checking Luxury Multipliers
-                let selectedBusType = "Non-AC";
-                for (const r of busTypes) {
-                    if (r.checked) { selectedBusType = r.value; break; }
-                }
-
-                if(selectedBusType === "Premium AC") {
-                    baseFare = Math.round(baseFare * 1.6); // 60% standard premium markups
-                }
-
-                fareDisplay.innerText = baseFare;
-            }
-
-            fromField.addEventListener('input', calculateFare);
-            toField.addEventListener('input', calculateFare);
-            busTypes.forEach(radio => radio.addEventListener('change', calculateFare));
+        function handleSignup(event) {
+            event.preventDefault();
+            alert('Registration Successful! Redirecting to Login Profile Terminal...');
+            navigateTo('login');
         }
 
-        // Launch Application Threads
-        window.onload = () => {
-            startLiveClock();
-            setupFareCalculator();
-        };
+        function switchToAuthCard(card) {
+            navigateTo(card);
+        }
+
+        function logout() {
+            navigateTo('login');
+        }
     </script>
 </body>
 </html>
