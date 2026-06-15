@@ -653,11 +653,11 @@
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
                 <div class="form-group">
                     <label>From</label>
-                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="এইখানে ক্লিক করলে সকল জেলার নাম আসবে, অথবা যেকোনো জেলার নাম দিয়ে সার্চ করলে জেলার নাম চলে আসবে">
+                    <input type="text" id="route-from" class="form-control" list="bangladesh-districts" placeholder="Select or Type District" onfocus="this.value=''" onclick="if(typeof this.showPicker === 'function') this.showPicker();">
                 </div>
                 <div class="form-group">
                     <label>To</label>
-                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="এইখানে ক্লিক করলে সকল জেলার নাম আসবে, অথবা যেকোনো জেলার নাম দিয়ে সার্চ করলে জেলার নাম চলে আসবে">
+                    <input type="text" id="route-to" class="form-control" list="bangladesh-districts" placeholder="Select or Type District" onfocus="this.value=''" onclick="if(typeof this.showPicker === 'function') this.showPicker();">
                 </div>
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
@@ -1473,7 +1473,7 @@
             });
         }
 
-        // --- NEW ADMIN MODULE: LIVE BOOKINGS CONSOLE RENDERER ---
+        // --- ADMIN MODULE: LIVE BOOKINGS CONSOLE RENDERER ---
         function renderLiveBookingsMonitorTable() {
             const tbody = document.getElementById('admin-live-bookings-tbody');
             if(!tbody) return;
@@ -1525,7 +1525,7 @@
             }
         }
 
-        // --- NEW ADMIN MODULE: LOAD ALL REGISTERED MEMBERS ---
+        // --- ADMIN MODULE: LOAD ALL REGISTERED MEMBERS ---
         function loadAllRegisteredMembersList() {
             buildUserAdminDisplayCards(db.users);
             alert(`Total ${db.users.length} members loaded successfully into grid view below!`);
