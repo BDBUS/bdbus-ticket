@@ -127,7 +127,7 @@
             top: 0;
             z-index: 100;
         }
-        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 15px; min-height: 40px; }
         .menu-trigger { font-size: 24px; cursor: pointer; color: var(--text-light); }
         
         .manual-back-trigger {
@@ -149,7 +149,7 @@
         .header-logo-container img { height: 40px; }
         .header-logo-container span { font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; }
         
-        .lang-toggle-box { display: flex; gap: 8px; }
+        .lang-toggle-box { display: flex; gap: 8px; margin-left: auto; }
         .lang-btn {
             border: none;
             padding: 6px 14px;
@@ -237,12 +237,12 @@
         .page-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; z-index: 10; position: relative; }
         .page-screen.active { display: block; }
 
-        .auth-container { max-width: 450px; margin: 30px auto; text-align: center; }
+        .auth-container { max-width: 450px; margin: 50px auto; text-align: center; }
         .auth-brand img { height: 80px; margin-bottom: 10px; }
         
-        /* লোগোর নিচের নামের সাইজ ছোট করা হলো */
-        .auth-brand h2 { font-size: 1.25rem; letter-spacing: 1px; font-weight: 600; margin-bottom: 4px; }
-        .auth-brand p { color: var(--neon-blue); font-size: 11px; margin-bottom: 25px; letter-spacing: 0.5px; }
+        /* লোগোর নিচের টেক্সট সাইজ ছোট করা হয়েছে */
+        .auth-brand h2 { font-size: 1.25rem; letter-spacing: 1px; font-weight: 600; }
+        .auth-brand p { color: var(--neon-blue); font-size: 11px; margin-bottom: 30px; }
         
         .form-card {
             background: var(--panel-bg);
@@ -265,17 +265,35 @@
             transition: 0.2s;
         }
         .form-control:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
+        
+        /* পাসওয়ার্ড শো/হাইড আইকন ডিজাইন */
+        .password-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-input-container .form-control {
+            padding-right: 45px;
+        }
+        .password-toggle-icon {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: var(--text-muted);
+            user-select: none;
+            font-size: 15px;
+            transition: 0.2s;
+            z-index: 5;
+        }
+        .password-toggle-icon:hover {
+            color: var(--neon-blue);
+        }
+
         .flex-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
 
-        /* পাসওয়ার্ড উইন্ডো ডিজাইন */
-        .password-wrapper { position: relative; display: flex; align-items: center; }
-        .password-wrapper .form-control { padding-right: 45px; }
-        .toggle-password { position: absolute; right: 14px; cursor: pointer; user-select: none; font-size: 16px; color: var(--text-muted); transition: 0.2s; }
-        .toggle-password:hover { color: var(--neon-blue); }
-
-        /* হোম পেজের হেডার স্টাইল ভিজিবল করার জন্য */
-        .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 25px; }
-        .central-branded-header img { height: 100px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
+        /* হোম পেজের লোগো ব্যানার সেকশন দৃশ্যমান করার জন্য আপডেট */
+        .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 20px; }
+        .central-branded-header img { height: 110px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
         .central-branded-header h2 { font-size: 20px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .central-branded-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
@@ -585,12 +603,12 @@
         </div>
     </div>
 
-    <!-- গ্লোবাল হেডার এখন সর্বদা সবার জন্য উপরে দৃশ্যমান থাকবে -->
+    <!-- হেডারটি সবসময় অন থাকবে কিন্তু লগইন ছাড়া মেনু থাকবে না -->
     <header class="global-header" id="main-global-header">
         <div class="header-left">
             <i class="fa-solid fa-arrow-left manual-back-trigger" id="global-back-nav-btn" onclick="executeHardwareBackTrigger()"></i>
             <i class="fa-solid fa-bars menu-trigger" id="global-menu-trigger-btn" onclick="toggleSidebarMenu(true)" style="display: none;"></i>
-            <div class="header-logo-container" onclick="navigatePage('home-screen')">
+            <div class="header-logo-container" id="global-header-logo-container" onclick="navigatePage('home-screen')" style="display: none;">
                 <img src="images/BDBUS Group Official Logo.png" alt="Logo">
                 <span>BDBUS</span>
             </div>
@@ -622,6 +640,7 @@
                 <p id="auth-sub-title">BDBUS OFFICIAL WEBSITE</p>
             </div>
 
+            <!-- লগইন কার্ড -->
             <div id="login-sub-card" class="form-card">
                 <div class="form-group">
                     <label>Email Address</label>
@@ -629,9 +648,9 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <div class="password-wrapper">
+                    <div class="password-input-container">
                         <input type="password" id="login-pass" class="form-control" placeholder="Example: ••••••••">
-                        <span class="toggle-password" onclick="togglePasswordInputView('login-pass', this)">👁️</span>
+                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('login-pass', this)"></i>
                     </div>
                 </div>
                 <a href="#" style="color:var(--neon-blue); font-size:12px; text-decoration:none;" onclick="triggerForgotPassword()">Forget password</a>
@@ -641,8 +660,9 @@
                 </div>
             </div>
 
+            <!-- রেজিস্ট্রেশন কার্ড -->
             <div id="signup-sub-card" class="form-card" style="display: none;">
-                <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" class="form-control" placeholder="Example: John Doe"></div>
+                <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" class="form-control" placeholder="Example: Emon Talukder"></div>
                 <div class="form-group"><label>Game Nickname / ID</label><input type="text" id="reg-gameid" class="form-control" placeholder="Example: PlayerOne / 123456"></div>
                 <div class="form-group"><label>Date of Birth</label><input type="date" id="reg-dob" class="form-control"></div>
                 <div class="form-group"><label>Mobile Number</label><input type="text" id="reg-phone" class="form-control" placeholder="Example: +88017XXXXXXXX"></div>
@@ -654,19 +674,29 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-
-                <!-- নতুন যুক্ত করা সার্চেবল বিভাগ (Division) ড্রপডাউন -->
-                <div class="form-group" style="position: relative;">
+                
+                <!-- নতুন বিভাগ ড্রপডাউন -->
+                <div class="form-group">
                     <label>Division</label>
-                    <input type="text" id="reg-division" autocomplete="off" class="form-control" placeholder="Example: Type or select division...">
-                    <div id="reg-division-dropdown" class="custom-dropdown-container" style="display: none;"></div>
+                    <select id="reg-division" class="form-control" onchange="populateDistrictDropdown()">
+                        <option value="">Select Division Content...</option>
+                        <option value="Barishal">Barishal</option>
+                        <option value="Chattogram">Chattogram</option>
+                        <option value="Dhaka">Dhaka</option>
+                        <option value="Khulna">Khulna</option>
+                        <option value="Mymensingh">Mymensingh</option>
+                        <option value="Rajshahi">Rajshahi</option>
+                        <option value="Rangpur">Rangpur</option>
+                        <option value="Sylhet">Sylhet</option>
+                    </select>
                 </div>
 
-                <!-- নতুন যুক্ত করা সার্চেবল জেলা (District) ড্রপডাউন -->
-                <div class="form-group" style="position: relative;">
+                <!-- নতুন জেলা ড্রপডাউন -->
+                <div class="form-group">
                     <label>District</label>
-                    <input type="text" id="reg-district" autocomplete="off" class="form-control" placeholder="Example: Type or select district...">
-                    <div id="reg-district-dropdown" class="custom-dropdown-container" style="display: none;"></div>
+                    <select id="reg-district" class="form-control">
+                        <option value="">Select District Content...</option>
+                    </select>
                 </div>
 
                 <div class="form-group"><label>Facebook Profile Link</label><input type="url" id="reg-fb" class="form-control" placeholder="Example: https://facebook.com/username"></div>
@@ -674,16 +704,16 @@
                 
                 <div class="form-group">
                     <label>Set Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="reg-pass" class="form-control" placeholder="Example: *******">
-                        <span class="toggle-password" onclick="togglePasswordInputView('reg-pass', this)">👁️</span>
+                    <div class="password-input-container">
+                        <input type="password" id="reg-pass" class="form-control" placeholder="Example: ********">
+                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('reg-pass', this)"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="reg-confpass" class="form-control" placeholder="Example: *******">
-                        <span class="toggle-password" onclick="togglePasswordInputView('reg-confpass', this)">👁️</span>
+                    <div class="password-input-container">
+                        <input type="password" id="reg-confpass" class="form-control" placeholder="Example: ********">
+                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('reg-confpass', this)"></i>
                     </div>
                 </div>
                 
@@ -698,9 +728,10 @@
         </div>
     </div>
 
+    <!-- হোম পেজ -->
     <div id="home-screen" class="page-screen">
-        <!-- হোম পৃষ্ঠার লোগো এবং নাম এখন সুন্দরভাবে দেখা যাবে -->
-        <div class="central-branded-header">
+        <!-- হোম পেজে ব্যানার লোগো ও নাম এখন সর্বদা দৃশ্যমান থাকবে -->
+        <div class="central-branded-header" id="home-branded-header-section">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
         </div>
@@ -763,11 +794,29 @@
     </div>
 
     <div id="password-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="সিকিউরিটি পাসওয়ার্ড পরিবর্তন">Change Password</h2>
+        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="सिक्युरीटी पासवर्ड परिवर्तन">Change Password</h2>
         <div class="form-card" style="max-width:450px; margin:0 auto;">
-            <div class="form-group"><label>Current Password</label><input type="password" id="pwd-curr" class="form-control"></div>
-            <div class="form-group"><label>New Password</label><input type="password" id="pwd-new" class="form-control"></div>
-            <div class="form-group"><label>Confirm Password</label><input type="password" id="pwd-conf" class="form-control"></div>
+            <div class="form-group">
+                <label>Current Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="pwd-curr" class="form-control" placeholder="Example: ••••••••">
+                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('pwd-curr', this)"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>New Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="pwd-new" class="form-control" placeholder="Example: ••••••••">
+                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('pwd-new', this)"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="pwd-conf" class="form-control" placeholder="Example: ••••••••">
+                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInput('pwd-conf', this)"></i>
+                </div>
+            </div>
             <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submitte Password</button>
         </div>
     </div>
@@ -949,7 +998,7 @@
                         </tr>
                     </thead>
                     <tbody id="admin-live-bookings-tbody">
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
@@ -1020,29 +1069,17 @@
         
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
 
-        // বাংলাদেশের ৮টি বিভাগ ও ৬৪টি জেলার ইংরেজি ম্যাপিং ডাটাসেট
-        const divisionsList = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
-        const districtsByDivision = {
+        // বিভাগ অনুযায়ী বাংলাদেশের ৬৪ জেলার ডাটা স্ট্রাকচার
+        const districtsByDivisionData = {
             "Barishal": ["Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur"],
             "Chattogram": ["Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cox's Bazar", "Cumilla", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
             "Dhaka": ["Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail"],
-            "Khulna": ["Bagerhat", "Chuadanga", "Jessore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"],
+            "Khulna": ["Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"],
             "Mymensingh": ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"],
             "Rajshahi": ["Bogra", "Joypurhat", "Naogaon", "Natore", "Chapai Nawabganj", "Pabna", "Rajshahi", "Sirajganj"],
             "Rangpur": ["Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon"],
             "Sylhet": ["Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"]
         };
-
-        // ৬৪ জেলার গ্লোবাল ফ্ল্যাট লিস্ট (বুকিং স্ক্রিনের জন্য)
-        const bangladeshDistricts = [
-            "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
-            "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", 
-            "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", 
-            "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", 
-            "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", 
-            "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", 
-            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
-        ];
 
         function verifyDatabaseStructureSeeding() {
             let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
@@ -1120,18 +1157,21 @@
             
             const backBtn = document.getElementById('global-back-nav-btn');
             const menuBtn = document.getElementById('global-menu-trigger-btn');
+            const headerLogo = document.getElementById('global-header-logo-container');
 
-            // লগইন স্ক্রিন ছাড়া বাকি সব স্ক্রিনে মেনু ট্রিগার অন থাকবে
             if(!activeUserSession || screenId === 'auth-screen') {
                 if(backBtn) backBtn.style.display = 'none';
                 if(menuBtn) menuBtn.style.display = 'none';
+                if(headerLogo) headerLogo.style.display = 'none';
             } else if (screenId === 'home-screen') {
                 if(backBtn) backBtn.style.display = 'none';
                 if(menuBtn) menuBtn.style.display = 'block';
+                if(headerLogo) headerLogo.style.display = 'flex';
                 if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
             } else {
                 if(backBtn) backBtn.style.display = 'flex'; 
                 if(menuBtn) menuBtn.style.display = 'block';
+                if(headerLogo) headerLogo.style.display = 'flex';
                 
                 if(saveHistory) {
                     if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
@@ -1183,15 +1223,35 @@
             }
         }
 
-        // পাসওয়ার্ড ইনপুট ভিজিবিলিটি পরিবর্তনের ফাংশন
-        function togglePasswordInputView(inputId, iconElement) {
-            const passwordInput = document.getElementById(inputId);
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                iconElement.textContent = "🙈";
+        // পাসওয়ার্ড ভিজিবিলিটি অন/অফ করার লজিক
+        function togglePasswordInput(inputId, iconEl) {
+            const passwordField = document.getElementById(inputId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                iconEl.classList.remove('fa-eye');
+                iconEl.classList.add('fa-eye-slash');
             } else {
-                passwordInput.type = "password";
-                iconElement.textContent = "👁️";
+                passwordField.type = "password";
+                iconEl.classList.remove('fa-eye-slash');
+                iconEl.classList.add('fa-eye');
+            }
+        }
+
+        // বিভাগ অনুযায়ী জেলা লোড করার ফাংশন
+        function populateDistrictDropdown() {
+            const divisionSelect = document.getElementById("reg-division");
+            const districtSelect = document.getElementById("reg-district");
+            const selectedDiv = divisionSelect.value;
+
+            districtSelect.innerHTML = '<option value="">Select District Content...</option>';
+
+            if (selectedDiv && districtsByDivisionData[selectedDiv]) {
+                districtsByDivisionData[selectedDiv].forEach(district => {
+                    const opt = document.createElement("option");
+                    opt.value = district;
+                    opt.textContent = district;
+                    districtSelect.appendChild(opt);
+                });
             }
         }
 
@@ -1201,15 +1261,15 @@
             const dob = document.getElementById('reg-dob').value;
             const phone = document.getElementById('reg-phone').value.trim();
             const gender = document.getElementById('reg-gender').value;
-            const division = document.getElementById('reg-division').value.trim();
-            const district = document.getElementById('reg-district').value.trim();
+            const division = document.getElementById('reg-division').value;
+            const district = document.getElementById('reg-district').value;
             const fb = document.getElementById('reg-fb').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-pass').value;
             const confpass = document.getElementById('reg-confpass').value;
             const agree = document.getElementById('reg-agree').checked;
 
-            if(!name || !gameid || !dob || !phone || !email || !pass || !division || !district) { alert("Please complete all fields!"); return; }
+            if(!name || !gameid || !dob || !phone || !email || !pass || !division || !district) { alert("Please complete all fields including Division and District!"); return; }
             if(pass !== confpass) { alert("Passwords do not match!"); return; }
             if(!agree) { alert("Please verify declarations checklist authorization."); return; }
             if(db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
@@ -1252,7 +1312,9 @@
             sessionStorage.setItem('bdbus_login_timestamp', Date.now());
 
             document.body.classList.add('logged-in');
+            document.getElementById('main-global-header').style.display = 'flex';
             document.getElementById('global-menu-trigger-btn').style.display = 'block';
+            document.getElementById('global-header-logo-container').style.display = 'flex';
             document.getElementById('main-global-footer').style.display = 'block';
             
             if(user.role === 'Admin') { document.getElementById('admin-menu-link').style.display = 'flex'; }
@@ -1270,6 +1332,7 @@
             internalNavigationHistoryArray = [];
             document.body.classList.remove('logged-in');
             document.getElementById('global-menu-trigger-btn').style.display = 'none';
+            document.getElementById('global-header-logo-container').style.display = 'none';
             document.getElementById('main-global-footer').style.display = 'none';
             navigatePage('auth-screen');
         }
@@ -1385,14 +1448,16 @@
                 return;
             }
 
+            // ডিফল্ট বেস ফেয়ার রেট গণনা
             let charSum = 0;
             for(let i=0; i<fromLoc.length; i++) charSum += fromLoc.charCodeAt(i);
             for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
             
-            let generatedBaseDistance = (charSum % 400) + 120; 
-            let perKmRate = 2.15; 
+            let generatedBaseDistance = (charSum % 400) + 120; // ১২০ থেকে ৫২০ কিলোমিটার রেঞ্জ
+            let perKmRate = 2.15; // বর্তমান সরকারি নন-এসি কিলোমিটার রেট
             let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
 
+            // সুনির্দিষ্ট জেলার জন্য স্পেশাল রিয়েলিস্টিক রুট কনফিগারেশন
             if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
                 calculatedBaseFare = 680;
             } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
@@ -1403,8 +1468,9 @@
                 calculatedBaseFare = 1100;
             }
 
+            // কোচ ক্যাটাগরির উপর নির্ভর করে চূড়ান্ত প্রিমিয়াম হিসাব
             if (type === "Premium AC Coach") {
-                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85); 
+                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85); // এসি কোচের জন্য প্রিমিয়াম মাল্টিপ্লায়ার
             } else {
                 selectedFareGlobalRate = calculatedBaseFare;
             }
@@ -1839,25 +1905,32 @@
             }
         });
 
-        // সার্চেবল ড্রপডাউন সিস্টেম ইনিশিয়ালাইজেশন
+        /* --- 64 DISTRICTS DATA SYNC --- */
+        const bangladeshDistricts = [
+            "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
+            "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", 
+            "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", 
+            "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", 
+            "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", 
+            "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", 
+            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
+        ];
+
         function initSearchableDropdownSystem() {
-            setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
-            setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
-            
-            // রেজিস্ট্রেশন ফর্মের জন্য নতুন বিভাগ ও জেলা ড্রপডাউন লজিক
-            setupRegistrationLocationSelectors();
+            setupCustomDropdown('route-from', 'from-custom-dropdown');
+            setupCustomDropdown('route-to', 'to-custom-dropdown');
         }
 
-        function setupCustomDropdown(inputId, dropdownId, dataList) {
+        function setupCustomDropdown(inputId, dropdownId) {
             const input = document.getElementById(inputId);
             const dropdown = document.getElementById(dropdownId);
 
             if(!input || !dropdown) return;
 
-            input.addEventListener('focus', () => filterDataNodes(input, dropdown, dataList));
+            input.addEventListener('focus', () => filterDistrictDataNodes(input, dropdown));
             input.addEventListener('input', () => {
-                filterDataNodes(input, dropdown, dataList);
-                if(typeof calculateFareSystemLogic === "function") calculateFareSystemLogic();
+                filterDistrictDataNodes(input, dropdown);
+                calculateFareSystemLogic();
             });
 
             document.addEventListener('click', (e) => {
@@ -1867,11 +1940,11 @@
             });
         }
 
-        function filterDataNodes(input, dropdown, dataList) {
+        function filterDistrictDataNodes(input, dropdown) {
             const val = input.value.toLowerCase().trim();
             dropdown.innerHTML = '';
 
-            const filtered = dataList.filter(d => d.toLowerCase().includes(val));
+            const filtered = bangladeshDistricts.filter(d => d.toLowerCase().includes(val));
 
             if (filtered.length === 0) {
                 dropdown.style.display = 'none';
@@ -1879,57 +1952,18 @@
             }
 
             dropdown.style.display = 'block';
-            filtered.forEach(nodeItem => {
+            filtered.forEach(dist => {
                 const item = document.createElement('div');
                 item.className = 'custom-dropdown-item';
-                item.innerText = nodeItem;
+                item.innerText = dist;
 
                 item.onclick = () => {
-                    input.value = nodeItem;
+                    input.value = dist;
                     dropdown.style.display = 'none';
-                    if(input.id === 'reg-division') {
-                        // বিভাগ পরিবর্তন হলে জেলার ফিল্ড রিসেট হবে
-                        document.getElementById('reg-district').value = '';
-                        setupRegistrationDistrictDropdown(nodeItem);
-                    }
-                    if(typeof calculateFareSystemLogic === "function") calculateFareSystemLogic();
+                    calculateFareSystemLogic();
                 };
                 dropdown.appendChild(item);
             });
-        }
-
-        // রেজিস্ট্রেশন পেজের বিভাগ ও জেলা ক্যাসকেডিং ফিল্টারিং লজিক
-        function setupRegistrationLocationSelectors() {
-            const divInput = document.getElementById('reg-division');
-            const distInput = document.getElementById('reg-district');
-            const divDropdown = document.getElementById('reg-division-dropdown');
-
-            setupCustomDropdown('reg-division', 'reg-division-dropdown', divisionsList);
-
-            distInput.addEventListener('focus', () => {
-                const currentDiv = divInput.value.trim();
-                if(currentDiv && districtsByDivision[currentDiv]) {
-                    filterDataNodes(distInput, document.getElementById('reg-district-dropdown'), districtsByDivision[currentDiv]);
-                } else {
-                    filterDataNodes(distInput, document.getElementById('reg-district-dropdown'), bangladeshDistricts);
-                }
-            });
-
-            distInput.addEventListener('input', () => {
-                const currentDiv = divInput.value.trim();
-                if(currentDiv && districtsByDivision[currentDiv]) {
-                    filterDataNodes(distInput, document.getElementById('reg-district-dropdown'), districtsByDivision[currentDiv]);
-                } else {
-                    filterDataNodes(distInput, document.getElementById('reg-district-dropdown'), bangladeshDistricts);
-                }
-            });
-        }
-
-        function setupRegistrationDistrictDropdown(divisionName) {
-            const distInput = document.getElementById('reg-district');
-            if(districtsByDivision[divisionName]) {
-                setupCustomDropdown('reg-district', 'reg-district-dropdown', districtsByDivision[divisionName]);
-            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -1945,7 +1979,9 @@
                 let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
                 if(refreshedUser && !refreshedUser.isBanned) {
                     document.body.classList.add('logged-in');
+                    document.getElementById('main-global-header').style.display = 'flex';
                     document.getElementById('global-menu-trigger-btn').style.display = 'block';
+                    document.getElementById('global-header-logo-container').style.display = 'flex';
                     document.getElementById('main-global-footer').style.display = 'block';
                     if(refreshedUser.role === 'Admin') document.getElementById('admin-menu-link').style.display = 'flex';
                     
