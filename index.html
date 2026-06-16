@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDBUS Online Ticket Counter</title>
+    <title> Bangladesh Bussid Unique Society(BDBUS)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -275,7 +275,7 @@
         
         .notice-board {
             background: #1e293b;
-            border-left: 4px solid var(--neon-blue);
+            border-left: 4px solid #FF3333;
             padding: 12px;
             border-radius: 8px;
             margin: 25px 0;
@@ -283,7 +283,7 @@
             display: flex;
             align-items: center;
         }
-        .notice-tag { background: var(--neon-blue); color: #000; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
+        .notice-tag { background: #FF3333; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
         .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
 
         .carousel-container { 
@@ -661,7 +661,6 @@
         <div class="central-branded-header" style="height: 1px; visibility: hidden; margin: 0; padding: 0; overflow: hidden;">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
-            <p>Official Online Ticket Hub Terminal</p>
         </div>
 
         <p class="welcome-msg" id="home-welcome-user" style="display: none; height: 1px; overflow: hidden;"></p>
@@ -674,7 +673,7 @@
 
         <div class="notice-board">
             <span class="notice-tag">NOTICE</span>
-            <marquee id="live-marquee-node" scrollamount="6">Welcome to BDBUS Official Ticket Counter Simulator Hub!</marquee>
+            <marquee id="live-marquee-node" scrollamount="6">Welcome to Bangladesh Bussid Unique Society (BDBUS)</marquee>
         </div>
 
         <div class="carousel-container">
@@ -763,10 +762,12 @@
                 <div class="form-group">
                     <label>Journey Time</label>
                     <select id="route-time" class="form-control">
-                        <option value="Morning">Morning</option>
-                        <option value="Evening">Evening</option>
-                        <option value="Night">Night</option>
-                        <option value="Midnight">Midnight</option>
+                        <option value="10:00 AM — Morning Trip">10:00 AM Morning Trip</option>
+<option value="03:00 PM — Afternoon Trip">03:00 PM Afternoon Trip</option>
+<option value="11:00 PM — Night Trip">11:00 PM Night Trip</option>
+<option value="12:00 AM — Midnight Trip">12:00 AM Midnight Trip</option>
+<option value="01:00 AM — Late Night Trip">01:00 AM Late Night Trip</option>
+
                     </select>
                 </div>
             </div>
@@ -861,8 +862,8 @@
                     <tr><td class="label-txt">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
                     <tr><td class="label-txt">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
                     <tr><td class="label-txt">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
-                    <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS_MEGA_TRIP</td></tr>
-                    <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">BDBUS77</td></tr>
+                    <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS</td></tr>
+                    <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">7531</td></tr>
                     <tr><td class="label-txt">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
                 </table>
                 <div class="ticket-rules-box">
@@ -955,10 +956,10 @@
             </div>
             <div class="footer-subs-flex">
                 <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px;">
-                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai Subscribe
+                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai
                 </a>
                 <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px; background:#475569;">
-                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller Subscribe
+                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller M2Vai
                 </a>
             </div>
         </div>
