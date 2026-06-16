@@ -197,6 +197,29 @@
         .sidebar-item:hover { background: rgba(0, 242, 254, 0.1); color: var(--neon-blue); }
         .sidebar-item.logout-item { margin-top: auto; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
+        /* --- Custom Custom Notice Box --- */
+        .custom-gaming-notice {
+            background: #221214 !important;
+            border: 1px solid #FF3333 !important;
+            color: #FFCCCC !important;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .custom-gaming-notice .notice-heading {
+            color: #FFCC00 !important;
+            font-weight: bold;
+        }
+        .custom-gaming-notice i {
+            color: #FFCC00 !important;
+            font-size: 24px;
+        }
+
         .warning-box {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid #ef4444;
@@ -241,42 +264,6 @@
         }
         .form-control:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
         .flex-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
-
-        /* --- PASSWORD TOGGLE EYE STYLE --- */
-        .password-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .password-toggle-icon {
-            position: absolute;
-            right: 15px;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: 0.2s;
-            z-index: 5;
-        }
-        .password-toggle-icon:hover {
-            color: var(--neon-blue);
-        }
-
-        /* --- SIDEBAR LOGO AREA --- */
-        .sidebar-brand-area {
-            text-align: center;
-            padding: 15px 10px 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 20px;
-        }
-        .sidebar-brand-area img {
-            height: 65px;
-            margin-bottom: 8px;
-        }
-        .sidebar-brand-area p {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            line-height: 1.3;
-        }
 
         .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 20px; }
         .central-branded-header img { height: 110px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
@@ -540,9 +527,54 @@
         .creator-identity { font-size: 18px; font-weight: 700; color: #fff; margin: 4px 0 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .creator-avatar-icon { width: 28px; height: 28px; border-radius: 50%; }
         .footer-subs-flex { display: flex; justify-content: center; gap: 15px; }
+
+        /* --- PREVENT CONFLICT MODAL --- */
+        .custom-welcome-modal-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 7, 12, 0.85);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .custom-welcome-modal-card {
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            animation: fadeInModalEffect 0.4s ease;
+        }
+        .modal-avatar-frame {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-green);
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
+        }
+        @keyframes fadeInModalEffect {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
+
+    <div class="custom-welcome-modal-layer" id="global-welcome-popup-layer">
+        <div class="custom-welcome-modal-card">
+            <img src="https://via.placeholder.com/150" id="pop-user-avatar" class="modal-avatar-frame" alt="Avatar">
+            <h3 style="color: var(--neon-blue); font-size: 20px; margin-bottom: 5px;">WELCOME</h3>
+            <h4 id="pop-user-name" style="font-size: 18px; margin-bottom: 5px; color: #fff;">User Name</h4>
+            <p id="pop-user-id" style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">ID: BDBUS-1000</p>
+            <button class="btn-premium" style="width: 130px; justify-content: center;" onclick="dismissGlobalWelcomePopup()">Thanks</button>
+        </div>
+    </div>
 
     <header class="global-header" id="main-global-header" style="display: none;">
         <div class="header-left">
@@ -563,15 +595,11 @@
         <div class="sidebar-close-header">
             <i class="fa-solid fa-xmark sidebar-close-btn" onclick="toggleSidebarMenu(false)"></i>
         </div>
-        <div class="sidebar-brand-area">
-            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
-            <p>Bangladesh Bussid Unique Society</p>
-        </div>
         <div class="sidebar-item" onclick="navigatePage('home-screen')"><i class="fa-solid fa-house"></i> <span class="lang-node" data-en="Home" data-bn="হোম">Home</span></div>
-        <div class="sidebar-item" onclick="navigatePage('booking-screen')"><i class="fa-solid fa-bus"></i> <span class="lang-node" data-en="Bus Ticket Booking" data-bn="বাস টিকিট বুকিং">Bus Ticket Booking</span></div>
-        <div class="sidebar-item" onclick="navigatePage('password-screen')"><i class="fa-solid fa-key"></i> <span class="lang-node" data-en="Change Password" data-bn="পাসওয়ার্ড পরিবর্তন">Change Password</span></div>
-        <div class="sidebar-item" id="admin-menu-link" onclick="navigatePage('admin-screen')" style="display:none;"><i class="fa-solid fa-user-shield"></i> <span class="lang-node" data-en="Admin Panel" data-bn="এডমিন প্যানেল">Admin Panel</span></div>
         <div class="sidebar-item" onclick="navigatePage('profile-screen')"><i class="fa-solid fa-user"></i> <span class="lang-node" data-en="My Profile" data-bn="মাই প্রোফাইল">My Profile</span></div>
+        <div class="sidebar-item" onclick="navigatePage('password-screen')"><i class="fa-solid fa-key"></i> <span class="lang-node" data-en="Change Password" data-bn="পাসওয়ার্ড পরিবর্তন">Change Password</span></div>
+        <div class="sidebar-item" onclick="navigatePage('booking-screen')"><i class="fa-solid fa-bus"></i> <span class="lang-node" data-en="Bus Ticket Booking" data-bn="বাস টিকিট বুকিং">Bus Ticket Booking</span></div>
+        <div class="sidebar-item" id="admin-menu-link" onclick="navigatePage('admin-screen')" style="display:none;"><i class="fa-solid fa-user-shield"></i> <span class="lang-node" data-en="Admin Panel" data-bn="এডমিন প্যানেল">Admin Panel</span></div>
         <div class="sidebar-item" onclick="navigatePage('contact-screen')"><i class="fa-solid fa-address-book"></i> <span class="lang-node" data-en="Contact" data-bn="যোগাযোগ">Contact</span></div>
         <div class="sidebar-item logout-item" onclick="executeLogoutAction()"><i class="fa-solid fa-right-from-bracket"></i> <span class="lang-node" data-en="Logout" data-bn="লগআউট">Logout</span></div>
     </nav>
@@ -580,8 +608,8 @@
         <div class="auth-container">
             <div class="auth-brand">
                 <img src="images/BDBUS Group Official Logo.png" alt="Logo">
-                <h2>BDBUS ONLINE TICKET COUNTER</h2>
-                <p>Bangladesh Bussid Unique Society</p>
+                <h2 id="auth-main-title">Bangladesh Bussid Unique Society</h2>
+                <p id="auth-sub-title">BDBUS OFFICIAL WEBSITE</p>
             </div>
 
             <div id="login-sub-card" class="form-card">
@@ -591,10 +619,7 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="login-pass" class="form-control" placeholder="••••••••">
-                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('login-pass', this)"></i>
-                    </div>
+                    <input type="password" id="login-pass" class="form-control" placeholder="••••••••">
                 </div>
                 <a href="#" style="color:var(--neon-blue); font-size:12px; text-decoration:none;" onclick="triggerForgotPassword()">Forget password</a>
                 <div class="flex-actions">
@@ -618,20 +643,8 @@
                 </div>
                 <div class="form-group"><label>Facebook Profile Link</label><input type="url" id="reg-fb" class="form-control"></div>
                 <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" class="form-control"></div>
-                <div class="form-group">
-                    <label>Set Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="reg-pass" class="form-control">
-                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('reg-pass', this)"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="reg-confpass" class="form-control">
-                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('reg-confpass', this)"></i>
-                    </div>
-                </div>
+                <div class="form-group"><label>Set Password</label><input type="password" id="reg-pass" class="form-control"></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-confpass" class="form-control"></div>
                 
                 <div style="display:flex; gap:10px; align-items:center; margin:20px 0;">
                     <input type="checkbox" id="reg-agree" style="width:18px; height:18px;">
@@ -640,19 +653,18 @@
                 <div style="text-align: center;">
                     <button class="btn-premium" onclick="executeRegistrationLogic()">Registration Submit</button>
                 </div>
-                <p style="font-size:12px; margin-top:15px;"><a href="#" style="color:var(--text-muted);" onclick="toggleAuthSubView('login')">Already have an account? Login</a></p>
             </div>
         </div>
     </div>
 
     <div id="home-screen" class="page-screen">
-        <div class="central-branded-header">
+        <div class="central-branded-header" style="height: 1px; visibility: hidden; margin: 0; padding: 0; overflow: hidden;">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
             <p>Official Online Ticket Hub Terminal</p>
         </div>
 
-        <p class="welcome-msg" id="home-welcome-user">Welcome, Player</p>
+        <p class="welcome-msg" id="home-welcome-user" style="display: none; height: 1px; overflow: hidden;"></p>
         <h2 class="greetings-text" id="home-greeting-txt">GOOD MORNING</h2>
 
         <div class="neon-clock">
@@ -714,27 +726,9 @@
     <div id="password-screen" class="page-screen">
         <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="সিকিউরিটি পাসওয়ার্ড পরিবর্তন">Change Password</h2>
         <div class="form-card" style="max-width:450px; margin:0 auto;">
-            <div class="form-group">
-                <label>Current Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-curr" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('pwd-curr', this)"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>New Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-new" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('pwd-new', this)"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-conf" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordVisibilityField('pwd-conf', this)"></i>
-                </div>
-            </div>
+            <div class="form-group"><label>Current Password</label><input type="password" id="pwd-curr" class="form-control"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="pwd-new" class="form-control"></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" id="pwd-conf" class="form-control"></div>
             <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submitte Password</button>
         </div>
     </div>
@@ -743,7 +737,7 @@
         <div class="central-branded-header">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
-            <p class="lang-node" data-en="Bus Ticket Booking Module" data-bn="বাস টিকিট বুকিং মডিউল">Bus Ticket Booking Module</p>
+            <p style="font-weight: 700; font-size: 24px; color: #fff; letter-spacing: 1px; margin-top: 5px;">BDBUS MULTIPLAYER TICKET BOOKING</p>
         </div>
 
         <div class="neon-clock">
@@ -766,7 +760,15 @@
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
                 <div class="form-group"><label>Journey Date</label><input type="date" id="route-date" class="form-control"></div>
-                <div class="form-group"><label>Journey Time</label><input type="time" id="route-time" class="form-control"></div>
+                <div class="form-group">
+                    <label>Journey Time</label>
+                    <select id="route-time" class="form-control">
+                        <option value="Morning">Morning</option>
+                        <option value="Evening">Evening</option>
+                        <option value="Night">Night</option>
+                        <option value="Midnight">Midnight</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group" style="margin-top:20px;">
                 <label>Bus Type Selection</label>
@@ -781,12 +783,12 @@
                 <span style="color:var(--neon-blue); font-weight:700; font-size:20px;" id="booking-fare-render">0 BDT</span>
             </div>
 
-            <div class="warning-box">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size:20px;"></i>
+            <div class="custom-gaming-notice">
+                <i class="fa-solid fa-triangle-exclamation"></i>
                 <div>
-                    <strong>⚠️ Important Notice</strong><br>
-                    EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                    বাংলা: আপনার internet সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                    <span class="notice-heading">⚠️ Important Notice</span><br>
+                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
+                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
                 </div>
             </div>
 
@@ -824,11 +826,11 @@
                 <span style="color:var(--neon-green); font-weight:700;" id="seat-calculated-total-fare">0 BDT</span>
             </div>
 
-            <div class="warning-box" style="margin:15px 0; text-align:left;">
+            <div class="custom-gaming-notice" style="text-align: left;">
                 <div>
-                    <strong>⚠️ Important Notice</strong><br>
-                    EN: Please do not attempt to book or confirm your ticket if your internet connection is unstable.<br>
-                    বাংলা: আপনার ইন্টারনেট সংযোগে কোনো সমস্যা বা স্লো থাকলে দয়া করে টিকিট কাটবেন না।
+                    <span class="notice-heading">⚠️ Important Notice</span><br>
+                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
+                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
                 </div>
             </div>
 
@@ -978,22 +980,6 @@
         
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
 
-        /* --- PASSWORD VISIBILITY TOGGLE LOGIC --- */
-        function togglePasswordVisibilityField(inputId, iconElement) {
-            const inputField = document.getElementById(inputId);
-            if (!inputField) return;
-            
-            if (inputField.type === "password") {
-                inputField.type = "text";
-                iconElement.classList.remove("fa-eye");
-                iconElement.classList.add("fa-eye-slash");
-            } else {
-                inputField.type = "password";
-                iconElement.classList.remove("fa-eye-slash");
-                iconElement.classList.add("fa-eye");
-            }
-        }
-
         function verifyDatabaseStructureSeeding() {
             let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
             if (!adminCheck) {
@@ -1117,12 +1103,18 @@
         }
 
         function toggleAuthSubView(view) {
+            const mainTitle = document.getElementById('auth-main-title');
+            const subTitle = document.getElementById('auth-sub-title');
             if(view === 'signup') {
                 document.getElementById('login-sub-card').style.display = 'none';
                 document.getElementById('signup-sub-card').style.display = 'block';
+                mainTitle.innerText = "Bangladesh Bussid Unique Society";
+                subTitle.innerText = "BDBUS REGISTRATION FORM";
             } else {
                 document.getElementById('login-sub-card').style.display = 'block';
                 document.getElementById('signup-sub-card').style.display = 'none';
+                mainTitle.innerText = "Bangladesh Bussid Unique Society";
+                subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
             }
         }
 
@@ -1154,8 +1146,18 @@
 
             db.users.push(newUser);
             saveDataEngine();
-            alert(`Registration successful! Your generated ID is: BDBUS-${newUser.id}`);
             toggleAuthSubView('login');
+        }
+
+        function triggerGlobalWelcomePopup(user) {
+            document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
+            document.getElementById('pop-user-name').innerText = user.name;
+            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
+            document.getElementById('global-welcome-popup-layer').style.display = "flex";
+        }
+
+        function dismissGlobalWelcomePopup() {
+            document.getElementById('global-welcome-popup-layer').style.display = "none";
         }
 
         function executeLoginLogic() {
@@ -1177,9 +1179,9 @@
             if(user.role === 'Admin') { document.getElementById('admin-menu-link').style.display = 'flex'; }
             else { document.getElementById('admin-menu-link').style.display = 'none'; }
 
-            document.getElementById('home-welcome-user').innerText = `Welcome, ${user.name} (ID: BDBUS-${user.id})`;
             document.getElementById('live-marquee-node').innerText = db.notices;
 
+            triggerGlobalWelcomePopup(user);
             navigatePage('home-screen');
         }
 
@@ -1291,9 +1293,44 @@
             document.getElementById('pwd-conf').value = "";
         }
 
+        /* --- OFFICIAL FARE LOGIC (DISTANCE BASED GOVERNMENT RATE AUTOMATION) --- */
         function calculateFareSystemLogic() {
+            const fromLoc = document.getElementById('route-from').value.trim();
+            const toLoc = document.getElementById('route-to').value.trim();
             const type = document.getElementById('route-bustype').value;
-            selectedFareGlobalRate = (type === "Premium AC Coach") ? 1200 : 650; 
+
+            if(!fromLoc || !toLoc) {
+                document.getElementById('booking-fare-render').innerText = `0 BDT`;
+                return;
+            }
+
+            // ডিফল্ট বেস ফেয়ার রেট গণনা
+            let charSum = 0;
+            for(let i=0; i<fromLoc.length; i++) charSum += fromLoc.charCodeAt(i);
+            for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
+            
+            let generatedBaseDistance = (charSum % 400) + 120; // ১২০ থেকে ৫২০ কিলোমিটার রেঞ্জ
+            let perKmRate = 2.15; // বর্তমান সরকারি নন-এসি কিলোমিটার রেট
+            let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
+
+            // সুনির্দিষ্ট জেলার জন্য স্পেশাল রিয়েলিস্টিক রুট কনফিগারেশন
+            if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
+                calculatedBaseFare = 680;
+            } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
+                calculatedBaseFare = 850;
+            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "chattogram") || (fromLoc.toLowerCase() === "chattogram" && toLoc.toLowerCase() === "dhaka")) {
+                calculatedBaseFare = 750;
+            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "cox's bazar") || (fromLoc.toLowerCase() === "cox's bazar" && toLoc.toLowerCase() === "dhaka")) {
+                calculatedBaseFare = 1100;
+            }
+
+            // কোচ ক্যাটাগরির উপর নির্ভর করে চূড়ান্ত প্রিমিয়াম হিসাব
+            if (type === "Premium AC Coach") {
+                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85); // এসি কোচের জন্য প্রিমিয়াম মাল্টিপ্লায়ার
+            } else {
+                selectedFareGlobalRate = calculatedBaseFare;
+            }
+
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
@@ -1526,7 +1563,6 @@
             });
         }
 
-        // --- ADMIN MODULE: LIVE BOOKINGS CONSOLE RENDERER ---
         function renderLiveBookingsMonitorTable() {
             const tbody = document.getElementById('admin-live-bookings-tbody');
             if(!tbody) return;
@@ -1578,7 +1614,6 @@
             }
         }
 
-        // --- ADMIN MODULE: LOAD ALL REGISTERED MEMBERS ---
         function loadAllRegisteredMembersList() {
             buildUserAdminDisplayCards(db.users);
             alert(`Total ${db.users.length} members loaded successfully into grid view below!`);
@@ -1726,7 +1761,7 @@
             }
         });
 
-        // --- SEARCHABLE DROPDOWN ENGINE IMPLEMENTATION ---
+        /* --- 64 DISTRICTS DATA SYNC --- */
         const bangladeshDistricts = [
             "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
             "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", 
@@ -1749,7 +1784,10 @@
             if(!input || !dropdown) return;
 
             input.addEventListener('focus', () => filterDistrictDataNodes(input, dropdown));
-            input.addEventListener('input', () => filterDistrictDataNodes(input, dropdown));
+            input.addEventListener('input', () => {
+                filterDistrictDataNodes(input, dropdown);
+                calculateFareSystemLogic();
+            });
 
             document.addEventListener('click', (e) => {
                 if (!input.contains(e.target) && !dropdown.contains(e.target)) {
@@ -1778,6 +1816,7 @@
                 item.onclick = () => {
                     input.value = dist;
                     dropdown.style.display = 'none';
+                    calculateFareSystemLogic();
                 };
                 dropdown.appendChild(item);
             });
@@ -1787,7 +1826,7 @@
             verifyDatabaseStructureSeeding();
             initialClockHeartbeatEngine();
             setLanguageSystem(selectedLanguage);
-            initSearchableDropdownSystem(); 
+            initSearchableDropdownSystem();
             setInterval(checkSessionTimeoutRules, 10000); 
 
             history.pushState(null, null, window.location.pathname);
