@@ -716,7 +716,119 @@
                 document.getElementById('admin-notice-input').value = '';
             });
         }
-                // --- CORE LOGIC & FUNCTIONS MODULES ---
+                        // --- SEARCHABLE DROPDOWN INFRASTRUCTURE ---
+        function initSearchableDropdownSystem() {
+            setupSingleDropdownField('reg-division', 'reg-division-dropdown', bangladeshDivisions);
+            setupSingleDropdownField('reg-district', 'reg-district-dropdown', bangladeshDistricts);
+            setupSingleDropdownField('route-from', 'from-custom-dropdown', bangladeshDistricts);
+            setupSingleDropdownField('route-to', 'to-custom-dropdown', bangladeshDistricts);
+        }
+
+        function setupSingleDropdownField(inputId, dropdownId, dataArray) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            if(!input || !dropdown) return;
+
+            input.addEventListener('focus', () => {
+                renderFilteredDropdownItems(input, dropdown, dataArray);
+            });
+
+            input.addEventListener('input', () => {
+                renderFilteredDropdownItems(input, dropdown, dataArray);
+            });
+
+            document.addEventListener('click', (e) => {
+                if(e.target !== input && e.target !== dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function renderFilteredDropdownItems(inputNode, dropdownNode, dataPool) {
+            let val = inputNode.value.trim().toLowerCase();
+            let filtered = dataPool.filter(item => item.toLowerCase().includes(val));
+
+            if(filtered.length === 0) { dropdownNode.style.display = 'none'; return; }
+            dropdownNode.innerHTML = '';
+            dropdownNode.style.display = 'block';
+
+            filtered.forEach(str => {
+                const item = document.createElement('div');
+                item.className = 'custom-dropdown-item';
+                item.innerText = str;
+                item.onclick = () => {
+                    inputNode.value = str;
+                    dropdownNode.style.display = 'none';
+                    if(inputNode.id === 'route-from' || inputNode.id === 'route-to') calculateFareSystemLogic();
+                };
+                dropdownNode.appendChild(item);
+            });
+        }
+
+        function buildUserAdminDisplayCards(usersArray) {
+            const grid = document.getElementById('admin-users-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            usersArray.forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'admin-control-card';
+                card.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                        <img src="${u.avatar || 'https://via.placeholder.com/150'}" style="width:45px; height:45px; border-radius:50%;" alt="User">
+                        <div>
+                            <h5 style="font-size:14px;">${u.name}</h5>
+                            <p style="font-size:11px; color:var(--text-muted);">ID: BDBUS-${u.id} | Balance: <span style="color:var(--neon-blue)">${u.wallet}</span> BDT</p>
+                        </div>
+                    </div>
+                    <div class="admin-action-row">
+                        <button class="btn-admin-small" style="background:var(--neon-blue); color:#000;" onclick="adminModifyUserBalanceField(${u.id})">Add Money</button>
+                        <button class="btn-admin-small" style="background:${u.role==='Admin'?'#ef4444':'var(--neon-green)'}; color:#000;" onclick="adminToggleUserRolePrivilege(${u.id})">${u.role==='Admin'?'Demote':'Make Admin'}</button>
+                        <button class="btn-admin-small" style="background:#e11d48; color:#fff;" onclick="adminToggleUserBanStatus(${u.id})">${u.isBanned?'Unban':'Ban'}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function adminModifyUserBalanceField(userId) {
+            let amount = prompt("Enter credit amount load configuration matrix to inject:");
+            if(!amount || isNaN(amount)) return;
+            let target = db.users.find(u => u.id === userId);
+            if(target) {
+                target.wallet = (target.wallet || 0) + parseInt(amount);
+                updateSingleUserInCloud(target);
+                alert("Financial asset ledger updated successfully.");
+            }
+        }
+
+        function adminToggleUserRolePrivilege(userId) {
+            let target = db.users.find(u => u.id === userId);
+            if(target) {
+                target.role = target.role === 'Admin' ? 'Regular Member' : 'Admin';
+                updateSingleUserInCloud(target);
+                alert("Account security node level altered.");
+            }
+        }
+
+        function adminToggleUserBanStatus(userId) {
+            let target = db.users.find(u => u.id === userId);
+            if(target) {
+                target.isBanned = !target.isBanned;
+                updateSingleUserInCloud(target);
+                alert(target.isBanned ? "User node banned." : "User node unbanned.");
+            }
+        }
+
+        function executeAdminSearchLogic() {
+            let q = document.getElementById('admin-search-input').value.trim().toLowerCase();
+            if(!q) { buildUserAdminDisplayCards(db.users); return; }
+            let filtered = db.users.filter(u => u.name.toLowerCase().includes(q) || u.id.toString().includes(q) || u.phone.includes(q));
+            buildUserAdminDisplayCards(filtered);
+        }
+
+
+        // --- CORE LOGIC & FUNCTIONS MODULES ---
         function toggleAuthSubView(mode) {
             if(mode === 'signup') {
                 document.getElementById('login-sub-card').style.display = 'none';
