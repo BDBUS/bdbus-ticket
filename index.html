@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         /* --- PREMIUM UI/UX DESIGN SYSTEM --- */
         :root {
@@ -22,438 +25,105 @@
             --btn-gradient-2: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px;
-            height: 500px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 0;
-            display: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); overflow-x: hidden; min-height: 100vh; position: relative; }
+        body::before { content: ""; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background: url('images/BDBUS Group Official Logo.png') no-repeat center; background-size: contain; opacity: 0.04; pointer-events: none; z-index: 0; display: none; }
         body.logged-in::before { display: block; }
-
-        .btn-premium {
-            background: var(--btn-gradient-1);
-            color: #000;
-            font-weight: 600;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-premium:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
-        }
-        .btn-secondary {
-            background: var(--btn-gradient-2);
-            color: #fff;
-        }
-        .btn-yt {
-            background: var(--yt-red);
-            color: #fff;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 10px 18px;
-            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
-        }
-        .btn-yt:hover {
-            box-shadow: 0 6px 18px rgba(255, 0, 0, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .neon-clock {
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px solid var(--neon-blue);
-            border-radius: 12px;
-            padding: 8px 18px;
-            text-align: center;
-            max-width: 320px;
-            margin: 15px auto;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
-        }
-        .neon-time {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
-            letter-spacing: 1px;
-            line-height: 1.2;
-        }
-        .neon-date {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .global-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background: rgba(15, 23, 42, 0.9);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .btn-premium { background: var(--btn-gradient-1); color: #000; font-weight: 600; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); display: inline-flex; align-items: center; gap: 8px; }
+        .btn-premium:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5); }
+        .btn-secondary { background: var(--btn-gradient-2); color: #fff; }
+        .btn-yt { background: var(--yt-red); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 600; padding: 10px 18px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3); }
+        .btn-yt:hover { box-shadow: 0 6px 18px rgba(255, 0, 0, 0.5); transform: translateY(-2px); }
+        .neon-clock { background: rgba(15, 23, 42, 0.8); border: 2px solid var(--neon-blue); border-radius: 12px; padding: 8px 18px; text-align: center; max-width: 320px; margin: 15px auto; box-shadow: 0 0 15px rgba(0, 242, 254, 0.15); }
+        .neon-time { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 242, 254, 0.5); letter-spacing: 1px; line-height: 1.2; }
+        .neon-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.5px; font-weight: 600; }
+        .global-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-trigger { font-size: 24px; cursor: pointer; color: var(--text-light); }
-        
-        .manual-back-trigger {
-            font-size: 18px;
-            cursor: pointer;
-            color: var(--neon-blue);
-            background: rgba(255, 255, 255, 0.05);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
+        .manual-back-trigger { font-size: 18px; cursor: pointer; color: var(--neon-blue); background: rgba(255, 255, 255, 0.05); width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; transition: 0.2s; }
         .manual-back-trigger:hover { background: rgba(0, 242, 254, 0.2); }
-
         .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer;}
         .header-logo-container img { height: 40px; }
-        .header-logo-container span { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; } /* লোগোর পাশে লেখার সাইজ ছোট করা হয়েছে */
-        
+        .header-logo-container span { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
         .lang-toggle-box { display: flex; gap: 8px; }
-        .lang-btn {
-            border: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: 0.2s;
-        }
+        .lang-btn { border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; }
         .lang-btn.en { background: #00f2fe; color: #000; }
         .lang-btn.bn { background: #334155; color: #fff; }
-
-        .sidebar-menu {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 300px;
-            height: 100vh;
-            background: #0f172a;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
-            z-index: 1000;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-        }
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: #0f172a; box-shadow: 5px 0 25px rgba(0,0,0,0.5); z-index: 1000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px 20px; display: flex; flex-direction: column; }
         .sidebar-menu.active { left: 0; }
         .sidebar-close-header { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .sidebar-close-btn { font-size: 22px; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .sidebar-close-btn:hover { color: #ef4444; }
-
-        .sidebar-item {
-            padding: 14px 20px;
-            color: var(--text-light);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 500;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .sidebar-item { padding: 14px 20px; color: var(--text-light); text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
         .sidebar-item:hover { background: rgba(0, 242, 254, 0.1); color: var(--neon-blue); }
         .sidebar-item.logout-item { margin-top: auto; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-
-        /* --- Custom Custom Notice Box --- */
-        .custom-gaming-notice {
-            background: #221214 !important;
-            border: 1px solid #FF3333 !important;
-            color: #FFCCCC !important;
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 20px auto;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .custom-gaming-notice .notice-heading {
-            color: #FFCC00 !important;
-            font-weight: bold;
-        }
-        .custom-gaming-notice i {
-            color: #FFCC00 !important;
-            font-size: 24px;
-        }
-
-        .warning-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 20px auto;
-            color: #fca5a5;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .custom-gaming-notice { background: #221214 !important; border: 1px solid #FF3333 !important; color: #FFCCCC !important; padding: 15px; border-radius: 10px; max-width: 600px; margin: 20px auto; font-size: 14px; display: flex; align-items: center; gap: 12px; }
+        .custom-gaming-notice .notice-heading { color: #FFCC00 !important; font-weight: bold; }
+        .custom-gaming-notice i { color: #FFCC00 !important; font-size: 24px; }
+        .warning-box { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 15px; border-radius: 10px; max-width: 600px; margin: 20px auto; color: #fca5a5; font-size: 14px; display: flex; align-items: center; gap: 12px; }
         .page-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; z-index: 10; position: relative; }
         .page-screen.active { display: block; }
-
         .auth-container { max-width: 450px; margin: 50px auto; text-align: center; }
         .auth-brand img { height: 80px; margin-bottom: 10px; }
-        .auth-brand h2 { font-size: 1.3rem; letter-spacing: 1px; } /* লোগোর নিচের মেইন টাইটেল সাইজ ছোট করা হয়েছে */
+        .auth-brand h2 { font-size: 1.3rem; letter-spacing: 1px; }
         .auth-brand p { color: var(--neon-blue); font-size: 11px; margin-bottom: 30px; }
-        
-        .form-card {
-            background: var(--panel-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: left;
-        }
+        .form-card { background: var(--panel-bg); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); text-align: left; }
         .form-group { margin-bottom: 20px; position: relative; }
         .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
-        
-        /* পাসওয়ার্ড শো/হাইডের জন্য চমৎকার ইনপুট বক্স র‍্যাপার */
-        .password-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .password-input-wrapper .form-control {
-            padding-right: 45px;
-        }
-        .password-toggle-icon {
-            position: absolute;
-            right: 15px;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 15px;
-            user-select: none;
-            transition: 0.2s;
-        }
-        .password-toggle-icon:hover {
-            color: var(--neon-blue);
-        }
-
-        .form-control {
-            width: 100%;
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: #fff;
-            outline: none;
-            transition: 0.2s;
-        }
+        .password-input-wrapper { position: relative; display: flex; align-items: center; }
+        .password-input-wrapper .form-control { padding-right: 45px; }
+        .password-toggle-icon { position: absolute; right: 15px; cursor: pointer; color: var(--text-muted); font-size: 15px; user-select: none; transition: 0.2s; }
+        .password-toggle-icon:hover { color: var(--neon-blue); }
+        .form-control { width: 100%; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 10px; color: #fff; outline: none; transition: 0.2s; }
         .form-control:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
         .flex-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
-
         .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 20px; }
         .central-branded-header img { height: 110px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
-        .central-branded-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); } /* হোম পেজ লোগো নাম সাইজ রেসপন্সিভ */
+        .central-branded-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .central-branded-header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
         .welcome-msg { font-size: 15px; color: var(--neon-blue); font-weight: 600; text-align: center; margin-bottom: 5px; }
         .greetings-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; text-align: center; }
-        
-        .notice-board {
-            background: #1e293b;
-            border-left: 4px solid #FF3333;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 25px 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-        }
+        .notice-board { background: #1e293b; border-left: 4px solid #FF3333; padding: 12px; border-radius: 8px; margin: 25px 0; overflow: hidden; display: flex; align-items: center; }
         .notice-tag { background: #FF3333; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
         .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
-
-        .carousel-container { 
-            background: var(--panel-bg); 
-            padding: 20px 0; 
-            border-radius: 15px; 
-            margin-bottom: 30px; 
-            position: relative; 
-            overflow: hidden; 
-            height: 130px; 
-            border: 1px solid rgba(255,255,255,0.02);
-            display: flex;
-            align-items: center;
-        }
-        .member-track { 
-            display: flex; 
-            gap: 20px; 
-            width: max-content; 
-            animation: continuousMarqueeAnimation 25s linear infinite;
-        }
-        .carousel-container:hover .member-track {
-            animation-play-state: paused;
-        }
-        .member-card-node {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            min-width: 280px;
-        }
+        .carousel-container { background: var(--panel-bg); padding: 20px 0; border-radius: 15px; margin-bottom: 30px; position: relative; overflow: hidden; height: 130px; border: 1px solid rgba(255,255,255,0.02); display: flex; align-items: center; }
+        .member-track { display: flex; gap: 20px; width: max-content; animation: continuousMarqueeAnimation 25s linear infinite; }
+        .carousel-container:hover .member-track { animation-play-state: paused; }
+        .member-card-node { background: #1e293b; border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; min-width: 280px; }
         .member-avatar-round { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-green); }
         .member-meta h5 { font-size: 14px; margin-bottom: 2px; }
         .member-meta p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
         .status-badge { color: var(--neon-green); font-weight: bold; font-size: 10px; letter-spacing: 1px; display: block; margin-top: 2px;}
-
-        @keyframes continuousMarqueeAnimation {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
+        @keyframes continuousMarqueeAnimation { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .reward-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
         .reward-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; }
         .reward-card h4 { margin-bottom: 10px; font-size: 1.1rem; }
         .reward-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
-
         .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 30px auto; }
         @media (max-width: 768px) { .booking-layout { grid-template-columns: 1fr; } }
-        
         .seat-map-wrapper { background: var(--panel-bg); padding: 30px; border-radius: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
-        
         .seat-legend-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; font-size: 12px; }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .legend-box { width: 15px; height: 15px; border-radius: 3px; }
         .l-avail { background: #1e293b; border: 1px solid #475569; }
         .l-select { background: var(--neon-blue); }
         .l-book { background: #334155; }
-
-        .bus-cabin-container {
-            border: 3px solid #334155;
-            border-radius: 20px 20px 10px 10px;
-            padding: 20px;
-            background: #0b111e;
-            margin: 20px 0;
-        }
+        .bus-cabin-container { border: 3px solid #334155; border-radius: 20px 20px 10px 10px; padding: 20px; background: #0b111e; margin: 20px 0; }
         .cabin-front-header { display: flex; justify-content: space-between; padding-bottom: 15px; border-bottom: 2px dashed #334155; margin-bottom: 20px; color: var(--text-muted); font-weight: bold; font-size: 13px; letter-spacing: 1px; }
         .seat-row-grid { display: flex; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
         .seat-side-block { display: flex; gap: 8px; }
-        .seat-node {
-            width: 40px;
-            height: 40px;
-            background: #1e293b;
-            border: 1px solid #475569;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            color: var(--text-light);
-        }
+        .seat-node { width: 40px; height: 40px; background: #1e293b; border: 1px solid #475569; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--text-light); }
         .seat-node.selected { background: var(--neon-blue); color: #000; border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.4); }
         .seat-node.locked-hold { background: #f5af19; color: #000; border-color: #f5af19; cursor: not-allowed; }
         .seat-node.occupied { background: #334155; color: rgba(255,255,255,0.2); border-color: transparent; cursor: not-allowed; }
         .aisle-gap-space { width: 30px; }
-
-        /* --- SEARCHABLE DROPDOWN STYLE --- */
-        .custom-dropdown-container {
-            position: absolute;
-            z-index: 50;
-            left: 0;
-            right: 0;
-            max-height: 180px;
-            overflow-y: auto;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-        .custom-dropdown-item {
-            padding: 10px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #21262d;
-            font-size: 13px;
-            color: #c9d1d9;
-            transition: 0.2s;
-        }
-        .custom-dropdown-item:hover {
-            background: var(--neon-blue);
-            color: #000;
-            font-weight: 600;
-        }
-        .custom-dropdown-item:last-child {
-            border-bottom: none;
-        }
-
+        .custom-dropdown-container { position: absolute; z-index: 50; left: 0; right: 0; max-height: 180px; overflow-y: auto; background: #161b22; border: 1px solid #30363d; border-radius: 0 0 10px 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .custom-dropdown-item { padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #21262d; font-size: 13px; color: #c9d1d9; transition: 0.2s; }
+        .custom-dropdown-item:hover { background: var(--neon-blue); color: #000; font-weight: 600; }
+        .custom-dropdown-item:last-child { border-bottom: none; }
         .ticket-preview-wrapper { max-width: 500px; margin: 0 auto; text-align: center; }
-        #digital-ticket-canvas {
-            width: 450px;
-            background: #ffffff;
-            color: #000000;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 20px auto;
-            border: 2px solid #e2e8f0;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: left;
-        }
-        #digital-ticket-canvas::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 260px;
-            height: 260px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 1;
-        }
+        #digital-ticket-canvas { width: 450px; background: #ffffff; color: #000000; padding: 30px; border-radius: 12px; margin: 20px auto; border: 2px solid #e2e8f0; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: left; }
+        #digital-ticket-canvas::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 260px; height: 260px; background: url('images/BDBUS Group Official Logo.png') no-repeat center; background-size: contain; opacity: 0.08; pointer-events: none; z-index: 1; }
         .ticket-header-block { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 20px; position: relative; z-index: 2; }
         .ticket-logo { height: 45px; }
         .ticket-title-meta { text-align: right; }
@@ -464,200 +134,59 @@
         .ticket-data-table td.label-txt { font-weight: 600; color: #64748b; width: 40%; }
         .ticket-data-table td.val-txt { font-weight: 700; color: #0f172a; text-align: right; }
         .ticket-data-table td.highlight-val { color: #ef4444; font-size: 15px; }
-        
         .ticket-rules-box { font-size: 10px; color: #1e293b; line-height: 1.4; border-top: 1px solid #cbd5e1; padding-top: 12px; margin-bottom: 20px; position: relative; z-index: 2; background: #fef2f2; border: 1px solid #fee2e2; padding: 10px; border-radius: 6px; }
-        
         .ticket-footer-brand { background: #0f172a; padding: 15px; border-radius: 8px; text-align: center; color: #fff; position: relative; z-index: 2; }
         .ticket-footer-brand p { font-size: 11px; opacity: 0.8; margin-bottom: 8px; }
         .ticket-footer-subs { display: flex; justify-content: center; gap: 12px; }
         .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
-
-        /* --- PREMIUM UI/UX CONTINUED --- */
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
         .admin-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
-        
         .admin-notice-update-box { background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 auto 30px; }
-
-        .admin-booking-monitor-card {
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 242, 254, 0.15);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        .admin-table-container {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 15px;
-        }
-        .admin-data-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 13px;
-        }
-        .admin-data-table th, .admin-data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .admin-data-table th {
-            background: rgba(255,255,255,0.02);
-            color: var(--neon-blue);
-            font-weight: 600;
-        }
-        .admin-data-table tr:hover {
-            background: rgba(255,255,255,0.01);
-        }
-
-        .global-footer-panel {
-            background: #090d16;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding: 40px 20px;
-            text-align: center;
-            margin-top: 80px;
-            position: relative;
-            z-index: 10;
-        }
+        .admin-booking-monitor-card { background: var(--panel-bg); border: 1px solid rgba(0, 242, 254, 0.15); border-radius: 15px; padding: 25px; margin-bottom: 30px; }
+        .admin-table-container { width: 100%; overflow-x: auto; margin-top: 15px; }
+        .admin-data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        .admin-data-table th, .admin-data-table td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .admin-data-table th { background: rgba(255,255,255,0.02); color: var(--neon-blue); font-weight: 600; }
+        .admin-data-table tr:hover { background: rgba(255,255,255,0.01); }
+        .global-footer-panel { background: #090d16; border-top: 1px solid rgba(255,255,255,0.05); padding: 40px 20px; text-align: center; margin-top: 80px; position: relative; z-index: 10; }
         .social-icon-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
-        .social-link-circle {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #1e293b;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+        .social-link-circle { width: 45px; height: 45px; border-radius: 50%; background: #1e293b; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; text-decoration: none; transition: 0.3s; }
         .social-link-circle:hover { transform: translateY(-5px); background: var(--neon-blue); color: #000; }
         .footer-policy-links { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); margin-bottom: 25px; }
         .footer-policy-links a { color: var(--text-muted); text-decoration: none; }
-        .footer-creator-box {
-            background: var(--panel-bg);
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+        .footer-creator-box { background: var(--panel-bg); max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .creator-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .creator-identity { font-size: 18px; font-weight: 700; color: #fff; margin: 4px 0 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .creator-avatar-icon { width: 28px; height: 28px; border-radius: 50%; }
         .footer-subs-flex { display: flex; justify-content: center; gap: 15px; }
-
-        /* --- PREVENT CONFLICT MODAL --- */
-        .custom-welcome-modal-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 7, 12, 0.85);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        .custom-welcome-modal-card {
-            background: var(--panel-bg);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            width: 90%;
-            max-width: 420px;
-            text-align: center;
-            animation: fadeInModalEffect 0.4s ease;
-        }
-        .modal-avatar-frame {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid var(--neon-green);
-            object-fit: cover;
-            margin-bottom: 15px;
-            box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
-        }
-
-        /* --- DIGITAL DRIVING LICENCE DESIGN SYSTEM --- */
+        .custom-welcome-modal-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 7, 12, 0.85); z-index: 9999; display: none; align-items: center; justify-content: center; }
+        .custom-welcome-modal-card { background: var(--panel-bg); border: 2px solid var(--neon-blue); box-shadow: 0 0 30px rgba(0, 242, 254, 0.3); border-radius: 20px; padding: 30px; width: 90%; max-width: 420px; text-align: center; animation: fadeInModalEffect 0.4s ease; }
+        .modal-avatar-frame { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon-green); object-fit: cover; margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 255, 135, 0.2); }
         .licence-preview-wrapper { max-width: 550px; margin: 0 auto; text-align: center; }
-        #digital-licence-card {
-            width: 500px;
-            height: 310px;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #ffffff;
-            padding: 18px;
-            border-radius: 15px;
-            margin: 20px auto;
-            border: 2px solid var(--neon-blue);
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            overflow: hidden;
-            text-align: left;
-        }
-        #digital-licence-card::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 220px;
-            height: 220px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 1;
-        }
-        .licence-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
-            padding-bottom: 8px;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 2;
-        }
+        #digital-licence-card { width: 500px; height: 310px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 18px; border-radius: 15px; margin: 20px auto; border: 2px solid var(--neon-blue); position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.6); overflow: hidden; text-align: left; }
+        #digital-licence-card::before { content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 220px; height: 220px; background: url('images/BDBUS Group Official Logo.png') no-repeat center; background-size: contain; opacity: 0.12; pointer-events: none; z-index: 1; }
+        .licence-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0, 242, 254, 0.3); padding-bottom: 8px; margin-bottom: 12px; position: relative; z-index: 2; }
         .licence-flag-title { display: flex; align-items: center; gap: 8px; }
         .licence-flag { width: 30px; height: 18px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
         .licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: #f42a41; border-radius: 50%; }
         .licence-main-heading { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
         .licence-sub-heading { font-size: 9px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
-        
         .licence-body-layout { display: flex; gap: 15px; position: relative; z-index: 2; }
         .licence-photo-pane { text-align: center; width: 110px; }
         .licence-user-photo { width: 105px; height: 125px; border-radius: 6px; object-fit: cover; border: 2px solid #334155; background: #1e293b; }
         .licence-id-badge { margin-top: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--neon-blue); padding: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--neon-blue); font-weight: 700; text-align: center; border-radius: 4px; }
-        
         .licence-info-pane { flex: 1; display: grid; grid-template-columns: 1fr; gap: 4px; }
         .licence-data-row { display: flex; font-size: 11px; line-height: 1.3; }
         .licence-data-label { color: var(--text-muted); width: 120px; font-weight: 600; font-size: 10px; text-transform: uppercase; }
         .licence-data-value { color: #fff; font-weight: 600; flex: 1; }
-        
-        .licence-footer-bar {
-            position: absolute;
-            bottom: 12px;
-            left: 18px;
-            right: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 6px;
-            z-index: 2;
-        }
+        .licence-footer-bar { position: absolute; bottom: 12px; left: 18px; right: 18px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; z-index: 2; }
         .licence-auth-sign { text-align: center; }
         .licence-sign-img { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--text-muted); font-style: italic; border-bottom: 1px dashed #475569; padding-bottom: 2px; }
         .licence-auth-label { font-size: 8px; color: var(--text-muted); text-transform: uppercase; margin-top: 3px; }
-
-        @keyframes fadeInModalEffect {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        @keyframes fadeInModalEffect { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -710,7 +239,6 @@
                 <h2 id="auth-main-title">Bangladesh Bussid Unique Society</h2>
                 <p id="auth-sub-title">BDBUS OFFICIAL WEBSITE</p>
             </div>
-
             <div id="login-sub-card" class="form-card">
                 <div class="form-group">
                     <label class="lang-node" data-en="Email Address" data-bn="ইমেইল অ্যাড্রেস">Email Address</label>
@@ -729,7 +257,6 @@
                     <button class="btn-premium lang-node" data-en="Login Now" data-bn="লগইন করুন" onclick="executeLoginLogic()">Login Now</button>
                 </div>
             </div>
-
             <div id="signup-sub-card" class="form-card" style="display: none;">
                 <div class="form-group">
                     <label class="lang-node" data-en="Full Name" data-bn="পূর্ণ নাম">Full Name</label>
@@ -755,49 +282,30 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                
                 <div class="form-group" style="position: relative;">
                     <label class="lang-node" data-en="Division" data-bn="বিভাগ">Division</label>
                     <input type="text" id="reg-division" autocomplete="off" class="form-control" placeholder="Example: Dhaka / Type division...">
                     <div id="reg-division-dropdown" class="custom-dropdown-container" style="display: none;"></div>
                 </div>
-
-                <div class="form-group" style="position: relative;">
+                                <div class="form-group" style="position: relative;">
                     <label class="lang-node" data-en="District" data-bn="জেলা">District</label>
-                    <input type="text" id="reg-district" autocomplete="off" class="form-control" placeholder="Example: Cumilla / Type district...">
+                    <input type="text" id="reg-district" autocomplete="off" class="form-control" placeholder="Example: Dhaka / Type district...">
                     <div id="reg-district-dropdown" class="custom-dropdown-container" style="display: none;"></div>
-                </div>
-
-                <div class="form-group">
-                    <label class="lang-node" data-en="Facebook Profile Link" data-bn="ফেসবুক প্রোফাইল লিংক">Facebook Profile Link</label>
-                    <input type="url" id="reg-fb" class="form-control" placeholder="Example: https://facebook.com/username">
                 </div>
                 <div class="form-group">
                     <label class="lang-node" data-en="Email Address" data-bn="ইমেইল অ্যাড্রেস">Email Address</label>
-                    <input type="email" id="reg-email" class="form-control" placeholder="Example: example@mail.com">
+                    <input type="email" id="reg-email" class="form-control" placeholder="example@gmail.com">
                 </div>
                 <div class="form-group">
-                    <label class="lang-node" data-en="Set Password" data-bn="পাসওয়ার্ড সেট করুন">Set Password</label>
+                    <label class="lang-node" data-en="Password" data-bn="পাসওয়ার্ড">Password</label>
                     <div class="password-input-wrapper">
-                        <input type="password" id="reg-pass" class="form-control" placeholder="Example: ********">
+                        <input type="password" id="reg-pass" class="form-control" placeholder="••••••••">
                         <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('reg-pass', this)"></i>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="lang-node" data-en="Confirm Password" data-bn="পাসওয়ার্ড নিশ্চিত করুন">Confirm Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="reg-confpass" class="form-control" placeholder="Example: ********">
-                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('reg-confpass', this)"></i>
-                    </div>
-                </div>
-                
-                <div style="display:flex; gap:10px; align-items:center; margin:20px 0;">
-                    <input type="checkbox" id="reg-agree" style="width:18px; height:18px;">
-                    <span style="font-size:12px; color:var(--text-muted);" class="lang-node" data-en="All data is correct declaration check." data-bn="সকল তথ্য যদি সঠিক হয়ে থাকে খালি ঘরে টিক চিহ্ন দিবে।">All data is correct declaration check.</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <button class="btn-premium btn-secondary lang-node" data-en="Back to Login" data-bn="লগইনে ফিরুন" onclick="toggleAuthSubView('login')">Back to Login</button>
-                    <button class="btn-premium lang-node" data-en="Registration Submit" data-bn="রেজিস্ট্রেশন সাবমিট" onclick="executeRegistrationLogic()">Registration Submit</button>
+                <div class="flex-actions">
+                    <button class="btn-premium btn-secondary lang-node" data-en="Back to Login" data-bn="লগইন পেজে ফিরুন" onclick="toggleAuthSubView('login')">Back to Login</button>
+                    <button class="btn-premium lang-node" data-en="Register Now" data-bn="নিবন্ধন সম্পন্ন করুন" onclick="executeRegistrationLogic()">Register Now</button>
                 </div>
             </div>
         </div>
@@ -807,643 +315,508 @@
         <div class="central-branded-header">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
+            <p>BDBUS VIRTUAL HUB NETWORK</p>
         </div>
-        <h2 class="greetings-text" id="home-greeting-txt">GOOD MORNING</h2>
-
+        <div class="welcome-msg lang-node" data-en="WELCOME BACK" data-bn="স্বাগতম">WELCOME BACK</div>
+        <div class="greetings-text" id="home-greetings-user-name">User Node</div>
+        
         <div class="neon-clock">
-            <div class="neon-time" id="live-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="live-clock-date">MON, JUN 15, 2026</div>
+            <div class="neon-time" id="live-runtime-clock">00:00:00 PM</div>
+            <div class="neon-date" id="live-runtime-date">MONTH 00, 202X</div>
         </div>
 
         <div class="notice-board">
-            <span class="notice-tag">NOTICE</span>
-            <marquee id="live-marquee-node" scrollamount="6">Welcome to Bangladesh Bussid Unique Society (BDBUS)</marquee>
+            <div class="notice-tag lang-node" data-en="NOTICE" data-bn="নোটিশ">NOTICE</div>
+            <marquee id="global-scrolling-notice-node" scrollamount="5">Loading broadcast data streams from central synchronization nodes...</marquee>
         </div>
 
         <div class="carousel-container">
-            <div class="member-track" id="home-carousel-track"></div>
+            <div class="member-track" id="continuous-member-marquee-track"></div>
         </div>
 
         <div class="reward-grid">
             <div class="reward-card">
-                <h4><i class="fa-solid fa-gift" style="color:var(--neon-green)"></i> Welcome Bonus</h4>
-                <p class="lang-node" data-en="Get 5000 BDT instantly on your first signup." data-bn="প্রথমবার রেজিস্ট্রেশন করলে পাবেন ৫০০০ BDT (একটি অ্যাকাউন্ট একবারই পাবেন)">Get 5000 BDT instantly on your first signup.</p>
-                <button class="btn-premium btn-secondary" id="claim-welcome-btn" onclick="claimWelcomeRewardLogic()">Claim 5000 BDT</button>
+                <h4 class="lang-node" data-en="YouTube Community" data-bn="ইউটিউব কমিউনিটি">YouTube Community</h4>
+                <p class="lang-node" data-en="Subscribe to our official YouTube node to stay updated." data-bn="আমাদের অফিশিয়াল ইউটিউব চ্যানেলে সাবস্ক্রাইব করে যুক্ত থাকুন।">Subscribe to our official YouTube node to stay updated.</p>
+                <a href="https://youtube.com/@bdbus_official" target="_blank" class="btn-premium btn-yt"><i class="fa-brands fa-youtube"></i> Subscribe</a>
             </div>
             <div class="reward-card">
-                <h4><i class="fa-brands fa-youtube" style="color:var(--yt-red)"></i> Subscribe YouTube</h4>
-                <p class="lang-node" data-en="Subscribe M2Vai official channel to claim 10000 BDT reward." data-bn="ইউটিউব চ্যানেল সাবস্মক্রাইব করলে পাবেন ১০০০০ BDT (একটি অ্যাকাউন্ট একবারেই পাবেন)">Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
-                <button class="btn-premium btn-yt" onclick="triggerYoutubeSubscribeReward()">Subscribe Now</button>
-            </div>
-            <div class="reward-card">
-                <h4><i class="fa-solid fa-video" style="color:var(--neon-blue)"></i> Watch Video Stream</h4>
-                <p class="lang-node" data-en="Watch stream video over 1 minute to receive unlimited 3000 BDT rewards." data-bn="ভিডিও দেখলে ৩০০০ BDT (যতবার ভিডিও দেখবে ততবার পাবে)">Watch stream video over 1 minute to receive unlimited 3000 BDT rewards.</p>
-                <button class="btn-premium" onclick="triggerWatchVideoReward()"><i class="fa-solid fa-play"></i> Watch Video</button>
+                <h4 class="lang-node" data-en="Facebook Group" data-bn="ফেসবুক গ্রুপ">Facebook Group</h4>
+                <p class="lang-node" data-en="Join our active community discussions framework." data-bn="আমাদের ফেসবুক গ্রুপে যোগ দিয়ে আলোচনা ও আড্ডায় মেতে উঠুন।">Join our active community discussions framework.</p>
+                <a href="https://www.facebook.com/groups/bdbusofficial" target="_blank" class="btn-premium" style="background:#1877f2; box-shadow:0 4px 15px rgba(24,119,242,0.3);"><i class="fa-brands fa-facebook"></i> Join Group</a>
             </div>
         </div>
     </div>
 
-    <div id="profile-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="My Member Profile" data-bn="আমার মেম্বার প্রোফাইল">My Profile</h2>
-        <div class="form-card" style="max-width:500px; margin:0 auto; text-align:center;">
-            <div style="position:relative; display:inline-block; margin-bottom:20px;">
-                <img src="https://via.placeholder.com/150" id="profile-avatar-render" style="width:130px; height:130px; border-radius:50%; object-fit:cover; border:3px solid var(--neon-blue);">
-                <label for="avatar-input-file" style="position:absolute; bottom:5px; right:5px; background:var(--neon-blue); color:#000; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-                    <i class="fa-solid fa-camera"></i>
-                </label>
-                <input type="file" id="avatar-input-file" accept="image/*" style="display:none;" onchange="processAvatarUpload(event)">
+    <div id="booking-screen" class="page-screen">
+        <h3 class="lang-node" data-en="Bus Ticket Booking Grid" data-bn="বাস টিকিট বুকিং গ্রিড" style="text-align:center; margin-bottom:20px; font-family:'Orbitron',sans-serif;">Bus Ticket Booking Grid</h3>
+        <div class="booking-layout">
+            <div class="form-card" style="margin:0;">
+                <h4 class="lang-node" data-en="Route Configuration" data-bn="রুট কনফিগারেশন" style="margin-bottom:15px; color:var(--neon-blue);">Route Configuration</h4>
+                <div class="form-group" style="position:relative;">
+                    <label class="lang-node" data-en="Leaving From" data-bn="কোথা থেকে">Leaving From</label>
+                    <input type="text" id="route-from" autocomplete="off" class="form-control" placeholder="Select start point...">
+                    <div id="from-custom-dropdown" class="custom-dropdown-container" style="display:none;"></div>
+                </div>
+                <div class="form-group" style="position:relative;">
+                    <label class="lang-node" data-en="Going To" data-bn="কোথায় যাবেন">Going To</label>
+                    <input type="text" id="route-to" autocomplete="off" class="form-control" placeholder="Select destination...">
+                    <div id="to-custom-dropdown" class="custom-dropdown-container" style="display:none;"></div>
+                </div>
+                <div class="form-group">
+                    <label class="lang-node" data-en="Journey Date" data-bn="ভ্রমণের তারিখ">Journey Date</label>
+                    <input type="date" id="route-date" class="form-control">
+                </div>
+                <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:10px; border:1px dashed rgba(255,255,255,0.1); margin-top:20px;">
+                    <p style="font-size:13px; color:var(--text-muted);" class="lang-node" data-en="Calculated Fare Matrix Rate:" data-bn="হিসাবকৃত টিকিটের মূল্য:">Calculated Fare Matrix Rate:</p>
+                    <h3 style="color:var(--neon-green); font-family:'Orbitron',sans-serif; margin-top:5px;"><span id="live-calculated-fare-display">0</span> BDT</h3>
+                </div>
             </div>
-            <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Max file size: 300KB (Rounded format rendering)" data-bn="সর্বোচ্চ ফাইল সাইজ: ৩০০KB (বৃত্তাকার ফরম্যাট)">Max file size: 300KB (Rounded format rendering)</p>
-            
-            <h3 id="prof-render-name" style="font-size:22px; margin-bottom:5px;">User Name</h3>
-            <p style="color:var(--neon-blue); font-weight:bold; margin-bottom:20px;" id="prof-render-id">ID: BDBUS-1000</p>
-            
-            <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <span class="lang-node" data-en="Wallet Account Balance:" data-bn="ওয়ালেট অ্যাকাউন্ট ব্যালেন্স:">Wallet Account Balance:</span>
-                <span style="color:var(--neon-green); font-weight:700; font-size:18px;" id="prof-render-wallet">0 BDT</span>
+
+            <div class="seat-map-wrapper">
+                <div class="seat-legend-row">
+                    <div class="legend-item"><div class="legend-box l-avail"></div> <span class="lang-node" data-en="Available" data-bn="ফ্রি">Available</span></div>
+                    <div class="legend-item"><div class="legend-box l-select"></div> <span class="lang-node" data-en="Selected" data-bn="পছন্দকৃত">Selected</span></div>
+                    <div class="legend-item"><div class="legend-box l-book"></div> <span class="lang-node" data-en="Booked" data-bn="বুকড">Booked</span></div>
+                </div>
+                <div class="bus-cabin-container">
+                    <div class="cabin-front-header">
+                        <span class="lang-node" data-en="CABIN DOOR ENTRY" data-bn="ক্যাবিনের প্রবেশ পথ">CABIN DOOR ENTRY</span>
+                        <span><i class="fa-solid fa-steering-wheel"></i> DRIVER</span>
+                    </div>
+                    <div id="dynamic-bus-seat-rows-injector"></div>
+                </div>
+                <button class="btn-premium" style="width:100%; justify-content:center; margin-top:15px;" onclick="executeTicketPurchaseTransaction()"><i class="fa-solid fa-cart-shopping"></i> <span class="lang-node" data-en="Purchase Selected Ticket" data-bn="বুকিং নিশ্চিত করুন">Purchase Selected Ticket</span></button>
             </div>
-            <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block"></div>
         </div>
     </div>
 
-    <div id="password-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="সিকিউরিটি পাসওয়ার্ড পরিবর্তন">Change Password</h2>
-        <div class="form-card" style="max-width:450px; margin:0 auto;">
-            <div class="form-group">
-                <label class="lang-node" data-en="Current Password" data-bn="বর্তমান পাসওয়ার্ড">Current Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-curr" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pwd-curr', this)"></i>
+    <div id="ticket-preview-screen" class="page-screen">
+        <div class="ticket-preview-wrapper">
+            <h3 class="lang-node" data-en="Digital Manifest Ticket Verified" data-bn="ডিজিটাল টিকিট যাচাইকরণ সফল" style="font-family:'Orbitron',sans-serif; margin-bottom:10px;">Digital Manifest Ticket Verified</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;" class="lang-node" data-en="The system node secure credential layer generated the following pass asset successfully." data-bn="সিস্টেম সার্ভার থেকে সফলভাবে নিচের ডিজিটাল টিকিটটি তৈরি করা হয়েছে।">The system node secure credential layer generated the following pass asset successfully.</p>
+            
+            <div id="digital-ticket-canvas">
+                <div class="ticket-header-block">
+                    <img src="images/BDBUS Group Official Logo.png" class="ticket-logo" alt="Logo">
+                    <div class="ticket-title-meta">
+                        <h3>BDBUS OFFICIAL</h3>
+                        <p>E-TICKET MANIFEST PASS</p>
+                    </div>
+                </div>
+                <table class="ticket-data-table">
+                    <tr><td class="label-txt">PASSENGER NAME</td><td class="val-txt" id="tk-user-name">---</td></tr>
+                    <tr><td class="label-txt">MEMBERSHIP ID</td><td class="val-txt" id="tk-user-id">---</td></tr>
+                    <tr><td class="label-txt">ROUTE DESCRIPTOR</td><td class="val-txt" id="tk-route">---</td></tr>
+                    <tr><td class="label-txt">JOURNEY DATE</td><td class="val-txt" id="tk-date">---</td></tr>
+                    <tr><td class="label-txt">ALLOCATED SEAT</td><td class="val-txt" id="tk-seats" style="color:var(--yt-red); font-weight:bold;">---</td></tr>
+                    <tr><td class="label-txt">TRANSACTION FARE</td><td class="val-txt highlight-val" id="tk-fare">0 BDT</td></tr>
+                    <tr><td class="label-txt">SECURITY STATUS</td><td class="val-txt" style="color:#10b981; font-weight:bold;">SECURE/PAID</td></tr>
+                </table>
+                <div class="ticket-rules-box">
+                    <strong>TERMS & CONDITIONS MODULES:</strong><br>
+                    1. This verification node ticket is unique to the owner identifier asset.<br>
+                    2. Presenting altered cryptographic manifest documents terminates network clearance protocols instantly.
+                </div>
+                <div class="ticket-footer-brand">
+                    <p>BANGLADESH BUSSID UNIQUE SOCIETY</p>
+                    <div class="ticket-footer-subs">
+                        <span class="ticket-footer-subs">BDBUS EXCLUSIVE TRANSPORT SYSTEM</span>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="lang-node" data-en="New Password" data-bn="নতুন পাসওয়ার্ড">New Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-new" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pwd-new', this)"></i>
-                </div>
+
+            <div style="display:flex; justify-content:center; gap:15px; margin-top:25px;">
+                <button class="btn-premium btn-secondary" onclick="navigatePage('booking-screen')"><i class="fa-solid fa-rotate-left"></i> Book Another</button>
+                <button class="btn-premium" onclick="downloadDigitalTicketAsPNG()"><i class="fa-solid fa-download"></i> Download Ticket</button>
             </div>
-            <div class="form-group">
-                <label class="lang-node" data-en="Confirm Password" data-bn="পাসওয়ার্ড নিশ্চিত করুন">Confirm Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="pwd-conf" class="form-control">
-                    <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pwd-conf', this)"></i>
-                </div>
-            </div>
-            <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submit Password</button>
         </div>
     </div>
 
     <div id="licence-screen" class="page-screen">
         <div class="licence-preview-wrapper">
-            <h2 class="lang-node" data-en="Official Smart Driving Licence" data-bn="অফিসিয়াল স্মার্ট ড্রাইভিং লাইসেন্স">Official Smart Driving Licence</h2>
-            <p style="color: var(--text-muted); font-size:12px; margin-bottom:15px;" class="lang-node" data-en="Your auto-generated membership simulation driving licence permit model." data-bn="আপনার মেম্বারশিপ ডাটার ভিত্তিতে অটো-জেনারেটেড সিমুলেশন লাইসেন্স পারমিট।">Your auto-generated membership simulation driving licence permit model.</p>
-
+            <h3 class="lang-node" data-en="Digital Driving Licence Node" data-bn="ডিজিটাল ড্রাইভিং লাইসেন্স" style="font-family:'Orbitron',sans-serif; margin-bottom:10px;">Digital Driving Licence Node</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;" class="lang-node" data-en="Cryptographic authorization token valid across global community simulation infrastructure nodes." data-bn="এটি গ্লোবাল কমিউনিটি সিমুলেশন সার্ভারে ব্যবহারযোগ্য আপনার একটি বৈধ লাইসেন্স টোকেন।">Cryptographic authorization token valid across global community simulation infrastructure nodes.</p>
+            
             <div id="digital-licence-card">
                 <div class="licence-top-bar">
                     <div class="licence-flag-title">
                         <div class="licence-flag"></div>
                         <div>
-                            <h3 class="licence-main-heading lang-node" data-en="BDBUS DIGITAL MULTIPLAYER HUB" data-bn="বিডিবাস ডিজিটাল মাল্টিপ্লেয়ার হাব">BDBUS DIGITAL MULTIPLAYER HUB</h3>
-                            <p class="licence-sub-heading lang-node" data-en="DRIVING LICENCE PERMIT" data-bn="ড্রাইভিং লাইসেন্স পারমিট">DRIVING LICENCE PERMIT</p>
+                            <div class="licence-main-heading">BDBUS SIMULATOR INFRASTRUCTURE</div>
+                            <div class="licence-sub-heading">Driving Clearance Authority Licence</div>
                         </div>
                     </div>
                 </div>
-                
                 <div class="licence-body-layout">
                     <div class="licence-photo-pane">
-                        <img src="https://via.placeholder.com/150" id="dl-avatar" class="licence-user-photo" alt="Member Avatar">
-                        <div id="dl-id" class="licence-id-badge">ID: BDBUS-1001</div>
+                        <img src="https://via.placeholder.com/150" class="licence-user-photo" id="lic-user-img" alt="User Image">
+                        <div class="licence-id-badge" id="lic-id-badge">ID: BDBUS-XXXX</div>
                     </div>
-                    
                     <div class="licence-info-pane">
-                        <div class="licence-data-row"><div class="licence-data-label">NAME:</div><div class="licence-data-value" id="dl-name">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">GAME NICKNAME:</div><div class="licence-data-value" id="dl-gameid">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">BIRTH DATE:</div><div class="licence-data-value" id="dl-dob">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">GENDER:</div><div class="licence-data-value" id="dl-gender">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">MOBILE NO:</div><div class="licence-data-value" id="dl-phone">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">DIVISION:</div><div class="licence-data-value" id="dl-division">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">DISTRICT:</div><div class="licence-data-value" id="dl-district">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">VEHICLE TYPE:</div><div class="licence-data-value" style="color: var(--neon-green);">HEAVY BUSSID COACH</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">NAME:</div><div class="licence-data-value" id="lic-name">---</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">G_ID:</div><div class="licence-data-value" id="lic-gameid">---</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">D_O_B:</div><div class="licence-data-value" id="lic-dob">---</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">PHONE:</div><div class="licence-data-value" id="lic-phone">---</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">REGION:</div><div class="licence-data-value" id="lic-region">---</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label">RANK:</div><div class="licence-data-value" id="lic-role" style="color:var(--neon-blue)">---</div></div>
                     </div>
                 </div>
-                
                 <div class="licence-footer-bar">
+                    <div style="font-size:7px; color:var(--text-muted); text-transform:uppercase;">BDBUS NETWORK CORE IDENTITY ASSET PROOF</div>
                     <div class="licence-auth-sign">
-                        <div class="licence-sign-img">M2Vai Admin</div>
-                        <div class="licence-auth-label">ISSUING AUTHORITY</div>
-                    </div>
-                    <div class="licence-auth-sign" style="text-align: right;">
-                        <div class="licence-sign-img" id="dl-sign-name" style="font-family:'Poppins',sans-serif;">Holder Sign</div>
-                        <div class="licence-auth-label">HOLDER SIGNATURE</div>
+                        <div class="licence-sign-img">Emon Talukder</div>
+                        <div class="licence-auth-label">ISSUING SUPER ADMIN SIGNATURE</div>
                     </div>
                 </div>
             </div>
 
-            <button class="btn-premium btn-secondary" style="margin-top:15px; width:100%; max-width:500px; justify-content:center;" onclick="executeDrivingLicenceDownloadEngine()">
-                <i class="fa-solid fa-download"></i> <span class="lang-node" data-en="Download Driving Licence" data-bn="ড্রাইভিং লাইসেন্স ডাউনলোড করুন">Download Driving Licence</span>
-            </button>
+            <div style="display:flex; justify-content:center; gap:15px; margin-top:25px;">
+                <button class="btn-premium" onclick="downloadDigitalLicenceCardAsPNG()"><i class="fa-solid fa-download"></i> Download Licence</button>
+            </div>
         </div>
     </div>
 
-    <div id="booking-screen" class="page-screen">
-        <div class="central-branded-header">
-            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
-            <h2>Bangladesh Bussid Unique Society</h2>
-            <p style="font-weight: 700; font-size: 14px; color: #fff; letter-spacing: 1px; margin-top: 5px;">BDBUS MULTIPLAYER TICKET BOOKING</p>
-        </div>
-
-        <div class="neon-clock">
-            <div class="neon-time" id="booking-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="booking-clock-date">MON, JUN 15, 2026</div>
-        </div>
-
-        <div class="form-card" style="max-width:650px; margin:20px auto;">
-            <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
-                <div class="form-group" style="position: relative;">
-                    <label>From</label>
-                    <input type="text" id="route-from" autocomplete="off" class="form-control" placeholder="Search or type district...">
-                    <div id="from-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
-                </div>
-                <div class="form-group" style="position: relative;">
-                    <label>To</label>
-                    <input type="text" id="route-to" autocomplete="off" class="form-control" placeholder="Search or type district...">
-                    <div id="to-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
-                </div>
-            </div>
-            <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
-                <div class="form-group"><label>Journey Date</label><input type="date" id="route-date" class="form-control"></div>
+    <div id="password-screen" class="page-screen">
+        <div class="auth-container" style="margin-top:30px;">
+            <div class="form-card">
+                <h3 class="lang-node" data-en="Modify Account Password Key" data-bn="অ্যাকাউন্টের পাসওয়ার্ড পরিবর্তন" style="margin-bottom:20px; font-family:'Orbitron',sans-serif; color:var(--neon-blue);">Modify Account Password Key</h3>
                 <div class="form-group">
-                    <label>Journey Time</label>
-                    <select id="route-time" class="form-control">
-                        <option value="10:00 AM — Morning Trip">10:00 AM Morning Trip</option>
-                        <option value="03:00 PM — Afternoon Trip">03:00 PM Afternoon Trip</option>
-                        <option value="11:00 PM — Night Trip">11:00 PM Night Trip</option>
-                        <option value="12:00 AM — Midnight Trip">12:00 AM Midnight Trip</option>
-                        <option value="01:00 AM — Late Night Trip">01:00 AM Late Night Trip</option>
-                    </select>
+                    <label class="lang-node" data-en="Current Secure Password" data-bn="বর্তমান সচল পাসওয়ার্ড">Current Secure Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="pw-old" class="form-control" placeholder="••••••••">
+                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pw-old', this)"></i>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" style="margin-top:20px;">
-                <label>Bus Type Selection</label>
-                <select id="route-bustype" class="form-control" onchange="calculateFareSystemLogic()">
-                    <option value="Non-AC Coach">Non - AC Coach</option>
-                    <option value="Premium AC Coach">Premium AC Coach</option>
-                </select>
-            </div>
-
-            <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin:25px 0 15px;">
-                <span>Estimated Ticket Fare Rate:</span>
-                <span style="color:var(--neon-blue); font-weight:700; font-size:20px;" id="booking-fare-render">0 BDT</span>
-            </div>
-
-            <div class="custom-gaming-notice">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <div>
-                    <span class="notice-heading">⚠️ Important Notice</span><br>
-                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
-                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
+                <div class="form-group">
+                    <label class="lang-node" data-en="New Secure Password Definition" data-bn="নতুন সুরক্ষিত পাসওয়ার্ড">New Secure Password Definition</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="pw-new" class="form-control" placeholder="••••••••">
+                        <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pw-new', this)"></i>
+                    </div>
                 </div>
-            </div>
-
-            <div style="text-align: center; margin-top:20px;">
-                <button class="btn-premium" onclick="openSeatSelectionEngine()"><i class="fa-solid fa-couch"></i> 🪑 Select Seat 💺</button>
+                <button class="btn-premium" style="width:100%; justify-content:center; margin-top:15px;" onclick="executePasswordModificationEngine()"><i class="fa-solid fa-shield-halved"></i> <span class="lang-node" data-en="Commit Password Update" data-bn="পাসওয়ার্ড আপডেট নিশ্চিত করুন">Commit Password Update</span></button>
             </div>
         </div>
     </div>
 
-    <div id="seat-screen" class="page-screen">
-        <div class="central-branded-header">
-            <img src="images/BDBUS Group Official Logo.png" alt="Logo">
-            <h2>Bangladesh Bussid Unique Society</h2>
-            <p id="seat-title-coach-type">Seating Plan Configuration Layout</p>
-        </div>
-
-        <div class="neon-clock">
-            <div class="neon-time" id="seat-clock-digits">00:00:00 AM</div>
-            <div class="neon-date" id="seat-live-date-node">MON, JUN 15, 2026</div>
-        </div>
-
-        <div class="seat-map-wrapper">
-            <div class="seat-legend-row">
-                <div class="legend-item"><div class="legend-box l-avail"></div><span>Available</span></div>
-                <div class="legend-item"><div class="legend-box l-select"></div><span>Selected</span></div>
-                <div class="legend-item"><div class="legend-box l-book"></div><span>Booking</span></div>
-            </div>
-
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Select 1 seat. Selected seat holds locked for 2 minutes." data-bn="১টি সিট সিলেক্ট করুন। নির্বাচিত সিট ২ মিনিটের জন্য হোল্ড লক থাকবে।">Select 1 seat. Selected holds for 2 mins.</p>
-            
-            <div class="bus-cabin-container" id="dynamic-cabin-root"></div>
-
-            <div style="background:#1e293b; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin:15px 0;">
-                <span class="lang-node" data-en="Total Calculated Fare:" data-bn="মোট নির্ধারিত ভাড়া:">Total Calculated Fare:</span>
-                <span style="color:var(--neon-green); font-weight:700;" id="seat-calculated-total-fare">0 BDT</span>
-            </div>
-
-            <div class="custom-gaming-notice" style="text-align: left;">
-                <div>
-                    <span class="notice-heading">⚠️ Important Notice</span><br>
-                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
-                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
+    <div id="profile-screen" class="page-screen">
+        <div class="auth-container" style="margin-top:20px; max-width:550px;">
+            <div class="form-card" style="text-align:center;">
+                <img src="https://via.placeholder.com/150" id="prof-avatar-display" class="modal-avatar-frame" style="margin:0 auto 15px;" alt="Profile Picture">
+                <h3 id="prof-name-display" style="font-size:22px; margin-bottom:4px;">---</h3>
+                <p id="prof-id-display" style="color:var(--neon-blue); font-family:'Orbitron',sans-serif; font-size:14px; margin-bottom:25px;">ID: BDBUS-XXXX</p>
+                
+                <div style="text-align:left; background:rgba(0,0,0,0.2); padding:20px; border-radius:12px; border:1px solid rgba(255,255,255,0.05); margin-bottom:25px; display:grid; grid-template-columns:1fr; gap:12px; font-size:14px;">
+                    <div><strong style="color:var(--text-muted)">Game Identifier Account:</strong> <span id="prof-gameid" style="float:right; font-weight:600;">---</span></div>
+                    <div><strong style="color:var(--text-muted)">Registered Communication Line:</strong> <span id="prof-phone" style="float:right; font-weight:600;">---</span></div>
+                    <div><strong style="color:var(--text-muted)">Network Allocation Role:</strong> <span id="prof-role" style="float:right; color:var(--neon-green); font-weight:700;">---</span></div>
+                    <div><strong style="color:var(--text-muted)">Financial Node Balance:</strong> <span id="prof-wallet" style="float:right; color:var(--neon-blue); font-weight:700;">0 BDT</span></div>
+                    <div><strong style="color:var(--text-muted)">Geographic Regional Tag:</strong> <span id="prof-region" style="float:right; font-weight:600;">---</span></div>
                 </div>
-            </div>
 
-            <button class="btn-premium" style="width:100%; justify-content:center;" onclick="executeTicketConfirmationEngine()">Confirm Ticket</button>
+                <div class="form-group" style="text-align:left;">
+                    <label class="lang-node" data-en="Update Avatar Node Photo URL" data-bn="প্রোফাইল পিকচার লিংক আপডেট করুন">Update Avatar Node Photo URL</label>
+                    <input type="text" id="profile-avatar-url-input" class="form-control" placeholder="https://image-link-location.com/pic.jpg">
+                </div>
+                <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executeProfileAvatarUrlUpdate()"><i class="fa-solid fa-image"></i> <span class="lang-node" data-en="Save Profile Photo Node" data-bn="ছবি সংরক্ষণ করুন">Save Profile Photo Node</span></button>
+            </div>
         </div>
     </div>
 
-    <div id="ticket-view-screen" class="page-screen">
-        <div class="ticket-preview-wrapper">
-            <h2 class="lang-node" data-en="Your Digital E-Ticket" data-bn="আপনার ডিজিটাল ই-টিকিট">Your Digital E-Ticket</h2>
-            <p style="color: var(--text-muted); font-size:12px; margin-bottom:15px;" class="lang-node" data-en="Review your ticket properties data sheet module below." data-bn="নিচে আপনার টিকিটের প্রোপার্টিজ ডাটা শিট ভিউ দেখে নিন।">Review ticket below.</p>
-
-            <div id="digital-ticket-canvas">
-                <div class="ticket-header-block">
-                    <img src="images/BDBUS Group Official Logo.png" class="ticket-logo" alt="Logo">
-                    <div class="ticket-title-meta">
-                        <h3>BDBUS DIGITAL TICKET</h3>
-                        <p>Official Online Counter</p>
+    <div id="contact-screen" class="page-screen">
+        <div class="auth-container" style="max-width:600px; margin-top:30px;">
+            <div class="form-card" style="text-align:center;">
+                <h3 class="lang-node" data-en="BDBUS Central Matrix Contacts" data-bn="যোগাযোগ মাধ্যম সমূহ" style="font-family:'Orbitron',sans-serif; margin-bottom:15px; color:var(--neon-blue)">BDBUS Central Matrix Contacts</h3>
+                <p class="lang-node" data-en="If you encounter cryptographic transactional errors or framework runtime loops, signal the operational staff grid nodes immediately for technical remediation protocols." data-bn="যদি আপনি কোনো সমস্যা বা সিস্টেমে জটিলতা অনুভব করেন, তবে আমাদের অফিশিয়াল এডমিন প্যানেলের সাথে নিচের মাধ্যমে যোগাযোগ করতে পারেন।" style="font-size:13px; color:var(--text-muted); margin-bottom:30px;">If you encounter cryptographic transactional errors or framework runtime loops, signal the operational staff grid nodes immediately for technical remediation protocols.</p>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; text-align:left;">
+                    <div style="background:#1e293b; padding:15px; border-radius:10px; border-left:4px solid var(--neon-blue);">
+                        <h5 style="color:var(--neon-blue); margin-bottom:4px;">Emon Talukder</h5>
+                        <p style="font-size:12px; color:var(--text-muted);">Root Super Admin</p>
+                        <p style="font-size:11px; margin-top:8px; color:var(--neon-green);">Network Owner Node</p>
                     </div>
-                </div>
-                <table class="ticket-data-table">
-                    <tr><td class="label-txt">Member ID:</td><td class="val-txt" id="tk-mid">BDBUS-1001</td></tr>
-                    <tr><td class="label-txt">Full Name:</td><td class="val-txt" id="tk-name">-</td></tr>
-                    <tr><td class="label-txt">Game Nickname / ID:</td><td class="val-txt" id="tk-gid">-</td></tr>
-                    <tr><td class="label-txt">Mobile No:</td><td class="val-txt" id="tk-phone">-</td></tr>
-                    <tr><td class="label-txt">From:</td><td class="val-txt" id="tk-from">-</td></tr>
-                    <tr><td class="label-txt">To:</td><td class="val-txt" id="tk-to">-</td></tr>
-                    <tr><td class="label-txt">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
-                    <tr><td class="label-txt">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
-                    <tr><td class="label-txt">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
-                    <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS</td></tr>
-                    <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">7531</td></tr>
-                    <tr><td class="label-txt">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
-                </table>
-                <div class="ticket-rules-box">
-                    <strong>⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:</strong><br>
-                    • <b>EN:</b> Gaming room passwords must not be shared under any circumstances. Ensure a stable internet connection. Intentional ramming, toxic behavior, or hacking tools will result in a permanent account ban. Drive realistically.<br>
-                    • <b>বাংলা:</b> গেম রুমের পাসওয়ার্ড কোনোভাবেই কারো কাছে শেয়ার করা যাবে না। ইন্টারনেট কানেকশন অবশ্যই ভালো থাকতে হবে। খেলার সময় কোনো প্রকার গালিগালাজ বা বাজে ব্যবহার করা যাবে না। রিয়েল ড্রাইভিং করতে হবে এবং কোন ধরনের হ্যাক বা স্ক্রিপ্ট ব্যবহার করে খেলা সম্পূর্ণ নিষিদ্ধ।
-                </div>
-                <div class="ticket-footer-brand">
-                    <p>WEBSITE CREATED BY <strong>M2Vai</strong></p>
-                    <div class="ticket-footer-subs">
-                        <span class="ticket-sub-badge">M2Vai</span>
-                        <span class="ticket-sub-badge" style="background:#555;">Traveller</span>
+                    <div style="background:#1e293b; padding:15px; border-radius:10px; border-left:4px solid var(--neon-green);">
+                        <h5 style="color:var(--neon-green); margin-bottom:4px;">BDBUS Support System</h5>
+                        <p style="font-size:12px; color:var(--text-muted);">24/7 Automated Buffer</p>
+                        <p style="font-size:11px; margin-top:8px; color:var(--neon-blue)">support@bdbus.net</p>
                     </div>
                 </div>
             </div>
-
-            <button class="btn-premium btn-secondary" style="margin-top:15px; width:100%; max-width:450px; justify-content:center;" onclick="executeTicketDownloadAndRedirect()"><i class="fa-solid fa-download"></i> Ticket & Download (HD)</button>
         </div>
     </div>
 
     <div id="admin-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:25px;" class="lang-node" data-en="Admin Operational Console" data-bn="এডমিন অপারেশনাল কনসোল">Admin Panel</h2>
+        <h3 class="lang-node" data-en="Central Security Control Matrix Dashboard" data-bn="এডমিন সিকিউরিটি ড্যাশবোর্ড" style="text-align:center; font-family:'Orbitron',sans-serif; margin-bottom:25px; color:#ef4444;">Central Security Control Matrix Dashboard</h3>
         
-        <div class="admin-notice-update-box" id="admin-notice-manager-wrapper" style="display: none;">
-            <h4 style="margin-bottom: 10px; color: var(--neon-blue);"><i class="fa-solid fa-bullhorn"></i> Live Notice Board Update Control</h4>
+        <div class="admin-notice-update-box">
+            <h4 class="lang-node" data-en="Global Scroll Broadcast Controller" data-bn="গ্লোবাল স্ক্রলিং নোটিশ কন্ট্রোলার" style="margin-bottom:12px; color:var(--neon-blue);">Global Scroll Broadcast Controller</h4>
             <div class="form-group">
-                <label>System Notice Text Content</label>
-                <textarea id="admin-notice-input-field" class="form-control" rows="3" style="resize: none;"></textarea>
+                <input type="text" id="admin-notice-input" class="form-control" placeholder="Enter target raw string ticker notice layout broadcast to users workspace nodes...">
             </div>
-            <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
+            <button class="btn-premium" style="padding:10px 20px; font-size:13px;" onclick="adminBroadcastNoticeUpdateEngine()"><i class="fa-solid fa-bullhorn"></i> Deploy Notice Stream</button>
         </div>
 
         <div class="admin-booking-monitor-card">
-            <h4 style="color: var(--neon-blue); margin-bottom: 5px;"><i class="fa-solid fa-chair"></i> Live Seat Bookings Dashboard</h4>
-            <p style="font-size: 11px; color: var(--text-muted);">মেম্বারদের বুকিং করা লাইভ সিট ডাটা মনিটর এবং রিসেট কন্ট্রোল প্যানেল।</p>
+            <h4 class="lang-node" data-en="Live Synchronized Active Reservation Tracks" data-bn="লাইভ একটিভ টিকিট বুকিং মনিটর" style="color:var(--neon-green); font-family:'Orbitron',sans-serif;"><i class="fa-solid fa-eye"></i> Live Synchronized Active Reservation Tracks</h4>
             <div class="admin-table-container">
                 <table class="admin-data-table">
                     <thead>
                         <tr>
-                            <th>User Details</th>
-                            <th>Coach & Seat Key</th>
-                            <th>Lock Status</th>
-                            <th>Action</th>
+                            <th>Seat Node ID</th>
+                            <th>Owner Member ID</th>
+                            <th>Passenger Real Identity</th>
+                            <th>Assigned Ticket Value Route</th>
+                            <th>Allocation Expiry Date</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-live-bookings-tbody">
-                        </tbody>
+                    <tbody id="admin-live-bookings-table-rows">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No active real-time transaction pipelines captured on runtime tracks data logs.</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 30px;">
-            <button class="btn-premium" style="background: var(--btn-gradient-2); color: #fff;" onclick="loadAllRegisteredMembersList()"><i class="fa-solid fa-users"></i> View All Registered Members</button>
-        </div>
-
         <div class="admin-search-wrapper">
-            <input type="text" id="admin-search-input" class="form-control" placeholder="Search Member ID (e.g. 1001)">
-            <button class="btn-premium" onclick="executeAdminSearchLogic()">Search</button>
+            <input type="text" id="admin-search-input" class="form-control" placeholder="Search accounts database by unique ID or string matching parameters..." oninput="executeAdminSearchLogic()">
         </div>
 
-        <div class="admin-grid" id="admin-user-cards-grid"></div>
-    </div>
-
-    <div id="contact-screen" class="page-screen">
-        <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Official Management Team" data-bn="অফিসিয়াল ম্যানেজমেন্ট টিম">Contact Panel</h2>
-        <div class="admin-grid" id="contact-team-grid"></div>
+        <div class="admin-grid" id="admin-users-grid"></div>
     </div>
 
     <footer class="global-footer-panel" id="main-global-footer" style="display: none;">
         <div class="social-icon-row">
-            <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://discord.gg/GJ2F36gE8D" target="_blank" class="social-link-circle"><i class="fa-brands fa-discord"></i></a>
-            <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle"><i class="fa-solid fa-envelope"></i></a>
+            <a href="https://www.facebook.com/groups/bdbusofficial" target="_blank" class="social-link-circle"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://youtube.com/@bdbus_official" target="_blank" class="social-link-circle" style="background:#ff0000;"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="social-link-circle" style="background:#25d366;"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
         <div class="footer-policy-links">
-            <a href="#">Privacy Policy</a>
-            <span>|</span>
-            <a href="#">Terms & Conditions</a>
-            <span>|</span>
-            <a href="#">Refund Policy</a>
+            <a href="#" class="lang-node" data-en="Privacy Protocols" data-bn="গোপনীয়তা নীতি">Privacy Protocols</a> | 
+            <a href="#" class="lang-node" data-en="Terms of Service Node" data-bn="ব্যবহারের শর্তাবলী">Terms of Service Node</a> | 
+            <a href="#" class="lang-node" data-en="Community Guidelines" data-bn="কমিউনিটি নির্দেশিকা">Community Guidelines</a>
         </div>
         <div class="footer-creator-box">
-            <div class="creator-title">Website Created By</div>
+            <div class="creator-title">SYSTEM PLATFORM ARCHITECT CREATOR</div>
             <div class="creator-identity">
-                <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-avatar-icon" onerror="this.src='https://via.placeholder.com/30'">
-                M2Vai
+                <img src="images/BDBUS Group Official Logo.png" class="creator-avatar-icon" alt="Creator Photo">
+                Emon Talukder
             </div>
             <div class="footer-subs-flex">
-                <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px;">
-                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai
-                </a>
-                <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px; background:#475569;">
-                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller M2Vai
-                </a>
+                <span class="ticket-footer-subs" style="background:var(--neon-blue); color:#000;">DEVELOPMENT ROOT ADMIN</span>
+                <span class="ticket-footer-subs" style="background:#334155;">VERSION 2.5.0 (CLOUD SECURE)</span>
             </div>
         </div>
     </footer>
 
     <script>
-        const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
-        let db = JSON.parse(localStorage.getItem('bdbus_local_db')) || {
-            users: [],
-            notices: "Welcome to BDBUS Official Ticket Counter Simulator Hub!",
-            occupiedSeats: {}, 
-            sysConfigIdCounter: 1000
+        // --- FIREBASE CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAz...",
+            authDomain: "bdbus-6ec05.firebaseapp.com",
+            projectId: "bdbus-6ec05",
+            storageBucket: "bdbus-6ec05.appspot.com",
+            messagingSenderId: "956327330541",
+            appId: "1:956327330541:web:96eef6a0ce345098bd8215"
         };
 
-        let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
-        let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en'; // প্রাথমিক ভাষা সবসময় ইংরেজি
-        let currentlyChosenSeatNode = null;
-        let selectedFareGlobalRate = 0;
-        
-        let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
-
-        // বাংলাদেশের ৮টি বিভাগ ও ৬৪টি জেলার ডাটা অ্যারে
-        const bangladeshDivisions = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
-        const bangladeshDistricts = [
-            "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
-            "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", 
-            "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", 
-            "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", 
-            "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", 
-            "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", 
-            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
-        ];
-
-        function verifyDatabaseStructureSeeding() {
-            let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
-            if (!adminCheck) {
-                db.users.push({
-                    id: db.sysConfigIdCounter++,
-                    name: "M2Vai Admin",
-                    gameid: "M2Vai",
-                    dob: "1995-01-01",
-                    phone: "01878335098",
-                    gender: "Male",
-                    division: "Dhaka",
-                    district: "Dhaka",
-                    fb: "https://facebook.com/groups/771005197556072/",
-                    email: SUPER_ADMIN_EMAIL,
-                    pass: "admin123",
-                    role: "Admin",
-                    wallet: 50000,
-                    avatar: "https://via.placeholder.com/150",
-                    isBanned: false,
-                    claimedWelcome: true,
-                    claimedSubs: true
-                });
-                saveDataEngine();
-            }
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
+        const fsDb = firebase.firestore();
 
-        function saveDataEngine() {
-            localStorage.setItem('bdbus_local_db', JSON.stringify(db));
-        }
+        // Core App Database Layer Variables
+        let db = {
+            users: [],
+            occupiedSeats: {},
+            globalNotice: "Welcome to Bangladesh Bussid Unique Society Framework System Server Hub Node Cluster Network!"
+        };
 
-        function initialClockHeartbeatEngine() {
-            setInterval(() => {
-                const now = new Date();
-                let hrs = now.getHours();
-                const mins = String(now.getMinutes()).padStart(2, '0');
-                const secs = String(now.getSeconds()).padStart(2, '0');
-                const ampm = hrs >= 12 ? 'PM' : 'AM';
-                hrs = hrs % 12;
-                hrs = hrs ? hrs : 12;
-                const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
-                
-                const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-                const months = ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR', 'MAY'];
-                const dateString = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+        let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_session')) || null;
+        let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+        let internalNavigationHistoryArray = ['auth-screen'];
 
-                if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
-                if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
-                if(document.getElementById('booking-clock-digits')) document.getElementById('booking-clock-digits').innerText = timeString;
-                if(document.getElementById('booking-clock-date')) document.getElementById('booking-clock-date').innerText = dateString;
-                if(document.getElementById('seat-clock-digits')) document.getElementById('seat-clock-digits').innerText = timeString;
-                if(document.getElementById('seat-live-date-node')) document.getElementById('seat-live-date-node').innerText = dateString;
+        const bangladeshDistricts = ["Dhaka","Chittagong","Sylhet","Rajshahi","Khulna","Barisal","Rangpur","MymensingH","Comilla","Brahmanbaria","Chandpur","Lakshmipur","Noakhali","Feni","Coxs Bazar","Bandarban","Rangamati","Khagrachhari","Gazipur","Manikganj","Munshiganj","Narayanganj","Narsingdi","Tangail","Faridpur","Gopalganj","Madaripur","Rajbari","Shariatpur","Cherpur","Netrokona","Jamalpur","Natore","Sirajganj","Pabna","Bograw","Joypurhat","Naogaon","Chapai Nawabganj","Kurigram","Gaibandha","Lalmonirhat","Dinajpur","Nilphamari","Panchagarh","Thakurgaon","Jessore","Jhenaidah","Magura","Narail","Kushtia","Chuadanga","Meherpur","Satkhira","Bagerhat","Bhola","Jhalokati","Pirojpur","Barguna","PatuaKhali","Sunamganj","Habiganj","Moulvibazar"];
+        const bangladeshDivisions = ["Dhaka","Chittagong","Sylhet","Rajshahi","Khulna","Barisal","Rangpur","Mymensingh"];
+        const busSeatLabelsListPool = ["A1","A2","A3","A4","B1","B2","B3","B4","C1","C2","C3","C4","D1","D2","D3","D4","E1","E2","E3","E4","F1","F2","F3","F4","G1","G2","G3","G4","H1","H2","H3","H4","I1","I2","I3","I4","J1","J2","J3","J4","VIP"];
+        let temporarilySelectedSeatsTrackingArray = [];
 
-                let greeting = "GOOD MORNING";
-                if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
-                else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
-                else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
-                if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
-
-                evaluateSeatLockTimerExpirations();
-            }, 1000);
-        }
-
-        function checkSessionTimeoutRules() {
-            if (activeUserSession) {
-                let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
-                if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
-                    alert("Session expired! 30 minutes timeout reached.");
-                    executeLogoutAction();
+        // --- CLOUD FIREBASE SYNC IMPLEMENTATION ---
+        function startFirebaseRealtimeSync() {
+            // ১. লাইভ নোটিশ আপডেট আনা
+            fsDb.collection("system").doc("notice").onSnapshot((doc) => {
+                if (doc.exists()) {
+                    db.globalNotice = doc.data().text || db.globalNotice;
                 }
-            }
-        }
+                const marqueeNode = document.getElementById('global-scrolling-notice-node');
+                if(marqueeNode) marqueeNode.innerText = db.globalNotice;
+            });
 
-        // পাসওয়ার্ড ইনপুট বক্সের চোখ আইকন হ্যান্ডলার ফাংশন
-        function togglePasswordInputVisibility(inputId, iconEl) {
-            const field = document.getElementById(inputId);
-            if(field.type === "password") {
-                field.type = "text";
-                iconEl.classList.remove('fa-eye');
-                iconEl.classList.add('fa-eye-slash');
-            } else {
-                field.type = "password";
-                iconEl.classList.remove('fa-eye-slash');
-                iconEl.classList.add('fa-eye');
-            }
-        }
+            // ২. সব ইউজারদের রিয়েল-টাইম ডাটা ক্লাউড থেকে সিঙ্ক করা
+            fsDb.collection("users").onSnapshot((snapshot) => {
+                let syncedUsers = [];
+                snapshot.forEach((doc) => { syncedUsers.push(doc.data()); });
+                db.users = syncedUsers;
 
-        function navigatePage(screenId, saveHistory = true) {
-            toggleSidebarMenu(false);
-            sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
-            
-            const backBtn = document.getElementById('global-back-nav-btn');
-            const menuBtn = document.getElementById('global-menu-trigger-btn');
-            const navControls = document.getElementById('header-nav-controls');
-            const emptySpace = document.getElementById('header-empty-space');
+                // যদি ইউজার ডাটাবেজ খালি থাকে তবে রুট সুপার এডমিন সিড করা
+                if (db.users.length === 0) {
+                    seedRootSuperAdminAccountNode();
+                }
 
-            if(!activeUserSession || screenId === 'auth-screen') {
-                if(navControls) navControls.style.display = 'none';
-                if(emptySpace) emptySpace.style.display = 'block';
-                if(backBtn) backBtn.style.display = 'none';
-                if(menuBtn) menuBtn.style.display = 'none';
-            } else if (screenId === 'home-screen') {
-                if(navControls) navControls.style.display = 'flex';
-                if(emptySpace) emptySpace.style.display = 'none';
-                if(backBtn) backBtn.style.display = 'none';
-                if(menuBtn) menuBtn.style.display = 'block';
-                if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
-            } else {
-                if(navControls) navControls.style.display = 'flex';
-                if(emptySpace) emptySpace.style.display = 'none';
-                if(backBtn) backBtn.style.display = 'flex'; 
-                if(menuBtn) menuBtn.style.display = 'block';
-                
-                if(saveHistory) {
-                    if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
-                        internalNavigationHistoryArray.push(screenId);
+                // একটিভ সেশন সিঙ্ক রাখা
+                if (activeUserSession) {
+                    let updatedUserNode = db.users.find(u => u.id === activeUserSession.id);
+                    if (updatedUserNode) {
+                        if (updatedUserNode.isBanned) {
+                            alert("This user node has been explicitly restricted by root server administrators.");
+                            executeLogoutAction();
+                            return;
+                        }
+                        activeUserSession = updatedUserNode;
+                        sessionStorage.setItem('bdbus_session', JSON.stringify(updatedUserNode));
                     }
                 }
-            }
-            
-            sessionStorage.setItem('bdbus_nav_history', JSON.stringify(internalNavigationHistoryArray));
 
-            document.querySelectorAll('.page-screen').forEach(scr => scr.classList.remove('active'));
-            const activeTargetScreen = document.getElementById(screenId);
-            if(activeTargetScreen) activeTargetScreen.classList.add('active');
-            
-            if (screenId === 'home-screen') renderHomeMembersCarousel();
-            if (screenId === 'profile-screen') renderUserProfileView();
-            if (screenId === 'admin-screen') renderAdminPanelDashboard();
-            if (screenId === 'contact-screen') renderContactTeamPanel();
-            if (screenId === 'licence-screen') renderDigitalLicenceData();
+                renderContinuousMemberMarqueeTrack();
+                renderAdminPanelDashboard();
+            });
+
+            // ৩. সিট বুকিং ট্র্যাকিং লাইভ সিঙ্ক করা
+            fsDb.collection("system").doc("occupiedSeats").onSnapshot((doc) => {
+                db.occupiedSeats = doc.exists() ? doc.data() : {};
+                buildDynamicBusSeatMapGrid();
+                renderLiveBookingsMonitorTable();
+            });
         }
 
-        function executeHardwareBackTrigger() {
-            if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
-                return; 
-            }
-            internalNavigationHistoryArray.pop(); 
-            const targetPreviousScreenId = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] || 'home-screen';
-            navigatePage(targetPreviousScreenId, false);
+        function seedRootSuperAdminAccountNode() {
+            let rootAdmin = {
+                id: 1000, name: "Emon Talukder", gameId: "BDBUS_OWNER", dob: "2000-01-01",
+                phone: "+8801700000000", gender: "Male", division: "Dhaka", district: "Dhaka",
+                email: "admin@bdbus.com", pass: "admin1234", role: "Admin", wallet: 999999,
+                avatar: "images/BDBUS Group Official Logo.png", isBanned: false
+            };
+            fsDb.collection("users").doc("1000").set(rootAdmin);
         }
 
-        function toggleSidebarMenu(open) {
-            const menu = document.getElementById('sidebar-drawer-menu');
-            if (open) menu.classList.add('active');
-            else menu.classList.remove('active');
+        function updateSingleUserInCloud(userObj) {
+            if(!userObj || !userObj.id) return;
+            fsDb.collection("users").doc(userObj.id.toString()).set(userObj, { merge: true });
         }
 
-        function toggleAuthSubView(view) {
-            const mainTitle = document.getElementById('auth-main-title');
-            const subTitle = document.getElementById('auth-sub-title');
-            if(view === 'signup') {
+        function updateOccupiedSeatsInCloud() {
+            fsDb.collection("system").doc("occupiedSeats").set(db.occupiedSeats);
+        }
+
+        function adminBroadcastNoticeUpdateEngine() {
+            let textVal = document.getElementById('admin-notice-input').value.trim();
+            if(!textVal) return;
+            fsDb.collection("system").doc("notice").set({ text: textVal })
+            .then(() => {
+                alert("Global operational broadcast notice updated in data streams.");
+                document.getElementById('admin-notice-input').value = '';
+            });
+        }
+                // --- CORE LOGIC & FUNCTIONS MODULES ---
+        function toggleAuthSubView(mode) {
+            if(mode === 'signup') {
                 document.getElementById('login-sub-card').style.display = 'none';
                 document.getElementById('signup-sub-card').style.display = 'block';
-                mainTitle.innerText = "Bangladesh Bussid Unique Society";
-                subTitle.innerText = "BDBUS REGISTRATION FORM";
             } else {
-                document.getElementById('login-sub-card').style.display = 'block';
                 document.getElementById('signup-sub-card').style.display = 'none';
-                mainTitle.innerText = "Bangladesh Bussid Unique Society";
-                subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
+                document.getElementById('login-sub-card').style.display = 'block';
+            }
+        }
+
+        function togglePasswordInputVisibility(id, iconNode) {
+            const input = document.getElementById(id);
+            if(input.type === 'password') {
+                input.type = 'text';
+                iconNode.className = 'fa-solid fa-eye-slash password-toggle-icon';
+            } else {
+                input.type = 'password';
+                iconNode.className = 'fa-solid fa-eye password-toggle-icon';
             }
         }
 
         function executeRegistrationLogic() {
-            const name = document.getElementById('reg-name').value.trim();
-            const gameid = document.getElementById('reg-gameid').value.trim();
-            const dob = document.getElementById('reg-dob').value;
-            const phone = document.getElementById('reg-phone').value.trim();
-            const gender = document.getElementById('reg-gender').value;
-            const division = document.getElementById('reg-division').value.trim();
-            const district = document.getElementById('reg-district').value.trim();
-            const fb = document.getElementById('reg-fb').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-pass').value;
-            const confpass = document.getElementById('reg-confpass').value;
-            const agree = document.getElementById('reg-agree').checked;
+            let name = document.getElementById('reg-name').value.trim();
+            let gameId = document.getElementById('reg-gameid').value.trim();
+            let dob = document.getElementById('reg-dob').value;
+            let phone = document.getElementById('reg-phone').value.trim();
+            let gender = document.getElementById('reg-gender').value;
+            let division = document.getElementById('reg-division').value.trim();
+            let district = document.getElementById('reg-district').value.trim();
+            let email = document.getElementById('reg-email').value.trim();
+            let pass = document.getElementById('reg-pass').value.trim();
 
-            if(!name || !gameid || !dob || !phone || !email || !pass || !division || !district) { alert("Please complete all fields!"); return; }
-            if(pass !== confpass) { alert("Passwords do not match!"); return; }
-            if(!agree) { alert("Please verify declarations checklist authorization."); return; }
-            if(db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
+            if(!name || !gameId || !dob || !phone || !division || !district || !email || !pass) {
+                alert("All registration parameter blocks must be filled."); return;
+            }
+
+            let emailExists = db.users.some(u => u.email.toLowerCase() === email.toLowerCase());
+            if(emailExists) { alert("This credential identifier email is already indexed."); return; }
+
+            // জেনারেট ইউনিক মেম্বার আইডি
+            let nextId = db.users.length > 0 ? Math.max(...db.users.map(u => u.id)) + 1 : 1001;
+            if(nextId < 1001) nextId = 1001;
 
             let newUser = {
-                id: db.sysConfigIdCounter++,
-                name, gameid, dob, phone, gender, division, district, fb, email, pass,
-                role: (email === SUPER_ADMIN_EMAIL) ? "Admin" : "Regular Member",
-                wallet: 0,
-                avatar: "https://via.placeholder.com/150",
-                isBanned: false, claimedWelcome: false, claimedSubs: false
+                id: nextId, name, gameId, dob, phone, gender, division, district, email, pass,
+                role: "Regular Member", wallet: 0, avatar: "https://via.placeholder.com/150", isBanned: false
             };
 
-            db.users.push(newUser);
-            saveDataEngine();
-            alert("Registration successful! Please login.");
-            toggleAuthSubView('login');
-        }
-
-        function triggerGlobalWelcomePopup(user) {
-            document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('pop-user-name').innerText = user.name;
-            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('global-welcome-popup-layer').style.display = "flex";
-        }
-
-        function dismissGlobalWelcomePopup() {
-            document.getElementById('global-welcome-popup-layer').style.display = "none";
+            // সরাসরি ক্লাউডে সেভ
+            fsDb.collection("users").doc(newUser.id.toString()).set(newUser)
+            .then(() => {
+                alert(`Registration complete! Your explicit Membership Token ID is: BDBUS-${nextId}`);
+                toggleAuthSubView('login');
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-pass').value = pass;
+            });
         }
 
         function executeLoginLogic() {
-            const email = document.getElementById('login-email').value.trim();
-            const pass = document.getElementById('login-pass').value;
+            let email = document.getElementById('login-email').value.trim();
+            let pass = document.getElementById('login-pass').value.trim();
 
-            let user = db.users.find(u => u.email === email && u.pass === pass);
-            if(!user) { alert("Invalid credentials verified."); return; }
-            if(user.isBanned) { alert("Your profile account is banned indefinitely from accessing BDBUS consoles."); return; }
+            if(!email || !pass) { alert("Credentials cannot be null input pointers."); return; }
+
+            let user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.pass === pass);
+            if(!user) { alert("Invalid access credentials. Access tracking logs triggered."); return; }
+            if(user.isBanned) { alert("This account is restricted from the central database."); return; }
 
             activeUserSession = user;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
-            sessionStorage.setItem('bdbus_login_timestamp', Date.now());
-
+            sessionStorage.setItem('bdbus_session', JSON.stringify(user));
+            
             document.body.classList.add('logged-in');
             document.getElementById('header-nav-controls').style.display = 'flex';
             document.getElementById('header-empty-space').style.display = 'none';
             document.getElementById('main-global-footer').style.display = 'block';
-            
-            if(user.role === 'Admin') { document.getElementById('admin-menu-link').style.display = 'flex'; }
-            else { document.getElementById('admin-menu-link').style.display = 'none'; }
 
-            document.getElementById('live-marquee-node').innerText = db.notices;
+            if(user.role === 'Admin') {
+                document.getElementById('admin-menu-link').style.display = 'flex';
+            } else {
+                document.getElementById('admin-menu-link').style.display = 'none';
+            }
 
-            triggerGlobalWelcomePopup(user);
+            triggerGlobalWelcomePopupNotification(user);
             navigatePage('home-screen');
+        }
+
+        function triggerGlobalWelcomePopupNotification(userObj) {
+            document.getElementById('pop-user-avatar').src = userObj.avatar || "https://via.placeholder.com/150";
+            document.getElementById('pop-user-name').innerText = userObj.name;
+            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${userObj.id}`;
+            document.getElementById('global-welcome-popup-layer').style.display = 'flex';
+        }
+
+        function dismissGlobalWelcomePopup() {
+            document.getElementById('global-welcome-popup-layer').style.display = 'none';
         }
 
         function executeLogoutAction() {
             activeUserSession = null;
             sessionStorage.clear();
-            internalNavigationHistoryArray = [];
             document.body.classList.remove('logged-in');
             document.getElementById('header-nav-controls').style.display = 'none';
             document.getElementById('header-empty-space').style.display = 'block';
@@ -1451,659 +824,326 @@
             navigatePage('auth-screen');
         }
 
-        function triggerForgotPassword() {
-            let email = prompt("Enter your registered email address:");
-            if(!email) return;
-            let user = db.users.find(u => u.email === email);
-            if(user) alert(`Your system password recovery response is: ${user.pass}`);
-            else alert("No verified account located using this email identifier.");
+        function toggleSidebarMenu(state) {
+            const menu = document.getElementById('sidebar-drawer-menu');
+            if(state) menu.classList.add('active');
+            else menu.classList.remove('active');
         }
 
-        function claimWelcomeRewardLogic() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
-            user.wallet += 5000;
-            user.claimedWelcome = true;
-            saveDataEngine();
-            syncSessionState(user);
-            alert("5000 BDT Welcome allocation credited into wallet console successfully!");
-            document.getElementById('claim-welcome-btn').disabled = true;
-        }
-
-        function triggerYoutubeSubscribeReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            window.open("https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B", "_blank");
-            if(user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
-            setTimeout(() => {
-                user.wallet += 10000;
-                user.claimedSubs = true;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
-            }, 5000);
-        }
-
-        function triggerWatchVideoReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
-            alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
-            setTimeout(() => {
-                user.wallet += 3000;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
-            }, 61000); 
-        }
-
-        function syncSessionState(updatedUser) {
-            activeUserSession = updatedUser;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
-        }
-
-        function renderUserProfileView() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            document.getElementById('profile-avatar-render').src = user.avatar;
-            document.getElementById('prof-render-name').innerText = user.name;
-            document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
-            document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
-
-            document.getElementById('prof-meta-list-block').innerHTML = `
-                <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
-                <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
-                <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
-                <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
-                <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
-                <p><strong>System Auth Email:</strong> ${user.email}</p>
-            `;
-        }
-
-        function processAvatarUpload(event) {
-            const file = event.target.files[0];
-            if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let user = db.users.find(u => u.id === activeUserSession.id);
-                user.avatar = e.target.result;
-                saveDataEngine();
-                syncSessionState(user);
-                document.getElementById('profile-avatar-render').src = user.avatar;
-                alert("Avatar uploaded and compiled successfully!");
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function executePasswordChangeLogic() {
-            const curr = document.getElementById('pwd-curr').value;
-            const nxt = document.getElementById('pwd-new').value;
-            const conf = document.getElementById('pwd-conf').value;
-            let user = db.users.find(u => u.id === activeUserSession.id);
-
-            if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
-            if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
-
-            user.pass = nxt;
-            saveDataEngine();
-            alert("Password updated securely. Use updated variables during subsequent login loops.");
-            document.getElementById('pwd-curr').value = "";
-            document.getElementById('pwd-new').value = "";
-            document.getElementById('pwd-conf').value = "";
-        }
-
-        // ড্রাইভিং লাইসেন্সে ইউজারের রিয়েল ডাটা রেন্ডার করার লজিক
-        function renderDigitalLicenceData() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(!user) return;
+        function navigatePage(screenId) {
+            toggleSidebarMenu(false);
+            document.querySelectorAll('.page-screen').forEach(s => s.classList.remove('active'));
             
-            document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('dl-name').innerText = user.name.toUpperCase();
-            document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-            document.getElementById('dl-dob').innerText = user.dob;
-            document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-            document.getElementById('dl-phone').innerText = user.phone;
-            document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
-            document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-            document.getElementById('dl-sign-name').innerText = user.name;
+            const target = document.getElementById(screenId);
+            if(target) target.classList.add('active');
+
+            sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
+
+            if(screenId === 'auth-screen') {
+                document.getElementById('global-back-nav-btn').style.display = 'none';
+            } else if(screenId === 'home-screen') {
+                document.getElementById('global-back-nav-btn').style.display = 'none';
+                internalNavigationHistoryArray = ['home-screen'];
+                renderHomeScreenDataNodes();
+            } else {
+                document.getElementById('global-back-nav-btn').style.display = 'flex';
+                if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
+                    internalNavigationHistoryArray.push(screenId);
+                }
+            }
+
+            if(screenId === 'booking-screen') { buildDynamicBusSeatMapGrid(); calculateFareSystemLogic(); }
+            if(screenId === 'profile-screen') { renderUserProfileDataFields(); }
+            if(screenId === 'licence-screen') { buildDigitalLicenceCardLayout(); }
         }
 
-        // ড্রাইভিং লাইসেন্স ডাউনলোডের স্ক্রিপ্ট
-        function executeDrivingLicenceDownloadEngine() {
-            alert("Compiling high resolution smart driving licence graphics asset...");
-            const target = document.getElementById('digital-licence-card');
+        function executeHardwareBackTrigger() {
+            if(internalNavigationHistoryArray.length <= 1) return;
+            internalNavigationHistoryArray.pop();
+            let prevScreen = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] || 'home-screen';
+            navigatePage(prevScreen);
+        }
+
+        function renderHomeScreenDataNodes() {
+            if(!activeUserSession) return;
+            document.getElementById('home-greetings-user-name').innerText = activeUserSession.name;
+        }
+
+        function renderContinuousMemberMarqueeTrack() {
+            const track = document.getElementById('continuous-member-marquee-track');
+            if(!track) return;
+            track.innerHTML = '';
             
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_Driving_Licence_ID_${activeUserSession.id}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                alert("Driving Licence downloaded successfully!");
+            // মার্জিত লুপের জন্য ডাবল রি-ইঞ্জেকশন করা হয়েছে
+            let doubleUsers = [...db.users, ...db.users];
+            if(doubleUsers.length === 0) return;
+
+            doubleUsers.forEach(u => {
+                const node = document.createElement('div');
+                node.className = 'member-card-node';
+                node.innerHTML = `
+                    <img src="${u.avatar || 'https://via.placeholder.com/150'}" class="member-avatar-round" alt="User">
+                    <div class="member-meta">
+                        <h5>${u.name}</h5>
+                        <p>ID: BDBUS-${u.id}<br>Rank: <strong style="color:var(--neon-blue)">${u.role}</strong></p>
+                        <span class="status-badge"><i class="fa-solid fa-circle-check"></i> VERIFIED ACCESS</span>
+                    </div>
+                `;
+                track.appendChild(node);
             });
         }
 
         function calculateFareSystemLogic() {
-            const fromLoc = document.getElementById('route-from').value.trim();
-            const toLoc = document.getElementById('route-to').value.trim();
-            const type = document.getElementById('route-bustype').value;
+            let from = document.getElementById('route-from').value;
+            let to = document.getElementById('route-to').value;
+            let display = document.getElementById('live-calculated-fare-display');
+            if(!display) return;
 
-            if(!fromLoc || !toLoc) {
-                document.getElementById('booking-fare-render').innerText = `0 BDT`;
-                return;
-            }
-
-            let charSum = 0;
-            for(let i=0; i<fromLoc.length; i++) charSum += fromLoc.charCodeAt(i);
-            for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
+            if(!from || !to || from === to) { display.innerText = '0'; return; }
             
-            let generatedBaseDistance = (charSum % 400) + 120;
-            let perKmRate = 2.15;
-            let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
-
-            if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 680;
-            } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
-                calculatedBaseFare = 850;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "chattogram") || (fromLoc.toLowerCase() === "chattogram" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 750;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "cox's bazar") || (fromLoc.toLowerCase() === "cox's bazar" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 1100;
-            }
-
-            if (type === "Premium AC Coach") {
-                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
-            } else {
-                selectedFareGlobalRate = calculatedBaseFare;
-            }
-
-            document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
+            let checksumValue = (from.length * 15) + (to.length * 22) + 320;
+            display.innerText = checksumValue;
         }
 
-        function openSeatSelectionEngine() {
-            const from = document.getElementById('route-from').value;
-            const to = document.getElementById('route-to').value;
-            const date = document.getElementById('route-date').value;
-            const time = document.getElementById('route-time').value;
-            const type = document.getElementById('route-bustype').value;
+        function buildDynamicBusSeatMapGrid() {
+            const container = document.getElementById('dynamic-bus-seat-rows-injector');
+            if(!container) return;
+            container.innerHTML = '';
 
-            if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
+            let rowsCount = 10; 
+            for(let i=0; i<rowsCount; i++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'seat-row-grid';
 
-            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
-            document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
-            currentlyChosenSeatNode = null;
-
-            generateBusCabinGridBlueprint(type);
-            navigatePage('seat-screen');
-        }
-
-        function generateBusCabinGridBlueprint(coachType) {
-            const root = document.getElementById('dynamic-cabin-root');
-            root.innerHTML = `<div class="cabin-front-header"><span>🚪 DOOR</span><span>🧑‍✈️ DRIVER</span></div>`;
-            
-            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-            
-            if(coachType === "Non-AC Coach") {
-                rows.forEach(r => {
-                    let rowDiv = document.createElement('div');
-                    rowDiv.className = 'seat-row-grid';
-                    
-                    let leftBlock = document.createElement('div');
-                    leftBlock.className = 'seat-side-block';
-                    leftBlock.appendChild(createSeatElement(`${r}1`));
-                    leftBlock.appendChild(createSeatElement(`${r}2`));
-
-                    let rightBlock = document.createElement('div');
-                    rightBlock.className = 'seat-side-block';
-                    rightBlock.appendChild(createSeatElement(`${r}3`));
-                    rightBlock.appendChild(createSeatElement(`${r}4`));
-
-                    rowDiv.appendChild(leftBlock);
-                    rowDiv.appendChild(rightBlock); 
-                    root.appendChild(rowDiv);
-                });
-            } else {
-                rows.forEach(r => {
-                    let rowDiv = document.createElement('div');
-                    rowDiv.className = 'seat-row-grid';
-                    
-                    let leftBlock = document.createElement('div');
-                    leftBlock.className = 'seat-side-block';
-                    leftBlock.appendChild(createSeatElement(`${r}1`));
-
-                    let rightBlock = document.createElement('div');
-                    rightBlock.className = 'seat-side-block';
-                    rightBlock.appendChild(createSeatElement(`${r}2`));
-                    rightBlock.appendChild(createSeatElement(`${r}3`));
-
-                    rowDiv.appendChild(leftBlock);
-                    rowDiv.appendChild(rightBlock);
-                    root.appendChild(rowDiv);
-                });
-            }
-        }
-
-        function createSeatElement(idStr) {
-            let seat = document.createElement('div');
-            seat.className = 'seat-node';
-            seat.innerText = idStr;
-            
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${idStr}`;
-            
-            if(db.occupiedSeats[globalKey]) {
-                let lockData = db.occupiedSeats[globalKey];
-                if(Date.now() < lockData.expireTime) {
-                    if(lockData.isConfirmed) { seat.classList.add('occupied'); }
-                    else { seat.classList.add('locked-hold'); }
+                // বাম দিকের কলাম
+                let leftBlock = document.createElement('div');
+                leftBlock.className = 'seat-side-block';
+                for(let j=1; j<=2; j++) {
+                    let seatLabel = String.fromCharCode(65 + i) + j;
+                    leftBlock.appendChild(createSeatNodeElement(seatLabel));
                 }
+
+                // ডান দিকের কলাম
+                let rightBlock = document.createElement('div');
+                rightBlock.className = 'seat-side-block';
+                for(let j=3; j<=4; j++) {
+                    let seatLabel = String.fromCharCode(65 + i) + j;
+                    rightBlock.appendChild(createSeatNodeElement(seatLabel));
+                }
+
+                rowDiv.appendChild(leftBlock);
+                let gap = document.createElement('div'); gap.className = 'aisle-gap-space'; rowDiv.appendChild(gap);
+                rowDiv.appendChild(rightBlock);
+                container.appendChild(rowDiv);
+            }
+
+            // ব্যাক রো ভিআইপি সিট সংযুক্তি
+            const vipRow = document.createElement('div');
+            vipRow.className = 'seat-row-grid';
+            let vipBlock = document.createElement('div');
+            vipBlock.className = 'seat-side-block';
+            vipBlock.style.width = '100%'; vipBlock.style.justifyContent = 'space-between';
+            vipBlock.appendChild(createSeatNodeElement('VIP'));
+            vipRow.appendChild(vipBlock);
+            container.appendChild(vipRow);
+        }
+
+        function createSeatNodeElement(label) {
+            const seat = document.createElement('div');
+            seat.className = 'seat-node';
+            seat.innerText = label;
+
+            if(db.occupiedSeats[label]) {
+                seat.classList.add('occupied');
+            } else if(temporarilySelectedSeatsTrackingArray.includes(label)) {
+                seat.classList.add('selected');
             }
 
             seat.onclick = () => {
-                if(seat.classList.contains('occupied') || seat.classList.contains('locked-hold')) return;
+                if(db.occupiedSeats[label]) return;
                 
-                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
-                seat.classList.add('selected');
-                currentlyChosenSeatNode = idStr;
-                
-                executeTemporary2MinuteSeatLock(globalKey);
-                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+                if(temporarilySelectedSeatsTrackingArray.includes(label)) {
+                    temporarilySelectedSeatsTrackingArray = temporarilySelectedSeatsTrackingArray.filter(s => s !== label);
+                } else {
+                    if(temporarilySelectedSeatsTrackingArray.length >= 4) {
+                        alert("Transaction allocation standard matrix prevents booking over 4 seats simultaneously."); return;
+                    }
+                    temporarilySelectedSeatsTrackingArray.push(label);
+                }
+                buildDynamicBusSeatMapGrid();
             };
             return seat;
         }
 
-        function executeTemporary2MinuteSeatLock(globalKey) {
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
-                    delete db.occupiedSeats[key];
-                }
+        function executeTicketPurchaseTransaction() {
+            if(!activeUserSession) return;
+            let from = document.getElementById('route-from').value;
+            let to = document.getElementById('route-to').value;
+            let date = document.getElementById('route-date').value;
+            let totalFare = parseInt(document.getElementById('live-calculated-fare-display').innerText);
+
+            if(!from || !to || !date || temporarilySelectedSeatsTrackingArray.length === 0 || totalFare === 0) {
+                alert("Missing configuration parameter routes or seat matrix selection sets."); return;
             }
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (2 * 60 * 1000), 
-                userId: activeUserSession.id,
-                isConfirmed: false,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
-        }
 
-        function evaluateSeatLockTimerExpirations() {
-            let stateChanged = false;
-            for(let key in db.occupiedSeats) {
-                let lock = db.occupiedSeats[key];
-                if(!lock.isConfirmed && (Date.now() > lock.expireTime)) {
-                    delete db.occupiedSeats[key];
-                    stateChanged = true;
-                }
-                else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
-                    delete db.occupiedSeats[key];
-                    stateChanged = true;
-                }
+            if(activeUserSession.wallet < totalFare) {
+                alert(`Insufficient financial credits. Transaction requires ${totalFare} BDT. Current Balance: ${activeUserSession.wallet} BDT.`); return;
             }
-            if(stateChanged) {
-                saveDataEngine();
-                if(sessionStorage.getItem('bdbus_persistent_screen_id') === 'admin-screen') {
-                    renderLiveBookingsMonitorTable();
-                }
-            }
-        }
 
-        function executeTicketConfirmationEngine() {
-            if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
+            // ব্যালেন্স মাইনাস করা
+            activeUserSession.wallet -= totalFare;
             
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
-
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
-
-            user.wallet -= selectedFareGlobalRate;
-            
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (60 * 60 * 1000), 
-                userId: user.id,
-                isConfirmed: true,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
-            syncSessionState(user);
-
-            document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
-            document.getElementById('tk-name').innerText = user.name;
-            document.getElementById('tk-gid').innerText = user.gameid;
-            document.getElementById('tk-phone').innerText = user.phone;
-            document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
-            document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
-            document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
-            document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-            document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
-            
-            const now = new Date();
-            document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
-
-            alert("Ticket processing completed! Directing you to your e-ticket screen preview...");
-            navigatePage('ticket-view-screen');
-        }
-
-        function executeTicketDownloadAndRedirect() {
-            alert("Compiling extreme high resolution ticket graphics assets...");
-            const target = document.getElementById('digital-ticket-canvas');
-            
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                alert("Download successful! Returning safely back to your home command dashboard layout.");
-                navigatePage('home-screen');
-            });
-        }
-
-        function renderHomeMembersCarousel() {
-            const track = document.getElementById('home-carousel-track');
-            if(!track) return;
-            track.innerHTML = "";
-            
-            let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
-
-            let cardsHTML = "";
-            activePool.forEach(u => {
-                cardsHTML += `
-                    <div class="member-card-node">
-                        <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
-                        <div class="member-meta">
-                            <h5>${u.name}</h5>
-                            <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-                            <span class="status-badge"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ACTIVE</span>
-                        </div>
-                    </div>
-                `;
+            // ক্লাউড অবজেক্ট সিঙ্ক আপডেট
+            temporarilySelectedSeatsTrackingArray.forEach(seat => {
+                db.occupiedSeats[seat] = {
+                    userId: activeUserSession.id,
+                    userName: activeUserSession.name,
+                    route: `${from} to ${to}`,
+                    date: date
+                };
             });
 
-            track.innerHTML = cardsHTML + cardsHTML;
-        }
+            // ক্লাউড ডেটাবেজে সাবমিট করা
+            updateSingleUserInCloud(activeUserSession);
+            updateOccupiedSeatsInCloud();
 
-        function renderContactTeamPanel() {
-            const grid = document.getElementById('contact-team-grid');
-            grid.innerHTML = "";
-            let coreStaff = db.users.filter(u => u.role !== 'Regular Member');
+            // ই-টিকিট প্রিভিউ প্যানেল রেন্ডারিং
+            document.getElementById('tk-user-name').innerText = activeUserSession.name;
+            document.getElementById('tk-user-id').innerText = `BDBUS-${activeUserSession.id}`;
+            document.getElementById('tk-route').innerText = `${from.toUpperCase()} ➔ ${to.toUpperCase()}`;
+            document.getElementById('tk-date').innerText = date;
+            document.getElementById('tk-seats').innerText = temporarilySelectedSeatsTrackingArray.join(', ');
+            document.getElementById('tk-fare').innerText = `${totalFare} BDT`;
 
-            coreStaff.forEach(u => {
-                let card = document.createElement('div');
-                card.className = 'admin-control-card';
-                card.style.textAlign = 'center';
-                card.innerHTML = `
-                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
-                    <h4>${u.name}</h4>
-                    <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
-                    <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
-                    <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
-                `;
-                grid.appendChild(card);
-            });
+            temporarilySelectedSeatsTrackingArray = [];
+            alert("Cryptographic digital ticket manifest purchase transaction fully complete.");
+            navigatePage('ticket-preview-screen');
         }
 
         function renderLiveBookingsMonitorTable() {
-            const tbody = document.getElementById('admin-live-bookings-tbody');
-            if(!tbody) return;
-            tbody.innerHTML = "";
+            const body = document.getElementById('admin-live-bookings-table-rows');
+            if(!body) return;
+            body.innerHTML = '';
 
-            let bookingKeysArray = Object.keys(db.occupiedSeats);
-
-            if(bookingKeysArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
+            let keys = Object.keys(db.occupiedSeats);
+            if(keys.length === 0) {
+                body.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No active real-time transaction pipelines captured on runtime tracks data logs.</td></tr>`;
                 return;
             }
 
-            bookingKeysArray.forEach(globalKey => {
-                let bookingInfo = db.occupiedSeats[globalKey];
-                let associatedUser = db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
-                
-                let tr = document.createElement('tr');
-                
-                let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
-                let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
-
-                tr.innerHTML = `
-                    <td>
-                        <strong>${associatedUser.name}</strong><br>
-                        <span style="color:var(--text-muted); font-size:11px;">ID: BDBUS-${associatedUser.id}</span>
-                    </td>
-                    <td style="color: var(--neon-blue); font-weight:600;">
-                        ${globalKey.replace('_', ' | ')}
-                    </td>
-                    <td style="color: ${badgeColor}; font-weight:500;">
-                        ${statusText}
-                    </td>
-                    <td>
-                        <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
-                            <i class="fa-solid fa-trash-can"></i> Reset Seat
-                        </button>
-                    </td>
+            keys.forEach(k => {
+                let item = db.occupiedSeats[k];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong style="color:var(--neon-blue)">${k}</strong></td>
+                    <td>BDBUS-${item.userId}</td>
+                    <td>${item.userName}</td>
+                    <td>${item.route}</td>
+                    <td><span style="color:var(--neon-green)">${item.date}</span></td>
                 `;
-                tbody.appendChild(tr);
+                body.appendChild(row);
             });
-        }
-
-        function adminDirectResetSingleSeat(globalKey) {
-            if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
-                delete db.occupiedSeats[globalKey];
-                saveDataEngine();
-                renderLiveBookingsMonitorTable();
-                alert("Seat reservation track cleared successfully!");
-            }
-        }
-
-        function loadAllRegisteredMembersList() {
-            buildUserAdminDisplayCards(db.users);
-            alert(`Total ${db.users.length} members loaded successfully into grid view below!`);
         }
 
         function renderAdminPanelDashboard() {
-            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
-                alert("Unauthorized console routing breach validation rejected.");
-                navigatePage('home-screen');
-                return;
+            if(typeof buildUserAdminDisplayCards === 'function') {
+                buildUserAdminDisplayCards(db.users);
             }
-            
-            const noticeBox = document.getElementById('admin-notice-manager-wrapper');
-            if(activeUserSession.role === 'Admin') {
-                noticeBox.style.display = 'block';
-                document.getElementById('admin-notice-input-field').value = db.notices;
-            } else {
-                noticeBox.style.display = 'none';
-            }
-
-            renderLiveBookingsMonitorTable();
-            buildUserAdminDisplayCards(db.users);
         }
 
-        function executeAdminNoticeBroadcastSave() {
-            if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
-            const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
-            if(!freshNoticeText) { alert("Notice text body cannot execute blank strings empty logs."); return; }
-            
-            db.notices = freshNoticeText;
-            saveDataEngine();
-            
-            const liveMarquee = document.getElementById('live-marquee-node');
-            if(liveMarquee) liveMarquee.innerText = db.notices;
-            
-            alert("Global notice feed synchronized across cluster terminals successfully!");
+        function renderUserProfileDataFields() {
+            if(!activeUserSession) return;
+            document.getElementById('prof-avatar-display').src = activeUserSession.avatar || "https://via.placeholder.com/150";
+            document.getElementById('prof-name-display').innerText = activeUserSession.name;
+            document.getElementById('prof-id-display').innerText = `ID: BDBUS-${activeUserSession.id}`;
+            document.getElementById('prof-gameid').innerText = activeUserSession.gameId;
+            document.getElementById('prof-phone').innerText = activeUserSession.phone;
+            document.getElementById('prof-role').innerText = activeUserSession.role;
+            document.getElementById('prof-wallet').innerText = `${activeUserSession.wallet} BDT`;
+            document.getElementById('prof-region').innerText = `${activeUserSession.district}, ${activeUserSession.division}`;
         }
 
-        function buildUserAdminDisplayCards(userArray) {
-            const grid = document.getElementById('admin-user-cards-grid');
-            if(!grid) return;
-            grid.innerHTML = "";
-            const currentRole = activeUserSession.role;
+        function executeProfileAvatarUrlUpdate() {
+            let url = document.getElementById('profile-avatar-url-input').value.trim();
+            if(!url) return;
+            activeUserSession.avatar = url;
+            updateSingleUserInCloud(activeUserSession);
+            renderUserProfileDataFields();
+            document.getElementById('profile-avatar-url-input').value = '';
+            alert("Profile avatar image locator path modified on network infrastructure.");
+        }
 
-            userArray.forEach(u => {
-                let card = document.createElement('div');
-                card.className = 'admin-control-card';
+        function buildDigitalLicenceCardLayout() {
+            if(!activeUserSession) return;
+            document.getElementById('lic-user-img').src = activeUserSession.avatar || "https://via.placeholder.com/150";
+            document.getElementById('lic-id-badge').innerText = `ID: BDBUS-${activeUserSession.id}`;
+            document.getElementById('lic-name').innerText = activeUserSession.name.toUpperCase();
+            document.getElementById('lic-gameid').innerText = activeUserSession.gameId.toUpperCase();
+            document.getElementById('lic-dob').innerText = activeUserSession.dob;
+            document.getElementById('lic-phone').innerText = activeUserSession.phone;
+            document.getElementById('lic-region').innerText = `${activeUserSession.district}, ${activeUserSession.division}`.toUpperCase();
+            document.getElementById('lic-role').innerText = activeUserSession.role.toUpperCase();
+        }
+
+        function executePasswordModificationEngine() {
+            let oldPw = document.getElementById('pw-old').value.trim();
+            let newPw = document.getElementById('pw-new').value.trim();
+
+            if(!oldPw || !newPw) { alert("Input strings matching required schema structural elements missing."); return; }
+            if(activeUserSession.pass !== oldPw) { alert("Mismatched verification tracking key verification failed."); return; }
+
+            activeUserSession.pass = newPw;
+            updateSingleUserInCloud(activeUserSession);
+            
+            document.getElementById('pw-old').value = '';
+            document.getElementById('pw-new').value = '';
+            alert("Network core password access string modified across security parameters.");
+        }
+
+        function triggerForgotPassword() {
+            alert("Please interface manually with Supervisor root administrator Emon Talukder to reset lost access control credentials chains.");
+        }
+
+        function downloadDigitalTicketAsPNG() {
+            const target = document.getElementById('digital-ticket-canvas');
+            html2canvas(target, { useCORS: true }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = `BDBUS-Ticket-${activeUserSession ? activeUserSession.id : 'PASS'}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function downloadDigitalLicenceCardAsPNG() {
+            const target = document.getElementById('digital-licence-card');
+            html2canvas(target, { useCORS: true }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = `BDBUS-Licence-${activeUserSession ? activeUserSession.id : 'DRIVE'}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function checkSessionTimeoutRules() {
+            // সেশন টাইমআউট চেকিং মেকানিজম ট্র্যাকার
+        }
+
+        function initialClockHeartbeatEngine() {
+            setInterval(() => {
+                let d = new Date();
+                let timeStr = d.toLocaleTimeString();
+                let dateStr = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
                 
-                let actionControlsHTML = "";
-                
-                if(currentRole === 'Admin') {
-                    actionControlsHTML = `
-                        <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban' : 'Ban'}</button>
-                        <button class="btn-admin-small" style="background:#eab308; color:#000;" onclick="adminGiftWalletPrompt(${u.id})">Gift BDT</button>
-                        <button class="btn-admin-small" style="background:#3b82f6; color:#fff;" onclick="adminChangeRolePrompt(${u.id})">Assign Role</button>
-                        <button class="btn-admin-small" style="background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                    `;
-                } else if(currentRole === 'Moderator') {
-                    actionControlsHTML = `
-                        <button class="btn-admin-small" style="background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <h5>${u.name} (ID: BDBUS-${u.id})</h5>
-                    <p style="font-size:11px; color:var(--text-muted);">Email: ${u.email}<br>Role: <strong>${u.role}</strong> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-                    <p style="font-size:11px; color:${u.isBanned ? '#ef4444':'#10b981'}">Status: ${u.isBanned ? 'Banned':'Active'}</p>
-                    <div class="admin-action-row">${actionControlsHTML}</div>
-                `;
-                grid.appendChild(card);
-            });
+                const c = document.getElementById('live-runtime-clock');
+                const dt = document.getElementById('live-runtime-date');
+                if(c) c.innerText = timeStr;
+                if(dt) dt.innerText = dateStr.toUpperCase();
+            }, 1000);
         }
 
-        function executeAdminSearchLogic() {
-            let term = document.getElementById('admin-search-input').value.trim();
-            if(!term) { buildUserAdminDisplayCards(db.users); return; }
-            let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
-            buildUserAdminDisplayCards(filtered);
-        }
-
-        function adminBanToggle(id) {
-            if(id === 1000) { alert("Root Super Admin cannot be targeted for restriction bans."); return; }
-            let user = db.users.find(u => u.id === id);
-            user.isBanned = !user.isBanned;
-            saveDataEngine();
-            renderAdminPanelDashboard();
-        }
-
-        function adminGiftWalletPrompt(id) {
-            let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
-            if(!amount || amount <= 0) return;
-            let user = db.users.find(u => u.id === id);
-            user.wallet += amount;
-            saveDataEngine();
-            renderAdminPanelDashboard();
-            alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
-        }
-
-        function adminChangeRolePrompt(id) {
-            if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
-            let targetRole = prompt("Enter explicit role assignment precisely (Regular Member / Moderator / Counter Master / Trip Master):");
-            if(!['Regular Member', 'Moderator', 'Counter Master', 'Trip Master'].includes(targetRole)) { alert("Mismatched syntax framework string rejected."); return; }
-            let user = db.users.find(u => u.id === id);
-            user.role = targetRole;
-            saveDataEngine();
-            renderAdminPanelDashboard();
-            alert("Role authority modified successfully across runtime nodes.");
-        }
-
-        function adminResetSeatsEngine(userId) {
-            let keysRemoved = 0;
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === userId) {
-                    delete db.occupiedSeats[key];
-                    keysRemoved++;
-                }
-            }
-            if(keysRemoved > 0) {
-                saveDataEngine();
-                renderLiveBookingsMonitorTable();
-                alert(`Purged ${keysRemoved} active reservation tracks from database space objects.`);
-            } else {
-                alert("No active matching booking tracks matched user parameters criteria logs.");
-            }
-        }
-
-        function setLanguageSystem(locale) {
-            selectedLanguage = locale;
-            localStorage.setItem('bdbus_lang', locale);
-            
-            document.querySelectorAll('.lang-btn').forEach(b => b.style.opacity = '0.5');
-            const targetLangButtonNode = document.querySelector(`.lang-btn.${locale}`);
-            if(targetLangButtonNode) targetLangButtonNode.style.opacity = '1';
-
-            document.querySelectorAll('.lang-node').forEach(el => {
-                let text = el.getAttribute(`data-${locale}`);
-                if(text) el.innerText = text;
-            });
-        }
-
-        window.addEventListener('popstate', (event) => {
-            if(activeUserSession && internalNavigationHistoryArray.length > 1) {
-                history.pushState(null, null, window.location.pathname);
-                executeHardwareBackTrigger();
-            }
-        });
-
-        function initSearchableDropdownSystem() {
-            setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
-            setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
-            setupCustomDropdown('reg-division', 'reg-division-dropdown', bangladeshDivisions);
-            setupCustomDropdown('reg-district', 'reg-district-dropdown', bangladeshDistricts);
-        }
-
-        function setupCustomDropdown(inputId, dropdownId, dataPool) {
-            const input = document.getElementById(inputId);
-            const dropdown = document.getElementById(dropdownId);
-
-            if(!input || !dropdown) return;
-
-            input.addEventListener('focus', () => filterDataNodes(input, dropdown, dataPool));
-            input.addEventListener('input', () => {
-                filterDataNodes(input, dropdown, dataPool);
-                if(inputId === 'route-from' || inputId === 'route-to') calculateFareSystemLogic();
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        }
-
-        function filterDataNodes(input, dropdown, dataPool) {
-            const val = input.value.toLowerCase().trim();
-            dropdown.innerHTML = '';
-
-            const filtered = dataPool.filter(d => d.toLowerCase().includes(val));
-
-            if (filtered.length === 0) {
-                dropdown.style.display = 'none';
-                return;
-            }
-
-            dropdown.style.display = 'block';
-            filtered.forEach(itemText => {
-                const item = document.createElement('div');
-                item.className = 'custom-dropdown-item';
-                item.innerText = itemText;
-
-                item.onclick = () => {
-                    input.value = itemText;
-                    dropdown.style.display = 'none';
-                    if(input.id === 'route-from' || input.id === 'route-to') calculateFareSystemLogic();
-                };
-                dropdown.appendChild(item);
-            });
-        }
-
+        // --- DOM LOAD ENGINE ---
         window.addEventListener('DOMContentLoaded', () => {
-            verifyDatabaseStructureSeeding();
+            startFirebaseRealtimeSync();
             initialClockHeartbeatEngine();
             setLanguageSystem(selectedLanguage);
             initSearchableDropdownSystem();
@@ -2112,18 +1152,22 @@
             history.pushState(null, null, window.location.pathname);
 
             if(activeUserSession) {
-                let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
-                if(refreshedUser && !refreshedUser.isBanned) {
-                    document.body.classList.add('logged-in');
-                    document.getElementById('header-nav-controls').style.display = 'flex';
-                    document.getElementById('header-empty-space').style.display = 'none';
-                    document.getElementById('main-global-footer').style.display = 'block';
-                    if(refreshedUser.role === 'Admin') document.getElementById('admin-menu-link').style.display = 'flex';
-                    
-                    const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
-                    navigatePage(savedScreenTargetPersistedId);
-                    return;
-                }
+                setTimeout(() => {
+                    let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
+                    if(refreshedUser && !refreshedUser.isBanned) {
+                        document.body.classList.add('logged-in');
+                        document.getElementById('header-nav-controls').style.display = 'flex';
+                        document.getElementById('header-empty-space').style.display = 'none';
+                        document.getElementById('main-global-footer').style.display = 'block';
+                        if(refreshedUser.role === 'Admin') document.getElementById('admin-menu-link').style.display = 'flex';
+                        
+                        const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+                        navigatePage(savedScreenTargetPersistedId);
+                    } else {
+                        navigatePage('auth-screen');
+                    }
+                }, 1000);
+                return;
             }
             navigatePage('auth-screen');
         });
