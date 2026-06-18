@@ -2198,6 +2198,85 @@ const timerId = setInterval(() => {
     timeLeft -= 1;
   }
 }, 1000);
+        // বাংলাদেশের ৮টি বিভাগ এবং ৬৪টি জেলা অটোকম্প্লিট লজিক
+const divisionsList = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
+const districtsList = [
+    "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", 
+    "Chapai Noawabganj", "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", 
+    "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", 
+    "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", "Khulna", "Kishoreganj", "Kurigram", 
+    "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur", 
+    "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", 
+    "Natore", "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", 
+    "Pirojpur", "Rajbari", "Rajshahi", "Rangamati", "Rangpur", "Satkhira", "Shariatpur", 
+    "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
+];
+
+function setupProfileDropdown(inputId, dropdownId, dataList) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+    if(!input || !dropdown) return;
+
+    input.addEventListener('focus', function() { renderDropdown(dataList); });
+    input.addEventListener('input', function() {
+        const value = this.value.toLowerCase();
+        const filtered = dataList.filter(item => item.toLowerCase().includes(value));
+        renderDropdown(filtered);
+    });
+
+    function renderDropdown(list) {
+        dropdown.innerHTML = '';
+        if (list.length === 0) { dropdown.style.display = 'none'; return; }
+        list.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'custom-dropdown-item'; // আপনার প্রজেক্টের স্টাইলের সাথে মিল রাখার জন্য
+            div.style.padding = '10px 12px';
+            div.style.color = '#fff';
+            div.style.cursor = 'pointer';
+            div.textContent = item;
+            
+            div.onmouseover = () => { div.style.background = '#00d2ff'; div.style.color = '#000'; };
+            div.onmouseout = () => { div.style.background = 'transparent'; div.style.color = '#fff'; };
+            
+            div.addEventListener('click', function() {
+                input.value = item;
+                dropdown.style.display = 'none';
+            });
+            dropdown.appendChild(div);
+        });
+        dropdown.style.display = 'block';
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+}
+
+// প্রোফাইল পেজ লোড বা নেভিগেট হলে ড্রপডাউন একটিভেট করার জন্য
+setupProfileDropdown('divisionInput', 'divisionDropdown', divisionsList);
+setupProfileDropdown('districtInput', 'districtDropdown', districtsList);
+
+// প্রোফাইল আপডেট বাটন ক্লিক হ্যান্ডলার
+const profileUpdateBtn = document.getElementById('updateProfileBtn');
+if(profileUpdateBtn) {
+    profileUpdateBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const updatedData = {
+            fullName: document.getElementById('fullName').value,
+            gameId: document.getElementById('gameId').value,
+            dob: document.getElementById('dob').value,
+            mobileNumber: document.getElementById('mobileNumber').value,
+            gender: document.getElementById('gender').value,
+            division: document.getElementById('divisionInput').value,
+            district: document.getElementById('districtInput').value,
+            fbLink: document.getElementById('fbLink').value
+        };
+        console.log("Saving updated data:", updatedData);
+        alert("প্রোফাইল তথ্য সফলভাবে নেওয়া হয়েছে!");
+    });
+}
     </script>
 </body>
 </html>
