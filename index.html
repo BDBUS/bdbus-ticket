@@ -2217,21 +2217,35 @@ const timerId = setInterval(() => {
         // বাংলাদেশের ৮টি বিভাগ এবং ৬৪টি জেলা অটোকম্প্লিট লজিক
 const divisionsList = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
 const districtsList = [
-    "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", 
-    "Chapai Noawabganj", "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur", 
-    "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore", 
-    "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", "Khulna", "Kishoreganj", "Kurigram", 
-    "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur", 
-    "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", 
-    "Natore", "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", 
-    "Pirojpur", "Rajbari", "Rajshahi", "Rangamati", "Rangpur", "Satkhira", "Shariatpur", 
+    "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur",
+    "Chapai Nawabganj", "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla", "Dhaka", "Dinajpur",
+    "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj", "Habiganj", "Jamalpur", "Jashore",
+    "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachhari", "Khulna", "Kishoreganj", "Kurigram",
+    "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur",
+    "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi",
+    "Natore", "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali",
+    "Pirojpur", "Rajbari", "Rajshahi", "Rangamati", "Rangpur", "Satkhira", "Shariatpur",
     "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
 ];
 
+// স্ক্রিন পরিবর্তন করার ফাংশনসমূহ
+function showUpdateProfileScreen() {
+    document.getElementById('profile-screen').style.display = 'none';
+    document.getElementById('update-profile-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+
+function hideUpdateProfileScreen() {
+    document.getElementById('update-profile-screen').style.display = 'none';
+    document.getElementById('profile-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+
+// ড্রপডাউন সেটআপ লজিক
 function setupProfileDropdown(inputId, dropdownId, dataList) {
     const input = document.getElementById(inputId);
     const dropdown = document.getElementById(dropdownId);
-    if(!input || !dropdown) return;
+    if (!input || !dropdown) return;
 
     input.addEventListener('focus', function() { renderDropdown(dataList); });
     input.addEventListener('input', function() {
@@ -2245,15 +2259,15 @@ function setupProfileDropdown(inputId, dropdownId, dataList) {
         if (list.length === 0) { dropdown.style.display = 'none'; return; }
         list.forEach(item => {
             const div = document.createElement('div');
-            div.className = 'custom-dropdown-item'; // আপনার প্রজেক্টের স্টাইলের সাথে মিল রাখার জন্য
+            div.className = 'custom-dropdown-item';
             div.style.padding = '10px 12px';
             div.style.color = '#fff';
             div.style.cursor = 'pointer';
             div.textContent = item;
-            
+
             div.onmouseover = () => { div.style.background = '#00d2ff'; div.style.color = '#000'; };
             div.onmouseout = () => { div.style.background = 'transparent'; div.style.color = '#fff'; };
-            
+
             div.addEventListener('click', function() {
                 input.value = item;
                 dropdown.style.display = 'none';
@@ -2270,13 +2284,13 @@ function setupProfileDropdown(inputId, dropdownId, dataList) {
     });
 }
 
-// প্রোফাইল পেজ লোড বা নেভিগেট হলে ড্রপডাউন একটিভেট করার জন্য
+// বিভাগ ও জেলা ড্রপডাউন অ্যাক্টিভেট করা
 setupProfileDropdown('divisionInput', 'divisionDropdown', divisionsList);
 setupProfileDropdown('districtInput', 'districtDropdown', districtsList);
 
 // প্রোফাইল আপডেট বাটন ক্লিক হ্যান্ডলার
-const profileUpdateBtn = document.getElementById('updateProfileBtn');
-if(profileUpdateBtn) {
+const profileUpdateBtn = document.getElementById('submitProfileBtn');
+if (profileUpdateBtn) {
     profileUpdateBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const updatedData = {
@@ -2289,8 +2303,10 @@ if(profileUpdateBtn) {
             district: document.getElementById('districtInput').value,
             fbLink: document.getElementById('fbLink').value
         };
+        
         console.log("Saving updated data:", updatedData);
         alert("প্রোফাইল তথ্য সফলভাবে নেওয়া হয়েছে!");
+        hideUpdateProfileScreen();
     });
 }
     </script>
