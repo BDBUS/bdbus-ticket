@@ -865,11 +865,72 @@
             <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block"></div>
         </div>
             <div class="profile-update-action" style="margin-top: 20px; text-align: center;">
-    <a href="update-profile.html" class="btn-premium" style="width: 100%; padding: 12px; font-size: 14px; display: flex; justify-content: center; align-items: center; text-decoration: none; background: #00d2ff; color: #000; font-weight: bold; border-radius: 8px;">
+    <button class="btn-premium" onclick="showUpdateProfileScreen()" style="width: 100%; padding: 12px; font-size: 14px; background: #00d2ff; color: #000; font-weight: bold; border-radius: 8px; border: none; cursor: pointer;">
         Update Profile
-    </a>
+    </button>
 </div>
         
+</div>
+    <div id="update-profile-screen" class="page-screen" style="display: none; padding: 10px;">
+    <div style="margin-bottom: 20px; text-align: left;">
+        <button onclick="hideUpdateProfileScreen()" style="background: none; border: none; color: #00d2ff; cursor: pointer; font-size: 15px; font-weight: bold;">← Back to Profile</button>
+    </div>
+    
+    <h2 style="text-align:center; margin-bottom:25px; color:#00d2ff;">Update Your Profile</h2>
+    
+    <div class="form-card" style="max-width:500px; margin:0 auto; background:#161b22; padding:25px; border-radius:12px; border:1px solid #21262d;">
+        
+        <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Full Name</label>
+            <input type="text" id="fullName" placeholder="Example: Emon Talukder" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Game Nickname / ID</label>
+            <input type="text" id="gameId" placeholder="Example: ProPlayer#1234" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Date of Birth</label>
+            <input type="date" id="dob" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Mobile Number</label>
+            <input type="text" id="mobileNumber" placeholder="Example: +88017XXXXXXXX" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Gender</label>
+            <select id="gender" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; position: relative; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Division</label>
+            <input type="text" id="divisionInput" placeholder="Type division..." autocomplete="off" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+            <div id="divisionDropdown" style="display: none; position: absolute; left: 0; right: 0; background: #0d1117; border: 1px solid #00d2ff; border-radius: 8px; max-height: 150px; overflow-y: auto; z-index: 999; margin-top: 5px;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px; position: relative; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">District</label>
+            <input type="text" id="districtInput" placeholder="Type district..." autocomplete="off" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+            <div id="districtDropdown" style="display: none; position: absolute; left: 0; right: 0; background: #0d1117; border: 1px solid #00d2ff; border-radius: 8px; max-height: 150px; overflow-y: auto; z-index: 999; margin-top: 5px;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 25px; text-align: left;">
+            <label style="display: block; color: #fff; margin-bottom: 5px; font-size: 14px;">Facebook Profile Link</label>
+            <input type="url" id="fbLink" placeholder="Example: https://facebook.com/username" style="width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+        </div>
+
+        <button id="submitProfileBtn" style="width: 100%; padding: 14px; background: #00d2ff; color: #000; font-weight: bold; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;">
+            Submit / Save Changes
+        </button>
+    </div>
 </div>
 
     </div>
