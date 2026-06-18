@@ -2128,6 +2128,23 @@
             }
             navigatePage('auth-screen');
         });
+        let timeLeft = 120; // ২ মিনিট বা ১২০ সেকেন্ড
+const timerId = setInterval(() => {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  
+  // টাইমারটি স্ক্রিনে দেখানোর জন্য
+  document.getElementById('countdown').innerHTML = 
+    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  if (timeLeft <= 0) {
+    clearInterval(timerId);
+    // সময় শেষ হলে এই বার্তাটি দেখানো হবে
+    alert("Seat booking time has expired! Please refresh the website to see the seat again.");
+  } else {
+    timeLeft -= 1;
+  }
+}, 1000);
     </script>
 </body>
 </html>
