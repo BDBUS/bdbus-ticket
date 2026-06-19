@@ -865,12 +865,20 @@
             <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block"></div>
         </div>
         <div class="profile-update-action" style="margin-top: 20px; text-align: center;">
-    <button class="btn-premium" id="updateProfileBtn" style="width: 100%; padding: 12px; font-size: 16px; display: flex;" onclick="showScreen('update-profile-screen')">
+    <button class="btn-premium" id="updateProfileBtn" style="width: 100%; padding: 12px; font-size: 16px; display: flex; justify-content: center;" onclick="showScreen('update-profile-screen')">
     Update Profile
 </button>
 </div>
 
     </div>
+    <div id="update-profile-screen" class="page-screen" style="display: none;">
+    <div style="padding: 20px; text-align: center;">
+        <h2 style="margin-bottom: 20px;">Update Profile</h2>
+        <p>আপনার তথ্য পরিবর্তন করুন</p>
+        
+        <button class="btn-premium" style="width: 100%; margin-top: 20px; background-color: #555;" onclick="document.getElementById('update-profile-screen').style.display='none'; document.getElementById('profile-screen').style.display='block';">Back</button>
+    <button class="btn-premium" style="width: 100%; margin-top: 20px; background-color: #555;" onclick="showScreen('profile-screen')">Back</button>
+</div>
 
     <div id="password-screen" class="page-screen">
         <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Change Password Security" data-bn="সিকিউরিটি পাসওয়ার্ড পরিবর্তন">Change Password</h2>
