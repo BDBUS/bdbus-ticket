@@ -1936,9 +1936,10 @@
             }
         }
 
-        function loadAllRegisteredMembersList() {
-            buildUserAdminDisplayCards(db.users);
-            alert(`Total ${db.users.length} members loaded successfully into grid view below!`);
+                function loadAllRegisteredMembersList() {
+            // আইডি অনুযায়ী ছোট থেকে বড় ক্রমানুসারে (সিরিয়াল অনুযায়ী) মেম্বারদের সাজানো
+            let sortedUsers = [...db.users].sort((a, b) => parseInt(a.id) - parseInt(b.id));
+            buildUserAdminDisplayCards(sortedUsers);
         }
 
         function renderAdminPanelDashboard() {
@@ -1957,7 +1958,7 @@
             }
 
             renderLiveBookingsMonitorTable();
-            buildUserAdminDisplayCards(db.users);
+            const grid = document.getElementById('admin-user-cards-grid'); if(grid) grid.innerHTML = "";
         }
 
         function executeAdminNoticeBroadcastSave() {
