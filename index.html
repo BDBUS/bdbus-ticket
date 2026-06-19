@@ -1265,6 +1265,10 @@
             }
         }
 
+        // ==========================================
+        // BDBUS CORE ENGINE & CORE JAVASCRIPT CODE
+        // ==========================================
+
         function saveDataEngine() {
             localStorage.setItem('bdbus_local_db', JSON.stringify(db));
         }
@@ -1311,7 +1315,6 @@
             }
         }
 
-        // পাসওয়ার্ড ইনপুট বক্সের চোখ আইকন হ্যান্ডলার ফাংশন
         function togglePasswordInputVisibility(inputId, iconEl) {
             const field = document.getElementById(inputId);
             if(field.type === "password") {
@@ -1584,7 +1587,6 @@
             document.getElementById('pwd-conf').value = "";
         }
 
-        // ড্রাইভিং লাইসেন্সে ইউজারের রিয়েল ডাটা রেন্ডার করার লজিক
         function renderDigitalLicenceData() {
             let user = db.users.find(u => u.id === activeUserSession.id);
             if(!user) return;
@@ -1601,7 +1603,6 @@
             document.getElementById('dl-sign-name').innerText = user.name;
         }
 
-        // ড্রাইভিং লাইসেন্স ডাউনলোডের স্ক্রিপ্ট
         function executeDrivingLicenceDownloadEngine() {
             alert("Compiling high resolution smart driving licence graphics asset...");
             const target = document.getElementById('digital-licence-card');
@@ -1671,7 +1672,32 @@
             currentlyChosenSeatNode = null;
 
             generateBusCabinGridBlueprint(type);
+            initSeatLockCountdownTimer();
             navigatePage('seat-screen');
+        }
+
+        // ২ মিনিটের কাউন্টডাউন টাইমার ইঞ্জিন লজিক
+        function initSeatLockCountdownTimer() {
+            const countdownEl = document.getElementById('countdown');
+            if(!countdownEl) return;
+            
+            let timeLeft = 120;
+            if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
+            
+            window.seatTimerIntervalId = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                countdownEl.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(window.seatTimerIntervalId);
+                    alert("Seat booking time has expired! Please refresh the website to see the seat again.");
+                    navigatePage('home-screen');
+                } else {
+                    timeLeft -= 1;
+                }
+            }, 1000);
         }
 
         function generateBusCabinGridBlueprint(coachType) {
@@ -1805,6 +1831,8 @@
             saveDataEngine();
             syncSessionState(user);
 
+            if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
+
             document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
             document.getElementById('tk-name').innerText = user.name;
             document.getElementById('tk-gid').innerText = user.gameid;
@@ -1936,10 +1964,9 @@
             }
         }
 
-                function loadAllRegisteredMembersList() {
-            // আইডি অনুযায়ী ছোট থেকে বড় ক্রমানুসারে (সিরিয়াল অনুযায়ী) মেম্বারদের সাজানো
-            let sortedUsers = [...db.users].sort((a, b) => parseInt(a.id) - parseInt(b.id));
-            buildUserAdminDisplayCards(sortedUsers);
+        function loadAllRegisteredMembersList() {
+            buildUserAdminDisplayCards(db.users);
+            alert(`Total ${db.users.length} members loaded successfully into grid view below!`);
         }
 
         function renderAdminPanelDashboard() {
@@ -1958,7 +1985,7 @@
             }
 
             renderLiveBookingsMonitorTable();
-            const grid = document.getElementById('admin-user-cards-grid'); if(grid) grid.innerHTML = "";
+            buildUserAdminDisplayCards(db.users);
         }
 
         function executeAdminNoticeBroadcastSave() {
@@ -1974,135 +2001,80 @@
             
             alert("Global notice feed synchronized across cluster terminals successfully!");
         }
-      function buildUserAdminDisplayCards(userArray) {
-    const grid = document.getElementById('admin-user-cards-grid');
-    if(!grid) return;
-    grid.innerHTML = "";
-    const currentRole = activeUserSession.role;
 
-    userArray.forEach(u => {
-        let card = document.createElement('div');
-        card.className = 'admin-control-card';
+        function buildUserAdminDisplayCards(userArray) {
+            const grid = document.getElementById('admin-user-cards-grid');
+            if(!grid) return;
+            grid.innerHTML = "";
+            const currentRole = activeUserSession.role;
 
-        let actionControlsHTML = "";
-        const btnStyle = 'display:inline-block; width:auto; padding:5px 10px; font-size:12px; font-weight:500; border-radius:4px;';
-
-        if(currentRole === 'Admin') {
-            actionControlsHTML = `
-                <button class="btn-admin-small" style="${btnStyle} background:#2563eb; color:#fff;" onclick="adminDirectRoleSet(${u.id}, 'Regular Member')">Regular Member</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#0d9488; color:#fff;" onclick="adminDirectRoleSet(${u.id}, 'Trip Master')">Trip Master</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#d97706; color:#fff;" onclick="adminDirectRoleSet(${u.id}, 'Counter Master')">Counter Master</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#ea580c; color:#fff;" onclick="adminDirectRoleSet(${u.id}, 'Moderator')">Moderator</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#9333ea; color:#fff;" onclick="adminGiftWalletPrompt(${u.id})">Gift</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#0284c7; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#dc2626; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#4b5563; color:#fff;" onclick="adminRemoveMemberFromSystem(${u.id})">Remove</button>
-            `;
-        } else if(currentRole === 'Moderator') {
-            actionControlsHTML = `
-                <button class="btn-admin-small" style="${btnStyle} background:#0284c7; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                <button class="btn-admin-small" style="${btnStyle} background:#dc2626; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-            `;
-        } else if(currentRole === 'Counter Master') {
-            actionControlsHTML = `
-                <button class="btn-admin-small" style="${btnStyle} background:#0284c7; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-            `;
-        } else if(currentRole === 'Trip Master') {
-            actionControlsHTML = `
-                <span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only Mode</span>
-            `;
-        }
-
-        // আপনার ওয়েবসাইটের রিয়েল ডিজাইন অনুযায়ী ড্রাইভিং লাইসেন্স লেআউট
-        let dlHtml = `
-            <div class="bdbus-licence-card" style="margin-top: 20px; padding: 20px; background: #0b1329; border: 2px solid #00b4d8; border-radius: 12px; font-family: sans-serif; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.6); text-align: left;">
+            userArray.forEach(u => {
+                let card = document.createElement('div');
+                card.className = 'admin-control-card';
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 15px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 20px; height: 12px; background: #006a4e; border-radius: 2px; position: relative;">
-                            <div style="width: 6px; height: 6px; background: #f42a41; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                let actionControlsHTML = "";
+                const btnStyle = 'display:inline-block; width:auto; padding:5px 10px; font-size:12px; font-weight:500; border-radius:4px;';
+                
+                if(currentRole === 'Admin') {
+                    actionControlsHTML = `
+                        <button class="btn-admin-small" style="${btnStyle} background:#2563eb; color:#fff;" onclick="adminChangeRolePrompt(${u.id})">Assign Role</button>
+                        <button class="btn-admin-small" style="${btnStyle} background:#eab308; color:#000;" onclick="adminGiftWalletPrompt(${u.id})">Gift BDT</button>
+                        <button class="btn-admin-small" style="${btnStyle} background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                        <button class="btn-admin-small" style="${btnStyle} background:#dc2626; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban' : 'Ban'}</button>
+                    `;
+                } else if(currentRole === 'Moderator') {
+                    actionControlsHTML = `
+                        <button class="btn-admin-small" style="${btnStyle} background:#10b981; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                        <button class="btn-admin-small" style="${btnStyle} background:#dc2626; color:#fff;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban' : 'Ban'}</button>
+                    `;
+                } else if(currentRole === 'Counter Master') {
+                    actionControlsHTML = `
+                        <button class="btn-admin-small" style="${btnStyle} background:#0284c7; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                    `;
+                } else if(currentRole === 'Trip Master') {
+                    actionControlsHTML = `<span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only Mode</span>`;
+                }
+
+                // আপনার ওয়েবসাইটের অফিসিয়াল ডার্ক ড্রাইভিং লাইসেন্স লেআউট থিম
+                let dlHtml = `
+                    <div class="bdbus-licence-card" style="margin-top: 20px; padding: 20px; background: #0b1329; border: 2px solid #00b4d8; border-radius: 12px; font-family: sans-serif; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.6); text-align: left;">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 15px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 20px; height: 12px; background: #006a4e; border-radius: 2px; position: relative;">
+                                    <div style="width: 6px; height: 6px; background: #f42a41; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                                </div>
+                                <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">BDBUS DIGITAL MULTIPLAYER HUB</span>
+                            </div>
+                            <span style="font-size: 10px; color: #10b981; font-weight: bold; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">DRIVING LICENCE PERMIT</span>
                         </div>
-                        <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">BDBUS DIGITAL MULTIPLAYER HUB</span>
-                    </div>
-                    <span style="font-size: 10px; color: #10b981; font-weight: bold; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">DRIVING LICENCE PERMIT</span>
-                </div>
 
-                <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
-                    
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 110px; flex-shrink: 0;">
-                        <div style="width: 110px; height: 110px; border: 2px solid #1e293b; border-radius: 8px; overflow: hidden; background: #111827; display: flex; align-items: center; justify-content: center;">
-                            <img src="${u.avatar || 'https://i.ibb.co/Z6xXzY9/logo.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/110?text=BDBUS'">
-                        </div>
-                        <div style="width: 100%; text-align: center; background: rgba(0, 180, 216, 0.15); border: 1px solid #00b4d8; border-radius: 4px; padding: 4px 0; font-size: 10px; font-family: monospace; color: #00b4d8; font-weight: bold;">
-                            ID: BDBUS-${u.id}
-                        </div>
-                    </div>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+                            
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 110px; flex-shrink: 0;">
+                                <div style="width: 110px; height: 110px; border: 2px solid #1e293b; border-radius: 8px; overflow: hidden; background: #111827; display: flex; align-items: center; justify-content: center;">
+                                    <img src="${u.avatar || 'https://i.ibb.co/Z6xXzY9/logo.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/110?text=BDBUS'">
+                                </div>
+                                <div style="width: 100%; text-align: center; background: rgba(0, 180, 216, 0.15); border: 1px solid #00b4d8; border-radius: 4px; padding: 4px 0; font-size: 10px; font-family: monospace; color: #00b4d8; font-weight: bold;">
+                                    ID: BDBUS-${u.id}
+                                </div>
+                            </div>
 
-                    <div style="flex: 1; min-width: 180px; display: grid; grid-template-columns: 120px 1fr; row-gap: 6px; font-size: 11px; align-content: center; line-height: 1.4;">
-                        <div style="color: #94a3b8; font-weight: bold;">NAME:</div>
-                        <div style="color: #ffffff; font-weight: bold; text-transform: uppercase;">${u.name || 'N/A'}</div>
+                            <div style="flex: 1; min-width: 180px; display: grid; grid-template-columns: 120px 1fr; row-gap: 6px; font-size: 11px; align-content: center; line-height: 1.4;">
+                                <div style="color: #94a3b8; font-weight: bold;">NAME:</div>
+                                <div style="color: #ffffff; font-weight: bold; text-transform: uppercase;">${u.name || 'N/A'}</div>
 
-                        <div style="color: #94a3b8; font-weight: bold;">GAME NICKNAME:</div>
-                        <div style="color: #ffffff; text-transform: uppercase;">${u.gameid || u.name.split(' ')[0]}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">BIRTH DATE:</div>
-                        <div style="color: #ffffff;">${u.birthDate || '1995-01-01'}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">GENDER:</div>
-                        <div style="color: #ffffff; text-transform: uppercase;">${u.gender || 'MALE'}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">MOBILE NO:</div>
-                        <div style="color: #ffffff;">${u.phone || u.mobile || '01878335098'}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">DIVISION:</div>
-                        <div style="color: #ffffff; text-transform: uppercase;">${u.division || 'DHAKA'}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">DISTRICT:</div>
-                        <div style="color: #ffffff; text-transform: uppercase;">${u.district || 'DHAKA'}</div>
-
-                        <div style="color: #94a3b8; font-weight: bold;">VEHICLE TYPE:</div>
-                        <div style="color: #10b981; font-weight: bold; letter-spacing: 0.5px;">HEAVY BUSSID COACH</div>
-                    </div>
-
-                </div>
-
-                <div style="margin-top: 18px; padding-top: 10px; border-top: 1px dashed #1e293b; display: flex; justify-content: space-between; font-size: 9px; color: #64748b;">
-                    <div style="text-align: left;">
-                        <span style="font-style: italic; color: #94a3b8; display: block; font-size: 11px; font-family: cursive;">M2Vai Admin</span>
-                        <span style="border-top: 1px dotted #334155; display: inline-block; padding-top: 2px; letter-spacing: 0.5px;">ISSUING AUTHORITY</span>
-                    </div>
-                    <div style="text-align: right;">
-                        <span style="font-style: italic; color: #94a3b8; display: block; font-size: 11px; font-family: cursive; text-transform: uppercase;">${u.name}</span>
-                        <span style="border-top: 1px dotted #334155; display: inline-block; padding-top: 2px; letter-spacing: 0.5px;">HOLDER SIGNATURE</span>
-                    </div>
-                </div>
-
-            </div>
-        `;
-
-        card.innerHTML = `
-            <h5>${u.name} (ID: BDBUS-${u.id})</h5>
-            <p style="font-size:11px; color:var(--text-muted);">Email: ${u.email}<br>Role: <strong>${u.role}</strong> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-            <p style="font-size:11px; color:${u.isBanned ? '#ef4444':'#10b981'}">Status: ${u.isBanned ? 'Banned':'Active'}</p>
-            <div class="admin-action-row" style="display:flex; flex-wrap:wrap; gap:2px; margin-top:8px;">${actionControlsHTML}</div>
-            
-            ${dlHtml}
-        `;
-        
-        grid.appendChild(card);
-    });
-}
                                 <div style="color: #94a3b8; font-weight: bold;">GAME NICKNAME:</div>
                                 <div style="color: #ffffff; text-transform: uppercase;">${u.gameid || u.name.split(' ')[0]}</div>
 
                                 <div style="color: #94a3b8; font-weight: bold;">BIRTH DATE:</div>
-                                <div style="color: #ffffff;">${u.birthDate || '1995-01-01'}</div>
+                                <div style="color: #ffffff;">${u.dob || '1995-01-01'}</div>
 
                                 <div style="color: #94a3b8; font-weight: bold;">GENDER:</div>
                                 <div style="color: #ffffff; text-transform: uppercase;">${u.gender || 'MALE'}</div>
 
                                 <div style="color: #94a3b8; font-weight: bold;">MOBILE NO:</div>
-                                <div style="color: #ffffff;">${u.phone || u.mobile || '01878335098'}</div>
+                                <div style="color: #ffffff;">${u.phone || '01878335098'}</div>
 
                                 <div style="color: #94a3b8; font-weight: bold;">DIVISION:</div>
                                 <div style="color: #ffffff; text-transform: uppercase;">${u.division || 'DHAKA'}</div>
@@ -2129,13 +2101,12 @@
 
                     </div>
                 `;
-                `;
 
                 card.innerHTML = `
                     <h5>${u.name} (ID: BDBUS-${u.id})</h5>
                     <p style="font-size:11px; color:var(--text-muted);">Email: ${u.email}<br>Role: <strong>${u.role}</strong> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
                     <p style="font-size:11px; color:${u.isBanned ? '#ef4444':'#10b981'}">Status: ${u.isBanned ? 'Banned':'Active'}</p>
-                    <div class="admin-action-row" style="display:flex; flex-wrap:wrap; gap:2px; margin-top:8px;">${actionControlsHTML}</div>
+                    <div class="admin-action-row" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:8px;">${actionControlsHTML}</div>
                     
                     ${dlHtml}
                 `;
@@ -2143,31 +2114,9 @@
             });
         }
 
-        // অ্যাডমিনের সহজে এক ক্লিকে রোল পরিবর্তনের জন্য কাস্টম হেল্পার ফাংশন
-        function adminDirectRoleSet(id, targetRole) {
-            if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
-            let user = db.users.find(u => u.id === id);
-            user.role = targetRole;
-            saveDataEngine();
-            renderAdminPanelDashboard();
-            alert(`"${user.name}" এর পদবী সফলভাবে পরিবর্তন করে "${targetRole}" করা হয়েছে।`);
-        }
-
-        // সিস্টেম থেকে ইউজার চিরতরে রিমুভ করার কাস্টম ফাংশন
-        function adminRemoveMemberFromSystem(id) {
-            if(id === 1000) { alert("Root Super Admin cannot be removed."); return; }
-            let user = db.users.find(u => u.id === id);
-            if(confirm(`আপনি কি নিশ্চিত যে "${user.name}" কে ওয়েবসাইট থেকে চিরতরে রিমুভ করতে চান?`)) {
-                db.users = db.users.filter(u => u.id !== id);
-                saveDataEngine();
-                renderAdminPanelDashboard();
-                alert("মেম্বারকে সফলভাবে রিমুভ করা হয়েছে।");
-            }
-        }
-
         function executeAdminSearchLogic() {
             let term = document.getElementById('admin-search-input').value.trim();
-            if(!term) { document.getElementById('admin-user-cards-grid').innerHTML = ""; return; }
+            if(!term) { buildUserAdminDisplayCards(db.users); return; }
             let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
             buildUserAdminDisplayCards(filtered);
         }
@@ -2316,23 +2265,6 @@
             }
             navigatePage('auth-screen');
         });
-        let timeLeft = 120; // ২ মিনিট বা ১২০ সেকেন্ড
-const timerId = setInterval(() => {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  
-  // টাইমারটি স্ক্রিনে দেখানোর জন্য
-  document.getElementById('countdown').innerHTML = 
-    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  
-  if (timeLeft <= 0) {
-    clearInterval(timerId);
-    // সময় শেষ হলে এই বার্তাটি দেখানো হবে
-    alert("Seat booking time has expired! Please refresh the website to see the seat again.");
-  } else {
-    timeLeft -= 1;
-  }
-}, 1000);
     </script>
 </body>
 </html>
