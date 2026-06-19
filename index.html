@@ -1404,6 +1404,15 @@
             if (screenId === 'admin-screen') renderAdminPanelDashboard();
             if (screenId === 'contact-screen') renderContactTeamPanel();
             if (screenId === 'licence-screen') renderDigitalLicenceData();
+            function goBack() {
+    if (internalNavigationHistoryArray.length > 1) {
+        internalNavigationHistoryArray.pop(); 
+        let previousScreenId = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1];
+        navigatePage(previousScreenId, false);
+    } else {
+        navigatePage('home-screen', true);
+    }
+}
         }
 
         function executeHardwareBackTrigger() {
