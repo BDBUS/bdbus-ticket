@@ -2019,23 +2019,72 @@
                 else if(currentRole === 'Trip Master') {
                     actionControlsHTML = `<span style="font-size:11px; color:var(--text-muted); italic">View Only Mode</span>`;
                 }
-
-                                // মেম্বারের তথ্য অনুযায়ী ডিজিটাল ড্রাইভিং লাইসেন্সের কাস্টম ডিজাইন
+                // আপনার ওয়েবসাইটের রিয়েল ডিজাইন অনুযায়ী ড্রাইভিং লাইসেন্স লেআউট
                 let dlHtml = `
-                    <div class="dl-preview-card" style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #0284c7; border-radius: 12px; color: #fff; text-align: left;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 5px; margin-bottom: 10px;">
-                            <span style="font-size: 11px; font-weight: bold; color: #38bdf8;">BDBUS DIGITAL LICENCE</span>
-                            <span style="font-size: 10px; font-family: monospace; color: #94a3b8;">ID: BDBUS-${u.id}</span>
+                    <div class="bdbus-licence-card" style="margin-top: 20px; padding: 20px; background: #0b1329; border: 2px solid #00b4d8; border-radius: 12px; font-family: sans-serif; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.6); text-align: left;">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 15px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 20px; height: 12px; background: #006a4e; border-radius: 2px; position: relative;">
+                                    <div style="width: 6px; height: 6px; background: #f42a41; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                                </div>
+                                <span style="font-size: 13px; font-weight: bold; letter-spacing: 0.5px; color: #ffffff;">BDBUS DIGITAL MULTIPLAYER HUB</span>
+                            </div>
+                            <span style="font-size: 10px; color: #10b981; font-weight: bold; border: 1px solid #10b981; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">DRIVING LICENCE PERMIT</span>
                         </div>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <div style="font-size: 11px; line-height: 1.5; flex-grow: 1;">
-                                <p style="margin: 0; font-size: 12px; color: #f5af19;"><strong>NAME:</strong> ${u.name.toUpperCase()}</p>
-                                <p style="margin: 3px 0 0 0;"><strong>EMAIL:</strong> ${u.email}</p>
-                                <p style="margin: 3px 0 0 0;"><strong>DUTY ROLE:</strong> <span style="color:#10b981; font-weight:bold;">${u.role.toUpperCase()}</span></p>
-                                <p style="margin: 3px 0 0 0;"><strong>LICENCE STATUS:</strong> <span style="color:${u.isBanned ? '#ef4444':'#10b981'}">${u.isBanned ? 'SUSPENDED':'VERIFIED'}</span></p>
+
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+                            
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 110px; flex-shrink: 0;">
+                                <div style="width: 110px; height: 110px; border: 2px solid #1e293b; border-radius: 8px; overflow: hidden; background: #111827; display: flex; align-items: center; justify-content: center;">
+                                    <img src="${u.avatar || 'https://i.ibb.co/Z6xXzY9/logo.png'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/110?text=BDBUS'">
+                                </div>
+                                <div style="width: 100%; text-align: center; background: rgba(0, 180, 216, 0.15); border: 1px solid #00b4d8; border-radius: 4px; padding: 4px 0; font-size: 10px; font-family: monospace; color: #00b4d8; font-weight: bold;">
+                                    ID: BDBUS-${u.id}
+                                </div>
+                            </div>
+
+                            <div style="flex: 1; min-width: 180px; display: grid; grid-template-columns: 120px 1fr; row-gap: 6px; font-size: 11px; align-content: center; line-height: 1.4;">
+                                <div style="color: #94a3b8; font-weight: bold;">NAME:</div>
+                                <div style="color: #ffffff; font-weight: bold; text-transform: uppercase;">${u.name || 'N/A'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">GAME NICKNAME:</div>
+                                <div style="color: #ffffff; text-transform: uppercase;">${u.gameid || u.name.split(' ')[0]}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">BIRTH DATE:</div>
+                                <div style="color: #ffffff;">${u.birthDate || '1995-01-01'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">GENDER:</div>
+                                <div style="color: #ffffff; text-transform: uppercase;">${u.gender || 'MALE'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">MOBILE NO:</div>
+                                <div style="color: #ffffff;">${u.phone || u.mobile || '01878335098'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">DIVISION:</div>
+                                <div style="color: #ffffff; text-transform: uppercase;">${u.division || 'DHAKA'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">DISTRICT:</div>
+                                <div style="color: #ffffff; text-transform: uppercase;">${u.district || 'DHAKA'}</div>
+
+                                <div style="color: #94a3b8; font-weight: bold;">VEHICLE TYPE:</div>
+                                <div style="color: #10b981; font-weight: bold; letter-spacing: 0.5px;">HEAVY BUSSID COACH</div>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-top: 18px; padding-top: 10px; border-top: 1px dashed #1e293b; display: flex; justify-content: space-between; font-size: 9px; color: #64748b;">
+                            <div style="text-align: left;">
+                                <span style="font-style: italic; color: #94a3b8; display: block; font-size: 11px; font-family: cursive;">M2Vai Admin</span>
+                                <span style="border-top: 1px dotted #334155; display: inline-block; padding-top: 2px; letter-spacing: 0.5px;">ISSUING AUTHORITY</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-style: italic; color: #94a3b8; display: block; font-size: 11px; font-family: cursive; text-transform: uppercase;">${u.name}</span>
+                                <span style="border-top: 1px dotted #334155; display: inline-block; padding-top: 2px; letter-spacing: 0.5px;">HOLDER SIGNATURE</span>
                             </div>
                         </div>
+
                     </div>
+                `;
                 `;
 
                 card.innerHTML = `
