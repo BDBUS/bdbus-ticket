@@ -1974,7 +1974,7 @@
             
             alert("Global notice feed synchronized across cluster terminals successfully!");
         }
-        function buildUserAdminDisplayCards(userArray) {
+      function buildUserAdminDisplayCards(userArray) {
     const grid = document.getElementById('admin-user-cards-grid');
     if(!grid) return;
     grid.innerHTML = "";
@@ -2008,7 +2008,9 @@
                 <button class="btn-admin-small" style="${btnStyle} background:#0284c7; color:#fff;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
             `;
         } else if(currentRole === 'Trip Master') {
-            actionControlsHTML = `<span style="font-size:11px; color:var(--text-muted); italic">View Only Mode</span>`;
+            actionControlsHTML = `
+                <span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only Mode</span>
+            `;
         }
 
         // আপনার ওয়েবসাইটের রিয়েল ডিজাইন অনুযায়ী ড্রাইভিং লাইসেন্স লেআউট
