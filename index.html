@@ -2019,11 +2019,31 @@
                     actionControlsHTML = `<span style="font-size:11px; color:var(--text-muted); italic">View Only Mode</span>`;
                 }
 
+                                // মেম্বারের তথ্য অনুযায়ী ডিজিটাল ড্রাইভিং লাইসেন্সের কাস্টম ডিজাইন
+                let dlHtml = `
+                    <div class="dl-preview-card" style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #0284c7; border-radius: 12px; color: #fff; text-align: left;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 5px; margin-bottom: 10px;">
+                            <span style="font-size: 11px; font-weight: bold; color: #38bdf8;">BDBUS DIGITAL LICENCE</span>
+                            <span style="font-size: 10px; font-family: monospace; color: #94a3b8;">ID: BDBUS-${u.id}</span>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div style="font-size: 11px; line-height: 1.5; flex-grow: 1;">
+                                <p style="margin: 0; font-size: 12px; color: #f5af19;"><strong>NAME:</strong> ${u.name.toUpperCase()}</p>
+                                <p style="margin: 3px 0 0 0;"><strong>EMAIL:</strong> ${u.email}</p>
+                                <p style="margin: 3px 0 0 0;"><strong>DUTY ROLE:</strong> <span style="color:#10b981; font-weight:bold;">${u.role.toUpperCase()}</span></p>
+                                <p style="margin: 3px 0 0 0;"><strong>LICENCE STATUS:</strong> <span style="color:${u.isBanned ? '#ef4444':'#10b981'}">${u.isBanned ? 'SUSPENDED':'VERIFIED'}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
                 card.innerHTML = `
                     <h5>${u.name} (ID: BDBUS-${u.id})</h5>
                     <p style="font-size:11px; color:var(--text-muted);">Email: ${u.email}<br>Role: <strong>${u.role}</strong> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
                     <p style="font-size:11px; color:${u.isBanned ? '#ef4444':'#10b981'}">Status: ${u.isBanned ? 'Banned':'Active'}</p>
                     <div class="admin-action-row" style="display:flex; flex-wrap:wrap; gap:2px; margin-top:8px;">${actionControlsHTML}</div>
+                    
+                    ${dlHtml}
                 `;
                 grid.appendChild(card);
             });
@@ -2053,7 +2073,7 @@
 
         function executeAdminSearchLogic() {
             let term = document.getElementById('admin-search-input').value.trim();
-            if(!term) { buildUserAdminDisplayCards(db.users); return; }
+            if(!term) { document.getElementById('admin-user-cards-grid').innerHTML = ""; return; }
             let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
             buildUserAdminDisplayCards(filtered);
         }
