@@ -1410,6 +1410,12 @@ function toggleAuthSubView(view) {
         mainTitle.innerText = "Bangladesh Bussid Unique Society";
         subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
     }
+
+    // নতুন কোড: লগইন/রেজিস্ট্রেশন পেইজে সোশ্যাল বাটন হাইড করার জন্য
+    const globalFooter = document.getElementById('main-global-footer');
+    if (globalFooter) {
+        globalFooter.style.display = 'none';
+    }
 }
 
 function executeRegistrationLogic() {
