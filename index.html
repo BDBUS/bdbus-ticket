@@ -1409,14 +1409,13 @@ function toggleAuthSubView(view) {
         document.getElementById('signup-sub-card').style.display = 'none';
         mainTitle.innerText = "Bangladesh Bussid Unique Society";
         subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
-    }
+
     // নতুন কোড: লগইন/রেজিস্ট্রেশন পেইজে সোশ্যাল বাটন হাইড করার জন্য
     const globalFooter = document.getElementById('main-global-footer');
     if (globalFooter) {
         globalFooter.style.display = 'none';
     }
 }
-
 function executeRegistrationLogic() {
     const name = document.getElementById('reg-name').value.trim();
     const gameid = document.getElementById('reg-gameid').value.trim();
@@ -2285,6 +2284,9 @@ window.addEventListener('DOMContentLoaded', () => {
             navigatePage(savedScreenTargetPersistedId);
             return;
         }
+    }
+        if(document.getElementById('main-global-footer')) {
+        document.getElementById('main-global-footer').style.display = 'none';
     }
     navigatePage('auth-screen');
 });
