@@ -1271,7 +1271,7 @@
             }
         }
 
-                /// ==========================================
+                // ==========================================
 // BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
 // ==========================================
 
@@ -1697,7 +1697,7 @@ function initSeatLockCountdownTimer() {
         const minutes = Math.floor(timeLeft / 60);
         const seconds = timeLeft % 60;
         
-                countdownEl.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        countdownEl.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         
         if (timeLeft <= 0) {
             clearInterval(window.seatTimerIntervalId);
@@ -1748,6 +1748,8 @@ function generateBusCabinGridBlueprint(coachType) {
             rightBlock.appendChild(createSeatElement(`${r}2`));
             rightBlock.appendChild(createSeatElement(`${r}3`));
 
+            rowDiv.appendChild(leftBlock);
+            rowDiv.appendChild(rightBlock);
             rowDiv.appendChild(leftBlock);
             rowDiv.appendChild(rightBlock);
             root.appendChild(rowDiv);
@@ -1850,7 +1852,7 @@ function executeTicketConfirmationEngine() {
     document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
     document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
     document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-    document.getElementById('tk-seat').innerText = customizedChosenSeatNode;
+    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode; // <--- টাইপো ফিক্স করা হয়েছে
     
     const now = new Date();
     document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
@@ -2160,7 +2162,7 @@ function renderAllRegisteredMembersPage() {
     sortedMembers.forEach((u, index) => {
         let row = document.createElement('div');
         row.style.display = 'flex';
-        row.style.justifyContent = 'space-between';
+        row.style.justifyContent = 'space-between'; // <--- টাইপো ফিক্স করা হয়েছে
         row.style.alignItems = 'center';
         row.style.padding = '10px 15px';
         row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
