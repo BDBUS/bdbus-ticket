@@ -1850,7 +1850,7 @@ function executeTicketConfirmationEngine() {
     document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
     document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
     document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
+    document.getElementById('tk-seat').innerText = customizedChosenSeatNode;
     
     const now = new Date();
     document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
@@ -2160,7 +2160,7 @@ function renderAllRegisteredMembersPage() {
     sortedMembers.forEach((u, index) => {
         let row = document.createElement('div');
         row.style.display = 'flex';
-        row.style.justify = 'space-between';
+        row.style.justifyContent = 'space-between';
         row.style.alignItems = 'center';
         row.style.padding = '10px 15px';
         row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
@@ -2283,6 +2283,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     navigatePage('auth-screen');
 });
+
     </script>
 </body>
 </html>
