@@ -1342,23 +1342,27 @@ function navigatePage(screenId, saveHistory = true) {
     const menuBtn = document.getElementById('global-menu-trigger-btn');
     const navControls = document.getElementById('header-nav-controls');
     const emptySpace = document.getElementById('header-empty-space');
+    const globalFooter = document.getElementById('main-global-footer'); // <-- ফুটার ভ্যারিয়েবল ট্র্যাক করার জন্য
 
     if(!activeUserSession || screenId === 'auth-screen') {
         if(navControls) navControls.style.display = 'none';
         if(emptySpace) emptySpace.style.display = 'block';
         if(backBtn) backBtn.style.display = 'none';
         if(menuBtn) menuBtn.style.display = 'none';
+        if(globalFooter) globalFooter.style.display = 'none'; // <-- লগআউট বা অথ স্ক্রিনে ফুটার ১০০% হাইড থাকবে
     } else if (screenId === 'home-screen') {
         if(navControls) navControls.style.display = 'flex';
         if(emptySpace) emptySpace.style.display = 'none';
         if(backBtn) backBtn.style.display = 'none';
         if(menuBtn) menuBtn.style.display = 'block';
+        if(globalFooter) globalFooter.style.display = 'block'; // <-- হোম স্ক্রিনে ফুটার শো করবে
         if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
     } else {
         if(navControls) navControls.style.display = 'flex';
         if(emptySpace) emptySpace.style.display = 'none';
         if(backBtn) backBtn.style.display = 'flex'; 
         if(menuBtn) menuBtn.style.display = 'block';
+        if(globalFooter) globalFooter.style.display = 'block'; // <-- অন্যান্য অভ্যন্তরীণ স্ক্রিনেও ফুটার শো করবে
         
         if(saveHistory) {
             if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
@@ -1852,7 +1856,7 @@ function executeTicketConfirmationEngine() {
     document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
     document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
     document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode; // <--- টাইপো ফিক্স করা হয়েছে
+    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
     
     const now = new Date();
     document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
@@ -2162,7 +2166,7 @@ function renderAllRegisteredMembersPage() {
     sortedMembers.forEach((u, index) => {
         let row = document.createElement('div');
         row.style.display = 'flex';
-        row.style.justifyContent = 'space-between'; // <--- টাইপো ফিক্স করা হয়েছে
+        row.style.justifyContent = 'space-between'; 
         row.style.alignItems = 'center';
         row.style.padding = '10px 15px';
         row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
@@ -2267,13 +2271,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     history.pushState(null, null, window.location.pathname);
 
+    const globalFooter = document.getElementById('main-global-footer'); // <-- লোড হওয়ার শুরুতেই ফুটার প্যানেল লক করার জন্য
+
     if(activeUserSession) {
         let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
         if(refreshedUser && !refreshedUser.isBanned) {
             document.body.classList.add('logged-in');
             document.getElementById('header-nav-controls').style.display = 'flex';
             document.getElementById('header-empty-space').style.display = 'none';
-            document.getElementById('main-global-footer').style.display = 'block';
+            if(globalFooter) globalFooter.style.display = 'block'; // <-- লগইন সেশন থাকলে ফুটার দেখাবে
+            
             if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
                 document.getElementById('admin-menu-link').style.display = 'flex';
             }
@@ -2283,6 +2290,9 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
+    
+    // যদি ইউজার লগইন না থাকে, তাহলে ফুটার আগে থেকেই হাইড হয়ে সোজা অথ স্ক্রিনে যাবে
+    if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
 });
     </script>
