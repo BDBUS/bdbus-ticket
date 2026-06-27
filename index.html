@@ -1270,8 +1270,7 @@
                 saveDataEngine();
             }
         }
-
-                <script type="module">
+            <script type="module">
 // ফায়ারবেস কোর এবং ফায়ারস্টোর ফাংশন ইমপোর্ট
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1290,8 +1289,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const firestoreDb = getFirestore(app);
 
-// গ্লোবাল ডাটাবেজ অবজেক্ট রেফারেন্স ট্র্যাকিং ট্রায়াল (যদি মেইন ফাইলে আগে থেকে ডিক্লেয়ার করা না থাকে)
-if (typeof window.db === 'undefined') {
+// গ্লোবাল ডাটাবেজ অবজেক্ট ইনিশিয়ালাইজেশন ফাংশন (সেফটি ব্যাকআপ)
+function initializeDefaultDatabaseState() {
     window.db = {
         sysConfigIdCounter: 1000,
         notices: "Welcome to Bangladesh Bussid Unique Society Official Console.",
@@ -1300,16 +1299,19 @@ if (typeof window.db === 'undefined') {
     };
 }
 
+if (typeof window.db === 'undefined' || !window.db) {
+    initializeDefaultDatabaseState();
+}
+
 // ==========================================
 // BDBUS CORE ENGINE - POWERED WITH CLOUD FIRESTORE
 // ==========================================
 
 // ক্লাউড ফায়ারস্টোরে ডেটা সিঙ্ক করার ইঞ্জিন
 async function saveDataEngine() {
-    // আগের লোকাল ব্যাকআপ ব্যাকওয়ার্ড কম্প্যাটিবিলিটির জন্য রাখা হলো
+    if (!window.db) initializeDefaultDatabaseState();
     localStorage.setItem('bdbus_local_db', JSON.stringify(window.db));
     
-    // ফায়ারস্টোর সেন্ট্রাল ক্লাউডে ডেটা আপলোড
     try {
         await setDoc(doc(firestoreDb, "bdbus_cluster", "main_database"), window.db);
         console.log("Database successfully synced to Cloud Firestore.");
@@ -1323,22 +1325,37 @@ async function pullCloudDatabaseState() {
     try {
         const docRef = doc(firestoreDb, "bdbus_cluster", "main_database");
         const docSnap = await getDoc(docRef);
+        
         if (docSnap.exists()) {
             window.db = docSnap.data();
+            // কোনো কারণে ফায়ারস্টোর স্কিমা খালি বা ভেঙে আসলে ব্যাকআপ ফিলআপ
+            if (!window.db.users) window.db.users = [];
+            if (!window.db.occupiedSeats) window.db.occupiedSeats = {};
+            if (!window.db.notices) window.db.notices = "Welcome to BDBUS.";
+            
             console.log("Centralized cloud database loaded successfully.");
+            
             // UI রি-রেন্ডার ট্রিগার
             if (typeof selectedLanguage !== 'undefined') setLanguageSystem(selectedLanguage);
-            if (activeUserSession) {
+            if (typeof activeUserSession !== 'undefined' && activeUserSession) {
                 let currentScreen = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
                 if (currentScreen === 'admin-screen') renderAdminPanelDashboard();
                 if (currentScreen === 'all-members-screen') renderAllRegisteredMembersPage();
             }
         } else {
             console.log("No cloud database layer detected. Seeding configuration template.");
+            initializeDefaultDatabaseState();
             await saveDataEngine();
         }
     } catch (error) {
         console.error("Cloud hydration pipeline exception: ", error);
+        // ফায়ারবেস ফেইল মারলে লোকাল স্টোরেজ থেকে রিকভারি ট্রাই
+        const localData = localStorage.getItem('bdbus_local_db');
+        if (localData) {
+            window.db = JSON.parse(localData);
+        } else {
+            initializeDefaultDatabaseState();
+        }
     }
 }
 
@@ -1379,7 +1396,7 @@ function initialClockHeartbeatEngine() {
 }
 
 function checkSessionTimeoutRules() {
-    if (activeUserSession) {
+    if (typeof activeUserSession !== 'undefined' && activeUserSession) {
         let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
         if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
             alert("Session expired! 30 minutes timeout reached.");
@@ -1402,7 +1419,7 @@ function togglePasswordInputVisibility(inputId, iconEl) {
 }
 
 function navigatePage(screenId, saveHistory = true) {
-    toggleSidebarMenu(false);
+    if (typeof toggleSidebarMenu === 'function') toggleSidebarMenu(false);
     sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
     
     const backBtn = document.getElementById('global-back-nav-btn');
@@ -1411,7 +1428,9 @@ function navigatePage(screenId, saveHistory = true) {
     const emptySpace = document.getElementById('header-empty-space');
     const globalFooter = document.getElementById('main-global-footer');
 
-    if(!activeUserSession || screenId === 'auth-screen') {
+    const hasActiveSession = typeof activeUserSession !== 'undefined' && activeUserSession;
+
+    if(!hasActiveSession || screenId === 'auth-screen') {
         if(navControls) navControls.style.display = 'none';
         if(emptySpace) emptySpace.style.display = 'block';
         if(backBtn) backBtn.style.display = 'none';
@@ -1423,7 +1442,7 @@ function navigatePage(screenId, saveHistory = true) {
         if(backBtn) backBtn.style.display = 'none';
         if(menuBtn) menuBtn.style.display = 'block';
         if(globalFooter) globalFooter.style.display = 'block';
-        if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
+        if(saveHistory && typeof internalNavigationHistoryArray !== 'undefined') internalNavigationHistoryArray = ['home-screen'];
     } else {
         if(navControls) navControls.style.display = 'flex';
         if(emptySpace) emptySpace.style.display = 'none';
@@ -1431,14 +1450,16 @@ function navigatePage(screenId, saveHistory = true) {
         if(menuBtn) menuBtn.style.display = 'block';
         if(globalFooter) globalFooter.style.display = 'block';
         
-        if(saveHistory) {
+        if(saveHistory && typeof internalNavigationHistoryArray !== 'undefined') {
             if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
                 internalNavigationHistoryArray.push(screenId);
             }
         }
     }
     
-    sessionStorage.setItem('bdbus_nav_history', JSON.stringify(internalNavigationHistoryArray));
+    if (typeof internalNavigationHistoryArray !== 'undefined') {
+        sessionStorage.setItem('bdbus_nav_history', JSON.stringify(internalNavigationHistoryArray));
+    }
 
     document.querySelectorAll('.page-screen').forEach(scr => scr.classList.remove('active'));
     const activeTargetScreen = document.getElementById(screenId);
@@ -1453,7 +1474,7 @@ function navigatePage(screenId, saveHistory = true) {
 }
 
 function executeHardwareBackTrigger() {
-    if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
+    if(typeof activeUserSession === 'undefined' || !activeUserSession || typeof internalNavigationHistoryArray === 'undefined' || internalNavigationHistoryArray.length <= 1) {
         return; 
     }
     internalNavigationHistoryArray.pop(); 
@@ -1463,23 +1484,25 @@ function executeHardwareBackTrigger() {
 
 function toggleSidebarMenu(open) {
     const menu = document.getElementById('sidebar-drawer-menu');
-    if (open) menu.classList.add('active');
-    else menu.classList.remove('active');
+    if (menu) {
+        if (open) menu.classList.add('active');
+        else menu.classList.remove('active');
+    }
 }
 
 function toggleAuthSubView(view) {
     const mainTitle = document.getElementById('auth-main-title');
     const subTitle = document.getElementById('auth-sub-title');
     if(view === 'signup') {
-        document.getElementById('login-sub-card').style.display = 'none';
-        document.getElementById('signup-sub-card').style.display = 'block';
-        mainTitle.innerText = "Bangladesh Bussid Unique Society";
-        subTitle.innerText = "BDBUS REGISTRATION FORM";
+        if(document.getElementById('login-sub-card')) document.getElementById('login-sub-card').style.display = 'none';
+        if(document.getElementById('signup-sub-card')) document.getElementById('signup-sub-card').style.display = 'block';
+        if(mainTitle) mainTitle.innerText = "Bangladesh Bussid Unique Society";
+        if(subTitle) subTitle.innerText = "BDBUS REGISTRATION FORM";
     } else {
-        document.getElementById('login-sub-card').style.display = 'block';
-        document.getElementById('signup-sub-card').style.display = 'none';
-        mainTitle.innerText = "Bangladesh Bussid Unique Society";
-        subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
+        if(document.getElementById('login-sub-card')) document.getElementById('login-sub-card').style.display = 'block';
+        if(document.getElementById('signup-sub-card')) document.getElementById('signup-sub-card').style.display = 'none';
+        if(mainTitle) mainTitle.innerText = "Bangladesh Bussid Unique Society";
+        if(subTitle) subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
     }
 }
 
@@ -1502,7 +1525,6 @@ window.executeRegistrationLogic = async function() {
     if(pass !== confpass) { alert("Passwords do not match!"); return; }
     if(!agree) { alert("Please verify declarations checklist authorization."); return; }
     
-    // ডাটাবেজ ক্লাউড থেকে লেটেস্ট কন্ডিশনে সিঙ্ক করে নেওয়া
     await pullCloudDatabaseState();
     
     if(window.db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
@@ -1523,21 +1545,20 @@ window.executeRegistrationLogic = async function() {
 }
 
 window.triggerGlobalWelcomePopup = function(user) {
-    document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
-    document.getElementById('pop-user-name').innerText = user.name;
-    document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
-    document.getElementById('global-welcome-popup-layer').style.display = "flex";
+    if(document.getElementById('pop-user-avatar')) document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    if(document.getElementById('pop-user-name')) document.getElementById('pop-user-name').innerText = user.name;
+    if(document.getElementById('pop-user-id')) document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
+    if(document.getElementById('global-welcome-popup-layer')) document.getElementById('global-welcome-popup-layer').style.display = "flex";
 }
 
 window.dismissGlobalWelcomePopup = function() {
-    document.getElementById('global-welcome-popup-layer').style.display = "none";
+    if(document.getElementById('global-welcome-popup-layer')) document.getElementById('global-welcome-popup-layer').style.display = "none";
 }
 
 window.executeLoginLogic = async function() {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
 
-    // লগইনের সময় লেটেস্ট ডেটা ক্লাউড থেকে সিঙ্ক করা
     await pullCloudDatabaseState();
 
     let user = window.db.users.find(u => u.email === email && u.pass === pass);
@@ -1549,17 +1570,19 @@ window.executeLoginLogic = async function() {
     sessionStorage.setItem('bdbus_login_timestamp', Date.now());
 
     document.body.classList.add('logged-in');
-    document.getElementById('header-nav-controls').style.display = 'flex';
-    document.getElementById('header-empty-space').style.display = 'none';
-    document.getElementById('main-global-footer').style.display = 'block';
+    if(document.getElementById('header-nav-controls')) document.getElementById('header-nav-controls').style.display = 'flex';
+    if(document.getElementById('header-empty-space')) document.getElementById('header-empty-space').style.display = 'none';
+    if(document.getElementById('main-global-footer')) document.getElementById('main-global-footer').style.display = 'block';
     
-    if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master') { 
-        document.getElementById('admin-menu-link').style.display = 'flex'; 
-    } else { 
-        document.getElementById('admin-menu-link').style.display = 'none'; 
+    if(document.getElementById('admin-menu-link')) {
+        if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master') { 
+            document.getElementById('admin-menu-link').style.display = 'flex'; 
+        } else { 
+            document.getElementById('admin-menu-link').style.display = 'none'; 
+        }
     }
 
-    document.getElementById('live-marquee-node').innerText = window.db.notices;
+    if(document.getElementById('live-marquee-node')) document.getElementById('live-marquee-node').innerText = window.db.notices;
 
     triggerGlobalWelcomePopup(user);
     navigatePage('home-screen');
@@ -1568,11 +1591,11 @@ window.executeLoginLogic = async function() {
 window.executeLogoutAction = function() {
     activeUserSession = null;
     sessionStorage.clear();
-    internalNavigationHistoryArray = [];
+    if(typeof internalNavigationHistoryArray !== 'undefined') internalNavigationHistoryArray = [];
     document.body.classList.remove('logged-in');
-    document.getElementById('header-nav-controls').style.display = 'none';
-    document.getElementById('header-empty-space').style.display = 'block';
-    document.getElementById('main-global-footer').style.display = 'none';
+    if(document.getElementById('header-nav-controls')) document.getElementById('header-nav-controls').style.display = 'none';
+    if(document.getElementById('header-empty-space')) document.getElementById('header-empty-space').style.display = 'block';
+    if(document.getElementById('main-global-footer')) document.getElementById('main-global-footer').style.display = 'none';
     navigatePage('auth-screen');
 }
 
@@ -1592,7 +1615,7 @@ window.claimWelcomeRewardLogic = async function() {
     await saveDataEngine();
     syncSessionState(user);
     alert("5000 BDT Welcome allocation credited into wallet console successfully!");
-    document.getElementById('claim-welcome-btn').disabled = true;
+    if(document.getElementById('claim-welcome-btn')) document.getElementById('claim-welcome-btn').disabled = true;
 }
 
 window.triggerYoutubeSubscribeReward = async function() {
@@ -1627,25 +1650,28 @@ function syncSessionState(updatedUser) {
 
 function renderUserProfileView() {
     let user = window.db.users.find(u => u.id === activeUserSession.id);
-    document.getElementById('profile-avatar-render').src = user.avatar;
-    document.getElementById('prof-render-name').innerText = user.name;
-    document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
-    document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
+    if(document.getElementById('profile-avatar-render')) document.getElementById('profile-avatar-render').src = user.avatar;
+    if(document.getElementById('prof-render-name')) document.getElementById('prof-render-name').innerText = user.name;
+    if(document.getElementById('prof-render-id')) document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
+    if(document.getElementById('prof-render-wallet')) document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
 
-    document.getElementById('prof-meta-list-block').innerHTML = `
-        <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
-        <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
-        <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
-        <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
-        <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
-        <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
-        <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
-        <p><strong>System Auth Email:</strong> ${user.email}</p>
-    `;
+    if(document.getElementById('prof-meta-list-block')) {
+        document.getElementById('prof-meta-list-block').innerHTML = `
+            <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
+            <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
+            <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
+            <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
+            <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
+            <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
+            <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
+            <p><strong>System Auth Email:</strong> ${user.email}</p>
+        `;
+    }
 }
 
 window.processAvatarUpload = function(event) {
     const file = event.target.files[0];
+    if(!file) return;
     if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
     const reader = new FileReader();
     reader.onload = async function(e) {
@@ -1653,7 +1679,7 @@ window.processAvatarUpload = function(event) {
         user.avatar = e.target.result;
         await saveDataEngine();
         syncSessionState(user);
-        document.getElementById('profile-avatar-render').src = user.avatar;
+        if(document.getElementById('profile-avatar-render')) document.getElementById('profile-avatar-render').src = user.avatar;
         alert("Avatar uploaded and compiled successfully!");
     };
     reader.readAsDataURL(file);
@@ -1680,21 +1706,22 @@ function renderDigitalLicenceData() {
     let user = window.db.users.find(u => u.id === activeUserSession.id);
     if(!user) return;
     
-    document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-    document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-    document.getElementById('dl-name').innerText = user.name.toUpperCase();
-    document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-    document.getElementById('dl-dob').innerText = user.dob;
-    document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-    document.getElementById('dl-phone').innerText = user.phone;
-    document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
-    document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-    document.getElementById('dl-sign-name').innerText = user.name;
+    if(document.getElementById('dl-avatar')) document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    if(document.getElementById('dl-id')) document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
+    if(document.getElementById('dl-name')) document.getElementById('dl-name').innerText = user.name.toUpperCase();
+    if(document.getElementById('dl-gameid')) document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
+    if(document.getElementById('dl-dob')) document.getElementById('dl-dob').innerText = user.dob;
+    if(document.getElementById('dl-gender')) document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
+    if(document.getElementById('dl-phone')) document.getElementById('dl-phone').innerText = user.phone;
+    if(document.getElementById('dl-division')) document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
+    if(document.getElementById('dl-district')) document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
+    if(document.getElementById('dl-sign-name')) document.getElementById('dl-sign-name').innerText = user.name;
 }
 
 window.executeDrivingLicenceDownloadEngine = function() {
     alert("Compiling high resolution smart driving licence graphics asset...");
     const target = document.getElementById('digital-licence-card');
+    if(!target) return;
     
     html2canvas(target, { 
         scale: 3, 
@@ -1715,7 +1742,7 @@ window.calculateFareSystemLogic = function() {
     const type = document.getElementById('route-bustype').value;
 
     if(!fromLoc || !toLoc) {
-        document.getElementById('booking-fare-render').innerText = `0 BDT`;
+        if(document.getElementById('booking-fare-render')) document.getElementById('booking-fare-render').innerText = `0 BDT`;
         return;
     }
 
@@ -1743,7 +1770,7 @@ window.calculateFareSystemLogic = function() {
         selectedFareGlobalRate = calculatedBaseFare;
     }
 
-    document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
+    if(document.getElementById('booking-fare-render')) document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
 }
 
 window.openSeatSelectionEngine = function() {
@@ -1756,8 +1783,8 @@ window.openSeatSelectionEngine = function() {
     if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
     if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
 
-    document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
-    document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
+    if(document.getElementById('seat-title-coach-type')) document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
+    if(document.getElementById('seat-calculated-total-fare')) document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
     currentlyChosenSeatNode = null;
 
     generateBusCabinGridBlueprint(type);
@@ -1788,8 +1815,10 @@ function initSeatLockCountdownTimer() {
     }, 1000);
 }
 
+// ট্রিপ মাস্টার / কেবিন গ্রিড জেনারেটর ইঞ্জিনে ফিক্স করা হয়েছে (ডুপ্লিকেট রো ব্লক দূর করা হলো)
 function generateBusCabinGridBlueprint(coachType) {
     const root = document.getElementById('dynamic-cabin-root');
+    if(!root) return;
     root.innerHTML = `<div class="cabin-front-header"><span>🚪 DOOR</span><span>🧑‍✈️ DRIVER</span></div>`;
     
     const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -1829,8 +1858,7 @@ function generateBusCabinGridBlueprint(coachType) {
 
             rowDiv.appendChild(leftBlock);
             rowDiv.appendChild(rightBlock);
-            rowDiv.appendChild(leftBlock);
-            rowDiv.appendChild(rightBlock);
+            // এখানে থাকা আগের অতিরিক্ত ডুপ্লিকেট লাইন রিমুভ করা হয়েছে যা গ্রিড নষ্ট করছিল
             root.appendChild(rowDiv);
         });
     }
@@ -1844,7 +1872,7 @@ function createSeatElement(idStr) {
     const type = document.getElementById('route-bustype').value;
     const globalKey = `${type}_Seat-${idStr}`;
     
-    if(window.db.occupiedSeats[globalKey]) {
+    if(window.db.occupiedSeats && window.db.occupiedSeats[globalKey]) {
         let lockData = window.db.occupiedSeats[globalKey];
         if(Date.now() < lockData.expireTime) {
             if(lockData.isConfirmed) { seat.classList.add('occupied'); }
@@ -1860,12 +1888,15 @@ function createSeatElement(idStr) {
         currentlyChosenSeatNode = idStr;
         
         executeTemporary2MinuteSeatLock(globalKey);
-        document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+        if(document.getElementById('seat-calculated-total-fare')) {
+            document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+        }
     };
     return seat;
 }
 
 async function executeTemporary2MinuteSeatLock(globalKey) {
+    if (!window.db.occupiedSeats) window.db.occupiedSeats = {};
     for(let key in window.db.occupiedSeats) {
         if(window.db.occupiedSeats[key].userId === activeUserSession.id && !window.db.occupiedSeats[key].isConfirmed) {
             delete window.db.occupiedSeats[key];
@@ -1881,6 +1912,7 @@ async function executeTemporary2MinuteSeatLock(globalKey) {
 }
 
 async function evaluateSeatLockTimerExpirations() {
+    if (!window.db || !window.db.occupiedSeats) return;
     let stateChanged = false;
     for(let key in window.db.occupiedSeats) {
         let lock = window.db.occupiedSeats[key];
@@ -1912,6 +1944,7 @@ window.executeTicketConfirmationEngine = async function() {
 
     user.wallet -= selectedFareGlobalRate;
     
+    if (!window.db.occupiedSeats) window.db.occupiedSeats = {};
     window.db.occupiedSeats[globalKey] = {
         expireTime: Date.now() + (60 * 60 * 1000), 
         userId: user.id,
@@ -1923,18 +1956,18 @@ window.executeTicketConfirmationEngine = async function() {
 
     if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
 
-    document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
-    document.getElementById('tk-name').innerText = user.name;
-    document.getElementById('tk-gid').innerText = user.gameid;
-    document.getElementById('tk-phone').innerText = user.phone;
-    document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
-    document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
-    document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
-    document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
+    if(document.getElementById('tk-mid')) document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
+    if(document.getElementById('tk-name')) document.getElementById('tk-name').innerText = user.name;
+    if(document.getElementById('tk-gid')) document.getElementById('tk-gid').innerText = user.gameid;
+    if(document.getElementById('tk-phone')) document.getElementById('tk-phone').innerText = user.phone;
+    if(document.getElementById('tk-from')) document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
+    if(document.getElementById('tk-to')) document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
+    if(document.getElementById('tk-date')) document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
+    if(document.getElementById('tk-time')) document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
+    if(document.getElementById('tk-seat')) document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
     
     const now = new Date();
-    document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+    if(document.getElementById('tk-issue')) document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
 
     alert("Ticket processing completed! Directing you to your e-ticket screen preview...");
     navigatePage('ticket-view-screen');
@@ -1943,6 +1976,7 @@ window.executeTicketConfirmationEngine = async function() {
 window.executeTicketDownloadAndRedirect = function() {
     alert("Compiling extreme high resolution ticket graphics assets...");
     const target = document.getElementById('digital-ticket-canvas');
+    if(!target) return;
     
     html2canvas(target, { 
         scale: 3, 
@@ -1964,6 +1998,7 @@ function renderHomeMembersCarousel() {
     if(!track) return;
     track.innerHTML = "";
     
+    if (!window.db.users) return;
     let activePool = [...window.db.users].sort((a,b) => b.wallet - a.wallet);
 
     let cardsHTML = "";
@@ -1985,7 +2020,9 @@ function renderHomeMembersCarousel() {
 
 function renderContactTeamPanel() {
     const grid = document.getElementById('contact-team-grid');
+    if(!grid) return;
     grid.innerHTML = "";
+    if (!window.db.users) return;
     let coreStaff = window.db.users.filter(u => u.role !== 'Regular Member');
 
     coreStaff.forEach(u => {
@@ -2008,6 +2045,11 @@ function renderLiveBookingsMonitorTable() {
     if(!tbody) return;
     tbody.innerHTML = "";
 
+    if (!window.db.occupiedSeats) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
+        return;
+    }
+
     let bookingKeysArray = Object.keys(window.db.occupiedSeats);
 
     if(bookingKeysArray.length === 0) {
@@ -2025,7 +2067,7 @@ function renderLiveBookingsMonitorTable() {
         let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
 
         let actionBtnHtml = "";
-        if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Moderator') {
+        if(typeof activeUserSession !== 'undefined' && activeUserSession && (activeUserSession.role === 'Admin' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Moderator')) {
             actionBtnHtml = `
                 <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
                     <i class="fa-solid fa-trash-can"></i> Reset Seat
@@ -2064,18 +2106,20 @@ window.adminDirectResetSingleSeat = async function(globalKey) {
 }
 
 function renderAdminPanelDashboard() {
-    if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
+    if(typeof activeUserSession === 'undefined' || !activeUserSession || (activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master')) {
         alert("Unauthorized console routing breach validation rejected.");
         navigatePage('home-screen');
         return;
     }
     
     const noticeBox = document.getElementById('admin-notice-manager-wrapper');
-    if(activeUserSession.role === 'Admin') {
-        noticeBox.style.display = 'block';
-        document.getElementById('admin-notice-input-field').value = window.db.notices;
-    } else {
-        noticeBox.style.display = 'none';
+    if(noticeBox) {
+        if(activeUserSession.role === 'Admin') {
+            noticeBox.style.display = 'block';
+            if(document.getElementById('admin-notice-input-field')) document.getElementById('admin-notice-input-field').value = window.db.notices;
+        } else {
+            noticeBox.style.display = 'none';
+        }
     }
 
     renderLiveBookingsMonitorTable();
@@ -2167,6 +2211,7 @@ window.executeAdminSearchLogic = function() {
         if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
         return; 
     }
+    if (!window.db.users) return;
     let filtered = window.db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
     buildUserAdminDisplayCards(filtered);
 }
@@ -2211,6 +2256,7 @@ window.adminRemoveMemberFromSystem = async function(id) {
 
 window.adminResetSeatsEngine = async function(userId) {
     let keysRemoved = 0;
+    if (!window.db.occupiedSeats) window.db.occupiedSeats = {};
     for(let key in window.db.occupiedSeats) {
         if(window.db.occupiedSeats[key].userId === userId) {
             delete window.db.occupiedSeats[key];
@@ -2236,6 +2282,7 @@ function renderAllRegisteredMembersPage() {
     if(!rootNode) return;
     rootNode.innerHTML = "";
 
+    if (!window.db.users) return;
     let sortedMembers = [...window.db.users].sort((a, b) => a.id - b.id);
 
     sortedMembers.forEach((u, index) => {
@@ -2265,6 +2312,7 @@ function renderAllRegisteredMembersPage() {
 }
 
 window.setLanguageSystem = function(locale) {
+    if (!locale) return;
     selectedLanguage = locale;
     localStorage.setItem('bdbus_lang', locale);
     
@@ -2279,17 +2327,21 @@ window.setLanguageSystem = function(locale) {
 }
 
 window.addEventListener('popstate', (event) => {
-    if(activeUserSession && internalNavigationHistoryArray.length > 1) {
+    if(typeof activeUserSession !== 'undefined' && activeUserSession && typeof internalNavigationHistoryArray !== 'undefined' && internalNavigationHistoryArray.length > 1) {
         history.pushState(null, null, window.location.pathname);
         executeHardwareBackTrigger();
     }
 });
 
 function initSearchableDropdownSystem() {
-    setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
-    setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
-    setupCustomDropdown('reg-division', 'reg-division-dropdown', bangladeshDivisions);
-    setupCustomDropdown('reg-district', 'reg-district-dropdown', bangladeshDistricts);
+    if (typeof bangladeshDistricts !== 'undefined') {
+        setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
+        setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
+        setupCustomDropdown('reg-district', 'reg-district-dropdown', bangladeshDistricts);
+    }
+    if (typeof bangladeshDivisions !== 'undefined') {
+        setupCustomDropdown('reg-division', 'reg-division-dropdown', bangladeshDivisions);
+    }
 }
 
 function setupCustomDropdown(inputId, dropdownId, dataPool) {
@@ -2339,10 +2391,26 @@ function filterDataNodes(input, dropdown, dataPool) {
 
 // ডোমেস্টিক মেমোরি থেকে ইনিশিয়ালাইজেশন এবং ক্লাউড রেডি রানার
 window.addEventListener('DOMContentLoaded', async () => {
+    // গ্লোবাল ভ্যারিয়েবল প্রটেকশন চেক
+    if (typeof internalNavigationHistoryArray === 'undefined') {
+        window.internalNavigationHistoryArray = ['home-screen'];
+    }
+    if (typeof selectedLanguage === 'undefined') {
+        window.selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+    }
+    if (typeof activeUserSession === 'undefined') {
+        window.activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
+    }
+    if (typeof selectedFareGlobalRate === 'undefined') {
+        window.selectedFareGlobalRate = 0;
+    }
+    if (typeof currentlyChosenSeatNode === 'undefined') {
+        window.currentlyChosenSeatNode = null;
+    }
+
     // ফায়ারস্টোর ক্লাউড লেয়ার ডাটাবেজ থেকে ডেটা হাইড্রেট করা
     await pullCloudDatabaseState();
     
-    verifyDatabaseStructureSeeding();
     initialClockHeartbeatEngine();
     setLanguageSystem(selectedLanguage);
     initSearchableDropdownSystem();
@@ -2352,16 +2420,18 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const globalFooter = document.getElementById('main-global-footer');
 
-    if(activeUserSession) {
+    if(activeUserSession && window.db && window.db.users) {
         let refreshedUser = window.db.users.find(u => u.id === activeUserSession.id);
         if(refreshedUser && !refreshedUser.isBanned) {
             document.body.classList.add('logged-in');
-            document.getElementById('header-nav-controls').style.display = 'flex';
-            document.getElementById('header-empty-space').style.display = 'none';
+            if(document.getElementById('header-nav-controls')) document.getElementById('header-nav-controls').style.display = 'flex';
+            if(document.getElementById('header-empty-space')) document.getElementById('header-empty-space').style.display = 'none';
             if(globalFooter) globalFooter.style.display = 'block';
             
-            if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
-                document.getElementById('admin-menu-link').style.display = 'flex';
+            if(document.getElementById('admin-menu-link')) {
+                if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
+                    document.getElementById('admin-menu-link').style.display = 'flex';
+                }
             }
             
             const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
