@@ -1271,13 +1271,80 @@
             }
         }
 
-                // ==========================================
-// BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
+                <script type="module">
+// ফায়ারবেস কোর এবং ফায়ারস্টোর ফাংশন ইমপোর্ট
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// আপনার প্রোভাইড করা ফায়ারবেস কনফিগারেশন
+const firebaseConfig = {
+    apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
+    authDomain: "bdbus-control-system.firebaseapp.com",
+    projectId: "bdbus-control-system",
+    storageBucket: "bdbus-control-system.firebasestorage.app",
+    messagingSenderId: "279853463516",
+    appId: "1:279853463516:web:30d7f068c0a81e8e2e0119"
+};
+
+// ফায়ারবেস ও ফায়ারস্টোর ইনিশিয়ালাইজেশন
+const app = initializeApp(firebaseConfig);
+const firestoreDb = getFirestore(app);
+
+// গ্লোবাল ডাটাবেজ অবজেক্ট রেফারেন্স ট্র্যাকিং ট্রায়াল (যদি মেইন ফাইলে আগে থেকে ডিক্লেয়ার করা না থাকে)
+if (typeof window.db === 'undefined') {
+    window.db = {
+        sysConfigIdCounter: 1000,
+        notices: "Welcome to Bangladesh Bussid Unique Society Official Console.",
+        users: [],
+        occupiedSeats: {}
+    };
+}
+
+// ==========================================
+// BDBUS CORE ENGINE - POWERED WITH CLOUD FIRESTORE
 // ==========================================
 
-function saveDataEngine() {
-    localStorage.setItem('bdbus_local_db', JSON.stringify(db));
+// ক্লাউড ফায়ারস্টোরে ডেটা সিঙ্ক করার ইঞ্জিন
+async function saveDataEngine() {
+    // আগের লোকাল ব্যাকআপ ব্যাকওয়ার্ড কম্প্যাটিবিলিটির জন্য রাখা হলো
+    localStorage.setItem('bdbus_local_db', JSON.stringify(window.db));
+    
+    // ফায়ারস্টোর সেন্ট্রাল ক্লাউডে ডেটা আপলোড
+    try {
+        await setDoc(doc(firestoreDb, "bdbus_cluster", "main_database"), window.db);
+        console.log("Database successfully synced to Cloud Firestore.");
+    } catch (error) {
+        console.error("Error updating centralized cloud database: ", error);
+    }
 }
+
+// ক্লাউড থেকে ডেটা পুল করার লাইভ সিঙ্ক ফাংশন
+async function pullCloudDatabaseState() {
+    try {
+        const docRef = doc(firestoreDb, "bdbus_cluster", "main_database");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            window.db = docSnap.data();
+            console.log("Centralized cloud database loaded successfully.");
+            // UI রি-রেন্ডার ট্রিগার
+            if (typeof selectedLanguage !== 'undefined') setLanguageSystem(selectedLanguage);
+            if (activeUserSession) {
+                let currentScreen = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+                if (currentScreen === 'admin-screen') renderAdminPanelDashboard();
+                if (currentScreen === 'all-members-screen') renderAllRegisteredMembersPage();
+            }
+        } else {
+            console.log("No cloud database layer detected. Seeding configuration template.");
+            await saveDataEngine();
+        }
+    } catch (error) {
+        console.error("Cloud hydration pipeline exception: ", error);
+    }
+}
+
+// উইন্ডো অবজেক্টে এক্সপোজ করা হলো যাতে অন্য এলিমেন্ট এক্সেস পায়
+window.saveDataEngine = saveDataEngine;
+window.pullCloudDatabaseState = pullCloudDatabaseState;
 
 function initialClockHeartbeatEngine() {
     setInterval(() => {
@@ -1342,27 +1409,27 @@ function navigatePage(screenId, saveHistory = true) {
     const menuBtn = document.getElementById('global-menu-trigger-btn');
     const navControls = document.getElementById('header-nav-controls');
     const emptySpace = document.getElementById('header-empty-space');
-    const globalFooter = document.getElementById('main-global-footer'); // <-- ফুটার ভ্যারিয়েবল ট্র্যাক করার জন্য
+    const globalFooter = document.getElementById('main-global-footer');
 
     if(!activeUserSession || screenId === 'auth-screen') {
         if(navControls) navControls.style.display = 'none';
         if(emptySpace) emptySpace.style.display = 'block';
         if(backBtn) backBtn.style.display = 'none';
         if(menuBtn) menuBtn.style.display = 'none';
-        if(globalFooter) globalFooter.style.display = 'none'; // <-- লগআউট বা অথ স্ক্রিনে ফুটার ১০০% হাইড থাকবে
+        if(globalFooter) globalFooter.style.display = 'none';
     } else if (screenId === 'home-screen') {
         if(navControls) navControls.style.display = 'flex';
         if(emptySpace) emptySpace.style.display = 'none';
         if(backBtn) backBtn.style.display = 'none';
         if(menuBtn) menuBtn.style.display = 'block';
-        if(globalFooter) globalFooter.style.display = 'block'; // <-- হোম স্ক্রিনে ফুটার শো করবে
+        if(globalFooter) globalFooter.style.display = 'block';
         if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
     } else {
         if(navControls) navControls.style.display = 'flex';
         if(emptySpace) emptySpace.style.display = 'none';
         if(backBtn) backBtn.style.display = 'flex'; 
         if(menuBtn) menuBtn.style.display = 'block';
-        if(globalFooter) globalFooter.style.display = 'block'; // <-- অন্যান্য অভ্যন্তরীণ স্ক্রিনেও ফুটার শো করবে
+        if(globalFooter) globalFooter.style.display = 'block';
         
         if(saveHistory) {
             if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
@@ -1416,7 +1483,8 @@ function toggleAuthSubView(view) {
     }
 }
 
-function executeRegistrationLogic() {
+// ফায়ারস্টোর রিয়েল-টাইম ইন্টিগ্রেশনের সাথে রেজিস্ট্রেশন প্রসেস
+window.executeRegistrationLogic = async function() {
     const name = document.getElementById('reg-name').value.trim();
     const gameid = document.getElementById('reg-gameid').value.trim();
     const dob = document.getElementById('reg-dob').value;
@@ -1433,10 +1501,14 @@ function executeRegistrationLogic() {
     if(!name || !gameid || !dob || !phone || !email || !pass || !division || !district) { alert("Please complete all fields!"); return; }
     if(pass !== confpass) { alert("Passwords do not match!"); return; }
     if(!agree) { alert("Please verify declarations checklist authorization."); return; }
-    if(db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
+    
+    // ডাটাবেজ ক্লাউড থেকে লেটেস্ট কন্ডিশনে সিঙ্ক করে নেওয়া
+    await pullCloudDatabaseState();
+    
+    if(window.db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
 
     let newUser = {
-        id: db.sysConfigIdCounter++,
+        id: window.db.sysConfigIdCounter++,
         name, gameid, dob, phone, gender, division, district, fb, email, pass,
         role: "Regular Member",
         wallet: 0,
@@ -1444,28 +1516,31 @@ function executeRegistrationLogic() {
         isBanned: false, claimedWelcome: false, claimedSubs: false
     };
 
-    db.users.push(newUser);
-    saveDataEngine();
+    window.db.users.push(newUser);
+    await saveDataEngine();
     alert("Registration successful! Please login.");
     toggleAuthSubView('login');
 }
 
-function triggerGlobalWelcomePopup(user) {
+window.triggerGlobalWelcomePopup = function(user) {
     document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
     document.getElementById('pop-user-name').innerText = user.name;
     document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
     document.getElementById('global-welcome-popup-layer').style.display = "flex";
 }
 
-function dismissGlobalWelcomePopup() {
+window.dismissGlobalWelcomePopup = function() {
     document.getElementById('global-welcome-popup-layer').style.display = "none";
 }
 
-function executeLoginLogic() {
+window.executeLoginLogic = async function() {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
 
-    let user = db.users.find(u => u.email === email && u.pass === pass);
+    // লগইনের সময় লেটেস্ট ডেটা ক্লাউড থেকে সিঙ্ক করা
+    await pullCloudDatabaseState();
+
+    let user = window.db.users.find(u => u.email === email && u.pass === pass);
     if(!user) { alert("Invalid credentials verified."); return; }
     if(user.isBanned) { alert("Your profile account is banned indefinitely from accessing BDBUS consoles."); return; }
 
@@ -1484,13 +1559,13 @@ function executeLoginLogic() {
         document.getElementById('admin-menu-link').style.display = 'none'; 
     }
 
-    document.getElementById('live-marquee-node').innerText = db.notices;
+    document.getElementById('live-marquee-node').innerText = window.db.notices;
 
     triggerGlobalWelcomePopup(user);
     navigatePage('home-screen');
 }
 
-function executeLogoutAction() {
+window.executeLogoutAction = function() {
     activeUserSession = null;
     sessionStorage.clear();
     internalNavigationHistoryArray = [];
@@ -1501,45 +1576,45 @@ function executeLogoutAction() {
     navigatePage('auth-screen');
 }
 
-function triggerForgotPassword() {
+window.triggerForgotPassword = function() {
     let email = prompt("Enter your registered email address:");
     if(!email) return;
-    let user = db.users.find(u => u.email === email);
+    let user = window.db.users.find(u => u.email === email);
     if(user) alert(`Your system password recovery response is: ${user.pass}`);
     else alert("No verified account located using this email identifier.");
 }
 
-function claimWelcomeRewardLogic() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
+window.claimWelcomeRewardLogic = async function() {
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
     user.wallet += 5000;
     user.claimedWelcome = true;
-    saveDataEngine();
+    await saveDataEngine();
     syncSessionState(user);
     alert("5000 BDT Welcome allocation credited into wallet console successfully!");
     document.getElementById('claim-welcome-btn').disabled = true;
 }
 
-function triggerYoutubeSubscribeReward() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
+window.triggerYoutubeSubscribeReward = async function() {
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     window.open("https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B", "_blank");
     if(user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
-    setTimeout(() => {
+    setTimeout(async () => {
         user.wallet += 10000;
         user.claimedSubs = true;
-        saveDataEngine();
+        await saveDataEngine();
         syncSessionState(user);
         alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
     }, 5000);
 }
 
-function triggerWatchVideoReward() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
+window.triggerWatchVideoReward = function() {
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
     alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
-    setTimeout(() => {
+    setTimeout(async () => {
         user.wallet += 3000;
-        saveDataEngine();
+        await saveDataEngine();
         syncSessionState(user);
         alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
     }, 61000); 
@@ -1551,7 +1626,7 @@ function syncSessionState(updatedUser) {
 }
 
 function renderUserProfileView() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     document.getElementById('profile-avatar-render').src = user.avatar;
     document.getElementById('prof-render-name').innerText = user.name;
     document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
@@ -1569,14 +1644,14 @@ function renderUserProfileView() {
     `;
 }
 
-function processAvatarUpload(event) {
+window.processAvatarUpload = function(event) {
     const file = event.target.files[0];
     if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
     const reader = new FileReader();
-    reader.onload = function(e) {
-        let user = db.users.find(u => u.id === activeUserSession.id);
+    reader.onload = async function(e) {
+        let user = window.db.users.find(u => u.id === activeUserSession.id);
         user.avatar = e.target.result;
-        saveDataEngine();
+        await saveDataEngine();
         syncSessionState(user);
         document.getElementById('profile-avatar-render').src = user.avatar;
         alert("Avatar uploaded and compiled successfully!");
@@ -1584,17 +1659,17 @@ function processAvatarUpload(event) {
     reader.readAsDataURL(file);
 }
 
-function executePasswordChangeLogic() {
+window.executePasswordChangeLogic = async function() {
     const curr = document.getElementById('pwd-curr').value;
     const nxt = document.getElementById('pwd-new').value;
     const conf = document.getElementById('pwd-conf').value;
-    let user = db.users.find(u => u.id === activeUserSession.id);
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
 
     if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
     if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
 
     user.pass = nxt;
-    saveDataEngine();
+    await saveDataEngine();
     alert("Password updated securely. Use updated variables during subsequent login loops.");
     document.getElementById('pwd-curr').value = "";
     document.getElementById('pwd-new').value = "";
@@ -1602,7 +1677,7 @@ function executePasswordChangeLogic() {
 }
 
 function renderDigitalLicenceData() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     if(!user) return;
     
     document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
@@ -1617,7 +1692,7 @@ function renderDigitalLicenceData() {
     document.getElementById('dl-sign-name').innerText = user.name;
 }
 
-function executeDrivingLicenceDownloadEngine() {
+window.executeDrivingLicenceDownloadEngine = function() {
     alert("Compiling high resolution smart driving licence graphics asset...");
     const target = document.getElementById('digital-licence-card');
     
@@ -1634,7 +1709,7 @@ function executeDrivingLicenceDownloadEngine() {
     });
 }
 
-function calculateFareSystemLogic() {
+window.calculateFareSystemLogic = function() {
     const fromLoc = document.getElementById('route-from').value.trim();
     const toLoc = document.getElementById('route-to').value.trim();
     const type = document.getElementById('route-bustype').value;
@@ -1671,7 +1746,7 @@ function calculateFareSystemLogic() {
     document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
 }
 
-function openSeatSelectionEngine() {
+window.openSeatSelectionEngine = function() {
     const from = document.getElementById('route-from').value;
     const to = document.getElementById('route-to').value;
     const date = document.getElementById('route-date').value;
@@ -1769,8 +1844,8 @@ function createSeatElement(idStr) {
     const type = document.getElementById('route-bustype').value;
     const globalKey = `${type}_Seat-${idStr}`;
     
-    if(db.occupiedSeats[globalKey]) {
-        let lockData = db.occupiedSeats[globalKey];
+    if(window.db.occupiedSeats[globalKey]) {
+        let lockData = window.db.occupiedSeats[globalKey];
         if(Date.now() < lockData.expireTime) {
             if(lockData.isConfirmed) { seat.classList.add('occupied'); }
             else { seat.classList.add('locked-hold'); }
@@ -1790,46 +1865,46 @@ function createSeatElement(idStr) {
     return seat;
 }
 
-function executeTemporary2MinuteSeatLock(globalKey) {
-    for(let key in db.occupiedSeats) {
-        if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
-            delete db.occupiedSeats[key];
+async function executeTemporary2MinuteSeatLock(globalKey) {
+    for(let key in window.db.occupiedSeats) {
+        if(window.db.occupiedSeats[key].userId === activeUserSession.id && !window.db.occupiedSeats[key].isConfirmed) {
+            delete window.db.occupiedSeats[key];
         }
     }
-    db.occupiedSeats[globalKey] = {
+    window.db.occupiedSeats[globalKey] = {
         expireTime: Date.now() + (2 * 60 * 1000), 
         userId: activeUserSession.id,
         isConfirmed: false,
         timestampLocked: Date.now()
     };
-    saveDataEngine();
+    await saveDataEngine();
 }
 
-function evaluateSeatLockTimerExpirations() {
+async function evaluateSeatLockTimerExpirations() {
     let stateChanged = false;
-    for(let key in db.occupiedSeats) {
-        let lock = db.occupiedSeats[key];
+    for(let key in window.db.occupiedSeats) {
+        let lock = window.db.occupiedSeats[key];
         if(!lock.isConfirmed && (Date.now() > lock.expireTime)) {
-            delete db.occupiedSeats[key];
+            delete window.db.occupiedSeats[key];
             stateChanged = true;
         }
         else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
-            delete db.occupiedSeats[key];
+            delete window.db.occupiedSeats[key];
             stateChanged = true;
         }
     }
     if(stateChanged) {
-        saveDataEngine();
+        await saveDataEngine();
         if(sessionStorage.getItem('bdbus_persistent_screen_id') === 'admin-screen') {
             renderLiveBookingsMonitorTable();
         }
     }
 }
 
-function executeTicketConfirmationEngine() {
+window.executeTicketConfirmationEngine = async function() {
     if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
     
-    let user = db.users.find(u => u.id === activeUserSession.id);
+    let user = window.db.users.find(u => u.id === activeUserSession.id);
     if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
     const type = document.getElementById('route-bustype').value;
@@ -1837,13 +1912,13 @@ function executeTicketConfirmationEngine() {
 
     user.wallet -= selectedFareGlobalRate;
     
-    db.occupiedSeats[globalKey] = {
+    window.db.occupiedSeats[globalKey] = {
         expireTime: Date.now() + (60 * 60 * 1000), 
         userId: user.id,
         isConfirmed: true,
         timestampLocked: Date.now()
     };
-    saveDataEngine();
+    await saveDataEngine();
     syncSessionState(user);
 
     if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
@@ -1865,7 +1940,7 @@ function executeTicketConfirmationEngine() {
     navigatePage('ticket-view-screen');
 }
 
-function executeTicketDownloadAndRedirect() {
+window.executeTicketDownloadAndRedirect = function() {
     alert("Compiling extreme high resolution ticket graphics assets...");
     const target = document.getElementById('digital-ticket-canvas');
     
@@ -1889,7 +1964,7 @@ function renderHomeMembersCarousel() {
     if(!track) return;
     track.innerHTML = "";
     
-    let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
+    let activePool = [...window.db.users].sort((a,b) => b.wallet - a.wallet);
 
     let cardsHTML = "";
     activePool.forEach(u => {
@@ -1911,7 +1986,7 @@ function renderHomeMembersCarousel() {
 function renderContactTeamPanel() {
     const grid = document.getElementById('contact-team-grid');
     grid.innerHTML = "";
-    let coreStaff = db.users.filter(u => u.role !== 'Regular Member');
+    let coreStaff = window.db.users.filter(u => u.role !== 'Regular Member');
 
     coreStaff.forEach(u => {
         let card = document.createElement('div');
@@ -1933,7 +2008,7 @@ function renderLiveBookingsMonitorTable() {
     if(!tbody) return;
     tbody.innerHTML = "";
 
-    let bookingKeysArray = Object.keys(db.occupiedSeats);
+    let bookingKeysArray = Object.keys(window.db.occupiedSeats);
 
     if(bookingKeysArray.length === 0) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
@@ -1941,8 +2016,8 @@ function renderLiveBookingsMonitorTable() {
     }
 
     bookingKeysArray.forEach(globalKey => {
-        let bookingInfo = db.occupiedSeats[globalKey];
-        let associatedUser = db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
+        let bookingInfo = window.db.occupiedSeats[globalKey];
+        let associatedUser = window.db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
         
         let tr = document.createElement('tr');
         
@@ -1979,10 +2054,10 @@ function renderLiveBookingsMonitorTable() {
     });
 }
 
-function adminDirectResetSingleSeat(globalKey) {
+window.adminDirectResetSingleSeat = async function(globalKey) {
     if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
-        delete db.occupiedSeats[globalKey];
-        saveDataEngine();
+        delete window.db.occupiedSeats[globalKey];
+        await saveDataEngine();
         renderLiveBookingsMonitorTable();
         alert("Seat reservation track cleared successfully!");
     }
@@ -1998,7 +2073,7 @@ function renderAdminPanelDashboard() {
     const noticeBox = document.getElementById('admin-notice-manager-wrapper');
     if(activeUserSession.role === 'Admin') {
         noticeBox.style.display = 'block';
-        document.getElementById('admin-notice-input-field').value = db.notices;
+        document.getElementById('admin-notice-input-field').value = window.db.notices;
     } else {
         noticeBox.style.display = 'none';
     }
@@ -2009,16 +2084,16 @@ function renderAdminPanelDashboard() {
     if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
 }
 
-function executeAdminNoticeBroadcastSave() {
+window.executeAdminNoticeBroadcastSave = async function() {
     if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
     const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
     if(!freshNoticeText) { alert("Notice text body cannot execute blank strings empty logs."); return; }
     
-    db.notices = freshNoticeText;
-    saveDataEngine();
+    window.db.notices = freshNoticeText;
+    await saveDataEngine();
     
     const liveMarquee = document.getElementById('live-marquee-node');
-    if(liveMarquee) liveMarquee.innerText = db.notices;
+    if(liveMarquee) liveMarquee.innerText = window.db.notices;
     
     alert("Global notice feed synchronized across cluster terminals successfully!");
 }
@@ -2084,7 +2159,7 @@ function buildUserAdminDisplayCards(userArray) {
     });
 }
 
-function executeAdminSearchLogic() {
+window.executeAdminSearchLogic = function() {
     let term = document.getElementById('admin-search-input').value.trim();
     const grid = document.getElementById('admin-user-cards-grid');
     
@@ -2092,58 +2167,58 @@ function executeAdminSearchLogic() {
         if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
         return; 
     }
-    let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
+    let filtered = window.db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
     buildUserAdminDisplayCards(filtered);
 }
 
-function adminDirectRoleSet(id, roleName) {
+window.adminDirectRoleSet = async function(id, roleName) {
     if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
-    let user = db.users.find(u => u.id === id);
+    let user = window.db.users.find(u => u.id === id);
     user.role = roleName;
-    saveDataEngine();
+    await saveDataEngine();
     alert(`Successfully updated role to ${roleName}`);
     executeAdminSearchLogic();
 }
 
-function adminBanToggle(id) {
+window.adminBanToggle = async function(id) {
     if(id === 1000) { alert("Root Super Admin cannot be targeted for restriction bans."); return; }
-    let user = db.users.find(u => u.id === id);
+    let user = window.db.users.find(u => u.id === id);
     user.isBanned = !user.isBanned;
-    saveDataEngine();
+    await saveDataEngine();
     alert(user.isBanned ? "Member has been Banned." : "Member has been Unbanned.");
     executeAdminSearchLogic();
 }
 
-function adminGiftWalletPrompt(id) {
+window.adminGiftWalletPrompt = async function(id) {
     let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
     if(!amount || amount <= 0) return;
-    let user = db.users.find(u => u.id === id);
+    let user = window.db.users.find(u => u.id === id);
     user.wallet += amount;
-    saveDataEngine();
+    await saveDataEngine();
     alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
     executeAdminSearchLogic();
 }
 
-function adminRemoveMemberFromSystem(id) {
+window.adminRemoveMemberFromSystem = async function(id) {
     if(id === 1000) { alert("Root Super Admin cannot be removed."); return; }
     if(confirm("Are you absolutely sure you want to permanently REMOVE this member from the database?")) {
-        db.users = db.users.filter(u => u.id !== id);
-        saveDataEngine();
+        window.db.users = window.db.users.filter(u => u.id !== id);
+        await saveDataEngine();
         alert("Member removed successfully from system.");
         executeAdminSearchLogic();
     }
 }
 
-function adminResetSeatsEngine(userId) {
+window.adminResetSeatsEngine = async function(userId) {
     let keysRemoved = 0;
-    for(let key in db.occupiedSeats) {
-        if(db.occupiedSeats[key].userId === userId) {
-            delete db.occupiedSeats[key];
+    for(let key in window.db.occupiedSeats) {
+        if(window.db.occupiedSeats[key].userId === userId) {
+            delete window.db.occupiedSeats[key];
             keysRemoved++;
         }
     }
     if(keysRemoved > 0) {
-        saveDataEngine();
+        await saveDataEngine();
         renderLiveBookingsMonitorTable();
         alert(`Purged ${keysRemoved} active reservation tracks from database.`);
         executeAdminSearchLogic();
@@ -2152,7 +2227,7 @@ function adminResetSeatsEngine(userId) {
     }
 }
 
-function loadAllRegisteredMembersList() {
+window.loadAllRegisteredMembersList = function() {
     renderAllRegisteredMembersPage();
 }
 
@@ -2161,7 +2236,7 @@ function renderAllRegisteredMembersPage() {
     if(!rootNode) return;
     rootNode.innerHTML = "";
 
-    let sortedMembers = [...db.users].sort((a, b) => a.id - b.id);
+    let sortedMembers = [...window.db.users].sort((a, b) => a.id - b.id);
 
     sortedMembers.forEach((u, index) => {
         let row = document.createElement('div');
@@ -2189,7 +2264,7 @@ function renderAllRegisteredMembersPage() {
     });
 }
 
-function setLanguageSystem(locale) {
+window.setLanguageSystem = function(locale) {
     selectedLanguage = locale;
     localStorage.setItem('bdbus_lang', locale);
     
@@ -2262,7 +2337,11 @@ function filterDataNodes(input, dropdown, dataPool) {
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+// ডোমেস্টিক মেমোরি থেকে ইনিশিয়ালাইজেশন এবং ক্লাউড রেডি রানার
+window.addEventListener('DOMContentLoaded', async () => {
+    // ফায়ারস্টোর ক্লাউড লেয়ার ডাটাবেজ থেকে ডেটা হাইড্রেট করা
+    await pullCloudDatabaseState();
+    
     verifyDatabaseStructureSeeding();
     initialClockHeartbeatEngine();
     setLanguageSystem(selectedLanguage);
@@ -2271,15 +2350,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     history.pushState(null, null, window.location.pathname);
 
-    const globalFooter = document.getElementById('main-global-footer'); // <-- লোড হওয়ার শুরুতেই ফুটার প্যানেল লক করার জন্য
+    const globalFooter = document.getElementById('main-global-footer');
 
     if(activeUserSession) {
-        let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
+        let refreshedUser = window.db.users.find(u => u.id === activeUserSession.id);
         if(refreshedUser && !refreshedUser.isBanned) {
             document.body.classList.add('logged-in');
             document.getElementById('header-nav-controls').style.display = 'flex';
             document.getElementById('header-empty-space').style.display = 'none';
-            if(globalFooter) globalFooter.style.display = 'block'; // <-- লগইন সেশন থাকলে ফুটার দেখাবে
+            if(globalFooter) globalFooter.style.display = 'block';
             
             if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
                 document.getElementById('admin-menu-link').style.display = 'flex';
@@ -2291,7 +2370,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // যদি ইউজার লগইন না থাকে, তাহলে ফুটার আগে থেকেই হাইড হয়ে সোজা অথ স্ক্রিনে যাবে
     if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
 });
