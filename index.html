@@ -2295,28 +2295,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
 });
-
-    <script type="module">
-  // Firebase SDK থেকে প্রয়োজনীয় ফাংশনগুলো ইমপোর্ট করা হলো
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-  // আপনার ওয়েব অ্যাপের ফায়ারবেস কনফিগারেশন
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
-    authDomain: "bdbus-control-system.firebaseapp.com",
-    projectId: "bdbus-control-system",
-    storageBucket: "bdbus-control-system.firebasestorage.app",
-    messagingSenderId: "279853463516",
-    appId: "1:279853463516:web:30d7f068c0a81e8e2e0119"
-  };
-
-  // ফায়ারবেস অ্যাপ ইনিশিয়েলাইজ করা হলো
-  const app = initializeApp(firebaseConfig);
-
-  // ফায়ারস্টোর ডাটাবেজ ইনিশিয়েলাইজ করা হলো (এটি এখন আপনি আপনার কোডে ব্যবহার করতে পারবেন)
-  const db = getFirestore(app);
-</script>
 </script>
 </body>
 </html>
