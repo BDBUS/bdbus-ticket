@@ -805,7 +805,7 @@
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <button class="btn-premium btn-secondary lang-node" data-en="Back to Login" data-bn="লগইনে ফিরুন" onclick="toggleAuthSubView('login')">Back to Login</button>
-                    <button class="btn-premium lang-node" data-en="Registration Submit" data-bn="রেজিস্ট্রেশন সাবমিট" onclick="executeRegistrationLogic()">Registration Submit</button>
+                    <button class="btn-premium lang-node" data-en="Registration Submit" data-bn="রেজিস্ট্রেশন সাবমিট" onclick="registerNewMember()">
                 </div>
             </div>
         </div>
@@ -2296,23 +2296,95 @@ window.addEventListener('DOMContentLoaded', () => {
 });
  
 <script type="module">
-  // Import the functions you need from the SDKs you need
+  // ১. ফায়ারবেস অ্যাপ এবং ফায়ারস্টোর ডাটাবেসের ফাংশনগুলো ইম্পোর্ট করা
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
+  // ফায়ারবেস কনফিগারেশন
   const firebaseConfig = {
-    apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
+    apiKey: "AIzaSyDJjAnL3e7KAAOuf6KH68WOOI8kqv7fvvE",
     authDomain: "bdbus-control-system.firebaseapp.com",
     projectId: "bdbus-control-system",
     storageBucket: "bdbus-control-system.firebasestorage.app",
-    messagingSenderId: "279853463516",
-    appId: "1:279853463516:web:13c9b4ec2f9f5bc62e0119"
+    messagingSenderId: "279853463510",
+    appId: "1:279853463510:web:13c9b4ec2f9f5bc62e0119"
   };
 
-  // Initialize Firebase
+  // ফায়ারবেস ও ফায়ারস্টোর ইনিশিয়ালাইজ করা
   const app = initializeApp(firebaseConfig);
+  window.db = getFirestore(app);
+  
+  // ফায়ারবেসে ডাটা সেভ করার গ্লোবাল ফাংশন
+  window.saveMemberToFirebase = async function(memberId, memberData) {
+    try {
+      await setDoc(doc(window.db, "members", memberId), memberData);
+      console.log("মেম্বার ডাটা ফায়ারবেসে সফলভাবে সেভ হয়েছে!");
+      return true;
+    } catch (error) {
+      console.error("ফায়ারবেসে ডাটা সেভ করতে সমস্যা হয়েছে: ", error);
+      return false;
+    }
+  };
+
+  console.log("Firebase and Firestore successfully initialized!");
+</script>
+
+<script>
+// ২. মেম্বার রেজিস্ট্রেশন হ্যান্ডেল করার মূল ফাংশন (টাইপো সংশোধন করা হয়েছে)
+async function registerNewMember() {
+  // ফর্মের প্রতিটি ইনপুট ফিল্ড থেকে ডাটা সংগ্রহ করা
+  const fullName = document.getElementById('reg-name').value.trim();
+  const gameId = document.getElementById('reg-gameid').value.trim();
+  const dob = document.getElementById('reg-dob').value;
+  const phone = document.getElementById('reg-phone').value.trim();
+  const gender = document.getElementById('reg-gender').value;
+  const division = document.getElementById('reg-division').value.trim();
+  const district = document.getElementById('reg-district').value.trim();
+  const fbLink = document.getElementById('reg-fb').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-pass').value;
+  
+  const isAgreed = document.getElementById('reg-agree').checked;
+
+  // সঠিক ভ্যারিয়েবল নাম দিয়ে ডাটা চেক করা (সংশোধিত)
+  if (!fullName || !phone || !email) {
+    alert("অনুগ্রহ করে নাম, মোবাইল নম্বর এবং ইমেইল অবশ্যই পূরণ করুন!");
+    return;
+  }
+  
+  if (!isAgreed) {
+    alert("অনুগ্রহ করে তথ্য সঠিক হওয়ার চেকবক্সটিতে টিক চিহ্ন দিন।");
+    return;
+  }
+
+  // সব ডাটা এক জায়গায় সাজানো
+  const memberData = {
+    fullName: fullName,
+    gameNicknameId: gameId,
+    dateOfBirth: dob,
+    mobileNumber: phone,
+    gender: gender,
+    division: division,
+    district: district,
+    facebookLink: fbLink,
+    emailAddress: email,
+    password: password,
+    role: "Member",
+    joinedAt: new Date().toISOString()
+  };
+
+  // মোবাইল নম্বরটিকে আইডি ধরে ফায়ারবেসে পাঠানো
+  const success = await window.saveMemberToFirebase(phone, memberData);
+
+  if (success) {
+    alert("অভিনন্দন! আপনার রেজিস্ট্রেশন সফল হয়েছে এবং ডাটা ফায়ারবেসে জমা হয়েছে।");
+    if (typeof navigatePage === "function") {
+      navigatePage('auth-screen'); // সফল হলে লগইন স্ক্রিনে নিয়ে যাবে
+    }
+  } else {
+    alert("দুঃখিত, ডাটা সেভ করা যায়নি। আবার চেষ্টা করুন।");
+  }
+}
 </script>
 </body>
 </html>
