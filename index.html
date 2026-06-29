@@ -1267,7 +1267,6 @@
                     claimedWelcome: true,
                     claimedSubs: true
                 });
-                saveDataEngine();
             }
         }
 
@@ -1275,12 +1274,27 @@
 // BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
 // ==========================================
 
-function saveDataEngine() {
-    localStorage.setItem('bdbus_local_db', JSON.stringify(db));
+// সুপাবেস ইনিশিয়ালিজেশন
+const SUPABASE_URL = "https://mvycxwirqvcuzyebiewq.supabase.co"; 
+const SUPABASE_ANON_KEY = "sb_publishable_9COCyJYLxwngtqwiapa4AQ_-i0lkIM1";
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ডাটা ক্লাউডে সেভ করার নতুন ফাংশন
+async function saveDataEngine() {
+  try {
+    const { data, error } = await supabase
+      .from('members') // আপনার সুপাবেস টেবিলের নাম ঠিক করা হয়েছে
+      .insert([db]);   
+
+    if (error) throw error;
+    console.log('সুপাবেসে ডাটা সফলভাবে সেভ হয়েছে:', data);
+  } catch (err) {
+    console.error('ডাটা সেভ করতে সমস্যা হয়েছে:', err.message);
+  }
 }
 
 function initialClockHeartbeatEngine() {
-    setInterval(() => {
+  setInterval(() => {
         const now = new Date();
         let hrs = now.getHours();
         const mins = String(now.getMinutes()).padStart(2, '0');
