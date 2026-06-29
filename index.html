@@ -1272,11 +1272,37 @@
         }
 
                 // ==========================================
+// SUPABASE DATABASE INITIALIZATION
+// ==========================================
+const SUPABASE_URL = "https://mvycxwirqvcuzyebiewq.supabase.co"; 
+const SUPABASE_ANON_KEY = "sb_publishable_9COCyJYLxwngtqwiapa4AQ_-i0lkIM1";
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ==========================================
 // BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
 // ==========================================
 
-function saveDataEngine() {
+// ডাটা ক্লাউডে এবং লোকালে একযোগে সেভ করার আপডেট ফাংশন
+async function saveDataEngine() {
+    // আগের মতো লোকাল স্টোরেজেও ডাটা ব্যাকআপ থাকবে
     localStorage.setItem('bdbus_local_db', JSON.stringify(db));
+    
+    // সুপাবেস ক্লাউড ডাটাবেজে ডাটা সিঙ্ক করার লাইভ মেকানিজম
+    try {
+        if (typeof db === 'undefined') {
+            console.error('db অবজেক্টটি খুঁজে পাওয়া যায়নি!');
+            return;
+        }
+        
+        const { data, error } = await supabase
+            .from('members') 
+            .insert([db]);   
+
+        if (error) throw error;
+        console.log('সুপাবেসে ডাটা সফলভাবে সেভ হয়েছে:', data);
+    } catch (err) {
+        console.error('ডাটা সেভ করতে সমস্যা হয়েছে:', err.message);
+    }
 }
 
 function initialClockHeartbeatEngine() {
@@ -1333,6 +1359,8 @@ function togglePasswordInputVisibility(inputId, iconEl) {
         iconEl.classList.add('fa-eye');
     }
 }
+
+// আপনার বাকি সব ফাংশন (navigatePage থেকে শুরু করে একদম শেষ পর্যন্ত) যেভাবে ছিল, অবিকল একই থাকবে।
 
 function navigatePage(screenId, saveHistory = true) {
     toggleSidebarMenu(false);
