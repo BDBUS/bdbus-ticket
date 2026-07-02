@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDBUS Official Dashboard</title>
+    <style>
+        /* মূল ডার্ক থিম সেটআপ */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { 
+            background-color: #05070c; 
+            color: #cbd5e1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 80px 20px; 
+            position: relative; 
+            overflow-x: hidden;
+        }
+        
+        /* ব্যাকগ্রাউন্ডে ফিক্সড ওয়াটারমার্ক লোগো */
+        .watermark { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 85%; 
+            max-width: 600px; 
+            opacity: 0.04; 
+            pointer-events: none; 
+            z-index: 0; 
+        }
+        
+        /* প্রফেশনাল ল্যাঙ্গুয়েজ হেডার (EN | বাংলা) */
+        .header-nav { position: absolute; top: 0; left: 0; width: 100%; height: 60px; border-bottom: 1px solid #1e293b; display: flex; justify-content: flex-end; align-items: center; padding-right: 25px; z-index: 10; background-color: #05070c; }
+        .lang-toggle-box { display: flex; background: #1e293b; border-radius: 20px; padding: 2px; }
+        .lang-btn { cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: bold; padding: 6px 16px; border-radius: 18px; transition: 0.3s; user-select: none; }
+        .lang-btn.active { background: #00e5ff; color: #000; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+
+        /* গ্লোয়িং ফর্ম কার্ড */
+        .form-card { background: #0e1626; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 460px; text-align: center; z-index: 5; position: relative; display: none; border: 1px solid #1e293b; }
+        .form-card.active { display: block; }
+        
+        .logo { width: 65px; margin-bottom: 15px; }
+        h1 { font-size: 21px; color: #ffffff; margin-bottom: 6px; font-weight: 700; letter-spacing: 0.5px; }
+        h2 { font-size: 12px; color: #00e5ff; margin-bottom: 30px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
+        
+        /* প্রিমিয়াম ইনপুট এবং ড্রপডাউন ডিজাইন */
+        .input-group { margin-bottom: 22px; text-align: left; position: relative; }
+        .input-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: 500; }
+        .input-group input, .input-group select { width: 100%; padding: 13px 16px; background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; font-size: 14px; color: #ffffff; outline: none; transition: 0.3s; appearance: none; -webkit-appearance: none; -moz-appearance: none; }
+        .input-group select option { background-color: #1e293b; color: #ffffff; }
+        .input-group input:focus, .input-group select:focus { border-color: #00e5ff; background-color: #243249; }
+        
+        /* বাটনসমূহ */
+        .btn-group { display: flex; gap: 20px; margin-top: 15px; }
+        .btn { flex: 1; padding: 13px; border: none; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.3s; text-align: center; }
+        .btn-orange { background: linear-gradient(135deg, #ff4e00, #ec9f05); color: white; }
+        .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255, 78, 0, 0.4); }
+        .btn-cyan { background: linear-gradient(135deg, #00e5ff, #0077ff); color: #000000; font-weight: 800; }
+        .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 229, 255, 0.4); }
+        
+        /* ==================== পপ আপ ডিজাইনসমূহ ==================== */
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+        .square-popup { background: #0e1626; width: 360px; height: 360px; border-radius: 16px; border: 1px solid #1e293b; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); }
+        .notice-popup { background: #0e1626; max-width: 500px; width: 100%; border-radius: 20px; border: 1px solid #ff4e00; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(255, 78, 0, 0.15); }
+        .notice-content { background: #1e293b; padding: 15px; border-radius: 10px; max-height: 200px; overflow-y: auto; text-align: left; font-size: 13px; line-height: 1.6; margin: 15px 0; border: 1px solid #334155; color: #cbd5e1; }
+
+        /* ==================== সাইডবার মেনুবার (Sidebar) স্টাইল ==================== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px; /* ডিফল্ট অবস্থায় স্ক্রিনের বাইরে থাকবে */
+            width: 280px;
+            height: 100%;
+            background-color: #0e1626;
+            border-right: 1px solid #1e293b;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px 20px;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+        }
+        .sidebar.open {
+            left: 0; /* ক্লিক করলে বাম থেকে বের হবে */
+        }
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 15px;
+        }
+        .sidebar-close {
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .sidebar-close:hover { color: #ff4e00; }
+        
+        /* মেনু অপশন লিস্ট */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .menu-item:hover, .menu-item.active {
+            background-color: #1e293b;
+            color: #00e5ff;
+            border-left-color: #00e5ff;
+        }
+        
+        /* নিচে অবস্থিত বিচ্ছিন্ন Logout বাটন */
+        .logout-section {
+            border-top: 1px solid #1e293b;
+            padding-top: 15px;
+            margin-top: auto;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .logout-btn:hover {
+            background: #ef4444;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* মেনু খোলা অবস্থায় ব্যাকগ্রাউন্ড ব্লার করার জন্য ওভারলে */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 150;
+        }
+
+        /* ==================== হোম পেজ / ড্যাশবোর্ড স্টাইল ==================== */
+        .dashboard-container { display: none; width: 100%; max-width: 500px; flex-direction: column; gap: 20px; z-index: 10; padding-bottom: 40px; }
+        .dash-top { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
+        .menu-icon { font-size: 26px; cursor: pointer; color: #fff; transition: 0.2s; user-select: none; }
+        .menu-icon:hover { color: #00e5ff; }
+        
+        .clock-card { background: #0e1626; border-radius: 20px; padding: 25px; text-align: center; border: 1px solid #1e293b; }
+        .wish-text { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 1px; margin: 12px 0; text-transform: uppercase; }
+        .digital-clock-box { border: 2px solid #00e5ff; border-radius: 12px; padding: 12px; display: inline-block; width: 100%; box-shadow: inset 0 0 10px rgba(0,229,255,0.1); }
+        .time-display { font-size: 26px; font-weight: bold; color: #00e5ff; font-family: monospace; }
+        .date-display { font-size: 11px; color: #64748b; margin-top: 4px; text-transform: uppercase; font-weight: bold; }
+
+        .notice-bar { background: #1e293b; border-left: 4px solid #ff4e00; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: #fff; }
+        .notice-tag { background: #ff4e00; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+
+        .members-wrapper { display: flex; gap: 15px; overflow-x: auto; padding: 5px 0; width: 100%; scrollbar-width: none; }
+        .members-wrapper::-webkit-scrollbar { display: none; }
+        
+        .member-card { background: #1e293b; border-radius: 14px; padding: 15px; display: flex; align-items: center; gap: 15px; min-width: 230px; flex: 1; border: 1px solid #2e3d52; }
+        .member-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #00e5ff; object-fit: cover; }
+        .member-info h4 { font-size: 14px; color: #fff; margin-bottom: 2px; }
+        .member-info p { font-size: 11px; color: #94a3b8; }
+        .status-active { color: #00e5ff; font-weight: bold; font-size: 10px; display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+        .status-active::before { content: '●'; font-size: 12px; }
+
+        .reward-card { background: #0e1626; border-radius: 18px; padding: 25px; text-align: center; border: 1px solid #1e293b; }
+        .reward-card h3 { font-size: 16px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .reward-card p { font-size: 12px; color: #94a3b8; margin-bottom: 18px; }
+        .reward-btn { display: inline-block; width: 65%; padding: 11px; border-radius: 20px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; transition: 0.2s; }
+    </style>
+</head>
+<body>
+
+    <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Watermark" class="watermark">
+
+    <!-- ল্যাঙ্গুয়েজ বার -->
+    <div class="header-nav" id="topNav">
+        <div class="lang-toggle-box">
+            <span id="lang-en" class="lang-btn active" onclick="changeLang('en')">EN</span>
+            <span id="lang-bn" class="lang-btn" onclick="changeLang('bn')">বাংলা</span>
+        </div>
+    </div>
+
+    <!-- ================= সাইডবার মেনু ড্রয়ার সিস্টেম ================= -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebarMenu">
+        <div>
+            <div class="sidebar-header">
+                <div style="font-weight: bold; font-size: 18px; color: #fff;">Logo <span style="color: #00e5ff;">BDBUS</span></div>
+                <div class="sidebar-close" onclick="closeSidebar()">✕</div>
+            </div>
+            <nav class="menu-list">
+                <a href="#" class="menu-item active" onclick="closeSidebar()">Home</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">Bus Ticket Booking</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">Change Password</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">Driving Licence</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">Admin Panel</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">My Profile</a>
+                <a href="#" class="menu-item" onclick="closeSidebar()">Contact</a>
+            </nav>
+        </div>
+        <div class="logout-section">
+            <button class="logout-btn" onclick="handleLogout()">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= লগইন ফর্ম ================= -->
+    <div id="loginCard" class="form-card">
+        <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" class="logo">
+        <h1>Bangladesh Bussid Unique Society</h1>
+        <h2 id="txt-subtitle">BDBUS OFFICIAL WEBSITE</h2>
+        <form onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label for="loginEmail">Email / BDBUS ID</label>
+                <input type="text" id="loginEmail" placeholder="Example: BDBUS-1001" required>
+            </div>
+            <div class="input-group">
+                <label class="lbl-pass" for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-orange" onclick="switchForm('register')">Sign Up Now</button>
+                <button type="submit" class="btn btn-cyan">Login Now</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== ১ম পপ-আপ: ওয়েলকাম স্কয়ার পপ-আপ ==================== -->
+    <div id="welcomeOverlay" class="popup-overlay">
+        <div class="square-popup">
+            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" style="width: 70px;">
+            <div>
+                <h3 id="pop1-name" style="color: #fff; font-size: 18px; margin-bottom: 5px;">Emon Talukder</h3>
+                <p id="pop1-id" style="color: #00e5ff; font-size: 14px; font-weight: bold; letter-spacing: 1px;">ID: BDBUS-1001</p>
+            </div>
+            <button type="button" class="btn btn-orange" style="width: 100%; border-radius: 10px;" onclick="showNoticePopup()">Thanks</button>
+        </div>
+    </div>
+
+    <!-- ==================== ২য় পপ-আপ: নোটিশ পপ-আপ ==================== -->
+    <div id="noticeOverlay" class="popup-overlay">
+        <div class="notice-popup">
+            <h3 id="pop2-title" style="color: #ff4e00; font-size: 20px;">📢 BDBUS Official Notice</h3>
+            <div class="notice-content">
+                স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম। আমাদের গ্রুপ নিয়মানুবर्तিতা এবং সবার মেলবন্ধনে পরিচালিত হয়। গেমের যেকোনো ইভেন্ট ও টুর্নামেন্টের আপডেট এই নোটিশ বোর্ডে নিয়মিত প্রকাশ করা হবে। কোনো প্রকার লোকাল হ্যাক বা অনৈতিক সুবিধা নেওয়া সম্পূর্ণ নিষিদ্ধ। আশা করি আপনারা সবাই নিয়ম মেনে চলবেন। ধন্যবাদ!
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                <input type="checkbox" id="noticeCheck" onchange="toggleNoticeBtn()" style="width: 16px; height: 16px; accent-color: #ff4e00;">
+                <label for="noticeCheck" id="pop2-check-lbl" style="font-size: 13px; color: #94a3b8; cursor: pointer; user-select: none;">I have read and agree to the notice.</label>
+            </div>
+            <button type="button" id="btn-notice-ok" class="btn btn-cyan" style="width: 100%; opacity: 0.4; cursor: not-allowed;" disabled onclick="enterHomePage()">Okay</button>
+        </div>
+    </div>
+
+    <!-- ==================== হোম পৃষ্ঠা / ড্যাশবোর্ড ইন্টারফেস ==================== -->
+    <div id="homePage" class="dashboard-container">
+        <div class="dash-top">
+            <div class="menu-icon" onclick="openSidebar()">☰</div>
+            <div style="font-weight: bold; font-size: 18px; color: #fff;">Logo <span style="color: #00e5ff;">BDBUS</span></div>
+            <div style="width: 30px;"></div>
+        </div>
+
+        <div class="clock-card">
+            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Logo</div>
+            <div style="font-size: 15px; font-weight: bold; color: #fff; margin-top: 4px;">Bangladesh Bussid Unique Society</div>
+            <div class="wish-text" id="wishMessage">GOOD AFTERNOON</div>
+            <div class="digital-clock-box">
+                <div class="time-display" id="liveTime">12:36:47 PM</div>
+                <div class="date-display" id="liveDate">LIVE DATE: THU, DEC 2, 2026</div>
+            </div>
+        </div>
+
+        <div class="notice-bar">
+            <span class="notice-tag">NOTICE</span>
+            <marquee behavior="scroll" direction="left" id="marqueeText">স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম</marquee>
+        </div>
+
+        <!-- মেম্বার কার্ড জোন -->
+        <div class="members-wrapper">
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=11" alt="Milton" class="member-avatar">
+                <div class="member-info">
+                    <h4>Milton</h4>
+                    <p>ID: BDBUS-1001 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">1012378 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=12" alt="Coupon" class="member-avatar">
+                <div class="member-info">
+                    <h4>Coupon Ahead</h4>
+                    <p>ID: BDBUS-1002 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">4415 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=33" alt="Al Amin" class="member-avatar">
+                <div class="member-info">
+                    <h4 id="dashUserTitle">Al Amin</h4>
+                    <p id="dashUserID">ID: BDBUS-1003 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">0 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- রিওয়ার্ড কার্ডসমূহ -->
+        <div class="reward-card">
+            <h3>🎁 Welcome Bonus</h3>
+            <p>Get 5000 BDT instantly on your first signup.</p>
+            <button class="reward-btn btn-orange" onclick="alert('5000 BDT Claimed!')">Claim 5000 BDT</button>
+        </div>
+
+        <div class="reward-card">
+            <h3><span style="color: #ef4444;">►</span> Subscribe YouTube</h3>
+            <p>Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
+            <button class="reward-btn" style="background: #ef4444; color: #fff;" onclick="window.open('https://youtube.com', '_blank')">Subscribe Now</button>
+        </div>
+    </div>
+
+    <script>
+        let registeredUser = { name: "Emon Talukder", id: "BDBUS-1001" };
+
+        // সাইডবার কন্ট্রোল ফাংশন
+        function openSidebar() {
+            document.getElementById("sidebarMenu").classList.add("open");
+            document.getElementById("sidebarOverlay").style.display = "block";
+        }
+
+        function closeSidebar() {
+            document.getElementById("sidebarMenu").classList.remove("open");
+            document.getElementById("sidebarOverlay").style.display = "none";
+        }
+
+        function handleLogout() {
+            closeSidebar();
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("loginCard").classList.add("active");
+            alert("Logged out successfully!");
+        }
+
+        // লগইন ও পপ-আপ লজিক
+        function handleLogin(e) {
+            e.preventDefault();
+            document.getElementById('loginCard').classList.remove('active');
+            document.getElementById("welcomeOverlay").style.display = "flex";
+        }
+
+        function showNoticePopup() {
+            document.getElementById("welcomeOverlay").style.display = "none";
+            document.getElementById("noticeOverlay").style.display = "flex";
+        }
+
+        function toggleNoticeBtn() {
+            const isChecked = document.getElementById("noticeCheck").checked;
+            const btn = document.getElementById("btn-notice-ok");
+            btn.disabled = !isChecked;
+            btn.style.opacity = isChecked ? "1" : "0.4";
+            btn.style.cursor = isChecked ? "pointer" : "not-allowed";
+        }
+
+        function enterHomePage() {
+            document.getElementById("noticeOverlay").style.display = "none";
+            document.getElementById("homePage").style.display = "flex";
+            startLiveClock();
+        }
+
+        function startLiveClock() {
+            setInterval(() => {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                
+                let wish = hours < 12 ? "GOOD MORNING" : (hours < 17 ? "GOOD AFTERNOON" : "GOOD EVENING");
+                document.getElementById("wishMessage").innerText = wish;
+
+                hours = hours % 12 || 12;
+                document.getElementById("liveTime").innerText = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+                document.getElementById("liveDate").innerText = "LIVE DATE: " + now.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
+            }, 1000);
+        }
+
+        // টেস্ট করার সুবিধার্থে সরাসরি হোমপেজ অন করে দেওয়া হলো
+        enterHomePage();
+    </script>
+</body>
+</html>
