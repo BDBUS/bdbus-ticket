@@ -2290,61 +2290,6 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
-        <script type="module">
-      // ১. ফায়ারবেজ মডিউল ইমপোর্ট করা
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-      import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-      // ২. কনফিগারেশন
-      const firebaseConfig = {
-        apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
-        authDomain: "bdbus-control-system.firebaseapp.com",
-        projectId: "bdbus-control-system",
-        storageBucket: "bdbus-control-system.firebasestorage.app",
-        messagingSenderId: "279853463516",
-        appId: "1:279853463516:web:13c9b4ec2f9f5bc62e0119"
-      };
-
-      // ৩. ইনিশিয়েলাইজ করা
-      const app = initializeApp(firebaseConfig);
-      const storage = getStorage(app);
-
-      // আপনার বাকি বাটন ও ফাংশনকে সচল রাখার জন্য গ্লোবাল উইন্ডোতে স্টোরেজ সেট করা
-      window.firebaseStorage = storage;
-      window.firebaseRef = ref;
-      window.firebaseUploadBytes = uploadBytes;
-      window.firebaseGetDownloadURL = getDownloadURL;
-
-      console.log("Firebase Connected Safely!");
-    </script>
-
-    <script>
-      // ৪. প্রোফাইল পিকচার লাইভ আপলোড লজিক (সাধারণ স্ক্রিপ্টে স্থানান্তরিত)
-      document.addEventListener('DOMContentLoaded', function() {
-        const avatarInput = document.getElementById('avatar-input-file');
-        const avatarRender = document.getElementById('profile-avatar-render');
-
-        if (avatarInput) {
-          avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file || !window.firebaseStorage) return;
-
-            const storageRef = window.firebaseRef(window.firebaseStorage, 'user_avatars/' + Date.now() + '_' + file.name);
-
-            window.firebaseUploadBytes(storageRef, file).then((snapshot) => {
-              window.firebaseGetDownloadURL(snapshot.ref).then((downloadURL) => {
-                if (avatarRender) {
-                  avatarRender.src = downloadURL;
-                }
-                alert('আপনার প্রোফাইল ছবি সফলভাবে ফায়ারবেজ ক্লাউডে সংরক্ষণ করা হয়েছে!');
-              });
-            }).catch((error) => {
-              console.error('Error:', error);
-              alert('ছবি আপলোড করতে সমস্যা হয়েছে!');
-            });
-          });
-        }
-      });
     </script>
 </body>
 </html>
