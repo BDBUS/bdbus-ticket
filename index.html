@@ -16,9 +16,10 @@
             min-height: 100vh; 
             padding: 80px 20px; 
             position: relative; 
+            overflow-x: hidden;
         }
         
-        /* ব্যাকগ্রাউন্ডে ঠিক মাঝখানে বড় ফিক্সড ওয়াটারমার্ক লোগো */
+        /* ব্যাকগ্রাউন্ডে ফিক্সড ওয়াটারমার্ক লোগো */
         .watermark { 
             position: fixed; 
             top: 50%; 
@@ -45,7 +46,6 @@
         h1 { font-size: 21px; color: #ffffff; margin-bottom: 6px; font-weight: 700; letter-spacing: 0.5px; }
         h2 { font-size: 12px; color: #00e5ff; margin-bottom: 30px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
         
-        /* টাইটেল মিডিলে (Center) আনার জন্য CSS */
         .form-title { font-size: 19px; font-weight: bold; color: #ffffff; margin: 10px 0 25px 0; text-align: center; }
         
         /* প্রিমিয়াম ইনপুট ডিজাইন */
@@ -53,83 +53,104 @@
         .input-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: 500; }
         .input-group input, .input-group select { width: 100%; padding: 13px 16px; background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; font-size: 14px; color: #ffffff; outline: none; transition: 0.3s; }
         .input-group input:focus, .input-group select:focus { border-color: #00e5ff; background-color: #243249; }
-        .input-group input::placeholder { color: #64748b; }
         
-        /* স্ট্যান্ডার্ড পাসওয়ার্ড শো/হাইড আইকন স্টাইল (SVG) */
-        .toggle-password { 
-            position: absolute; 
-            right: 16px; 
-            top: 38px; 
-            cursor: pointer; 
-            color: #64748b; 
-            width: 20px;
-            height: 20px;
-            user-select: none; 
-            transition: 0.2s; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* স্ট্যান্ডার্ড পাসওয়ার্ড শো/হাইড আইকন স্টাইল */
+        .toggle-password { position: absolute; right: 16px; top: 38px; cursor: pointer; color: #64748b; width: 20px; height: 20px; user-select: none; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .toggle-password:hover { color: #00e5ff; }
         .toggle-password svg { width: 100%; height: 100%; fill: currentColor; }
         
         .forget-pwd { display: block; text-align: left; font-size: 13px; color: #00e5ff; text-decoration: none; margin-bottom: 25px; font-weight: 500; }
-        .forget-pwd:hover { text-decoration: underline; }
         
-        /* নিয়ন গ্রেডিয়েন্ট বাটনসমূহ */
+        /* বাটনসমূহ */
         .btn-group { display: flex; gap: 20px; margin-top: 15px; }
-        .btn { flex: 1; padding: 13px; border: none; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.3s; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        
-        /* অরেঞ্জ গ্রেডিয়েন্ট */
-        .btn-orange { background: linear-gradient(135deg, #ff4e00, #ec9f05); color: white; box-shadow: 0 4px 12px rgba(255, 78, 0, 0.2); }
+        .btn { flex: 1; padding: 13px; border: none; border-radius: 25px; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.3s; text-align: center; }
+        .btn-orange { background: linear-gradient(135deg, #ff4e00, #ec9f05); color: white; }
         .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255, 78, 0, 0.4); }
-        
-        /* সাইয়ান গ্রেডিয়েন্ট */
-        .btn-cyan { background: linear-gradient(135deg, #00e5ff, #0077ff); color: #000000; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 229, 255, 0.2); }
+        .btn-cyan { background: linear-gradient(135deg, #00e5ff, #0077ff); color: #000000; font-weight: 800; }
         .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 229, 255, 0.4); }
         
-        /* চেক বক্স */
         .checkbox-group { display: flex; align-items: center; gap: 10px; text-align: left; margin: 25px 0; }
         .checkbox-group input { width: 16px; height: 16px; cursor: pointer; accent-color: #00e5ff; }
-        .checkbox-group label { font-size: 13px; color: #94a3b8; cursor: pointer; user-select: none; }
+
+        /* সাকসেস আইডি কার্ড স্টাইল */
+        .success-box { display: none; background: #0e1626; border: 2px dashed #00e5ff; border-radius: 20px; padding: 35px 25px; max-width: 460px; width: 100%; text-align: center; z-index: 6; }
+        .id-badge { font-size: 32px; font-weight: 800; color: #00e5ff; margin: 20px 0; letter-spacing: 2px; }
+
+        /* ==================== পপ আপ ডিজাইনসমূহ ==================== */
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+        
+        /* ১ম পপ-আপ: নিখুঁত স্কয়ার সাইজ */
+        .square-popup { background: #0e1626; width: 360px; height: 360px; border-radius: 16px; border: 1px solid #1e293b; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); }
+        
+        /* ২য় পপ-আপ: বড় সাইজের নোটিশ */
+        .notice-popup { background: #0e1626; max-width: 500px; width: 100%; border-radius: 20px; border: 1px solid #ff4e00; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(255, 78, 0, 0.15); }
+        .notice-content { background: #1e293b; padding: 15px; border-radius: 10px; max-height: 200px; overflow-y: auto; text-align: left; font-size: 13px; line-height: 1.6; margin: 15px 0; border: 1px solid #334155; color: #cbd5e1; }
+
+        /* ==================== হোম পেজ / ড্যাশবোর্ড স্টাইল ==================== */
+        .dashboard-container { display: none; width: 100%; max-width: 500px; flex-direction: column; gap: 20px; z-index: 10; padding-bottom: 40px; }
+        
+        /* ড্যাশবোর্ড টপ বার */
+        .dash-top { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
+        .menu-icon { font-size: 24px; cursor: pointer; color: #fff; }
+        
+        /* ক্লক এবং উইশ বক্স */
+        .clock-card { background: #0e1626; border-radius: 20px; padding: 25px; text-align: center; border: 1px solid #1e293b; }
+        .wish-text { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: 1px; margin: 12px 0; text-transform: uppercase; }
+        .digital-clock-box { border: 2px solid #00e5ff; border-radius: 12px; padding: 12px; display: inline-block; width: 100%; box-shadow: inset 0 0 10px rgba(0,229,255,0.1); }
+        .time-display { font-size: 26px; font-weight: bold; color: #00e5ff; font-family: monospace; }
+        .date-display { font-size: 11px; color: #64748b; margin-top: 4px; text-transform: uppercase; font-weight: bold; }
+
+        /* স্ক্রিনশট অনুযায়ী স্ক্রোলিং মেম্বার জোন */
+        .notice-bar { background: #1e293b; border-left: 4px solid #ff4e00; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: #fff; }
+        .notice-tag { background: #ff4e00; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+
+        .members-wrapper { display: flex; gap: 15px; overflow-x: auto; padding: 5px 0; width: 100%; scrollbar-width: none; }
+        .members-wrapper::-webkit-scrollbar { display: none; }
+        
+        .member-card { background: #1e293b; border-radius: 14px; padding: 15px; display: flex; align-items: center; gap: 15px; min-width: 230px; flex: 1; border: 1px solid #2e3d52; }
+        .member-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #00e5ff; object-fit: cover; }
+        .member-info h4 { font-size: 14px; color: #fff; margin-bottom: 2px; }
+        .member-info p { font-size: 11px; color: #94a3b8; }
+        .status-active { color: #00e5ff; font-weight: bold; font-size: 10px; display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+        .status-active::before { content: '●'; font-size: 12px; }
+
+        /* রিওয়ার্ড এবং অ্যাকশন কার্ডস */
+        .reward-card { background: #0e1626; border-radius: 18px; padding: 25px; text-align: center; border: 1px solid #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .reward-card h3 { font-size: 16px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .reward-card p { font-size: 12px; color: #94a3b8; margin-bottom: 18px; }
+        .reward-btn { display: inline-block; width: 65%; padding: 11px; border-radius: 20px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; transition: 0.2s; }
     </style>
 </head>
 <body>
 
-    <!-- ব্যাকগ্রাউন্ডের ঠিক মাঝখানে ফিক্সড ওয়াটারমার্ক লোগো -->
     <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Watermark" class="watermark">
 
-    <!-- ভাষা চেঞ্জার নেভিগেশন বার -->
-    <div class="header-nav">
+    <!-- ল্যাঙ্গুয়েজ বার -->
+    <div class="header-nav" id="topNav">
         <div class="lang-toggle-box">
             <span id="lang-en" class="lang-btn active" onclick="changeLang('en')">EN</span>
             <span id="lang-bn" class="lang-btn" onclick="changeLang('bn')">বাংলা</span>
         </div>
     </div>
 
-    <!-- ================= লগইন ফর্ম কার্ড ================= -->
+    <!-- ================= লগইন ফর্ম ================= -->
     <div id="loginCard" class="form-card active">
         <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" class="logo">
         <h1 class="txt-main-title">Bangladesh Bussid Unique Society</h1>
-        <h2 class="txt-subtitle">BDBUS OFFICIAL WEBSITE</h2>
-
-        <form onsubmit="event.preventDefault(); alert('Login feature is under development.');">
+        <h2 id="txt-subtitle">BDBUS OFFICIAL WEBSITE</h2>
+        <form onsubmit="handleLogin(event)">
             <div class="input-group">
-                <label class="lbl-email" for="loginEmail">Email Address</label>
-                <input type="email" id="loginEmail" placeholder="example@gmail.com" required>
+                <label class="lbl-email" for="loginEmail">Email / BDBUS ID</label>
+                <input type="text" id="loginEmail" placeholder="Example: BDBUS-1001" required>
             </div>
-            
             <div class="input-group">
                 <label class="lbl-pass" for="loginPassword">Password</label>
                 <input type="password" id="loginPassword" placeholder="••••••••" required>
-                <!-- স্ট্যান্ডার্ড চোখ আইকন -->
                 <span class="toggle-password" onclick="togglePassword('loginPassword', this)">
-                    <svg viewBox="0 0 24 24" id="eye-icon-login"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                 </span>
             </div>
-
             <a href="#" class="forget-pwd" id="txt-forget">Forget password</a>
-
             <div class="btn-group">
                 <button type="button" class="btn btn-orange" id="btn-register-nav" onclick="switchForm('register')">Sign Up Now</button>
                 <button type="submit" class="btn btn-cyan" id="btn-login">Login Now</button>
@@ -137,90 +158,39 @@
         </form>
     </div>
 
-
-    <!-- ================= রেজিস্ট্রেশন ফর্ম কার্ড ================= -->
+    <!-- ================= রেজিস্ট্রেশন ফর্ম ================= -->
     <div id="registerCard" class="form-card">
         <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" class="logo">
         <h1 class="txt-main-title">Bangladesh Bussid Unique Society</h1>
-        <!-- এই টাইটেলটি এখন মিডিলে থাকবে -->
         <div class="form-title" id="txt-form-title">BDBUS Registration Form</div>
-
         <form id="regForm" onsubmit="submitForm(event)">
-            <div class="input-group">
-                <label id="lbl-name" for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="Example: John Doe" required>
-            </div>
-            
-            <div class="input-group">
-                <label id="lbl-nick" for="gameId">Game Nickname / ID</label>
-                <input type="text" id="gameId" placeholder="Example: PlayerOne / 123456" required>
-            </div>
-
-            <div class="input-group">
-                <label id="lbl-dob" for="dob">Date of Birth</label>
-                <input type="date" id="dob" required>
-            </div>
-
-            <div class="input-group">
-                <label id="lbl-mobile" for="mobile">Mobile Number</label>
-                <input type="tel" id="mobile" placeholder="Example: +88017XXXXXXXX" required>
-            </div>
-
+            <div class="input-group"><label id="lbl-name" for="fullName">Full Name</label><input type="text" id="fullName" placeholder="Example: Emon Talukder" required></div>
+            <div class="input-group"><label id="lbl-nick" for="gameId">Game Nickname / ID</label><input type="text" id="gameId" placeholder="Example: PlayerOne / 123456" required></div>
+            <div class="input-group"><label id="lbl-dob" for="dob">Date of Birth</label><input type="date" id="dob" required></div>
+            <div class="input-group"><label id="lbl-mobile" for="mobile">Mobile Number</label><input type="tel" id="mobile" placeholder="Example: +88017XXXXXXXX" required></div>
             <div class="input-group">
                 <label id="lbl-gender" for="gender">Gender</label>
                 <select id="gender" required>
                     <option value="" disabled selected id="opt-gender">Select Gender</option>
                     <option value="Male" id="opt-male">Male</option>
                     <option value="Female" id="opt-female">Female</option>
-                    <option value="Other" id="opt-other">Other</option>
                 </select>
             </div>
-
-            <div class="input-group">
-                <label id="lbl-div" for="division">Division</label>
-                <select id="division" onchange="updateDistricts()" required>
-                    <option value="" disabled selected id="opt-div">Example: Dhaka / Type division...</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label id="lbl-dist" for="district">District</label>
-                <select id="district" required>
-                    <option value="" disabled selected id="opt-dist">Example: Cumilla / Type district...</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label id="lbl-fb" for="fbLink">Facebook Profile Link</label>
-                <input type="url" id="fbLink" placeholder="Example: https://facebook.com/username" required>
-            </div>
-
-            <div class="input-group">
-                <label class="lbl-email" for="regEmail">Email Address</label>
-                <input type="email" id="regEmail" placeholder="Example: example@mail.com" required>
-            </div>
-
+            <div class="input-group"><label id="lbl-div" for="division">Division</label><select id="division" onchange="updateDistricts()" required><option value="" disabled selected id="opt-div">Select Division</option></select></div>
+            <div class="input-group"><label id="lbl-dist" for="district">District</label><select id="district" required><option value="" disabled selected id="opt-dist">Select District</option></select></div>
+            <div class="input-group"><label id="lbl-fb" for="fbLink">Facebook Profile Link</label><input type="url" id="fbLink" placeholder="Example: https://facebook.com/" required></div>
+            <div class="input-group"><label class="lbl-email" for="regEmail">Email Address</label><input type="email" id="regEmail" placeholder="Example: example@mail.com" required></div>
             <div class="input-group">
                 <label class="lbl-pass" for="regPassword">Set Password</label>
-                <input type="password" id="regPassword" placeholder="Example: ••••••••" required>
-                <span class="toggle-password" onclick="togglePassword('regPassword', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </span>
+                <input type="password" id="regPassword" placeholder="••••••••" required>
+                <span class="toggle-password" onclick="togglePassword('regPassword', this)"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></span>
             </div>
-
             <div class="input-group">
                 <label id="lbl-conf" for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="Example: ••••••••" required>
-                <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">
-                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                </span>
+                <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                <span class="toggle-password" onclick="togglePassword('confirmPassword', this)"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></span>
             </div>
-
-            <div class="checkbox-group">
-                <input type="checkbox" id="declaration" required>
-                <label id="lbl-dec" for="declaration">All data is correct declaration check.</label>
-            </div>
-
+            <div class="checkbox-group"><input type="checkbox" id="declaration" required><label id="lbl-dec" for="declaration">All data is correct declaration check.</label></div>
             <div class="btn-group">
                 <button type="button" class="btn btn-orange" id="btn-login-nav" onclick="switchForm('login')">Back to Login</button>
                 <button type="submit" class="btn btn-cyan" id="btn-submit">Registration Submit</button>
@@ -228,9 +198,122 @@
         </form>
     </div>
 
+    <!-- ================= রেজিস্ট্রেশন সাকসেস আইডি ডিসপ্লে ================= -->
+    <div id="successCard" class="success-box">
+        <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" class="logo" style="width: 55px;">
+        <h3 id="txt-succ-title" style="color: #fff; font-size: 20px; margin-bottom: 5px;">Registration Successful!</h3>
+        <span id="txt-succ-sub" style="color: #64748b; font-size: 13px;">Welcome to BDBUS Society</span>
+        <div class="id-badge" id="generatedUserID">BDBUS-1001</div>
+        <p id="txt-succ-msg">Please copy or take a screenshot of your official BDBUS ID. You will need this ID along with your password to login to the website home page.</p>
+        <button type="button" class="btn btn-cyan" style="width: 100%;" id="btn-succ-done" onclick="closeSuccessCard()">Go to Login</button>
+    </div>
+
+    <!-- ==================== ১ম পপ-আপ: ওয়েলকাম স্কয়ার পপ-আপ ==================== -->
+    <div id="welcomeOverlay" class="popup-overlay">
+        <div class="square-popup">
+            <img src="images/BDBUS Group Official Logo.png" alt="BDBUS Logo" style="width: 70px;">
+            <div>
+                <h3 id="pop1-name" style="color: #fff; font-size: 18px; margin-bottom: 5px;">Emon Talukder</h3>
+                <p id="pop1-id" style="color: #00e5ff; font-size: 14px; font-weight: bold; letter-spacing: 1px;">ID: BDBUS-1001</p>
+            </div>
+            <button type="button" class="btn btn-orange" style="width: 100%; border-radius: 10px;" onclick="showNoticePopup()">Thanks</button>
+        </div>
+    </div>
+
+    <!-- ==================== ২য় পপ-আপ: অফিসিয়াল নোটিশ পপ-আপ ==================== -->
+    <div id="noticeOverlay" class="popup-overlay">
+        <div class="notice-popup">
+            <h3 id="pop2-title" style="color: #ff4e00; font-size: 20px;">📢 BDBUS Official Notice</h3>
+            <div class="notice-content" id="pop2-body">
+                স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম। আমাদের গ্রুপ নিয়মানুবর্তিতা এবং সবার মেলবন্ধনে পরিচালিত হয়। গেমের যেকোনো ইভেন্ট ও টুর্নামেন্টের আপডেট এই নোটিশ বোর্ডে নিয়মিত প্রকাশ করা হবে। কোনো প্রকার লোকাল হ্যাক বা অনৈতিক সুবিধা নেওয়া সম্পূর্ণ নিষিদ্ধ। আশা করি আপনারা সবাই নিয়ম মেনে চলবেন। ধন্যবাদ!
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                <input type="checkbox" id="noticeCheck" onchange="toggleNoticeBtn()" style="width: 16px; height: 16px; accent-color: #ff4e00;">
+                <label for="noticeCheck" id="pop2-check-lbl" style="font-size: 13px; color: #94a3b8; cursor: pointer; user-select: none;">I have read and agree to the notice.</label>
+            </div>
+            <button type="button" id="btn-notice-ok" class="btn btn-cyan" style="width: 100%; opacity: 0.4; cursor: not-allowed;" disabled onclick="enterHomePage()">Okay</button>
+        </div>
+    </div>
+
+    <!-- ==================== হোম পৃষ্ঠা / ড্যাশবোর্ড ইন্টারফেস ==================== -->
+    <div id="homePage" class="dashboard-container">
+        <div class="dash-top">
+            <div class="menu-icon">☰</div>
+            <div style="font-weight: bold; font-size: 18px; color: #fff;">Logo <span style="color: #00e5ff;">BDBUS</span></div>
+            <div style="width: 30px;"></div>
+        </div>
+
+        <div class="clock-card">
+            <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Logo</div>
+            <div style="font-size: 15px; font-weight: bold; color: #fff; margin-top: 4px;">Bangladesh Bussid Unique Society</div>
+            <div class="wish-text" id="wishMessage">GOOD AFTERNOON</div>
+            <div class="digital-clock-box">
+                <div class="time-display" id="liveTime">12:36:47 PM</div>
+                <div class="date-display" id="liveDate">LIVE DATE: THU, DEC 2, 2026</div>
+            </div>
+        </div>
+
+        <div class="notice-bar">
+            <span class="notice-tag">NOTICE</span>
+            <marquee behavior="scroll" direction="left" id="marqueeText">স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম</marquee>
+        </div>
+
+        <!-- স্ক্রিনশট অনুযায়ী পাশাপাশি স্ক্রোলিং মেম্বার কার্ড জোন -->
+        <div class="members-wrapper">
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=11" alt="Milton" class="member-avatar">
+                <div class="member-info">
+                    <h4>Milton</h4>
+                    <p>ID: BDBUS-1001 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">1012378 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=12" alt="Coupon" class="member-avatar">
+                <div class="member-info">
+                    <h4>Coupon Ahead</h4>
+                    <p>ID: BDBUS-1002 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">4415 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+            <div class="member-card">
+                <img src="https://i.pravatar.cc/100?img=33" alt="Al Amin" class="member-avatar">
+                <div class="member-info">
+                    <h4 id="dashUserTitle">Al Amin</h4>
+                    <p id="dashUserID">ID: BDBUS-1003 | Regular</p>
+                    <p style="color: #64748b; margin-top: 2px;">Balance: <span style="color: #22c55e;">0 BDT</span></p>
+                    <div class="status-active">ACTIVE</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reward-card">
+            <h3>🎁 Welcome Bonus</h3>
+            <p>Get 5000 BDT instantly on your first signup.</p>
+            <button class="reward-btn btn-orange" onclick="alert('5000 BDT Claimed Successfully!')">Claim 5000 BDT</button>
+        </div>
+
+        <div class="reward-card">
+            <h3><span style="color: #ef4444;">►</span> Subscribe YouTube</h3>
+            <p>Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
+            <button class="reward-btn" style="background: #ef4444; color: #fff;" onclick="window.open('https://youtube.com', '_blank')">Subscribe Now</button>
+        </div>
+
+        <div class="reward-card">
+            <h3>📹 Watch Video Stream</h3>
+            <p>Watch stream video over 1 minute to receive unlimited 3000 BDT rewards.</p>
+            <button class="reward-btn btn-cyan" onclick="alert('Streaming starting soon...')">► Watch Video</button>
+        </div>
+    </div>
+
     <script>
-        // ফর্ম টগল ফাংশন
+        // গ্লোবাল ডাইনামিক ইউজার স্টেট
+        let registeredUser = { name: "Emon Talukder", id: "BDBUS-1001" };
+
         function switchForm(formType) {
+            document.getElementById('successCard').style.display = 'none';
             if(formType === 'register') {
                 document.getElementById('loginCard').classList.remove('active');
                 document.getElementById('registerCard').classList.add('active');
@@ -241,175 +324,154 @@
             window.scrollTo(0, 0);
         }
 
-        // স্ট্যান্ডার্ড পাসওয়ার্ড শো/হাইড মেকানিজম (চোখ খোলা এবং চোখের উপর দাগ SVG পরিবর্তন)
         function togglePassword(inputId, container) {
             var pwdInput = document.getElementById(inputId);
-            
-            // চোখ খোলা এবং চোখ বন্ধের ২টা প্রফেশনাল SVG পাথ
-            const openEyePath = `<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
-            const closedEyePath = `<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.82l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.74-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.01-.16c0-1.66-1.34-3-3-3l-.16.01z"/></svg>`;
-
-            if (pwdInput.type === "password") {
-                pwdInput.type = "text";
-                container.innerHTML = closedEyePath;
-                container.style.color = "#00e5ff"; // একটিভ হলে গ্লো করবে
-            } else {
-                pwdInput.type = "password";
-                container.innerHTML = openEyePath;
-                container.style.color = "#64748b";
-            }
+            if (pwdInput.type === "password") { pwdInput.type = "text"; container.style.color = "#00e5ff"; } 
+            else { pwdInput.type = "password"; container.style.color = "#64748b"; }
         }
 
-        // বাংলাদেশ জেলা ও বিভাগ ডেটাবেজ
-        const bdData = {
-            "Dhaka": ["Dhaka", "Gazipur", "Narayanganj", "Tangail", "Faridpur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narsingdi", "Rajbari", "Shariatpur"],
-            "Chattogram": ["Chattogram", "Cox's Bazar", "Cumilla", "Feni", "Brahmanbaria", "Chandpur", "Noakhali", "Lakshmipur", "Rangamati", "Khagrachhari", "Bandarban"],
-            "Rajshahi": ["Rajshahi", "Bogra", "Pabna", "Natore", "Naogaon", "Chapai Nawabganj", "Joypurhat", "Sirajganj"],
-            "Khulna": ["Khulna", "Jashore", "Satkhira", "Bagerhat", "Kushtia", "Meherpur", "Chuadanga", "Jhenaidah", "Magura", "Narail"],
-            "Barishal": ["Barishal", "Bhola", "Patuakhali", "Pirojpur", "Jhalokathi", "Barguna"],
-            "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj", "Sunamganj"],
-            "Rangpur": ["Rangpur", "Dinajpur", "Kurigram", "Gaibandha", "Nilphamari", "Panchagarh", "Thakurgaon", "Lalmonirhat"],
-            "Mymensingh": ["Mymensingh", "Jamalpur", "Netrokona", "Sherpur"]
-        };
-
-        const bdDataBn = {
-            "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "টাঙ্গাইল", "ফরিদপুর", "গোপালগঞ্জ", "কিশোরগঞ্জ", "মাদারীপুর", "মানিকগঞ্জ", "মুন্সীগঞ্জ", "নরসিংদী", "রাজবাড়ী", "শরীয়তপুর"],
-            "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "ফেনী", "ব্রাহ্মণবাড়িয়া", "চাঁদপুর", "নোয়াখালী", "লক্ষ্মীপুর", "রাঙ্গামাটি", "খাগড়াছড়ি", "বান্দরবান"],
-            "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "নাটোর", "নওগাঁ", "চাঁপাইনবাবগঞ্জ", "জয়পুরহাট", "সিরাজগঞ্জ"],
-            "খুলনা": ["খুলনা", "যশোর", "সাতক্ষীরা", "বাগেরহাট", "কুষ্টিয়া", "মেহেরপুর", "চুয়াডাঙ্গা", "ঝিনাইদহ", "মাগুরা", "নড়াইল"],
-            "বরিশাল": ["বরিশাল", "ভোলা", "পটুয়াখালী", "পিরোজপুর", "ঝালকাঠি", "বরগুনা"],
-            "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
-            "রংপুর": ["রংপুর", "দিনাজপুর", "কুড়িগ্রাম", "গাইবান্ধা", "নীলফামারী", "পঞ্চগড়", "ঠাকুরগাঁও", "লালমনিরহাট"],
-            "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "নেত্রকোনা", "শেরপুর"]
-        };
+        // বাংলাদেশ ডিস্ট্রিক্ট ডেটাবেজ
+        const bdData = { "Dhaka": ["Dhaka", "Gazipur"], "Sylhet": ["Sylhet", "Moulvibazar", "Habiganj"] };
+        const bdDataBn = { "ঢাকা": ["ঢাকা", "গাজীপুর"], "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ"] };
 
         function populateDivisions(lang) {
             const divSelect = document.getElementById("division");
-            const currentVal = divSelect.value;
-            divSelect.innerHTML = `<option value="" disabled selected>${lang === 'bn' ? 'উদাহরণ: ঢাকা / বিভাগ টাইপ করুন...' : 'Example: Dhaka / Type division...'}</option>`;
-            
+            divSelect.innerHTML = `<option value="" disabled selected>${lang==='bn'?'বিভাগ নির্বাচন করুন':'Select Division'}</option>`;
             const data = lang === 'bn' ? bdDataBn : bdData;
-            Object.keys(data).forEach(div => {
-                let opt = document.createElement("option");
-                opt.value = div;
-                opt.innerText = div;
-                divSelect.appendChild(opt);
-            });
-            if(currentVal) divSelect.value = currentVal;
+            Object.keys(data).forEach(div => { divSelect.innerHTML += `<option value="${div}">${div}</option>`; });
         }
-
         function updateDistricts() {
             const divSelect = document.getElementById("division").value;
             const distSelect = document.getElementById("district");
             const currentLang = document.getElementById("lang-bn").classList.contains("active") ? 'bn' : 'en';
-            
-            distSelect.innerHTML = `<option value="" disabled selected>${currentLang === 'bn' ? 'উদাহরণ: কুমিল্লা / জেলা টাইপ করুন...' : 'Example: Cumilla / Type district...'}</option>`;
-            
+            distSelect.innerHTML = `<option value="" disabled selected>${currentLang==='bn'?'জেলা নির্বাচন করুন':'Select District'}</option>`;
             const data = currentLang === 'bn' ? bdDataBn : bdData;
-            if(divSelect && data[divSelect]) {
-                data[divSelect].forEach(dist => {
-                    let opt = document.createElement("option");
-                    opt.value = dist;
-                    opt.innerText = dist;
-                    distSelect.appendChild(opt);
-                });
+            if(divSelect && data[divSelect]) { data[divSelect].forEach(dist => { distSelect.innerHTML += `<option value="${dist}">${dist}</option>`; }); }
+        }
+        populateDivisions('en');
+
+        // রেজিস্ট্রেশন সাবমিট লজিক
+        function submitForm(e) {
+            e.preventDefault();
+            if(document.getElementById("regPassword").value !== document.getElementById("confirmPassword").value) {
+                alert("Passwords do not match!"); return;
+            }
+            const nameInput = document.getElementById("fullName").value;
+            const finalID = "BDBUS-" + (1000 + Math.floor(Math.random() * 50) + 1);
+            
+            registeredUser.name = nameInput;
+            registeredUser.id = finalID;
+
+            document.getElementById("generatedUserID").innerText = finalID;
+            document.getElementById('registerCard').classList.remove('active');
+            document.getElementById('successCard').style.display = 'block';
+            document.getElementById("regForm").reset();
+            window.scrollTo(0, 0);
+        }
+
+        function closeSuccessCard() {
+            document.getElementById('successCard').style.display = 'none';
+            document.getElementById('loginCard').classList.add('active');
+        }
+
+        // লগইন সাকসেস হ্যান্ডলার -> ১ম পপ আপ ট্রিগার
+        function handleLogin(e) {
+            e.preventDefault();
+            document.getElementById('loginCard').classList.remove('active');
+            document.getElementById('topNav').style.display = 'none';
+            
+            // ১ম পপ আপে ডাটা লোড
+            document.getElementById("pop1-name").innerText = registeredUser.name;
+            document.getElementById("pop1-id").innerText = "ID: " + registeredUser.id;
+            
+            document.getElementById("welcomeOverlay").style.display = "flex";
+        }
+
+        // ২য় পপ-আপ নোটিশ প্রদর্শন
+        function showNoticePopup() {
+            document.getElementById("welcomeOverlay").style.display = "none";
+            document.getElementById("noticeOverlay").style.display = "flex";
+        }
+
+        // নোটিশ চেকবক্স ভ্যালিডেশন
+        function toggleNoticeBtn() {
+            const isChecked = document.getElementById("noticeCheck").checked;
+            const btn = document.getElementById("btn-notice-ok");
+            if(isChecked) {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = "0.4";
+                btn.style.cursor = "not-allowed";
             }
         }
 
-        populateDivisions('en');
+        // হোম পেজে প্রবেশ লজিক
+        function enterHomePage() {
+            document.getElementById("noticeOverlay").style.display = "none";
+            document.getElementById("topNav").style.display = "flex";
+            
+            // ড্যাশবোর্ডে লাইভ ইউজারের নাম ও আইডি সেট করুন
+            document.getElementById("dashUserTitle").innerText = registeredUser.name;
+            document.getElementById("dashUserID").innerText = "ID: " + registeredUser.id + " | Regular Member";
+            
+            document.getElementById("homePage").style.display = "flex";
+            startLiveClock();
+        }
 
-        // বহুভাষিক সাপোর্ট
+        // লাইভ ডিজিটাল ক্লক এবং রিয়েল-টাইম উইশ লজিক
+        function startLiveClock() {
+            setInterval(() => {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                
+                // উইশ মেসেজ পরিবর্তন লজিক
+                let wish = "GOOD DAY";
+                if(hours >= 5 && hours < 12) wish = "GOOD MORNING";
+                else if(hours >= 12 && hours < 17) wish = "GOOD AFTERNOON";
+                else if(hours >= 17 && hours < 21) wish = "GOOD EVENING";
+                else wish = "GOOD NIGHT";
+                
+                document.getElementById("wishMessage").innerText = wish;
+
+                hours = hours % 12;
+                hours = hours ? hours : 12; 
+                const timeStr = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+                document.getElementById("liveTime").innerText = timeStr;
+
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                document.getElementById("liveDate").innerText = "LIVE DATE: " + now.toLocaleDateString('en-US', options).toUpperCase();
+            }, 1000);
+        }
+
+        // বহুভাষিক ট্র্যান্সলেশন সাপোর্ট
         function changeLang(lang) {
             var enBtn = document.getElementById("lang-en");
             var bnBtn = document.getElementById("lang-bn");
-
-            var mainTitles = document.getElementsByClassName("txt-main-title");
-            var emailLabels = document.getElementsByClassName("lbl-email");
-            var passLabels = document.getElementsByClassName("lbl-pass");
-
             if(lang === 'en') {
-                enBtn.classList.add("active");
-                bnBtn.classList.remove("active");
-                
-                for(let el of mainTitles) el.innerText = "Bangladesh Bussid Unique Society";
-                for(let el of emailLabels) el.innerText = "Email Address";
-                for(let el of passLabels) el.innerText = "Password";
-                
+                enBtn.classList.add("active"); bnBtn.classList.remove("active");
                 document.getElementById("txt-subtitle").innerText = "BDBUS OFFICIAL WEBSITE";
-                document.getElementById("txt-forget").innerText = "Forget password";
-                document.getElementById("btn-login").innerText = "Login Now";
-                document.getElementById("btn-register-nav").innerText = "Sign Up Now";
-
                 document.getElementById("txt-form-title").innerText = "BDBUS Registration Form";
-                document.getElementById("lbl-name").innerText = "Full Name";
-                document.getElementById("lbl-nick").innerText = "Game Nickname / ID";
-                document.getElementById("lbl-dob").innerText = "Date of Birth";
-                document.getElementById("lbl-mobile").innerText = "Mobile Number";
-                document.getElementById("lbl-gender").innerText = "Gender";
-                document.getElementById("opt-gender").innerText = "Select Gender";
-                document.getElementById("opt-male").innerText = "Male";
-                document.getElementById("opt-female").innerText = "Female";
-                document.getElementById("opt-other").innerText = "Other";
-                document.getElementById("lbl-div").innerText = "Division";
-                document.getElementById("lbl-dist").innerText = "District";
-                document.getElementById("lbl-fb").innerText = "Facebook Profile Link";
-                document.getElementById("lbl-conf").innerText = "Confirm Password";
-                document.getElementById("lbl-dec").innerText = "All data is correct declaration check.";
-                document.getElementById("btn-login-nav").innerText = "Back to Login";
-                document.getElementById("btn-submit").innerText = "Registration Submit";
-                
+                document.getElementById("pop2-title").innerText = "📢 BDBUS Official Notice";
+                document.getElementById("pop2-check-lbl").innerText = "I have read and agree to the notice.";
+                document.getElementById("btn-notice-ok").innerText = "Okay";
+                document.getElementById("marqueeText").innerText = "Welcome to BDBUS Official Website Setup";
                 populateDivisions('en');
-                updateDistricts();
             } else {
-                bnBtn.classList.add("active");
-                enBtn.classList.remove("active");
-                
-                for(let el of mainTitles) el.innerText = "বাংলাদেশ বাসআইডি ইউনিক সোসাইটি";
-                for(let el of emailLabels) el.innerText = "ইমেইল এড্রেস";
-                for(let el of passLabels) el.innerText = "পাসওয়ার্ড";
-                
+                bnBtn.classList.add("active"); enBtn.classList.remove("active");
                 document.getElementById("txt-subtitle").innerText = "বিডিবাস অফিসিয়াল ওয়েবসাইট";
-                document.getElementById("txt-forget").innerText = "পাসওয়ার্ড ভুলে গেছেন";
-                document.getElementById("btn-login").innerText = "লগইন করুন";
-                document.getElementById("btn-register-nav").innerText = "সাইন আপ করুন";
-
                 document.getElementById("txt-form-title").innerText = "BDBUS রেজিস্ট্রেশন ফর্ম";
-                document.getElementById("lbl-name").innerText = "পূর্ণ নাম";
-                document.getElementById("lbl-nick").innerText = "গেম নিকনেম / আইডি";
-                document.getElementById("lbl-dob").innerText = "জন্ম তারিখ";
-                document.getElementById("lbl-mobile").innerText = "মোবাইল নম্বর";
-                document.getElementById("lbl-gender").innerText = "লিঙ্গ";
-                document.getElementById("opt-gender").innerText = "লিঙ্গ নির্বাচন করুন";
-                document.getElementById("opt-male").innerText = "পুরুষ";
-                document.getElementById("opt-female").innerText = "মহিলা";
-                document.getElementById("opt-other").innerText = "অন্যান্য";
-                document.getElementById("lbl-div").innerText = "বিভাগ";
-                document.getElementById("lbl-dist").innerText = "জেলা";
-                document.getElementById("lbl-fb").innerText = "ফেসবুক প্রোফাইল লিংক";
-                document.getElementById("lbl-conf").innerText = "পাসওয়ার্ড নিশ্চিত করুন";
-                document.getElementById("lbl-dec").innerText = "সব তথ্য সঠিক আছে তা নিশ্চিত করুন।";
-                document.getElementById("btn-login-nav").innerText = "লগইন পেজে ফিরুন";
-                document.getElementById("btn-submit").innerText = "রেজিস্ট্রেশন সাবমিট করুন";
-                
+                document.getElementById("pop2-title").innerText = "📢 বিডিবাস অফিসিয়াল নোটিশ";
+                document.getElementById("pop2-check-lbl").innerText = "আমি নোটিশটি পড়েছি এবং একমত পোষণ করছি।";
+                document.getElementById("btn-notice-ok").innerText = "ঠিক আছে";
+                document.getElementById("marqueeText").innerText = "স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম";
                 populateDivisions('bn');
-                updateDistricts();
             }
-        }
-
-        function submitForm(e) {
-            e.preventDefault();
-            const pass = document.getElementById("regPassword").value;
-            const confPass = document.getElementById("confirmPassword").value;
-            const currentLang = document.getElementById("lang-bn").classList.contains("active") ? 'bn' : 'en';
-
-            if(pass !== confPass) {
-                alert(currentLang === 'bn' ? "পাসওয়ার্ড মেলেনি!" : "Passwords do not match!");
-                return;
-            }
-
-            alert(currentLang === 'bn' ? "রেজিস্ট্রেশন সাকসেসফুল।" : "Registration Successful.");
-            document.getElementById("regForm").reset();
-            switchForm('login');
         }
     </script>
 </body>
