@@ -48,13 +48,39 @@
         
         .form-title { font-size: 19px; font-weight: bold; color: #ffffff; margin: 10px 0 25px 0; text-align: center; }
         
-        /* প্রিমিয়াম ইনপুট ডিজাইন */
+        /* প্রিমিয়াম ইনপুট এবং ড্রপডাউন ডিজাইন */
         .input-group { margin-bottom: 22px; text-align: left; position: relative; }
         .input-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: 500; }
-        .input-group input, .input-group select { width: 100%; padding: 13px 16px; background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; font-size: 14px; color: #ffffff; outline: none; transition: 0.3s; }
-        .input-group input:focus, .input-group select:focus { border-color: #00e5ff; background-color: #243249; }
         
-        /* স্ট্যান্ডার্ড পাসওয়ার্ড শো/হাইড আইকন স্টাইল */
+        .input-group input, 
+        .input-group select { 
+            width: 100%; 
+            padding: 13px 16px; 
+            background-color: #1e293b; 
+            border: 1px solid #334155; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            color: #ffffff; 
+            outline: none; 
+            transition: 0.3s;
+            appearance: none; 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        /* ড্রপডাউন অপশনগুলোর ব্যাকগ্রাউন্ড ডার্ক করার জন্য */
+        .input-group select option {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
+        
+        .input-group input:focus, 
+        .input-group select:focus { 
+            border-color: #00e5ff; 
+            background-color: #243249; 
+        }
+        
+        /* পাসওয়ার্ড শো/হাইড আইকন স্টাইল */
         .toggle-password { position: absolute; right: 16px; top: 38px; cursor: pointer; color: #64748b; width: 20px; height: 20px; user-select: none; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .toggle-password:hover { color: #00e5ff; }
         .toggle-password svg { width: 100%; height: 100%; fill: currentColor; }
@@ -100,7 +126,7 @@
         .time-display { font-size: 26px; font-weight: bold; color: #00e5ff; font-family: monospace; }
         .date-display { font-size: 11px; color: #64748b; margin-top: 4px; text-transform: uppercase; font-weight: bold; }
 
-        /* স্ক্রিনশট অনুযায়ী স্ক্রোলিং মেম্বার জোন */
+        /* নোটিশ এবং মেম্বার লিস্ট */
         .notice-bar { background: #1e293b; border-left: 4px solid #ff4e00; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: #fff; }
         .notice-tag { background: #ff4e00; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
 
@@ -114,7 +140,7 @@
         .status-active { color: #00e5ff; font-weight: bold; font-size: 10px; display: flex; align-items: center; gap: 4px; margin-top: 3px; }
         .status-active::before { content: '●'; font-size: 12px; }
 
-        /* রিওয়ার্ড এবং অ্যাকশন কার্ডস */
+        /* রিওয়ার্ড কার্ডস */
         .reward-card { background: #0e1626; border-radius: 18px; padding: 25px; text-align: center; border: 1px solid #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .reward-card h3 { font-size: 16px; color: #fff; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; }
         .reward-card p { font-size: 12px; color: #94a3b8; margin-bottom: 18px; }
@@ -168,6 +194,7 @@
             <div class="input-group"><label id="lbl-nick" for="gameId">Game Nickname / ID</label><input type="text" id="gameId" placeholder="Example: PlayerOne / 123456" required></div>
             <div class="input-group"><label id="lbl-dob" for="dob">Date of Birth</label><input type="date" id="dob" required></div>
             <div class="input-group"><label id="lbl-mobile" for="mobile">Mobile Number</label><input type="tel" id="mobile" placeholder="Example: +88017XXXXXXXX" required></div>
+            
             <div class="input-group">
                 <label id="lbl-gender" for="gender">Gender</label>
                 <select id="gender" required>
@@ -176,10 +203,12 @@
                     <option value="Female" id="opt-female">Female</option>
                 </select>
             </div>
+            
             <div class="input-group"><label id="lbl-div" for="division">Division</label><select id="division" onchange="updateDistricts()" required><option value="" disabled selected id="opt-div">Select Division</option></select></div>
             <div class="input-group"><label id="lbl-dist" for="district">District</label><select id="district" required><option value="" disabled selected id="opt-dist">Select District</option></select></div>
             <div class="input-group"><label id="lbl-fb" for="fbLink">Facebook Profile Link</label><input type="url" id="fbLink" placeholder="Example: https://facebook.com/" required></div>
             <div class="input-group"><label class="lbl-email" for="regEmail">Email Address</label><input type="email" id="regEmail" placeholder="Example: example@mail.com" required></div>
+            
             <div class="input-group">
                 <label class="lbl-pass" for="regPassword">Set Password</label>
                 <input type="password" id="regPassword" placeholder="••••••••" required>
@@ -258,7 +287,7 @@
             <marquee behavior="scroll" direction="left" id="marqueeText">স্বাগতম BDBUS ওয়েবসাইটে আপনাকে সুস্বাগতম</marquee>
         </div>
 
-        <!-- স্ক্রিনশট অনুযায়ী পাশাপাশি স্ক্রোলিং মেম্বার কার্ড জোন -->
+        <!-- মেম্বার কার্ড জোন -->
         <div class="members-wrapper">
             <div class="member-card">
                 <img src="https://i.pravatar.cc/100?img=11" alt="Milton" class="member-avatar">
@@ -380,7 +409,6 @@
             document.getElementById('loginCard').classList.remove('active');
             document.getElementById('topNav').style.display = 'none';
             
-            // ১ম পপ আপে ডাটা লোড
             document.getElementById("pop1-name").innerText = registeredUser.name;
             document.getElementById("pop1-id").innerText = "ID: " + registeredUser.id;
             
@@ -413,7 +441,6 @@
             document.getElementById("noticeOverlay").style.display = "none";
             document.getElementById("topNav").style.display = "flex";
             
-            // ড্যাশবোর্ডে লাইভ ইউজারের নাম ও আইডি সেট করুন
             document.getElementById("dashUserTitle").innerText = registeredUser.name;
             document.getElementById("dashUserID").innerText = "ID: " + registeredUser.id + " | Regular Member";
             
@@ -430,7 +457,6 @@
                 const seconds = String(now.getSeconds()).padStart(2, '0');
                 const ampm = hours >= 12 ? 'PM' : 'AM';
                 
-                // উইশ মেসেজ পরিবর্তন লজিক
                 let wish = "GOOD DAY";
                 if(hours >= 5 && hours < 12) wish = "GOOD MORNING";
                 else if(hours >= 12 && hours < 17) wish = "GOOD AFTERNOON";
