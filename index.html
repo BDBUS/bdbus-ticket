@@ -1973,8 +1973,8 @@ function executeTicketConfirmationEngine() {
     const now = new Date();
     document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
 
-    alert("Ticket processing completed! Directing you to your e-ticket screen preview...");
     navigatePage('ticket-view-screen');
+    
 }
 
 function executeTicketDownloadAndRedirect() {
