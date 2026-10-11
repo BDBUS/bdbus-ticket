@@ -1359,30 +1359,54 @@
         ];
 
         function verifyDatabaseStructureSeeding() {
-            let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
-            if (!adminCheck) {
-                db.users.push({
-                    id: db.sysConfigIdCounter++,
-                    name: "M2Vai Admin",
-                    gameid: "M2Vai",
-                    dob: "1992-09-10",
-                    phone: "01878335098",
-                    gender: "Male",
-                    division: "Sylhet",
-                    district: "Sunamganj",
-                    fb: "https://facebook.com/groups/771005197556072/",
-                    email: SUPER_ADMIN_EMAIL,
-                    pass: "admin123",
-                    role: "Admin",
-                    wallet: 50000,
-                    avatar: "images/M2Vai.png",
-                    isBanned: false,
-                    claimedWelcome: true,
-                    claimedSubs: true
-                });
-                saveDataEngine();
-            }
-        }
+    let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
+    if (!adminCheck) {
+        // ১. অ্যাডমিন অ্যাকাউন্ট
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "M2Vai Admin",
+            gameid: "M2Vai",
+            dob: "1992-09-10",
+            phone: "01878335098",
+            gender: "Male",
+            division: "Sylhet",
+            district: "Sunamganj",
+            fb: "https://facebook.com/groups/771005197556072/",
+            email: SUPER_ADMIN_EMAIL,
+            pass: "admin123",
+            role: "Admin",
+            wallet: 50000,
+            avatar: "images/M2Vai.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+
+        // ২. নতুন মেম্বার (Al Amin)
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Al Amin",
+            gameid: "1005",
+            dob: "1998-01-01",
+            phone: "01737199447",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Mymensingh",
+            fb: "https://www.facebook.com/share/1cuVXpg2YT/",
+            email: "alamin766700@email.com",
+            pass: "Alom12@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Alom.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+
+        saveDataEngine();
+    }
+}
+
 
                 // ==========================================
 // BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
