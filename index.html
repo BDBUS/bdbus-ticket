@@ -844,7 +844,7 @@
                 </div>
                 <a href="#" style="color:var(--neon-blue); font-size:12px; text-decoration:none;" onclick="triggerForgotPassword()" class="lang-node" data-en="Forget password" data-bn="পাসওয়ার্ড ভুলে গেছেন?">Forget password</a>
                 <div class="flex-actions">
-                    <button class="btn-premium btn-secondary lang-node" data-en="Sign Up Now" data-bn="রেজিস্ট্রেশন করুন" onclick="toggleAuthSubView('signup')">Sign Up Now</button>
+                    <button class="btn-premium btn-secondary lang-node" data-en="Sign Up Now" data-bn="রেজিস্ট্রেশন করুন" onclick="event.preventDefault(); return false;">Sign Up Now</button>
                     <button class="btn-premium lang-node" data-en="Login Now" data-bn="লগইন করুন" onclick="executeLoginLogic()">Login Now</button>
                 </div>
             </div>
