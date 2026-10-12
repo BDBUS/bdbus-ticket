@@ -1408,31 +1408,6 @@
         });
     }
 
-    // ৩. মেহেদি হাসান (সুমন) ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-    let sumonEmail = "sumonyrz@gmail.com";
-    let sumonCheck = db.users.find(u => u.email === sumonEmail);
-    if (!sumonCheck) {
-        db.users.push({
-            id: db.sysConfigIdCounter++,
-            name: "Mehdi Hassan (Sumon)",
-            gameid: "BD M@X",
-            dob: "1988-04-07",
-            phone: "01719181819",
-            gender: "Male",
-            division: "Dhaka",
-            district: "Munshiganj",
-            fb: "https://www.facebook.com/share/19VuWSPVFy/",
-            email: sumonEmail,
-            pass: "Sumon13@",
-            role: "Member",
-            wallet: 0,
-            avatar: "images/Sumon.jpg",
-            isBanned: false,
-            claimedWelcome: true,
-            claimedSubs: true
-        });
-    }
-
     // ৪. মাসুদ রানা ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
     let masudEmail = "masudahmed8820@gmail.com";
     let masudCheck = db.users.find(u => u.email === masudEmail);
