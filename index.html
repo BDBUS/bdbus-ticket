@@ -1408,10 +1408,58 @@
         });
     }
 
+    // ৩. মেহেদি হাসান (সুমন) ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let sumonEmail = "sumonyrz@gmail.com";
+    let sumonCheck = db.users.find(u => u.email === sumonEmail);
+    if (!sumonCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Mehdi Hassan (Sumon)",
+            gameid: "BD M@X",
+            dob: "1988-04-07",
+            phone: "01719181819",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Munshiganj",
+            fb: "https://www.facebook.com/share/19VuWSPVFy/",
+            email: sumonEmail,
+            pass: "Sumon13@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/default.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+
+    // ৪. মাসুদ রানা ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let masudEmail = "masudahmed8820@gmail.com";
+    let masudCheck = db.users.find(u => u.email === masudEmail);
+    if (!masudCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Masud Rana",
+            gameid: "AERO",
+            dob: "1999-07-21",
+            phone: "01837018333",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Dhaka",
+            fb: "https://www.facebook.com/share/1HqsXZcT2p/",
+            email: masudEmail,
+            pass: "Masud14@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Mashud Rana.jpg",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+
     saveDataEngine();
 }
-
-
 
                 // ==========================================
 // BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
