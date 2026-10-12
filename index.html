@@ -1424,6 +1424,72 @@
             fb: "https://www.facebook.com/share/19VuWSPVFy/",
             email: sumonEmail,
             pass: "Sumon13@",
+function verifyDatabaseStructureSeeding() {
+    // ১. অ্যাডমিন অ্যাকাউন্ট চেক ও সেভ
+    let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
+    if (!adminCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "M2Vai Admin",
+            gameid: "M2Vai",
+            dob: "1992-09-10",
+            phone: "01878335098",
+            gender: "Male",
+            division: "Sylhet",
+            district: "Sunamganj",
+            fb: "https://facebook.com/groups/771005197556072/",
+            email: SUPER_ADMIN_EMAIL,
+            pass: "admin123",
+            role: "Admin",
+            wallet: 50000,
+            avatar: "images/M2Vai.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+
+    // ২. আল-আমিন ভাইয়ের অ্যাকাউন্ট আলাদাভাবে চেক ও সেভ
+    let alaminEmail = "alamin766700@gmail.com";
+    let alaminCheck = db.users.find(u => u.email === alaminEmail);
+    if (!alaminCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Al Amin",
+            gameid: "alom vai",
+            dob: "1998-01-01",
+            phone: "01737199447",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Mymensingh",
+            fb: "https://www.facebook.com/share/1cuVXpg2YT/",
+            email: alaminEmail,
+            pass: "Alom12@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Alom.jpg",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+
+    // ৩. মেহেদি হাসান (সুমন) ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let sumonEmail = "sumonyrz@gmail.com";
+    let sumonCheck = db.users.find(u => u.email === sumonEmail);
+    if (!sumonCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Mehdi Hassan (Sumon)",
+            gameid: "BD M@X",
+            dob: "1988-04-07",
+            phone: "01719181819",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Munshiganj",
+            fb: "https://www.facebook.com/share/19VuWSPVFy/",
+            email: sumonEmail,
+            pass: "Sumon13@",
             role: "Member",
             wallet: 0,
             avatar: "images/default.png",
@@ -1452,6 +1518,31 @@
             role: "Member",
             wallet: 0,
             avatar: "images/Mashud Rana.jpg",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+
+    // ৫. শুভ আহমেদ ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let shuvoEmail = "shuvoshaiful706@gmail.com";
+    let shuvoCheck = db.users.find(u => u.email === shuvoEmail);
+    if (!shuvoCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Shuvo Ahmed",
+            gameid: "Shuvo",
+            dob: "1996-10-27",
+            phone: "01700000000",
+            gender: "Male",
+            division: "Comilla",
+            district: "Noakhali",
+            fb: "https://www.facebook.com/ahmedshuvo.ss",
+            email: shuvoEmail,
+            pass: "Shuvo15@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Shuvo.jpg",
             isBanned: false,
             claimedWelcome: true,
             claimedSubs: true
