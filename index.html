@@ -1359,9 +1359,9 @@
         ];
 
         function verifyDatabaseStructureSeeding() {
+    // ১. অ্যাডমিন অ্যাকাউন্ট চেক ও সেভ
     let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
     if (!adminCheck) {
-        // ১. অ্যাডমিন অ্যাকাউন্ট
         db.users.push({
             id: db.sysConfigIdCounter++,
             name: "M2Vai Admin",
@@ -1381,8 +1381,12 @@
             claimedWelcome: true,
             claimedSubs: true
         });
+    }
 
-        // ২. নতুন মেম্বার (Al Amin)
+    // ২. আল-আমিন ভাইয়ের অ্যাকাউন্ট আলাদাভাবে চেক ও সেভ
+    let alaminEmail = "bangladeshbussiduniquesociety@gmail.com";
+    let alaminCheck = db.users.find(u => u.email === alaminEmail);
+    if (!alaminCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
             name: "Al Amin",
@@ -1393,7 +1397,7 @@
             division: "Dhaka",
             district: "Mymensingh",
             fb: "https://www.facebook.com/share/1cuVXpg2YT/",
-            email: "bangladeshbussiduniquesociety@gmail.com",
+            email: alaminEmail,
             pass: "Alom12@",
             role: "Member",
             wallet: 0,
@@ -1402,10 +1406,11 @@
             claimedWelcome: true,
             claimedSubs: true
         });
-
-        saveDataEngine();
     }
+
+    saveDataEngine();
 }
+
 
 
                 // ==========================================
