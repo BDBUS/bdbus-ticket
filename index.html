@@ -1505,7 +1505,7 @@ function initialClockHeartbeatEngine() {
         const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
         
         const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        const months = ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR', 'MAY'];
+        const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
         const dateString = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
 
         if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
