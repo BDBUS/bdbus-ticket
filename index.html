@@ -2124,7 +2124,24 @@ function renderHomeMembersCarousel() {
 function renderContactTeamPanel() {
     const grid = document.getElementById('contact-team-grid');
     grid.innerHTML = "";
-    let coreStaff = db.users.filter(u => u.role !== 'Regular Member');
+    
+    let coreStaff = db.users.filter(u => {
+        const role = u.role ? u.role.toLowerCase() : '';
+        return role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master';
+    });
+
+    const rolePriority = {
+        'admin': 1,
+        'moderator': 2,
+        'counter master': 3,
+        'trip master': 4
+    };
+
+    coreStaff.sort((a, b) => {
+        let roleA = a.role ? a.role.toLowerCase() : '';
+        let roleB = b.role ? b.role.toLowerCase() : '';
+        return (rolePriority[roleA] || 99) - (rolePriority[roleB] || 99);
+    });
 
     coreStaff.forEach(u => {
         let card = document.createElement('div');
