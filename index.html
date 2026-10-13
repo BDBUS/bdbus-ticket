@@ -1568,6 +1568,32 @@
             claimedSubs: true
         });
         }
+       // ৭. আরিয়ান ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let ariyanEmail = "eshagordhaka184@gmail.com";
+    let ariyanCheck = db.users.find(u => u && u.email === ariyanEmail);
+    if (!ariyanCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Ariyan Ahmed sagor",
+            gameid: "Choto vai",
+            dob: "1997-05-07",
+            phone: "01954152066",
+            gender: "Male",
+            division: "Chittagong",
+            district: "Lakshmipur",
+            fb: "https://www.facebook.com/soitan.cele.54?mibextid=rS40aB7S9Ucbxw6v",
+            email: ariyanEmail,
+            pass: "Ariyan23@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Farhan.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+    }
+            
     saveDataEngine();
 }
 
