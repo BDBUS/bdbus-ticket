@@ -1568,8 +1568,8 @@
             claimedSubs: true
         });
         }
-            // সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-    let sumonEmail = "mia700746@gmail.com";
+        // ৭. সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+        let sumonEmail = "mia700746@gmail.com";
     let sumonCheck = db.users.find(u => u && u.email === sumonEmail);
     if (!sumonCheck) {
         db.users.push({
@@ -1589,7 +1589,8 @@
             avatar: "images/SumonT.jpg",
             isBanned: false,
             claimedWelcome: true,
-            claimedSubs: true
+            claimedSubs: true,
+            lastActive: Date.now()
         });
     }
     saveDataEngine();
