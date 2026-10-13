@@ -1479,7 +1479,31 @@
             claimedSubs: true
         });
     }
-            
+   // ৬. ফারহান ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let farhanEmail = "farhanshetu950@gmail.com";
+    let farhanCheck = db.users.find(u => u.email === farhanEmail);
+    if (!farhanCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Farhan Shetu",
+            gameid: "ĐØ™",
+            dob: "1993-11-08",
+            phone: "01714552123",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Barishal",
+            fb: "https://www.facebook.com/share/1Cbk6Cr13U/",
+            email: farhanEmail,
+            pass: "Farhan25@",
+            role: "Member",
+            wallet: 0,
+            avatar: "https://via.placeholder.com/150",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+        }
+        
     saveDataEngine();
 }
 
