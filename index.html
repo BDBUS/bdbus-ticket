@@ -1506,7 +1506,7 @@ function initialClockHeartbeatEngine() {
         
         const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
-        const dateString = `LIVE DATE: ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+        const dateString = `LIVE DATE: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 
         if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
         if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
