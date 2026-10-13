@@ -2116,13 +2116,17 @@ function renderHomeMembersCarousel() {
 
     let cardsHTML = "";
     activePool.forEach(u => {
+        let isOnline = u.lastActive && (Date.now() - u.lastActive < 45000);
+        let statusText = isOnline ? "ACTIVE" : "OFFLINE";
+        let statusColor = isOnline ? "var(--neon-green)" : "#94a3b8";
+
         cardsHTML += `
             <div class="member-card-node">
                 <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
                 <div class="member-meta">
                     <h5>${u.name}</h5>
                     <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-                    <span class="status-badge"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ACTIVE</span>
+                    <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${statusText}</span>
                 </div>
             </div>
         `;
