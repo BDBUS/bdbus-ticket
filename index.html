@@ -1495,6 +1495,16 @@ function saveDataEngine() {
 function initialClockHeartbeatEngine() {
     setInterval(() => {
         const now = new Date();
+        
+        // ইউজারের লাইভ অ্যাক্টিভিটি টাইম আপডেট করার কোড
+        if (activeUserSession) {
+            let currentUser = db.users.find(u => u.id === activeUserSession.id);
+            if (currentUser) {
+                currentUser.lastActive = Date.now();
+                saveDataEngine();
+            }
+        }
+
         let hrs = now.getHours();
         const mins = String(now.getMinutes()).padStart(2, '0');
         const secs = String(now.getSeconds()).padStart(2, '0');
@@ -1533,7 +1543,7 @@ function checkSessionTimeoutRules() {
         }
     }
 }
-
+        
 function togglePasswordInputVisibility(inputId, iconEl) {
     const field = document.getElementById(inputId);
     if(field.type === "password") {
