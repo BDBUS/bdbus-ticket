@@ -1544,7 +1544,7 @@
             claimedSubs: true
         });
     }
-   // ৬. ফারহান ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    // ৬. ফারহান ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
     let farhanEmail = "farhanshetu950@gmail.com";
     let farhanCheck = db.users.find(u => u.email === farhanEmail);
     if (!farhanCheck) {
@@ -1568,7 +1568,31 @@
             claimedSubs: true
         });
         }
-        
+        // ৭. সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let sumonEmail = "mia700746@gmail.com";
+    let sumonCheck = db.users.find(u => u.email === sumonEmail);
+    if (!sumonCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Sumon Mia",
+            gameid: "SOMON T",
+            dob: "1997-03-12",
+            phone: "01851565324",
+            gender: "Male",
+            division: "Mymensingh",
+            district: "Mymensingh",
+            fb: "https://www.facebook.com/share/19XvY4GUJe/",
+            email: sumonEmail,
+            pass: "Sumon45@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/SumonT.jpg",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+            
     saveDataEngine();
 }
 
