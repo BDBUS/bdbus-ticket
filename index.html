@@ -1569,28 +1569,27 @@
         });
         }
         // ৭. সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-        let sumonEmail = "mia700746@gmail.com";
-    let sumonCheck = db.users.find(u => u && u.email === sumonEmail);
-    if (!sumonCheck) {
+    let abcEmail = "abc950@gmail.com";
+    let farhanCheck = db.users.find(u => u.email === abcEmail);
+    if (!abcCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Sumon Mia",
-            gameid: "SOMON T",
-            dob: "1997-03-12",
-            phone: "01851565324",
+            name: "abc",
+            gameid: "abc,
+            dob: "1993-11-08",
+            phone: "01700000000",
             gender: "Male",
             division: "Mymensingh",
             district: "Mymensingh",
-            fb: "https://www.facebook.com/share/19XvY4GUJe/",
-            email: sumonEmail,
-            pass: "Sumon45@",
+            fb: "https://www.facebook.com/share/1Cbk6Cr13U/",
+            email: abcEmail,
+            pass: "Farhan25@",
             role: "Member",
             wallet: 0,
-            avatar: "images/SumonT.jpg",
+            avatar: "images/abc.png",
             isBanned: false,
             claimedWelcome: true,
-            claimedSubs: true,
-            lastActive: Date.now()
+            claimedSubs: true
         });
     }
     saveDataEngine();
