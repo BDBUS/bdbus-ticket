@@ -1568,30 +1568,6 @@
             claimedSubs: true
         });
         }
-        // ৭. সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-    let abcEmail = "abc950@gmail.com";
-    let farhanCheck = db.users.find(u => u.email === abcEmail);
-    if (!abcCheck) {
-        db.users.push({
-            id: db.sysConfigIdCounter++,
-            name: "abc",
-            gameid: "abc,
-            dob: "1993-11-08",
-            phone: "01700000000",
-            gender: "Male",
-            division: "Mymensingh",
-            district: "Mymensingh",
-            fb: "https://www.facebook.com/share/1Cbk6Cr13U/",
-            email: abcEmail,
-            pass: "Farhan25@",
-            role: "Member",
-            wallet: 0,
-            avatar: "images/abc.png",
-            isBanned: false,
-            claimedWelcome: true,
-            claimedSubs: true
-        });
-    }
     saveDataEngine();
 }
 
