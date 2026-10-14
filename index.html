@@ -1420,6 +1420,7 @@
         // BDBUS Floating Chat Window Toggle Engine
 function toggleChatBox() {
     let win = document.getElementById('bdbusChatWindow');
+    if (!win) return;
     win.style.display = (win.style.display === 'none' || win.style.display === '') ? 'flex' : 'none';
     if(win.style.display === 'flex') {
         loadAndCleanMessages();
@@ -1452,11 +1453,12 @@ function loadAndCleanMessages() {
     localStorage.setItem('bdbus_chat_history', JSON.stringify(validMessages));
 
     let chatContainer = document.getElementById('chatMessages');
+    if (!chatContainer) return;
     chatContainer.innerHTML = '';
 
     validMessages.forEach(msg => {
         let msgDiv = document.createElement('div');
-        msgDiv.style.cssText = `max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; word-break: break-word; ${msg.isBot ? 'background: #e2e3e5; color: #333; align-self: flex-start;' : 'background: #007bff; color: #fff; align-self: flex-end;'}`;
+        msgDiv.style.cssText = `max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; word-break: break-word; margin-bottom: 6px; ${msg.isBot ? 'background: #e2e3e5; color: #333; align-self: flex-start;' : 'background: #007bff; color: #fff; align-self: flex-end;'}`;
         msgDiv.innerHTML = `<b>${msg.sender}:</b><br>${msg.text}`;
         chatContainer.appendChild(msgDiv);
     });
@@ -1468,7 +1470,7 @@ function loadAndCleanMessages() {
 function getBDBUSBotReply(userMessage) {
     let text = userMessage.toLowerCase().trim();
 
-    // ১. সর্বধর্মীয় অভিবাদন ও কুশলাদি (Salam, Nomoshkar, Adab & Greetings)
+    // ১. সর্বধর্মীয় অভিবাদন ও কুশলাদি
     if (text.includes("সালাম") || text.includes("আসসালামু আলাইকুম") || text.includes("salam") || text.includes("assalamu alaikum") || text.includes("assalam")) {
         return "ওয়ালাইকুমুসসালাম ওয়া রাহমাতুল্লাহ! BDBUS Digital Hub-এ আপনাকে স্বাগতম। কীভাবে সাহায্য করতে পারি?";
     }
@@ -1482,7 +1484,7 @@ function getBDBUSBotReply(userMessage) {
         return "আপনাকেও অনেক ধন্যবাদ! BDBUS-এর সাথেই থাকুন। 🚌✨";
     }
 
-    // ২. প্ল্যাটফর্ম সম্পর্কিত সুনির্দিষ্ট তথ্য (লাইসেন্স, ওয়ালেট, টিকিট, গেম)
+    // ২. প্ল্যাটফর্ম সম্পর্কিত সুনির্দিষ্ট তথ্য
     if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
         return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
     }
@@ -1501,7 +1503,7 @@ function getBDBUSBotReply(userMessage) {
         return "BDBUS হলো আপনাদের নিজস্ব বিনোদন ও আড্ডার জায়গা! বাস ড্রাইভিং, ট্রিপ প্ল্যানিং বা যেকোনো ফ্রেন্ডলি আড্ডার বিষয়ে আমাকে বলতে পারেন, আমি সবসময় প্রস্তুত আছি।";
     }
 
-    // ৪. কঠোরভাবে নিষিদ্ধ বিষয়সমূহ (রাজনীতি, আক্রমণাত্মক, সেক্সুয়াল, নেগেটিভ বিষয়)
+    // ৪. কঠোরভাবে নিষিদ্ধ বিষয়সমূহ
     const prohibitedKeywords = [
         "রাজনীতি", "political", "election", "বিএনপি", "আওয়ামী লীগ", "জামায়াত", "সরকার", "minister", "mp", 
         "sex", "adult", "porn", "১৪+", "১৮+", "অগ্ন্যাশয়", "অশালীন", "গালাগালি", "খারাপ ভাষায়", "বেশ্যা", "মাগি", 
@@ -1519,6 +1521,7 @@ function getBDBUSBotReply(userMessage) {
 // Message Sending Engine
 function sendChatMessage() {
     let inputField = document.getElementById('chatInput');
+    if (!inputField) return;
     let text = inputField.value.trim();
     if(!text) return;
 
@@ -1541,7 +1544,8 @@ function sendChatMessage() {
     setTimeout(() => {
         let botReplyText = getBDBUSBotReply(text);
         
-        let currentMessages = JSON.parse(localStorage.getItem('bdbus_chat_history'));
+        let currentRaw = localStorage.getItem('bdbus_chat_history');
+        let currentMessages = currentRaw ? JSON.parse(currentRaw) : [];
         currentMessages.push({
             sender: "Bangladesh Bussid Unique Society (BDBUS)",
             text: botReplyText,
@@ -1552,7 +1556,6 @@ function sendChatMessage() {
         localStorage.setItem('bdbus_chat_history', JSON.stringify(currentMessages));
         loadAndCleanMessages();
     }, 600);
-}
 }
         
         const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
