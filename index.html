@@ -1593,30 +1593,32 @@
             lastActive: Date.now()
         });
     }
-    // ৮. সুমন মিয়াভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-    let sumonEmail = "mia700746@gmail.com";
-    let sumonCheck = db.users.find(u => u && u.email === sumonEmail);
-    if (!sumonCheck) {
+    // ৮. BDBUS অফিশিয়াল অ্যাকাউন্ট চেক ও সেভ
+    let bdbusEmail = "bangladeshbussiduniquesociety@gmail.com";
+    let bdbusCheck = db.users.find(u => u && u.email === bdbusEmail);
+    if (!bdbusCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Sumon Mia",
-            gameid: "SOMON T",
-            dob: "1997-03-12",
-            phone: "01851565324",
+            name: "Bangladesh Bussid Unique Society (BDBUS)",
+            gameid: "BDBUS",
+            dob: "2026-02-01",
+            phone: "01510002000",
             gender: "Male",
-            division: "Mymensingh",
-            district: "Mymensingh",
-            fb: "https://www.facebook.com/share/19XvY4GUJe/",
-            email: sumonEmail,
-            pass: "Sumon34@",
+            division: "Dhaka",
+            district: "Dhaka",
+            fb: "https://facebook.com/groups/771005197556072/",
+            email: bdbusEmail,
+            pass: "BDBUS90@",
             role: "Member",
             wallet: 0,
-            avatar: "images/SumonT.jpg",
+            avatar: "images/BDBUS Group Official Logo.png",
             isBanned: false,
             claimedWelcome: true,
             claimedSubs: true,
             lastActive: Date.now()
         });
+    } else {
+        bdbusCheck.pass = "BDBUS90@";
     }
             
     saveDataEngine();
