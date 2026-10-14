@@ -1393,8 +1393,129 @@
             </div>
         </div>
     </footer>
+<!-- BDBUS Floating Chat Window -->
+<div id="bdbusChatBubble" onclick="toggleChatBox()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; font-size: 26px;">
+    💬
+</div>
 
+<div id="bdbusChatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; background: #fff; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 9999; overflow: hidden; font-family: Arial, sans-serif;">
+    <div style="background: #007bff; color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; font-size: 15px;">BDBUS Live AI Chat</span>
+        <span onclick="toggleChatBox()" style="cursor: pointer; font-size: 18px; font-weight: bold;">✕</span>
+    </div>
+    
+    <div style="background: #fff3cd; color: #856404; font-size: 11px; padding: 5px 10px; text-align: center; border-bottom: 1px solid #ffeeba;">
+        ⚠️ ৭২ ঘণ্টা পর সমস্ত চ্যাট অটো-ডিলিট হয়ে যায়।
+    </div>
+
+    <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 8px;"></div>
+
+    <div style="padding: 10px; background: #fff; border-top: 1px solid #ddd; display: flex; gap: 5px;">
+        <input type="text" id="chatInput" placeholder="@BDBUS লিখে প্রশ্ন করুন..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 13px;">
+        <button onclick="sendChatMessage()" style="background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Send</button>
+    </div>
+</div>
+    
     <script>
+        // BDBUS Chat Box Engine & 72 Hours Auto Cleanup
+function toggleChatBox() {
+    let win = document.getElementById('bdbusChatWindow');
+    win.style.display = (win.style.display === 'none' || win.style.display === '') ? 'flex' : 'none';
+    if(win.style.display === 'flex') {
+        loadAndCleanMessages();
+    }
+}
+
+function loadAndCleanMessages() {
+    let rawData = localStorage.getItem('bdbus_chat_history');
+    let messages = rawData ? JSON.parse(rawData) : [];
+    
+    let now = Date.now();
+    let threeDaysInMillis = 72 * 60 * 60 * 1000; // ৭২ ঘণ্টা
+
+    let validMessages = messages.filter(msg => (now - msg.timestamp) < threeDaysInMillis);
+
+    localStorage.setItem('bdbus_chat_history', JSON.stringify(validMessages));
+
+    let chatContainer = document.getElementById('chatMessages');
+    chatContainer.innerHTML = '';
+
+    if(validMessages.length === 0) {
+        chatContainer.innerHTML = `<div style="text-align: center; color: #888; font-size: 12px; margin-top: 20px;">কোনো পুরনো চ্যাট নেই। @BDBUS লিখে প্রথম প্রশ্ন করুন!</div>`;
+        return;
+    }
+
+    validMessages.forEach(msg => {
+        let msgDiv = document.createElement('div');
+        msgDiv.style.cssText = `max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; word-break: break-word; ${msg.isBot ? 'background: #e2e3e5; color: #333; align-self: flex-start;' : 'background: #007bff; color: #fff; align-self: flex-end;'}`;
+        msgDiv.innerHTML = `<b>${msg.sender}:</b><br>${msg.text}`;
+        chatContainer.appendChild(msgDiv);
+    });
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function getBDBUSBotReply(userMessage) {
+    let text = userMessage.toLowerCase().trim();
+
+    if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
+        return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
+    }
+    if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
+        return "নতুন অ্যাকাউন্টে ওয়েলকাম ও সাবস্ক্রিপশন বোনাস পেয়ে যাবেন। ওয়ালেটে পর্যাপ্ত ব্যালেন্স না থাকলে রিচার্জ অপশন থেকে ব্যালেন্স যোগ করে নিতে পারবেন।";
+    }
+    if (text.includes("ticket") || text.includes("টিকিট") || text.includes("booking") || text.includes("বুকিং") || text.includes("রুম") || text.includes("সিট")) {
+        return "ওয়ালেট ব্যালেন্স ব্যবহার করে নির্দিষ্ট রুট, সময় ও সিট সিলেক্ট করে টিকিট কাটুন। টিকিটে থাকা রুম আইডি বা পাসকোড দিয়ে মাল্টিপ্লেয়ার ট্রিপে জয়েন করতে পারবেন।";
+    }
+    if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম")) {
+        return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ অন্যান্য বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়।";
+    }
+
+    const prohibitedKeywords = ["রাজনীতি", "শেখ হাসিনা", "খালেদা", "বিএনপি", "আওয়ামী লীগ", "sex", "adult", "১৪+", "১৮+", "গালাগালি", "ঝগড়া", "খারাপ", "হ্যাক", "মারামারি"];
+    if (prohibitedKeywords.some(word => text.includes(word))) {
+        return "BDBUS একটি বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, অশালীন বা আক্রমণাত্মক আলোচনা সম্পূর্ণ নিষিদ্ধ।";
+    }
+
+    return "সঠিক তথ্য পেতে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, ওয়ালেট বা গেম সম্পর্কিত সুনির্দিষ্ট প্রশ্ন করুন।";
+}
+
+function sendChatMessage() {
+    let inputField = document.getElementById('chatInput');
+    let text = inputField.value.trim();
+    if(!text) return;
+
+    let rawData = localStorage.getItem('bdbus_chat_history');
+    let messages = rawData ? JSON.parse(rawData) : [];
+
+    let currentUser = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
+
+    messages.push({
+        sender: currentUser,
+        text: text,
+        isBot: false,
+        timestamp: Date.now()
+    });
+
+    inputField.value = '';
+    localStorage.setItem('bdbus_chat_history', JSON.stringify(messages));
+    loadAndCleanMessages();
+
+    setTimeout(() => {
+        let botReplyText = getBDBUSBotReply(text);
+        
+        let currentMessages = JSON.parse(localStorage.getItem('bdbus_chat_history'));
+        currentMessages.push({
+            sender: "Bangladesh Bussid Unique Society (BDBUS)",
+            text: botReplyText,
+            isBot: true,
+            timestamp: Date.now()
+        });
+
+        localStorage.setItem('bdbus_chat_history', JSON.stringify(currentMessages));
+        loadAndCleanMessages();
+    }, 600);
+}
+        
         const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
         let db = JSON.parse(localStorage.getItem('bdbus_local_db')) || {
             users: [],
