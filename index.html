@@ -1417,7 +1417,7 @@
 </div>
     
     <script>
-        // BDBUS Chat Box Engine & 72 Hours Auto Cleanup
+        // BDBUS Floating Chat Window Toggle Engine
 function toggleChatBox() {
     let win = document.getElementById('bdbusChatWindow');
     win.style.display = (win.style.display === 'none' || win.style.display === '') ? 'flex' : 'none';
@@ -1426,24 +1426,33 @@ function toggleChatBox() {
     }
 }
 
+// BDBUS Chat Storage & Personalized Welcome Engine
 function loadAndCleanMessages() {
     let rawData = localStorage.getItem('bdbus_chat_history');
     let messages = rawData ? JSON.parse(rawData) : [];
     
     let now = Date.now();
-    let threeDaysInMillis = 72 * 60 * 60 * 1000; // ৭২ ঘণ্টা
+    let threeDaysInMillis = 72 * 60 * 60 * 1000; // ৭২ ঘণ্টা অটো-ডিলিট
 
     let validMessages = messages.filter(msg => (now - msg.timestamp) < threeDaysInMillis);
+
+    // প্রথমবার চ্যাট খুললে বা কোনো মেসেজ না থাকলে ইউজারের নাম ধরে ওয়েলকাম বার্তা
+    if (validMessages.length === 0) {
+        let userName = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
+        
+        let welcomeMsg = {
+            sender: "Bangladesh Bussid Unique Society (BDBUS)",
+            text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-এ আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সহযোগিতা করতে পারি বলুন?`,
+            isBot: true,
+            timestamp: Date.now()
+        };
+        validMessages.push(welcomeMsg);
+    }
 
     localStorage.setItem('bdbus_chat_history', JSON.stringify(validMessages));
 
     let chatContainer = document.getElementById('chatMessages');
     chatContainer.innerHTML = '';
-
-    if(validMessages.length === 0) {
-        chatContainer.innerHTML = `<div style="text-align: center; color: #888; font-size: 12px; margin-top: 20px;">কোনো পুরনো চ্যাট নেই। @BDBUS লিখে প্রথম প্রশ্ন করুন!</div>`;
-        return;
-    }
 
     validMessages.forEach(msg => {
         let msgDiv = document.createElement('div');
@@ -1455,9 +1464,25 @@ function loadAndCleanMessages() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+// BDBUS AI Bot Smart Reply Engine (All-Religions, Advisory & Safety Filter)
 function getBDBUSBotReply(userMessage) {
     let text = userMessage.toLowerCase().trim();
 
+    // ১. সর্বধর্মীয় অভিবাদন ও কুশলাদি (Salam, Nomoshkar, Adab & Greetings)
+    if (text.includes("সালাম") || text.includes("আসসালামু আলাইকুম") || text.includes("salam") || text.includes("assalamu alaikum") || text.includes("assalam")) {
+        return "ওয়ালাইকুমুসসালাম ওয়া রাহমাতুল্লাহ! BDBUS Digital Hub-এ আপনাকে স্বাগতম। কীভাবে সাহায্য করতে পারি?";
+    }
+    if (text.includes("নমস্কার") || text.includes("নমস্তে") || text.includes("nomoshkar") || text.includes("adab") || text.includes("আদাব")) {
+        return "নমস্কার/আদাব! BDBUS হাবে আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সাহায্য করতে পারি বলুন?";
+    }
+    if (text.includes("কেমন আছো") || text.includes("কেমন আছেন") || text.includes("ভালো") || text.includes("hi") || text.includes("hello") || text.includes("হাই") || text.includes("হ্যালো")) {
+        return "আলহামদুলিল্লাহ্‌ / ঈশ্বর বা আল্লাহর অশেষ রহমতে আমি খুব ভালো আছি! BDBUS-এ আপনার যাত্রা কেমন কাটছে বলুন?";
+    }
+    if (text.includes("ধন্যবাদ") || text.includes("thanks") || text.includes("thank you")) {
+        return "আপনাকেও অনেক ধন্যবাদ! BDBUS-এর সাথেই থাকুন। 🚌✨";
+    }
+
+    // ২. প্ল্যাটফর্ম সম্পর্কিত সুনির্দিষ্ট তথ্য (লাইসেন্স, ওয়ালেট, টিকিট, গেম)
     if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
         return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
     }
@@ -1467,18 +1492,31 @@ function getBDBUSBotReply(userMessage) {
     if (text.includes("ticket") || text.includes("টিকিট") || text.includes("booking") || text.includes("বুকিং") || text.includes("রুম") || text.includes("সিট")) {
         return "ওয়ালেট ব্যালেন্স ব্যবহার করে নির্দিষ্ট রুট, সময় ও সিট সিলেক্ট করে টিকিট কাটুন। টিকিটে থাকা রুম আইডি বা পাসকোড দিয়ে মাল্টিপ্লেয়ার ট্রিপে জয়েন করতে পারবেন।";
     }
-    if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম")) {
-        return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ অন্যান্য বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়।";
+
+    // ৩. বিনোদনমূলক, সাধারণ আলাপ ও গেম সম্পর্কিত প্রশ্ন বা পরামর্শ
+    if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম") || text.includes("খেলবো") || text.includes("মাল্টিপ্লেয়ার")) {
+        return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ দারুণ সব বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়। একসাথে ড্রাইভ করার আনন্দই আলাদা!";
+    }
+    if (text.includes("মজা") || text.includes("আনন্দ") || text.includes("বিনোদন") || text.includes("আড্ডা") || text.includes("পরামর্শ") || text.includes("help") || text.includes("সাহায্য")) {
+        return "BDBUS হলো আপনাদের নিজস্ব বিনোদন ও আড্ডার জায়গা! বাস ড্রাইভিং, ট্রিপ প্ল্যানিং বা যেকোনো ফ্রেন্ডলি আড্ডার বিষয়ে আমাকে বলতে পারেন, আমি সবসময় প্রস্তুত আছি।";
     }
 
-    const prohibitedKeywords = ["রাজনীতি", "শেখ হাসিনা", "খালেদা", "বিএনপি", "আওয়ামী লীগ", "sex", "adult", "১৪+", "১৮+", "গালাগালি", "ঝগড়া", "খারাপ", "হ্যাক", "মারামারি"];
+    // ৪. কঠোরভাবে নিষিদ্ধ বিষয়সমূহ (রাজনীতি, আক্রমণাত্মক, সেক্সুয়াল, নেগেটিভ বিষয়)
+    const prohibitedKeywords = [
+        "রাজনীতি", "political", "election", "বিএনপি", "আওয়ামী লীগ", "জামায়াত", "সরকার", "minister", "mp", 
+        "sex", "adult", "porn", "১৪+", "১৮+", "অগ্ন্যাশয়", "অশালীন", "গালাগালি", "খারাপ ভাষায়", "বেশ্যা", "মাগি", 
+        "ঝগড়া", "মারামারি", "হ্যাক", "crack", "scam", "ধর্ষণ", "খুন", "আত্মহত্যা", "suicide"
+    ];
+    
     if (prohibitedKeywords.some(word => text.includes(word))) {
-        return "BDBUS একটি বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, অশালীন বা আক্রমণাত্মক আলোচনা সম্পূর্ণ নিষিদ্ধ।";
+        return "⚠️ BDBUS একটি পরিচ্ছন্ন ও সৌহার্দ্যপূর্ণ বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, আক্রমণাত্মক বা অশালীন কোনো আলোচনার সুযোগ নেই। দয়া করে কমিউনিটির নিয়ম বজায় রাখুন।";
     }
 
-    return "সঠিক তথ্য পেতে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, ওয়ালেট বা গেম সম্পর্কিত সুনির্দিষ্ট প্রশ্ন করুন।";
+    // ৫. সাধারণ যেকোনো বিনোদনমূলক প্রশ্নের উত্তর/পরামর্শ
+    return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
 }
 
+// Message Sending Engine
 function sendChatMessage() {
     let inputField = document.getElementById('chatInput');
     let text = inputField.value.trim();
@@ -1514,6 +1552,7 @@ function sendChatMessage() {
         localStorage.setItem('bdbus_chat_history', JSON.stringify(currentMessages));
         loadAndCleanMessages();
     }, 600);
+}
 }
         
         const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
