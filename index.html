@@ -1806,6 +1806,32 @@ function sendChatMessage() {
             lastActive: Date.now()
         });
         }
+        // ১০. বেকর্ণ দাস ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let bekarnoEmail = "bekarnodas999@gmail.com";
+    let bekarnoCheck = db.users.find(u => u && u.email === bekarnoEmail);
+    if (!bekarnoCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Bekarno Das",
+            gameid: "ভুত",
+            dob: "1992-07-14",
+            phone: "01926506987",
+            gender: "Male",
+            division: "Chattagram",
+            district: "Lakshimpur",
+            fb: "https://www.facebook.com/bekarno.das.3",
+            email: bekarnoEmail,
+            pass: "Be karon55@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Das.jpg",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+    }
+            
     saveDataEngine();
 }
 
