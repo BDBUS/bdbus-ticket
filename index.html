@@ -1831,6 +1831,31 @@ function sendChatMessage() {
             lastActive: Date.now()
         });
     }
+    // ১১. ইয়াসির সাদেক ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let yasirEmail = "armanhasan3380@gmail.com";
+    let yasirCheck = db.users.find(u => u && u.email === yasirEmail);
+    if (!yasirCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "YASIR SADEQUE",
+            gameid: "YSR10",
+            dob: "2002-10-04",
+            phone: "01862082265",
+            gender: "Male",
+            division: "Chittagong",
+            district: "Chittagong",
+            fb: "https://www.facebook.com/share/1VNjgrKfYf/",
+            email: yasirEmail,
+            pass: "Ysr10@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/default.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+    }
             
     saveDataEngine();
 }
