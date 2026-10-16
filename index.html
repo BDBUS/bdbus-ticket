@@ -1831,7 +1831,6 @@ function sendChatMessage() {
             lastActive: Date.now()
         });
     }
-            
     // ১১. ইয়াসির সাদেক ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
     let yasirEmail = "armanhasan3380@gmail.com";
     let yasirCheck = db.users.find(u => u && u.email === yasirEmail);
@@ -1851,6 +1850,31 @@ function sendChatMessage() {
             role: "Member",
             wallet: 0,
             avatar: "images/Ysr10.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+    }
+        // ১২. দুরন্ত ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let durantaEmail = "sreeduranta007@gmail.com";
+    let durantaCheck = db.users.find(u => u && u.email === durantaEmail);
+    if (!durantaCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "Duranta",
+            gameid: "ᴅꪙʀꫝꪀᴛꫝ",
+            dob: "2007-01-24",
+            phone: "01310909454",
+            gender: "Male",
+            division: "Dhaka",
+            district: "Narsingdi",
+            fb: "https://www.facebook.com/share/1DiDw5hEfK/",
+            email: durantaEmail,
+            pass: "Duranta77@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/Duranta.jpg",
             isBanned: false,
             claimedWelcome: true,
             claimedSubs: true,
