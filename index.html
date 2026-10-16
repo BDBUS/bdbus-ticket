@@ -1782,9 +1782,9 @@ function sendChatMessage() {
         });
     }
     // ৯. সুমন ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
-    let sumonEmail = "mia700746@gmail.com";
-    let sumonCheck = db.users.find(u => u && u.email === sumonEmail);
-    if (!sumonCheck) {
+    let sumon2Email = "mia700746@gmail.com";
+    let sumon2Check = db.users.find(u => u && u.email === sumon2Email);
+    if (!sumon2Check) {
         db.users.push({
             id: db.sysConfigIdCounter++,
             name: "Sumon Mia",
@@ -1795,7 +1795,7 @@ function sendChatMessage() {
             division: "Mymensingh",
             district: "Mymensingh",
             fb: "https://www.facebook.com/share/19XvY4GUJe/",
-            email: sumonEmail,
+            email: sumon2Email,
             pass: "Sumon34@",
             role: "Member",
             wallet: 0,
