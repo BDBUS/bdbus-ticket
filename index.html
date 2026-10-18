@@ -1591,7 +1591,7 @@ function sendChatMessage() {
     if (!adminCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "M2Vai",
+            name: "M2VAI",
             gameid: "M2Vai",
             dob: "1992-09-10",
             phone: "01878335098",
@@ -1616,7 +1616,7 @@ function sendChatMessage() {
     if (!alaminCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Al Amin",
+            name: "AL AMIN",
             gameid: "alom vai",
             dob: "1998-01-01",
             phone: "01737199447",
@@ -1665,7 +1665,7 @@ function sendChatMessage() {
     if (!shuvoCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Shuvo Ahmed",
+            name: "SHUVO AHMED",
             gameid: "Shuvo",
             dob: "1996-10-27",
             phone: "01700000000",
@@ -1689,7 +1689,7 @@ function sendChatMessage() {
     if (!masudCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Masud Rana",
+            name: "MASUD RANA",
             gameid: "AERO",
             dob: "1999-07-21",
             phone: "01837018333",
@@ -1713,7 +1713,7 @@ function sendChatMessage() {
     if (!farhanCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Farhan Shetu",
+            name: "FARHAN SHETU",
             gameid: "ĐØ™",
             dob: "1993-11-08",
             phone: "01714552123",
@@ -1737,7 +1737,7 @@ function sendChatMessage() {
     if (!ariyanCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Ariyan Ahmed sagor",
+            name: "ARIYAN AHMED SAGOR",
             gameid: "Choto vai",
             dob: "1997-05-07",
             phone: "01954152066",
@@ -1762,7 +1762,7 @@ function sendChatMessage() {
     if (!bdbusCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Bangladesh Bussid Unique Society (BDBUS)",
+            name: "BANGLADESH BUSSID UNIQUE SOCIETY (BDBUS)",
             gameid: "BDBUS",
             dob: "2026-02-01",
             phone: "01510002000",
@@ -1787,7 +1787,7 @@ function sendChatMessage() {
     if (!sumon2Check) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Sumon Mia",
+            name: "SUMON MIA",
             gameid: "SOMON T",
             dob: "1997-03-12",
             phone: "01851565324",
@@ -1812,7 +1812,7 @@ function sendChatMessage() {
     if (!bekarnoCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Bekarno Das",
+            name: "BEKARNO DAS",
             gameid: "ভুত",
             dob: "1992-07-14",
             phone: "01926506987",
@@ -1862,7 +1862,7 @@ function sendChatMessage() {
     if (!durantaCheck) {
         db.users.push({
             id: db.sysConfigIdCounter++,
-            name: "Duranta",
+            name: "DURANTA",
             gameid: "ᴅꪙʀꫝꪀᴛꫝ",
             dob: "2007-01-24",
             phone: "01310909454",
@@ -1881,6 +1881,31 @@ function sendChatMessage() {
             lastActive: Date.now()
         });
     }
+    // ১৩. আমিন পাশা ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let pashaEmail = "mdaminpasha8e@gmail.com";
+    let pashaCheck = db.users.find(u => u && u.email === pashaEmail);
+    if (!pashaCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "AMIN PASA",
+            gameid: "PASHA",
+            dob: "1997-03-02",
+            phone: "01647461616",
+            gender: "Male",
+            division: "Chittagong",
+            district: "Noakhali",
+            fb: "https://www.facebook.com/share/1CAey5fu79/",
+            email: pashaEmail,
+            pass: "Pasha21@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/default.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+            }
             
     saveDataEngine();
 }
