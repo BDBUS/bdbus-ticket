@@ -1906,7 +1906,32 @@ function sendChatMessage() {
             lastActive: Date.now()
         });
             }
-            
+                // ১৪. কামরুজ্জামান শাকিল ভাইয়ের অ্যাকাউন্ট চেক ও সেভ
+    let shakilEmail = "skbai32644@gmail.com";
+    let shakilCheck = db.users.find(u => u && u.email === shakilEmail);
+    if (!shakilCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "KAMRUZZAMAN SHAKIL",
+            gameid: "Tufan",
+            dob: "2000-03-13",
+            phone: "01352218820",
+            gender: "Male",
+            division: "Chittagong",
+            district: "Lakshmipur",
+            fb: "https://www.facebook.com/profile.php?id=61590587196085",
+            email: shakilEmail,
+            pass: "Shakil55@",
+            role: "Member",
+            wallet: 0,
+            avatar: "images/default.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true,
+            lastActive: Date.now()
+        });
+    }
+    
     saveDataEngine();
 }
 
