@@ -2195,11 +2195,14 @@ function claimWelcomeRewardLogic() {
     document.getElementById('claim-welcome-btn').disabled = true;
 }
 
-    function triggerYoutubeSubscribeReward() {
+        function triggerYoutubeSubscribeReward() {
         let user = db.users.find(u => u.id === activeUserSession.id);
         
-        // এখানে আপনার নতুন চ্যানেলের লিংক এবং ?sub_confirmation=1 যুক্ত করে দেওয়া হলো
-        window.open("https://youtube.com/@m2vai?sub_confirmation=1", "_blank");
+        // সরাসরি অফিশিয়াল অ্যাপ বা ব্রাউজারে ট্রিগার করার জন্য লোকেশন ফোর্স করা
+        let ytUrl = "https://youtube.com/@m2vai?sub_confirmation=1";
+        
+        // এটি অ্যাপের নিজস্ব ব্রাউজারের বদলে বাইরে বা সরাসরি অ্যাপে পাঠাতে সাহায্য করবে
+        window.location.href = ytUrl;
         
         if (user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
         setTimeout(() => {
