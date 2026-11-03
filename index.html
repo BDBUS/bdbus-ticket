@@ -2195,18 +2195,21 @@ function claimWelcomeRewardLogic() {
     document.getElementById('claim-welcome-btn').disabled = true;
 }
 
-function triggerYoutubeSubscribeReward() {
-    let user = db.users.find(u => u.id === activeUserSession.id);
-    window.open("https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B", "_blank");
-    if(user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
-    setTimeout(() => {
-        user.wallet += 10000;
-        user.claimedSubs = true;
-        saveDataEngine();
-        syncSessionState(user);
-        alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
-    }, 5000);
-}
+    function triggerYoutubeSubscribeReward() {
+        let user = db.users.find(u => u.id === activeUserSession.id);
+        
+        // এখানে আপনার নতুন চ্যানেলের লিংক এবং ?sub_confirmation=1 যুক্ত করে দেওয়া হলো
+        window.open("https://youtube.com/@m2vai?sub_confirmation=1", "_blank");
+        
+        if (user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
+        setTimeout(() => {
+            user.wallet += 10000;
+            user.claimedSubs = true;
+            saveDataEngine();
+            syncSessionState(user);
+            alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
+        }, 5000);
+    }
 
 function triggerWatchVideoReward() {
     let user = db.users.find(u => u.id === activeUserSession.id);
