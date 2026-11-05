@@ -484,6 +484,7 @@
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
+        .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         
         .admin-notice-update-box { background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 auto 30px; }
 
@@ -527,7 +528,7 @@
             position: relative;
             z-index: 10;
         }
-        .social-icon-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .social-icon-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .social-link-circle {
             width: 45px;
             height: 45px;
@@ -545,7 +546,7 @@
         .yt { background-color: #FF0000 !important; }
         .insta { background-color: #E1306C !important; }
         .x { background-color: #000000 !important; }
-        .threads { background-color: #ffffff !important; color: #000 !important; }
+        .threads { background-color: #ffffff !important; }
         .gmail { background-color: #EA4335 !important; }
         
         .social-link-circle:hover { transform: translateY(-5px); background: var(--neon-blue); color: #000; }
@@ -593,7 +594,6 @@
             box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
         }
 
-        /* --- DIGITAL DRIVING LICENCE DESIGN SYSTEM --- */
         #licence-screen {
             width: 100%;
             max-width: 100%;
@@ -614,14 +614,14 @@
             width: 100%;
             max-width: 370px;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid var(--neon-blue);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
-            box-sizing: border-box;
-            overflow: hidden;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
             margin: 20px auto;
+            border: 2px solid var(--neon-blue);
             position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            overflow: hidden;
             text-align: left;
         }
         #digital-licence-card::before {
@@ -654,19 +654,38 @@
         .licence-main-heading { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
         .licence-sub-heading { font-size: 9px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
         
-        .licence-body-layout { 
-            display: flex; 
-            flex-direction: row; 
-            align-items: center; 
-            gap: 15px; 
-            margin-top: 15px; 
-            margin-bottom: 15px; 
-            position: relative; 
-            z-index: 2; 
+        .licence-body-layout {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
-        .licence-photo-pane { text-align: center; width: 110px; flex-shrink: 0; }
-        .licence-user-photo { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-blue); background: #1e293b; }
-        .licence-id-badge { margin-top: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--neon-blue); padding: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--neon-blue); font-weight: 700; text-align: center; border-radius: 4px; }
+        .licence-photo-pane {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .licence-user-photo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-cyan, #00e5ff);
+            object-fit: cover;
+        }
+        .licence-id-badge {
+            margin-top: 8px;
+            background: rgba(0, 229, 255, 0.15);
+            color: var(--neon-cyan, #00e5ff);
+            border: 1px solid var(--neon-cyan, #00e5ff);
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
         
         .licence-info-pane {
             flex-grow: 1;
@@ -694,8 +713,6 @@
             margin-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 10px;
-            position: relative;
-            z-index: 2;
         }
         .licence-auth-label { font-size: 8px; color: #64748b; margin-top: 2px; }
 
@@ -1173,8 +1190,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-live-bookings-tbody">
-                    </tbody>
+                    <tbody id="admin-live-bookings-tbody"></tbody>
                 </table>
             </div>
         </div>
@@ -1203,38 +1219,19 @@
         <div id="all-members-list-render-node" style="margin-top:20px; border-radius:8px; overflow:hidden;"></div>
     </div>
 
-    <!-- ফুটার ট্যাগ এবং এর ভেতরের এলিমেন্টগুলো সুন্দরভাবে সাজানো হয়েছে -->
     <footer class="global-footer-panel" id="main-global-footer">
         <div style="text-align: center; margin-bottom: 15px;">
             <strong style="font-size: 18px; color: #ffffff; letter-spacing: 1px;">JOIN US</strong>
         </div>
 
         <div class="social-icon-row">
-            <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle fb">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-
-            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle yt">
-                <i class="fab fa-youtube"></i>
-            </a>
-
-            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle insta">
-                <i class="fab fa-instagram"></i>
-            </a>
-
-            <a href="https://www.x.com/m2vai380" target="_blank" class="social-link-circle x">
-                <i class="fab fa-x"></i>
-            </a>
-
-            <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle threads">
-                <i class="fab fa-threads"></i>
-            </a>
-
-            <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle gmail">
-                <i class="fas fa-envelope"></i>
-            </a>
+            <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle fb"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle yt"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle insta"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.x.com/m2vai380" target="_blank" class="social-link-circle x"><i class="fab fa-x"></i></a>
+            <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle threads"><i class="fab fa-threads"></i></a>
+            <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle gmail"><i class="fas fa-envelope"></i></a>
         </div>
-
         <div class="footer-policy-links">
             <a href="#">Privacy Policy</a>
             <span>|</span>
@@ -1242,19 +1239,18 @@
             <span>|</span>
             <a href="#">Refund Policy</a>
         </div>
-        
         <div class="footer-creator-box">
             <div class="creator-title">Website Created By</div>
             <div class="creator-identity">
-                <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-avatar-icon" onerror="this.src='https://via.placeholder.com/30'" alt="Creator">
+                <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-avatar-icon" onerror="this.src='https://via.placeholder.com/30'">
                 M2Vai
             </div>
             <div class="footer-subs-flex">
                 <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px;">
-                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;" alt="YT"> M2Vai
+                    <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai
                 </a>
                 <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px; background:#475569;">
-                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;" alt="Traveller"> Traveller M2Vai
+                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller M2Vai
                 </a>
             </div>
         </div>
@@ -1665,14 +1661,52 @@
             document.getElementById('global-welcome-popup-layer').style.display = "none";
         }
 
-        function executeLoginLogic() {
+        // --- ফায়ারবেস ডাটাবেজ থেকে লগইন চেক করার সংশোধিত ফাংশন ---
+        async function executeLoginLogic() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
 
-            let user = db.users.find(u => u.email === email && u.pass === pass);
-            if(!user) { alert("Invalid credentials verified."); return; }
-            if(user.isBanned) { alert("Your profile account is banned indefinitely from accessing BDBUS consoles."); return; }
+            if (!email || !pass) {
+                alert("দয়া করে ইমেইল এবং পাসওয়ার্ড দিন।");
+                return;
+            }
 
+            try {
+                // ১. যদি হার্ডকোডেড অ্যাডমিন ইমেইল হয়, তাহলে লোকাল থেকে চেক করবে
+                if (email === SUPER_ADMIN_EMAIL) {
+                    let adminUser = db.users.find(u => u.email === email && u.pass === pass);
+                    if (adminUser) {
+                        proceedLoginSession(adminUser);
+                        return;
+                    }
+                }
+
+                // ২. ফায়ারবেস ডাটাবেজ থেকে ইউজারের ডাটা নিয়ে আসা
+                const docRef = window.firebaseFirestore.doc(window.firebaseDb, "users", email);
+                const docSnap = await window.firebaseFirestore.getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const user = docSnap.data();
+
+                    if (user.pass === pass) {
+                        if (user.isBanned) {
+                            alert("আপনার অ্যাকাউন্টটি ব্লক করা হয়েছে।");
+                            return;
+                        }
+                        proceedLoginSession(user);
+                    } else {
+                        alert("পাসওয়ার্ড ভুল হয়েছে!");
+                    }
+                } else {
+                    alert("এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট রেজিস্ট্রেশন করা হয়নি!");
+                }
+            } catch (error) {
+                console.error("Login error: ", error);
+                alert("লগইন করার সময় সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
+            }
+        }
+
+        function proceedLoginSession(user) {
             activeUserSession = user;
             sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
             sessionStorage.setItem('bdbus_login_timestamp', Date.now());
@@ -2101,7 +2135,7 @@
 
                 cardsHTML += `
                     <div class="member-card-node">
-                        <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'" alt="Avatar">
+                        <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
                         <div class="member-meta">
                             <h5>${u.name}</h5>
                             <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
@@ -2135,7 +2169,7 @@
                 card.className = 'admin-control-card';
                 card.style.textAlign = 'center';
                 card.innerHTML = `
-                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'" alt="Avatar">
+                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
                     <h4>${u.name}</h4>
                     <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
                     <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
@@ -2254,29 +2288,29 @@
 
                 if(currentRole === 'Admin') {
                     actionControlsHTML = `
-                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet('${u.id}', 'Regular Member')">Regular Member</button>
-                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet('${u.id}', 'Trip Master')">Trip Master</button>
-                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet('${u.id}', 'Counter Master')">Counter Master</button>
-                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet('${u.id}', 'Moderator')">Moderator</button>
-                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt('${u.id}')">Gift</button>
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine('${u.id}')">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle('${u.id}')">${u.isBanned ? 'Unban':'Ban'}</button>
-                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem('${u.id}')">Remove</button>
+                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet(${u.id}, 'Regular Member')">Regular Member</button>
+                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet(${u.id}, 'Trip Master')">Trip Master</button>
+                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet(${u.id}, 'Counter Master')">Counter Master</button>
+                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet(${u.id}, 'Moderator')">Moderator</button>
+                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt(${u.id})">Gift</button>
+                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
+                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem(${u.id})">Remove</button>
                     `;
                 } else if(currentRole === 'Moderator') {
                     actionControlsHTML = `
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine('${u.id}')">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle('${u.id}')">${u.isBanned ? 'Unban':'Ban'}</button>
+                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
                     `;
                 } else if(currentRole === 'Counter Master') {
-                    actionControlsHTML = `<button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine('${u.id}')">Reset Seats</button>`;
+                    actionControlsHTML = `<button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>`;
                 } else if(currentRole === 'Trip Master') {
                     actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Only Mode</span>`;
                 }
 
                 card.innerHTML = `
                     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-                        <img src="${u.avatar}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/45'" alt="User">
+                        <img src="${u.avatar}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/45'">
                         <div>
                             <h5 style="margin:0; font-size:14px; color:#fff;">${u.name} (ID: BDBUS-${u.id})</h5>
                             <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8;">Email: ${u.email} | Nickname: <strong>${u.gameid || 'N/A'}</strong></p>
@@ -2302,7 +2336,6 @@
 
         function adminDirectRoleSet(id, roleName) {
             let user = db.users.find(u => u.id === id);
-            if(!user) return;
             user.role = roleName;
             saveDataEngine();
             alert(`Successfully updated role to ${roleName}`);
@@ -2311,7 +2344,6 @@
 
         function adminBanToggle(id) {
             let user = db.users.find(u => u.id === id);
-            if(!user) return;
             user.isBanned = !user.isBanned;
             saveDataEngine();
             alert(user.isBanned ? "Member has been Banned." : "Member has been Unbanned.");
@@ -2322,7 +2354,6 @@
             let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
             if(!amount || amount <= 0) return;
             let user = db.users.find(u => u.id === id);
-            if(!user) return;
             user.wallet += amount;
             saveDataEngine();
             alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
