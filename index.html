@@ -2674,6 +2674,24 @@ window.addEventListener('DOMContentLoaded', () => {
     if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
 });
-    </script>
+    <script type="module">
+  // Firebase Initialization
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
+    authDomain: "bdbus-control-system.firebaseapp.com",
+    projectId: "bdbus-control-system",
+    storageBucket: "bdbus-control-system.firebasestorage.app",
+    messagingSenderId: "279853463516",
+    appId: "1:279853463516:web:13c9b4ec2f9f5bc62e0119"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db;
+</script>
+
 </body>
 </html>
