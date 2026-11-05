@@ -2685,22 +2685,29 @@ window.addEventListener('DOMContentLoaded', () => {
     navigatePage('auth-screen');
 });
     <script type="module">
-  // Firebase Initialization
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+    // Firebase Initialization
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJjAnL3e7KAA0uf4KHE8WO0IBkqv7fvvE",
-    authDomain: "bdbus-control-system.firebaseapp.com",
-    projectId: "bdbus-control-system",
-    storageBucket: "bdbus-control-system.firebasestorage.app",
-    messagingSenderId: "279853463516",
-    appId: "1:279853463516:web:13c9b4ec2f9f5bc62e0119"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyOjAnL3e7KAOUf4hEXWD0l8KY7fvsE",
+        authDomain: "bdbus-control-system.firebaseapp.com",
+        projectId: "bdbus-control-system",
+        storageBucket: "bdbus-control-system.firebasestorage.app",
+        messagingSenderId: "275053463516",
+        appId: "1:275053463516:web:13c9b4ec2f9f5bc82ed319"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  window.db = db;
-  </script>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ফায়ারবেসের টুলগুলোকে গ্লোবাল উইন্ডোতে যুক্ত করা হলো যাতে কোড থেকে সহজে ব্যবহার করা যায়
+    window.db = db;
+    window.firebaseFirestore = {
+        doc: doc,
+        setDoc: setDoc,
+        getDoc: getDoc
+    };
+</script>
 </body>
 </html>
