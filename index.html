@@ -1768,7 +1768,7 @@ function toggleAuthSubView(view) {
     }
 }
 
-function executeRegistrationLogic() {
+async function executeRegistrationLogic() {
     const name = document.getElementById('reg-name').value.trim();
     const gameid = document.getElementById('reg-gameid').value.trim();
     const dob = document.getElementById('reg-dob').value;
@@ -1782,24 +1782,36 @@ function executeRegistrationLogic() {
     const confpass = document.getElementById('reg-confpass').value;
     const agree = document.getElementById('reg-agree').checked;
 
-    if(!name || !gameid || !dob || !phone || !email || !pass || !division || !district) { alert("Please complete all fields!"); return; }
-    if(pass !== confpass) { alert("Passwords do not match!"); return; }
-    if(!agree) { alert("Please verify declarations checklist authorization."); return; }
-    if(db.users.some(u => u.email === email)) { alert("Email already registered!"); return; }
+    if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
+        alert("Please fill in all required fields!");
+        return;
+    }
+    if (pass !== confpass) { alert("Passwords do not match!"); return; }
+    if (!agree) { alert("Please verify declarations checklist authorization!"); return; }
 
-    let newUser = {
-        id: db.sysConfigIdCounter++,
-        name, gameid, dob, phone, gender, division, district, fb, email, pass,
-        role: "Regular Member",
-        wallet: 0,
-        avatar: "https://via.placeholder.com/150",
-        isBanned: false, claimedWelcome: false, claimedSubs: false
-    };
+    try {
+        const userId = "USER_" + Date.now();
+        const newUser = {
+            id: userId,
+            name, gameid, dob, phone, gender, division, district, fb, email, pass,
+            role: "Regular Member",
+            wallet: 0,
+            avatar: "https://via.placeholder.com/150",
+            isBanned: false, 
+            claimedWelcome: false, 
+            claimedSubs: false,
+            createdAt: Date.now()
+        };
 
-    db.users.push(newUser);
-    saveDataEngine();
-    alert("Registration successful! Please login.");
-    toggleAuthSubView('login');
+        // ফায়ারবেস ফায়ারস্টোরে ডাটা সেভ করার কমান্ড
+        await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.db, "users", email), newUser);
+
+        alert("Registration successful! Please login.");
+        toggleAuthSubView('login');
+    } catch (error) {
+        console.error("Error writing document: ", error);
+        alert("Registration failed. Please try again.");
+    }
 }
 
 function triggerGlobalWelcomePopup(user) {
@@ -2669,7 +2681,6 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
-    
     // যদি ইউজার লগইন না থাকে, তাহলে ফুটার আগে থেকেই হাইড হয়ে সোজা অথ স্ক্রিনে যাবে
     if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
@@ -2691,7 +2702,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   window.db = db;
-</script>
-
+  </script>
 </body>
 </html>
