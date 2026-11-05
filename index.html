@@ -2684,9 +2684,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if(globalFooter) globalFooter.style.display = 'none'; 
     navigatePage('auth-screen');
  });
-    
-   <script type="module">
-    // Firebase Initialization (Stable Version)
+<script type="module">
+    // Firebase Initialization (Safe Version without overriding local db)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -2701,19 +2700,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
     try {
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const cloudDb = getFirestore(app);
 
-        // গ্লোবাল উইন্ডোতে যুক্ত করা হলো
-        window.db = db;
+        // আলাদা নামে গ্লোবাল উইন্ডোতে যুক্ত করা হলো যাতে পুরানো db অবজেক্ট নষ্ট না হয়
+        window.firebaseDb = cloudDb;
         window.firebaseFirestore = {
             doc: doc,
             setDoc: setDoc,
             getDoc: getDoc
         };
-        console.log("Firebase Connected Successfully!");
+        console.log("Firebase Connected Safely!");
     } catch (error) {
         console.error("Firebase Initialization Error:", error);
     }
-   </script>
+</script>
 </body>
 </html>
