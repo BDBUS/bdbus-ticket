@@ -1805,7 +1805,6 @@ async function executeRegistrationLogic() {
 
         // ফায়ারবেস ফায়ারস্টোরে ডাটা সেভ করার কমান্ড
         await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.db, "users", email), newUser);
-
         alert("Registration successful! Please login.");
         toggleAuthSubView('login');
     } catch (error) {
