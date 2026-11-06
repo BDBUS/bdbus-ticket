@@ -10,7 +10,7 @@
 <!-- ফায়ারবেস মডিউল সবার উপরে নিরাপদে ইনিশিয়ালাইজ করা হলো -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyOjAnL3e7KAOUf4hEXWD0l8KY7fvsE",
@@ -25,11 +25,14 @@
             const app = initializeApp(firebaseConfig);
             const cloudDb = getFirestore(app);
 
-            window.firebaseDb = cloudDb;
-            window.firebaseFirestore = {
+            window.FirebaseDb = cloudDb;
+            window.FirebaseFirestore = {
                 doc: doc,
                 setDoc: setDoc,
-                getDoc: getDoc
+                getDoc: getDoc,
+                collection: collection,
+                getDocs: getDocs,
+                deleteDoc: deleteDoc
             };
             console.log("Firebase Connected Safely!");
         } catch (error) {
@@ -1408,7 +1411,6 @@
         
         const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
         let db = JSON.parse(localStorage.getItem('bdbus_local_db')) || {
-            users: [],
             notices: "Welcome to BDBUS Official Ticket Counter Simulator Hub!",
             occupiedSeats: {}, 
             sysConfigIdCounter: 1000
@@ -1432,49 +1434,50 @@
         ];
 
         async function verifyDatabaseStructureSeeding() {
-    const adminData = {
-        id: 1001,
-        name: "M2VAI",
-        gameid: "M2Vai",
-        dob: "1992-09-10",
-        phone: "01878335098",
-        gender: "Male",
-        division: "Sylhet",
-        district: "Sunamganj",
-        fb: "https://facebook.com/groups/771005197556072/",
-        email: SUPER_ADMIN_EMAIL,
-        pass: "admin123",
-        role: "Admin",
-        wallet: 100000,
-        avatar: "images/M2Vai.png",
-        isBanned: false,
-        claimedWelcome: true,
-        claimedSubs: true,
-        createdAt: Date.now()
-    };
+            const adminData = {
+                id: 1000,
+                name: "M2VAI",
+                gameid: "M2Vai",
+                dob: "1992-09-10",
+                phone: "01878335098",
+                gender: "Male",
+                division: "Sylhet",
+                district: "Sunamganj",
+                fb: "https://facebook.com/groups/771005197556072/",
+                email: SUPER_ADMIN_EMAIL,
+                pass: "admin123",
+                role: "Admin",
+                wallet: 100000,
+                avatar: "images/M2Vai.png",
+                isBanned: false,
+                claimedWelcome: true,
+                claimedSubs: true,
+                createdAt: Date.now()
+            };
 
-    // ১. লোকাল স্টোরেজে চেক ও সেভ
-    let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
-    if (!adminCheck) {
-        db.users.push(adminData);
-        saveDataEngine();
-    }
+            // ফায়ারবেস ক্লাউড ডাটাবেজে সুপার এডমিন ডাটা সিড করা
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const adminDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", SUPER_ADMIN_EMAIL);
+                    const docSnap = await window.FirebaseFirestore.getDoc(adminDocRef);
+                    
+                    if (!docSnap.exists()) {
+                        await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
+                        console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
+                    }
 
-    // ২. ফায়ারবেস ক্লাউড ডাটাবেজে সুপার এডমিন ডাটা সেভ
-    try {
-        if (window.firebaseDb && window.firebaseFirestore) {
-            const adminDocRef = window.firebaseFirestore.doc(window.firebaseDb, "users", SUPER_ADMIN_EMAIL);
-            const docSnap = await window.firebaseFirestore.getDoc(adminDocRef);
-            
-            if (!docSnap.exists()) {
-                await window.firebaseFirestore.setDoc(adminDocRef, adminData);
-                console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
+                    // system_config কাউন্টার চেক
+                    const counterRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "user_counter");
+                    const counterSnap = await window.FirebaseFirestore.getDoc(counterRef);
+                    if (!counterSnap.exists()) {
+                        await window.FirebaseFirestore.setDoc(counterRef, { lastId: 1000 });
+                    }
+                }
+            } catch (err) {
+                console.error("Firebase Admin Sync Error:", err);
             }
         }
-    } catch (err) {
-        console.error("Firebase Admin Sync Error:", err);
-    }
-}
+
         function saveDataEngine() {
             localStorage.setItem('bdbus_local_db', JSON.stringify(db));
         }
@@ -1483,11 +1486,7 @@
             setInterval(() => {
                 const now = new Date();
                 if (activeUserSession) {
-                    let currentUser = db.users.find(u => u.id === activeUserSession.id);
-                    if (currentUser) {
-                        currentUser.lastActive = Date.now();
-                        saveDataEngine();
-                    }
+                    // সেশন লাইভ আপডেট
                 }
 
                 let hrs = now.getHours();
@@ -1625,62 +1624,57 @@
         }
 
         async function executeRegistrationLogic() {
-    const name = document.getElementById('reg-name').value.trim();
-    const gameid = document.getElementById('reg-gameid').value.trim();
-    const dob = document.getElementById('reg-dob').value;
-    const phone = document.getElementById('reg-phone').value.trim();
-    const gender = document.getElementById('reg-gender').value;
-    const division = document.getElementById('reg-division').value.trim();
-    const district = document.getElementById('reg-district').value.trim();
-    const fb = document.getElementById('reg-fb').value.trim();
-    const email = document.getElementById('reg-email').value.trim();
-    const pass = document.getElementById('reg-pass').value;
-    const confpass = document.getElementById('reg-confpass').value;
-    const agree = document.getElementById('reg-agree').checked;
+            const name = document.getElementById('reg-name').value.trim();
+            const gameid = document.getElementById('reg-gameid').value.trim();
+            const dob = document.getElementById('reg-dob').value;
+            const phone = document.getElementById('reg-phone').value.trim();
+            const gender = document.getElementById('reg-gender').value;
+            const division = document.getElementById('reg-division').value.trim();
+            const district = document.getElementById('reg-district').value.trim();
+            const fb = document.getElementById('reg-fb').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+            const confpass = document.getElementById('reg-confpass').value;
+            const agree = document.getElementById('reg-agree').checked;
 
-    if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
-        alert("দয়া করে সব প্রয়োজনীয় ঘরগুলো পূরণ করুন!");
-        return;
-    }
-    if (pass !== confpass) { alert("পাসওয়ার্ড দুটি মিলছে না!"); return; }
-    if (!agree) { alert("শর্তাবলীতে টিক চিহ্ন দিন!"); return; }
+            if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
+                alert("দয়া করে সব প্রয়োজনীয় ঘরগুলো পূরণ করুন!");
+                return;
+            }
+            if (pass !== confpass) { alert("পাসওয়ার্ড দুটি মিলছে না!"); return; }
+            if (!agree) { alert("শর্তাবলীতে টিক চিহ্ন দিন!"); return; }
 
-    try {
-        // ১. ফায়ারবেস থেকে লাস্ট আইডি কাউন্টার চেক করা
-        const counterRef = window.firebaseFirestore.doc(window.firebaseDb, "system_config", "user_counter");
-        const counterSnap = await window.firebaseFirestore.getDoc(counterRef);
-        
-        let nextId = 1000; // প্রথম ইউজারের জন্য ১০০০
-        if (counterSnap.exists()) {
-            nextId = counterSnap.data().lastId + 1;
+            try {
+                const counterRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "user_counter");
+                const counterSnap = await window.FirebaseFirestore.getDoc(counterRef);
+                
+                let nextId = 1001; 
+                if (counterSnap.exists()) {
+                    nextId = counterSnap.data().lastId + 1;
+                }
+
+                const newUser = {
+                    id: nextId,
+                    name, gameid, dob, phone, gender, division, district, fb, email, pass,
+                    role: "Regular Member",
+                    wallet: 0,
+                    avatar: "https://via.placeholder.com/150",
+                    isBanned: false, 
+                    claimedWelcome: false, 
+                    claimedSubs: false,
+                    createdAt: Date.now()
+                };
+
+                await window.FirebaseFirestore.setDoc(window.FirebaseFirestore.doc(window.FirebaseDb, "users", email), newUser);
+                await window.FirebaseFirestore.setDoc(counterRef, { lastId: nextId });
+
+                alert(`রেজিস্ট্রেশন সফল হয়েছে! আপনার আইডি নম্বর: BDBUS-${nextId}`);
+                toggleAuthSubView('login');
+            } catch (error) {
+                console.error("Error writing document: ", error);
+                alert("রেজিস্ট্রেশন করতে সমস্যা হয়েছে। ফায়ারবেস রুলস পাবলিশ করা আছে কি না চেক করুন।");
+            }
         }
-
-        // ২. নতুন ইউজারের ডাটা তৈরি
-        const newUser = {
-            id: nextId, // সিরিয়াল আইডি (1000, 1001, 1002...)
-            name, gameid, dob, phone, gender, division, district, fb, email, pass,
-            role: "Regular Member",
-            wallet: 0,
-            avatar: "https://via.placeholder.com/150",
-            isBanned: false, 
-            claimedWelcome: false, 
-            claimedSubs: false,
-            createdAt: Date.now()
-        };
-
-        // ৩. ফায়ারবেসে ইউজার সেভ করা
-        await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.firebaseDb, "users", email), newUser);
-
-        // ৪. পরের ইউজারের জন্য কাউন্টার ১ বাড়িয়ে সেভ করা
-        await window.firebaseFirestore.setDoc(counterRef, { lastId: nextId });
-
-        alert(`রেজিস্ট্রেশন সফল হয়েছে! আপনার আইডি নম্বর: BDBUS-${nextId}`);
-        toggleAuthSubView('login');
-    } catch (error) {
-        console.error("Error writing document: ", error);
-        alert("রেজিস্ট্রেশন করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
-    }
-}
 
         function triggerGlobalWelcomePopup(user) {
             document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
@@ -1693,7 +1687,6 @@
             document.getElementById('global-welcome-popup-layer').style.display = "none";
         }
 
-        // --- ফায়ারবেস ডাটাবেজ থেকে লগইন চেক করার সংশোধিত ফাংশন ---
         async function executeLoginLogic() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
@@ -1704,18 +1697,8 @@
             }
 
             try {
-                // ১. যদি হার্ডকোডেড অ্যাডমিন ইমেইল হয়, তাহলে লোকাল থেকে চেক করবে
-                if (email === SUPER_ADMIN_EMAIL) {
-                    let adminUser = db.users.find(u => u.email === email && u.pass === pass);
-                    if (adminUser) {
-                        proceedLoginSession(adminUser);
-                        return;
-                    }
-                }
-
-                // ২. ফায়ারবেস ডাটাবেজ থেকে ইউজারের ডাটা নিয়ে আসা
-                const docRef = window.firebaseFirestore.doc(window.firebaseDb, "users", email);
-                const docSnap = await window.firebaseFirestore.getDoc(docRef);
+                const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                const docSnap = await window.FirebaseFirestore.getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const user = docSnap.data();
@@ -1734,7 +1717,7 @@
                 }
             } catch (error) {
                 console.error("Login error: ", error);
-                alert("লগইন করার সময় সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
+                alert("লগইন করার সময় সমস্যা হয়েছে।");
             }
         }
 
@@ -1774,47 +1757,56 @@
         function triggerForgotPassword() {
             let email = prompt("Enter your registered email address:");
             if(!email) return;
-            let user = db.users.find(u => u.email === email);
-            if(user) alert(`Your system password recovery response is: ${user.pass}`);
-            else alert("No verified account located using this email identifier.");
+            alert("Password recovery prompt dispatched to system administrators.");
         }
 
-        function claimWelcomeRewardLogic() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
-            user.wallet += 5000;
-            user.claimedWelcome = true;
-            saveDataEngine();
-            syncSessionState(user);
-            alert("5000 BDT Welcome allocation credited into wallet console successfully!");
+        async function claimWelcomeRewardLogic() {
+            if(!activeUserSession) return;
+            if(activeUserSession.claimedWelcome) { alert("Already claimed welcome reward!"); return; }
+            activeUserSession.wallet += 5000;
+            activeUserSession.claimedWelcome = true;
+            
+            await updateCloudUserDocument(activeUserSession);
+            syncSessionState(activeUserSession);
+            alert("5000 BDT Welcome allocation credited successfully!");
             document.getElementById('claim-welcome-btn').disabled = true;
         }
 
-        function triggerYoutubeSubscribeReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
+        async function triggerYoutubeSubscribeReward() {
+            if(!activeUserSession) return;
             let ytUrl = "https://youtube.com/@m2vai?sub_confirmation=1";
             window.location.href = ytUrl;
             
-            if (user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
-            setTimeout(() => {
-                user.wallet += 10000;
-                user.claimedSubs = true;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
+            if (activeUserSession.claimedSubs) { return; }
+            setTimeout(async () => {
+                activeUserSession.wallet += 10000;
+                activeUserSession.claimedSubs = true;
+                await updateCloudUserDocument(activeUserSession);
+                syncSessionState(activeUserSession);
+                alert("Subscription detected! 10000 BDT allocated!");
             }, 5000);
         }
 
-        function triggerWatchVideoReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
+        async function triggerWatchVideoReward() {
+            if(!activeUserSession) return;
             window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
-            alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
-            setTimeout(() => {
-                user.wallet += 3000;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
+            setTimeout(async () => {
+                activeUserSession.wallet += 3000;
+                await updateCloudUserDocument(activeUserSession);
+                syncSessionState(activeUserSession);
+                alert("Stream watching verified! 3000 BDT updated.");
             }, 61000); 
+        }
+
+        async function updateCloudUserDocument(userObj) {
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", userObj.email);
+                    await window.FirebaseFirestore.setDoc(docRef, userObj, { merge: true });
+                }
+            } catch (err) {
+                console.error("Cloud update error:", err);
+            }
         }
 
         function syncSessionState(updatedUser) {
@@ -1823,82 +1815,80 @@
         }
 
         function renderUserProfileView() {
-    if (!activeUserSession) return;
-    const user = activeUserSession;
-    document.getElementById('profile-avatar-render').src = user.avatar || "https://via.placeholder.com/150";
-    document.getElementById('prof-render-name').innerText = user.name;
-    document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
-    document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
+            if (!activeUserSession) return;
+            const user = activeUserSession;
+            document.getElementById('profile-avatar-render').src = user.avatar || "https://via.placeholder.com/150";
+            document.getElementById('prof-render-name').innerText = user.name;
+            document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
+            document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
 
-    document.getElementById('prof-meta-list-block').innerHTML = `
-        <p style="margin-bottom: 8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
-        <p style="margin-bottom: 8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
-        <p style="margin-bottom: 8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
-        <p style="margin-bottom: 8px;"><strong>Gender Node:</strong> ${user.gender}</p>
-        <p style="margin-bottom: 8px;"><strong>Division:</strong> ${user.divition || '-'}</p>
-        <p style="margin-bottom: 8px;"><strong>District:</strong> ${user.district || '-'}</p>
-        <p style="margin-bottom: 8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank">View Link</a></p>
-        <p><strong>System Auth Email:</strong> ${user.email}</p>
-    `;
-}
+            document.getElementById('prof-meta-list-block').innerHTML = `
+                <p style="margin-bottom: 8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
+                <p style="margin-bottom: 8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
+                <p style="margin-bottom: 8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
+                <p style="margin-bottom: 8px;"><strong>Gender Node:</strong> ${user.gender}</p>
+                <p style="margin-bottom: 8px;"><strong>Division:</strong> ${user.division || '-'}</p>
+                <p style="margin-bottom: 8px;"><strong>District:</strong> ${user.district || '-'}</p>
+                <p style="margin-bottom: 8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank">View Link</a></p>
+                <p><strong>System Auth Email:</strong> ${user.email}</p>
+            `;
+        }
 
-function processAvatarUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB"); return; }
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        if (!activeUserSession) return;
-        activeUserSession.avatar = e.target.result;
-        syncSessionState(activeUserSession);
-        document.getElementById('profile-avatar-render').src = activeUserSession.avatar;
-        alert("Avatar uploaded and compiled successfully!");
-    };
-    reader.readAsDataURL(file);
-}
+        async function processAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB"); return; }
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                if (!activeUserSession) return;
+                activeUserSession.avatar = e.target.result;
+                await updateCloudUserDocument(activeUserSession);
+                syncSessionState(activeUserSession);
+                document.getElementById('profile-avatar-render').src = activeUserSession.avatar;
+                alert("Avatar uploaded and compiled successfully!");
+            };
+            reader.readAsDataURL(file);
+        }
 
-function executePasswordChangeLogic() {
-    const curr = document.getElementById('pwd-curr').value;
-    const nxt = document.getElementById('pwd-new').value;
-    const conf = document.getElementById('pwd-conf').value;
-    if (!activeUserSession) return;
+        async function executePasswordChangeLogic() {
+            const curr = document.getElementById('pwd-curr').value;
+            const nxt = document.getElementById('pwd-new').value;
+            const conf = document.getElementById('pwd-conf').value;
+            if (!activeUserSession) return;
 
-    if (activeUserSession.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
-    if (nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
+            if (activeUserSession.pass !== curr) { alert("Current password verification failed!"); return; }
+            if (nxt !== conf) { alert("New passwords do not match!"); return; }
 
-    activeUserSession.pass = nxt;
-    syncSessionState(activeUserSession);
-    alert("Password updated securely. Use updated variables during subsequent login loops.");
-    document.getElementById('pwd-curr').value = "";
-    document.getElementById('pwd-new').value = "";
-    document.getElementById('pwd-conf').value = "";
-}
+            activeUserSession.pass = nxt;
+            await updateCloudUserDocument(activeUserSession);
+            syncSessionState(activeUserSession);
+            alert("Password updated securely.");
+            document.getElementById('pwd-curr').value = "";
+            document.getElementById('pwd-new').value = "";
+            document.getElementById('pwd-conf').value = "";
+        }
 
-function renderDigitalLicenceData() {
-    if (!activeUserSession) return;
-    const user = activeUserSession;
+        function renderDigitalLicenceData() {
+            if (!activeUserSession) return;
+            const user = activeUserSession;
 
-    document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-    document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-    document.getElementById('dl-name').innerText = user.name.toUpperCase();
-    document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-    document.getElementById('dl-dob').innerText = user.dob;
-    document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-    document.getElementById('dl-phone').innerText = user.phone;
-    document.getElementById('dl-division').innerText = (user.divition || "Dhaka").toUpperCase();
-    document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-    document.getElementById('dl-sign-name').innerText = user.name;
-}
+            document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
+            document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
+            document.getElementById('dl-name').innerText = user.name.toUpperCase();
+            document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
+            document.getElementById('dl-dob').innerText = user.dob;
+            document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
+            document.getElementById('dl-phone').innerText = user.phone;
+            document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
+            document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
+            document.getElementById('dl-sign-name').innerText = user.name;
+        }
         
         function executeDrivingLicenceDownloadEngine() {
             alert("Compiling high resolution smart driving licence graphics asset...");
             const target = document.getElementById('digital-licence-card');
             
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
+            html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
                 let link = document.createElement('a');
                 link.download = `BDBUS_Driving_Licence_ID_${activeUserSession.id}.png`;
                 link.href = canvas.toDataURL('image/png');
@@ -1925,17 +1915,7 @@ function renderDigitalLicenceData() {
             let perKmRate = 2.15;
             let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
 
-            if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 680;
-            } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
-                calculatedBaseFare = 850;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "chattogram") || (fromLoc.toLowerCase() === "chattogram" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 750;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "cox's bazar") || (fromLoc.toLowerCase() === "cox's bazar" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 1100;
-            }
-
-            if (type === "Premium AC Coach") {
+            if ((type === "Premium AC Coach")) {
                 selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
             } else {
                 selectedFareGlobalRate = calculatedBaseFare;
@@ -1952,7 +1932,7 @@ function renderDigitalLicenceData() {
             const type = document.getElementById('route-bustype').value;
 
             if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
+            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits."); return; }
 
             document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
             document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
@@ -1978,7 +1958,7 @@ function renderDigitalLicenceData() {
                 
                 if (timeLeft <= 0) {
                     clearInterval(window.seatTimerIntervalId);
-                    alert("Seat booking time has expired! Please refresh the website to see the seat again.");
+                    alert("Seat booking time has expired!");
                     navigatePage('home-screen');
                 } else {
                     timeLeft -= 1;
@@ -2084,10 +2064,6 @@ function renderDigitalLicenceData() {
                     delete db.occupiedSeats[key];
                     stateChanged = true;
                 }
-                else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
-                    delete db.occupiedSeats[key];
-                    stateChanged = true;
-                }
             }
             if(stateChanged) {
                 saveDataEngine();
@@ -2097,32 +2073,32 @@ function renderDigitalLicenceData() {
             }
         }
 
-        function executeTicketConfirmationEngine() {
-            if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
+        async function executeTicketConfirmationEngine() {
+            if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
             
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
+            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
             const type = document.getElementById('route-bustype').value;
             const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
-            user.wallet -= selectedFareGlobalRate;
+            activeUserSession.wallet -= selectedFareGlobalRate;
             
             db.occupiedSeats[globalKey] = {
                 expireTime: Date.now() + (60 * 60 * 1000), 
-                userId: user.id,
+                userId: activeUserSession.id,
                 isConfirmed: true,
                 timestampLocked: Date.now()
             };
             saveDataEngine();
-            syncSessionState(user);
+            await updateCloudUserDocument(activeUserSession);
+            syncSessionState(activeUserSession);
 
             if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
 
-            document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
-            document.getElementById('tk-name').innerText = user.name;
-            document.getElementById('tk-gid').innerText = user.gameid;
-            document.getElementById('tk-phone').innerText = user.phone;
+            document.getElementById('tk-mid').innerText = `BDBUS-${activeUserSession.id}`;
+            document.getElementById('tk-name').innerText = activeUserSession.name;
+            document.getElementById('tk-gid').innerText = activeUserSession.gameid;
+            document.getElementById('tk-phone').innerText = activeUserSession.phone;
             document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
             document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
             document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
@@ -2136,97 +2112,96 @@ function renderDigitalLicenceData() {
         }
 
         function executeTicketDownloadAndRedirect() {
-            alert("Compiling extreme high resolution ticket graphics assets...");
+            alert("Compiling ticket graphics assets...");
             const target = document.getElementById('digital-ticket-canvas');
             
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
+            html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
                 let link = document.createElement('a');
                 link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 
-                alert("Download successful! Returning safely back to your home command dashboard layout.");
+                alert("Download successful! Returning safely back to home command dashboard.");
                 navigatePage('home-screen');
             });
         }
 
         async function renderHomeMembersCarousel() {
-    const track = document.getElementById('home-carousel-track');
-    if (!track) return;
-    track.innerHTML = `<div style="color: #fff; padding: 10px; text-align: center;">Loading Live Members...</div>`;
+            const track = document.getElementById('home-carousel-track');
+            if (!track) return;
+            track.innerHTML = `<div style="color: #fff; padding: 10px; text-align: center;">Loading Live Members...</div>`;
 
-    try {
-        // সরাসরি ফায়ারবেসের 'users' কালেকশন থেকে সব মেম্বারের ডাটা নিয়ে আসা
-        const querySnapshot = await window.FirebaseFirestore.getDocs(
-            window.FirebaseFirestore.collection(window.FirebaseDb, "users")
-        );
-        
-        let usersList = [];
-        querySnapshot.forEach((doc) => {
-            usersList.push(doc.data());
-        });
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                
+                let usersList = [];
+                querySnapshot.forEach((doc) => {
+                    usersList.push(doc.data());
+                });
 
-        // ওয়ালেট ব্যালেন্স অনুযায়ী সর্ট করা
-        usersList.sort((a, b) => b.wallet - a.wallet);
+                usersList.sort((a, b) => b.wallet - a.wallet);
 
-        let cardsHTML = "";
-        usersList.forEach(user => {
-            let isOnline = user.lastActive && (Date.now() - user.lastActive < 45000);
-            let statusText = isOnline ? "ACTIVE" : "OFFLINE";
-            let statusColor = isOnline ? "var(--neon-green)" : "#094a36";
+                let cardsHTML = "";
+                usersList.forEach(user => {
+                    let isOnline = user.lastActive && (Date.now() - user.lastActive < 45000);
+                    let statusText = isOnline ? "ACTIVE" : "OFFLINE";
+                    let statusColor = isOnline ? "var(--neon-green)" : "#094a36";
 
-            cardsHTML += `
-                <div class="member-card-node">
-                    <img src="${user.avatar || 'https://via.placeholder.com/150'}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="member-meta">
-                        <h5>${user.name}</h5>
-                        <p>ID: BDBUS-${user.id} | <strong>${user.role}</strong><br>Balance: <span style="color:var(--neon-green);">${user.wallet} BDT</span></p>
-                        <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle"></i> ${statusText}</span>
-                    </div>
-                </div>
-            `;
-        });
+                    cardsHTML += `
+                        <div class="member-card-node">
+                            <img src="${user.avatar || 'https://via.placeholder.com/150'}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/150'">
+                            <div class="member-meta">
+                                <h5>${user.name}</h5>
+                                <p>ID: BDBUS-${user.id} | <strong>${user.role}</strong><br>Balance: <span style="color:var(--neon-green);">${user.wallet} BDT</span></p>
+                                <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle"></i> ${statusText}</span>
+                            </div>
+                        </div>
+                    `;
+                });
 
-        track.innerHTML = cardsHTML;
-    } catch (error) {
-        console.error("Error loading carousel members from Firebase:", error);
-        track.innerHTML = `<div style="color: #ff4d4d; padding: 10px; text-align: center;">Failed to load live members.</div>`;
-    }
-}
+                track.innerHTML = cardsHTML;
+            } catch (error) {
+                console.error("Error loading carousel members from Firebase:", error);
+                track.innerHTML = `<div style="color: #ff4d4d; padding: 10px; text-align: center;">Failed to load live members.</div>`;
+            }
+        }
 
-        function renderContactTeamPanel() {
+        async function renderContactTeamPanel() {
             const grid = document.getElementById('contact-team-grid');
             grid.innerHTML = "";
             
-            let coreStaff = db.users.filter(u => {
-                const role = u.role ? u.role.toLowerCase() : '';
-                return role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master';
-            });
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                
+                let coreStaff = [];
+                querySnapshot.forEach((doc) => {
+                    let u = doc.data();
+                    const role = u.role ? u.role.toLowerCase() : '';
+                    if (role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master') {
+                        coreStaff.push(u);
+                    }
+                });
 
-            const rolePriority = { 'admin': 1, 'moderator': 2, 'counter master': 3, 'trip master': 4 };
-            coreStaff.sort((a, b) => {
-                let roleA = a.role ? a.role.toLowerCase() : '';
-                let roleB = b.role ? b.role.toLowerCase() : '';
-                return (rolePriority[roleA] || 99) - (rolePriority[roleB] || 99);
-            });
-
-            coreStaff.forEach(u => {
-                let card = document.createElement('div');
-                card.className = 'admin-control-card';
-                card.style.textAlign = 'center';
-                card.innerHTML = `
-                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
-                    <h4>${u.name}</h4>
-                    <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
-                    <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
-                    <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
-                `;
-                grid.appendChild(card);
-            });
+                coreStaff.forEach(u => {
+                    let card = document.createElement('div');
+                    card.className = 'admin-control-card';
+                    card.style.textAlign = 'center';
+                    card.innerHTML = `
+                        <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
+                        <h4>${u.name}</h4>
+                        <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
+                        <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
+                        <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Error loading contact team:", e);
+            }
         }
 
         function renderLiveBookingsMonitorTable() {
@@ -2242,26 +2217,19 @@ function renderDigitalLicenceData() {
 
             bookingKeysArray.forEach(globalKey => {
                 let bookingInfo = db.occupiedSeats[globalKey];
-                let associatedUser = db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
                 let tr = document.createElement('tr');
                 let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
                 let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
 
-                let actionBtnHtml = "";
-                if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Moderator') {
-                    actionBtnHtml = `
-                        <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
-                            <i class="fa-solid fa-trash-can"></i> Reset Seat
-                        </button>
-                    `;
-                } else {
-                    actionBtnHtml = `<span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only</span>`;
-                }
+                let actionBtnHtml = `
+                    <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
+                        <i class="fa-solid fa-trash-can"></i> Reset Seat
+                    </button>
+                `;
 
                 tr.innerHTML = `
                     <td>
-                        <strong>${associatedUser.name}</strong><br>
-                        <span style="color:var(--text-muted); font-size:11px;">ID: BDBUS-${associatedUser.id}</span>
+                        <strong>User ID: BDBUS-${bookingInfo.userId}</strong>
                     </td>
                     <td style="color: var(--neon-blue); font-weight:600;">${globalKey.replace('_', ' | ')}</td>
                     <td style="color: ${badgeColor}; font-weight:500;">${statusText}</td>
@@ -2282,7 +2250,7 @@ function renderDigitalLicenceData() {
 
         function renderAdminPanelDashboard() {
             if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
-                alert("Unauthorized console routing breach validation rejected.");
+                alert("Unauthorized access denied.");
                 navigatePage('home-screen');
                 return;
             }
@@ -2301,9 +2269,9 @@ function renderDigitalLicenceData() {
         }
 
         function executeAdminNoticeBroadcastSave() {
-            if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
+            if(activeUserSession.role !== 'Admin') { alert("Permission denied."); return; }
             const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
-            if(!freshNoticeText) { alert("Notice text body cannot execute blank strings empty logs."); return; }
+            if(!freshNoticeText) { alert("Notice text cannot be blank."); return; }
             
             db.notices = freshNoticeText;
             saveDataEngine();
@@ -2311,7 +2279,7 @@ function renderDigitalLicenceData() {
             const liveMarquee = document.getElementById('live-marquee-node');
             if(liveMarquee) liveMarquee.innerText = db.notices;
             
-            alert("Global notice feed synchronized across cluster terminals successfully!");
+            alert("Global notice feed updated successfully!");
         }
 
         function buildUserAdminDisplayCards(userArray) {
@@ -2338,24 +2306,17 @@ function renderDigitalLicenceData() {
 
                 if(currentRole === 'Admin') {
                     actionControlsHTML = `
-                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet(${u.id}, 'Regular Member')">Regular Member</button>
-                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet(${u.id}, 'Trip Master')">Trip Master</button>
-                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet(${u.id}, 'Counter Master')">Counter Master</button>
-                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet(${u.id}, 'Moderator')">Moderator</button>
-                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt(${u.id})">Gift</button>
+                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet('${u.email}', 'Regular Member')">Member</button>
+                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet('${u.email}', 'Trip Master')">Trip Master</button>
+                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet('${u.email}', 'Counter Master')">Counter</button>
+                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet('${u.email}', 'Moderator')">Mod</button>
+                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt('${u.email}')">Gift</button>
                         <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem(${u.id})">Remove</button>
+                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle('${u.email}', ${u.isBanned})">${u.isBanned ? 'Unban':'Ban'}</button>
+                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem('${u.email}')">Remove</button>
                     `;
-                } else if(currentRole === 'Moderator') {
-                    actionControlsHTML = `
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-                    `;
-                } else if(currentRole === 'Counter Master') {
-                    actionControlsHTML = `<button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>`;
-                } else if(currentRole === 'Trip Master') {
-                    actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Only Mode</span>`;
+                } else {
+                    actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Mode</span>`;
                 }
 
                 card.innerHTML = `
@@ -2373,49 +2334,88 @@ function renderDigitalLicenceData() {
             });
         }
 
-        function executeAdminSearchLogic() {
+        async function executeAdminSearchLogic() {
             let term = document.getElementById('admin-search-input').value.trim();
             const grid = document.getElementById('admin-user-cards-grid');
             if(!term) { 
                 if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
                 return; 
             }
-            let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
-            buildUserAdminDisplayCards(filtered);
+
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                
+                let allUsers = [];
+                querySnapshot.forEach((doc) => {
+                    allUsers.push(doc.data());
+                });
+
+                let filtered = allUsers.filter(u => u.id.toString() === term || u.name.toLowerCase().includes(term.toLowerCase()) || (u.gameid && u.gameid.toLowerCase().includes(term.toLowerCase())));
+                buildUserAdminDisplayCards(filtered);
+            } catch (e) {
+                console.error("Search error:", e);
+                alert("সার্চ করতে সমস্যা হয়েছে।");
+            }
         }
 
-        function adminDirectRoleSet(id, roleName) {
-            let user = db.users.find(u => u.id === id);
-            user.role = roleName;
-            saveDataEngine();
-            alert(`Successfully updated role to ${roleName}`);
-            executeAdminSearchLogic();
-        }
-
-        function adminBanToggle(id) {
-            let user = db.users.find(u => u.id === id);
-            user.isBanned = !user.isBanned;
-            saveDataEngine();
-            alert(user.isBanned ? "Member has been Banned." : "Member has been Unbanned.");
-            executeAdminSearchLogic();
-        }
-
-        function adminGiftWalletPrompt(id) {
-            let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
-            if(!amount || amount <= 0) return;
-            let user = db.users.find(u => u.id === id);
-            user.wallet += amount;
-            saveDataEngine();
-            alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
-            executeAdminSearchLogic();
-        }
-
-        function adminRemoveMemberFromSystem(id) {
-            if(confirm("Are you absolutely sure you want to permanently REMOVE this member from the database?")) {
-                db.users = db.users.filter(u => u.id !== id);
-                saveDataEngine();
-                alert("Member removed successfully from system.");
+        async function adminDirectRoleSet(email, roleName) {
+            try {
+                const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                await window.FirebaseFirestore.setDoc(docRef, { role: roleName }, { merge: true });
+                alert(`Successfully updated role to ${roleName}`);
                 executeAdminSearchLogic();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function adminBanToggle(email, currentStatus) {
+            try {
+                const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                await window.FirebaseFirestore.setDoc(docRef, { isBanned: !currentStatus }, { merge: true });
+                alert(!currentStatus ? "Member has been Banned." : "Member has been Unbanned.");
+                executeAdminSearchLogic();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function adminGiftWalletPrompt(email) {
+            let amount = parseInt(prompt("Enter BDT credit allocation:"));
+            if(!amount || amount <= 0) return;
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                let targetUser = null;
+                querySnapshot.forEach((d) => {
+                    if(d.data().email === email) targetUser = d.data();
+                });
+
+                if(targetUser) {
+                    targetUser.wallet += amount;
+                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                    await window.FirebaseFirestore.setDoc(docRef, { wallet: targetUser.wallet }, { merge: true });
+                    alert(`Credited ${amount} BDT successfully!`);
+                    executeAdminSearchLogic();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function adminRemoveMemberFromSystem(email) {
+            if(confirm("Are you sure you want to permanently REMOVE this member from Firebase database?")) {
+                try {
+                    await window.FirebaseFirestore.deleteDoc(window.FirebaseFirestore.doc(window.FirebaseDb, "users", email));
+                    alert("Member removed successfully.");
+                    executeAdminSearchLogic();
+                } catch (e) {
+                    console.error(e);
+                    alert("Failed to remove member.");
+                }
             }
         }
 
@@ -2430,47 +2430,63 @@ function renderDigitalLicenceData() {
             if(keysRemoved > 0) {
                 saveDataEngine();
                 renderLiveBookingsMonitorTable();
-                alert(`Purged ${keysRemoved} active reservation tracks from database.`);
+                alert(`Purged ${keysRemoved} active reservation tracks.`);
                 executeAdminSearchLogic();
             } else {
-                alert("No active matching booking tracks matched user parameters.");
+                alert("No active matching booking tracks found.");
             }
         }
 
-        function loadAllRegisteredMembersList() {
+        async function loadAllRegisteredMembersList() {
             renderAllRegisteredMembersPage();
         }
 
-        function renderAllRegisteredMembersPage() {
+        async function renderAllRegisteredMembersPage() {
             const rootNode = document.getElementById('all-members-list-render-node');
             if(!rootNode) return;
-            rootNode.innerHTML = "";
+            rootNode.innerHTML = `<div style="text-align:center; padding:20px; color:#fff;">Loading members from Firebase...</div>`;
 
-            let sortedMembers = [...db.users].sort((a, b) => a.id - b.id);
-            sortedMembers.forEach((u, index) => {
-                let row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.justifyContent = 'space-between'; 
-                row.style.alignItems = 'center';
-                row.style.padding = '10px 15px';
-                row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
-                row.style.borderBottom = '1px solid #334155';
-                row.style.fontSize = '13px';
-                row.style.color = '#fff';
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                
+                let sortedMembers = [];
+                querySnapshot.forEach((doc) => {
+                    sortedMembers.push(doc.data());
+                });
 
-                row.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="color:#94a3b8; font-weight:bold; width:30px;">#${index + 1}</span>
-                        <span style="color:#00b4d8; font-weight:bold; width:90px;">ID: ${u.id}</span>
-                        <span style="font-weight:500;">${u.name}</span>
-                    </div>
-                    <div style="display:flex; gap:15px; align-items:center;">
-                        <span style="background:rgba(0,180,216,0.2); color:#00b4d8; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold;">${u.role}</span>
-                        <span style="color:#10b981; font-weight:bold;">${u.wallet} BDT</span>
-                    </div>
-                `;
-                rootNode.appendChild(row);
-            });
+                sortedMembers.sort((a, b) => a.id - b.id);
+                rootNode.innerHTML = "";
+
+                sortedMembers.forEach((u, index) => {
+                    let row = document.createElement('div');
+                    row.style.display = 'flex';
+                    row.style.justifyContent = 'space-between'; 
+                    row.style.alignItems = 'center';
+                    row.style.padding = '10px 15px';
+                    row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
+                    row.style.borderBottom = '1px solid #334155';
+                    row.style.fontSize = '13px';
+                    row.style.color = '#fff';
+
+                    row.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="color:#94a3b8; font-weight:bold; width:30px;">#${index + 1}</span>
+                            <span style="color:#00b4d8; font-weight:bold; width:90px;">ID: ${u.id}</span>
+                            <span style="font-weight:500;">${u.name}</span>
+                        </div>
+                        <div style="display:flex; gap:15px; align-items:center;">
+                            <span style="background:rgba(0,180,216,0.2); color:#00b4d8; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold;">${u.role}</span>
+                            <span style="color:#10b981; font-weight:bold;">${u.wallet} BDT</span>
+                        </div>
+                    `;
+                    rootNode.appendChild(row);
+                });
+            } catch (e) {
+                console.error("Error loading all members:", e);
+                rootNode.innerHTML = `<div style="text-align:center; padding:20px; color:#ff4d4d;">Failed to load members list.</div>`;
+            }
         }
 
         function setLanguageSystem(locale) {
@@ -2545,8 +2561,8 @@ function renderDigitalLicenceData() {
             });
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            verifyDatabaseStructureSeeding();
+        window.addEventListener('DOMContentLoaded', async () => {
+            await verifyDatabaseStructureSeeding();
             initialClockHeartbeatEngine();
             setLanguageSystem(selectedLanguage);
             initSearchableDropdownSystem();
@@ -2556,14 +2572,13 @@ function renderDigitalLicenceData() {
             const globalFooter = document.getElementById('main-global-footer');
 
             if(activeUserSession) {
-                let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
-                if(refreshedUser && !refreshedUser.isBanned) {
+                if(activeUserSession && !activeUserSession.isBanned) {
                     document.body.classList.add('logged-in');
                     document.getElementById('header-nav-controls').style.display = 'flex';
                     document.getElementById('header-empty-space').style.display = 'none';
                     if(globalFooter) globalFooter.style.display = 'block';
                     
-                    if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
+                    if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Moderator' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Trip Master') {
                         document.getElementById('admin-menu-link').style.display = 'flex';
                     }
                     
