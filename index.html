@@ -1924,15 +1924,62 @@
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-            function openSeatSelectionEngine() {
+                function openSeatSelectionEngine() {
         const from = document.getElementById('route-from').value;
         const to = document.getElementById('route-to').value;
         const date = document.getElementById('route-date').value;
         const time = document.getElementById('route-time').value;
-        const type = document.getElementById('route-bustype').value;
+        const type = document.getElementById('route-bustype').value; // এখানে ট্রিপের নাম/টাইপ থাকে
 
         if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
         if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance for execution."); return; }
+
+        // ==========================================
+        // 🕒 অ্যাডমিন প্যানেল টাইম রেস্ট্রিকশন লজিক
+        // ==========================================
+        const isAdminRestrictionOn = db.adminSettings && db.adminSettings.timeRestrictionEnabled; 
+        const isUnofficialTrip = type.toLowerCase().includes('unofficial') || type.includes('আনঅফিসিয়াল');
+
+        if (isAdminRestrictionOn && !isUnofficialTrip) {
+            const now = new Date();
+            const currentHours = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentTimeInMinutes = currentHours * 60 + currentMinutes;
+
+            let isAllowed = false;
+            let restrictionMessage = "";
+
+            // ১. ১০:৩০ Pm ট্রিপ (টিকেট কাটার সময়: ০৯:৫০ Pm থেকে ১০:২০ Pm)
+            if (type.includes("10:30")) {
+                const startTime = 21 * 60 + 50; // রাত 09:50 Pm (21:50)
+                const endTime = 22 * 60 + 20;   // রাত 10:20 Pm (22:20)
+                
+                if (currentTimeInMinutes >= startTime && currentTimeInMinutes <= endTime) {
+                    isAllowed = true;
+                } else {
+                    restrictionMessage = "রাত 09:50 Pm থেকে রাত 10:20 Pm পর্যন্ত টিকেট কাটার সময়।";
+                }
+            } 
+            // ২. ০১:১০ Am ট্রিপ (টিকেট কাটার সময়: ১২:৩০ Am থেকে ০১:০০ Am)
+            else if (type.includes("01:10")) {
+                const startTime = 0 * 60 + 30;  // রাত 12:30 Am (00:30)
+                const endTime = 1 * 60 + 0;     // রাত 01:00 Am (01:00)
+                
+                if (currentTimeInMinutes >= startTime && currentTimeInMinutes <= endTime) {
+                    isAllowed = true;
+                } else {
+                    restrictionMessage = "রাত 12:30 Am থেকে রাত 01 Am পর্যন্ত টিকেট কাটার সময়।";
+                }
+            } else {
+                isAllowed = true; // অন্য কোনো ট্রিপ হলে নরমাল নিয়ম থাকবে
+            }
+
+            if (!isAllowed) {
+                alert(`দুঃখিত! এই ট্রিপের জন্য এখন টিকিট কাটার সময় নয়।\nসময়সীমা: ${restrictionMessage}`);
+                return; // সিট সিলেকশন পেজে ঢুকতে দেবে না
+            }
+        }
+        // ==========================================
 
         document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
         document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
@@ -1946,6 +1993,7 @@
 
         navigatePage('seat-screen');
     }
+
 
         function initSeatLockCountdownTimer() {
             const countdownEl = document.getElementById('countdown');
