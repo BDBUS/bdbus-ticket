@@ -1823,72 +1823,73 @@
         }
 
         function renderUserProfileView() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            document.getElementById('profile-avatar-render').src = user.avatar;
-            document.getElementById('prof-render-name').innerText = user.name;
-            document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
-            document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
+    if (!activeUserSession) return;
+    const user = activeUserSession;
+    document.getElementById('profile-avatar-render').src = user.avatar || "https://via.placeholder.com/150";
+    document.getElementById('prof-render-name').innerText = user.name;
+    document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
+    document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
 
-            document.getElementById('prof-meta-list-block').innerHTML = `
-                <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
-                <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
-                <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
-                <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
-                <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
-                <p><strong>System Auth Email:</strong> ${user.email}</p>
-            `;
-        }
+    document.getElementById('prof-meta-list-block').innerHTML = `
+        <p style="margin-bottom: 8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
+        <p style="margin-bottom: 8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
+        <p style="margin-bottom: 8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
+        <p style="margin-bottom: 8px;"><strong>Gender Node:</strong> ${user.gender}</p>
+        <p style="margin-bottom: 8px;"><strong>Division:</strong> ${user.divition || '-'}</p>
+        <p style="margin-bottom: 8px;"><strong>District:</strong> ${user.district || '-'}</p>
+        <p style="margin-bottom: 8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank">View Link</a></p>
+        <p><strong>System Auth Email:</strong> ${user.email}</p>
+    `;
+}
 
-        function processAvatarUpload(event) {
-            const file = event.target.files[0];
-            if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let user = db.users.find(u => u.id === activeUserSession.id);
-                user.avatar = e.target.result;
-                saveDataEngine();
-                syncSessionState(user);
-                document.getElementById('profile-avatar-render').src = user.avatar;
-                alert("Avatar uploaded and compiled successfully!");
-            };
-            reader.readAsDataURL(file);
-        }
+function processAvatarUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB"); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        if (!activeUserSession) return;
+        activeUserSession.avatar = e.target.result;
+        syncSessionState(activeUserSession);
+        document.getElementById('profile-avatar-render').src = activeUserSession.avatar;
+        alert("Avatar uploaded and compiled successfully!");
+    };
+    reader.readAsDataURL(file);
+}
 
-        function executePasswordChangeLogic() {
-            const curr = document.getElementById('pwd-curr').value;
-            const nxt = document.getElementById('pwd-new').value;
-            const conf = document.getElementById('pwd-conf').value;
-            let user = db.users.find(u => u.id === activeUserSession.id);
+function executePasswordChangeLogic() {
+    const curr = document.getElementById('pwd-curr').value;
+    const nxt = document.getElementById('pwd-new').value;
+    const conf = document.getElementById('pwd-conf').value;
+    if (!activeUserSession) return;
 
-            if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
-            if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
+    if (activeUserSession.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
+    if (nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
 
-            user.pass = nxt;
-            saveDataEngine();
-            alert("Password updated securely. Use updated variables during subsequent login loops.");
-            document.getElementById('pwd-curr').value = "";
-            document.getElementById('pwd-new').value = "";
-            document.getElementById('pwd-conf').value = "";
-        }
+    activeUserSession.pass = nxt;
+    syncSessionState(activeUserSession);
+    alert("Password updated securely. Use updated variables during subsequent login loops.");
+    document.getElementById('pwd-curr').value = "";
+    document.getElementById('pwd-new').value = "";
+    document.getElementById('pwd-conf').value = "";
+}
 
-        function renderDigitalLicenceData() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(!user) return;
-            
-            document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('dl-name').innerText = user.name.toUpperCase();
-            document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-            document.getElementById('dl-dob').innerText = user.dob;
-            document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-            document.getElementById('dl-phone').innerText = user.phone;
-            document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
-            document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-            document.getElementById('dl-sign-name').innerText = user.name;
-        }
+function renderDigitalLicenceData() {
+    if (!activeUserSession) return;
+    const user = activeUserSession;
 
+    document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
+    document.getElementById('dl-name').innerText = user.name.toUpperCase();
+    document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
+    document.getElementById('dl-dob').innerText = user.dob;
+    document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
+    document.getElementById('dl-phone').innerText = user.phone;
+    document.getElementById('dl-division').innerText = (user.divition || "Dhaka").toUpperCase();
+    document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
+    document.getElementById('dl-sign-name').innerText = user.name;
+}
+        
         function executeDrivingLicenceDownloadEngine() {
             alert("Compiling high resolution smart driving licence graphics asset...");
             const target = document.getElementById('digital-licence-card');
@@ -2153,32 +2154,49 @@
             });
         }
 
-        function renderHomeMembersCarousel() {
-            const track = document.getElementById('home-carousel-track');
-            if(!track) return;
-            track.innerHTML = "";
-            
-            let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
-            let cardsHTML = "";
-            activePool.forEach(u => {
-                let isOnline = u.lastActive && (Date.now() - u.lastActive < 45000);
-                let statusText = isOnline ? "ACTIVE" : "OFFLINE";
-                let statusColor = isOnline ? "var(--neon-green)" : "#94a3b8";
+        async function renderHomeMembersCarousel() {
+    const track = document.getElementById('home-carousel-track');
+    if (!track) return;
+    track.innerHTML = `<div style="color: #fff; padding: 10px; text-align: center;">Loading Live Members...</div>`;
 
-                cardsHTML += `
-                    <div class="member-card-node">
-                        <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
-                        <div class="member-meta">
-                            <h5>${u.name}</h5>
-                            <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-                            <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${statusText}</span>
-                        </div>
+    try {
+        // সরাসরি ফায়ারবেসের 'users' কালেকশন থেকে সব মেম্বারের ডাটা নিয়ে আসা
+        const querySnapshot = await window.FirebaseFirestore.getDocs(
+            window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+        );
+        
+        let usersList = [];
+        querySnapshot.forEach((doc) => {
+            usersList.push(doc.data());
+        });
+
+        // ওয়ালেট ব্যালেন্স অনুযায়ী সর্ট করা
+        usersList.sort((a, b) => b.wallet - a.wallet);
+
+        let cardsHTML = "";
+        usersList.forEach(user => {
+            let isOnline = user.lastActive && (Date.now() - user.lastActive < 45000);
+            let statusText = isOnline ? "ACTIVE" : "OFFLINE";
+            let statusColor = isOnline ? "var(--neon-green)" : "#094a36";
+
+            cardsHTML += `
+                <div class="member-card-node">
+                    <img src="${user.avatar || 'https://via.placeholder.com/150'}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/150'">
+                    <div class="member-meta">
+                        <h5>${user.name}</h5>
+                        <p>ID: BDBUS-${user.id} | <strong>${user.role}</strong><br>Balance: <span style="color:var(--neon-green);">${user.wallet} BDT</span></p>
+                        <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle"></i> ${statusText}</span>
                     </div>
-                `;
-            });
+                </div>
+            `;
+        });
 
-            track.innerHTML = cardsHTML + cardsHTML;
-        }
+        track.innerHTML = cardsHTML;
+    } catch (error) {
+        console.error("Error loading carousel members from Firebase:", error);
+        track.innerHTML = `<div style="color: #ff4d4d; padding: 10px; text-align: center;">Failed to load live members.</div>`;
+    }
+}
 
         function renderContactTeamPanel() {
             const grid = document.getElementById('contact-team-grid');
