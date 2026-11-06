@@ -1625,48 +1625,62 @@
         }
 
         async function executeRegistrationLogic() {
-            const name = document.getElementById('reg-name').value.trim();
-            const gameid = document.getElementById('reg-gameid').value.trim();
-            const dob = document.getElementById('reg-dob').value;
-            const phone = document.getElementById('reg-phone').value.trim();
-            const gender = document.getElementById('reg-gender').value;
-            const division = document.getElementById('reg-division').value.trim();
-            const district = document.getElementById('reg-district').value.trim();
-            const fb = document.getElementById('reg-fb').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-pass').value;
-            const confpass = document.getElementById('reg-confpass').value;
-            const agree = document.getElementById('reg-agree').checked;
+    const name = document.getElementById('reg-name').value.trim();
+    const gameid = document.getElementById('reg-gameid').value.trim();
+    const dob = document.getElementById('reg-dob').value;
+    const phone = document.getElementById('reg-phone').value.trim();
+    const gender = document.getElementById('reg-gender').value;
+    const division = document.getElementById('reg-division').value.trim();
+    const district = document.getElementById('reg-district').value.trim();
+    const fb = document.getElementById('reg-fb').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const confpass = document.getElementById('reg-confpass').value;
+    const agree = document.getElementById('reg-agree').checked;
 
-            if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
-                alert("Please fill in all required fields!");
-                return;
-            }
-            if (pass !== confpass) { alert("Passwords do not match!"); return; }
-            if (!agree) { alert("Please verify declarations checklist authorization!"); return; }
+    if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
+        alert("দয়া করে সব প্রয়োজনীয় ঘরগুলো পূরণ করুন!");
+        return;
+    }
+    if (pass !== confpass) { alert("পাসওয়ার্ড দুটি মিলছে না!"); return; }
+    if (!agree) { alert("শর্তাবলীতে টিক চিহ্ন দিন!"); return; }
 
-            try {
-                const userId = "USER_" + Date.now();
-                const newUser = {
-                    id: userId,
-                    name, gameid, dob, phone, gender, division, district, fb, email, pass,
-                    role: "Regular Member",
-                    wallet: 0,
-                    avatar: "https://via.placeholder.com/150",
-                    isBanned: false, 
-                    claimedWelcome: false, 
-                    claimedSubs: false,
-                    createdAt: Date.now()
-                };
-
-                await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.firebaseDb, "users", email), newUser);
-                alert("Registration successful! Please login.");
-                toggleAuthSubView('login');
-            } catch (error) {
-                console.error("Error writing document: ", error);
-                alert("Registration failed. Please try again.");
-            }
+    try {
+        // ১. ফায়ারবেস থেকে লাস্ট আইডি কাউন্টার চেক করা
+        const counterRef = window.firebaseFirestore.doc(window.firebaseDb, "system_config", "user_counter");
+        const counterSnap = await window.firebaseFirestore.getDoc(counterRef);
+        
+        let nextId = 1000; // প্রথম ইউজারের জন্য ১০০০
+        if (counterSnap.exists()) {
+            nextId = counterSnap.data().lastId + 1;
         }
+
+        // ২. নতুন ইউজারের ডাটা তৈরি
+        const newUser = {
+            id: nextId, // সিরিয়াল আইডি (1000, 1001, 1002...)
+            name, gameid, dob, phone, gender, division, district, fb, email, pass,
+            role: "Regular Member",
+            wallet: 0,
+            avatar: "https://via.placeholder.com/150",
+            isBanned: false, 
+            claimedWelcome: false, 
+            claimedSubs: false,
+            createdAt: Date.now()
+        };
+
+        // ৩. ফায়ারবেসে ইউজার সেভ করা
+        await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.firebaseDb, "users", email), newUser);
+
+        // ৪. পরের ইউজারের জন্য কাউন্টার ১ বাড়িয়ে সেভ করা
+        await window.firebaseFirestore.setDoc(counterRef, { lastId: nextId });
+
+        alert(`রেজিস্ট্রেশন সফল হয়েছে! আপনার আইডি নম্বর: BDBUS-${nextId}`);
+        toggleAuthSubView('login');
+    } catch (error) {
+        console.error("Error writing document: ", error);
+        alert("রেজিস্ট্রেশন করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
+    }
+}
 
         function triggerGlobalWelcomePopup(user) {
             document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
