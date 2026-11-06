@@ -1924,24 +1924,28 @@
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-        function openSeatSelectionEngine() {
-            const from = document.getElementById('route-from').value;
-            const to = document.getElementById('route-to').value;
-            const date = document.getElementById('route-date').value;
-            const time = document.getElementById('route-time').value;
-            const type = document.getElementById('route-bustype').value;
+            function openSeatSelectionEngine() {
+        const from = document.getElementById('route-from').value;
+        const to = document.getElementById('route-to').value;
+        const date = document.getElementById('route-date').value;
+        const time = document.getElementById('route-time').value;
+        const type = document.getElementById('route-bustype').value;
 
-            if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits."); return; }
+        if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
+        if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance for execution."); return; }
 
-            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
-            document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
-            currentlyChosenSeatNode = null;
+        document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
+        document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
+        currentlyChosenSeatNode = null;
 
-            generateBusCabinGridBlueprint(type);
-            initSeatLockCountdownTimer();
-            navigatePage('seat-screen');
-        }
+        generateBusCabinGridBlueprint(type);
+        initSeatLockCountdownTimer();
+        
+        // ফায়ারবেস থেকে লাইভ সিট ডাটা লোড করার ফাংশন
+        loadFirebaseBookingsAndRenderMap();
+
+        navigatePage('seat-screen');
+    }
 
         function initSeatLockCountdownTimer() {
             const countdownEl = document.getElementById('countdown');
