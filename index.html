@@ -1431,32 +1431,50 @@
             "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
         ];
 
-        function verifyDatabaseStructureSeeding() {
-            let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
-            if (!adminCheck) {
-                db.users.push({
-                    id: db.sysConfigIdCounter++,
-                    name: "M2VAI",
-                    gameid: "M2Vai",
-                    dob: "1992-09-10",
-                    phone: "01878335098",
-                    gender: "Male",
-                    division: "Sylhet",
-                    district: "Sunamganj",
-                    fb: "https://facebook.com/groups/771005197556072/",
-                    email: SUPER_ADMIN_EMAIL,
-                    pass: "admin123",
-                    role: "Admin",
-                    wallet: 1000,
-                    avatar: "images/M2Vai.png",
-                    isBanned: false,
-                    claimedWelcome: true,
-                    claimedSubs: true
-                });
-            }
-            saveDataEngine();
-        }
+        async function verifyDatabaseStructureSeeding() {
+    const adminData = {
+        id: 1000,
+        name: "M2VAI",
+        gameid: "M2Vai",
+        dob: "1992-09-10",
+        phone: "01878335098",
+        gender: "Male",
+        division: "Sylhet",
+        district: "Sunamganj",
+        fb: "https://facebook.com/groups/771005197556072/",
+        email: SUPER_ADMIN_EMAIL,
+        pass: "admin123",
+        role: "Admin",
+        wallet: 100000,
+        avatar: "images/M2Vai.png",
+        isBanned: false,
+        claimedWelcome: true,
+        claimedSubs: true,
+        createdAt: Date.now()
+    };
 
+    // ১. লোকাল স্টোরেজে চেক ও সেভ
+    let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
+    if (!adminCheck) {
+        db.users.push(adminData);
+        saveDataEngine();
+    }
+
+    // ২. ফায়ারবেস ক্লাউড ডাটাবেজে সুপার এডমিন ডাটা সেভ
+    try {
+        if (window.firebaseDb && window.firebaseFirestore) {
+            const adminDocRef = window.firebaseFirestore.doc(window.firebaseDb, "users", SUPER_ADMIN_EMAIL);
+            const docSnap = await window.firebaseFirestore.getDoc(adminDocRef);
+            
+            if (!docSnap.exists()) {
+                await window.firebaseFirestore.setDoc(adminDocRef, adminData);
+                console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
+            }
+        }
+    } catch (err) {
+        console.error("Firebase Admin Sync Error:", err);
+    }
+}
         function saveDataEngine() {
             localStorage.setItem('bdbus_local_db', JSON.stringify(db));
         }
