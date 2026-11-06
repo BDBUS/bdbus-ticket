@@ -175,7 +175,7 @@
 
         .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer;}
         .header-logo-container img { height: 40px; }
-        .header-logo-container span { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
+        .header-logo-container span { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; } /* লোগোর পাশে লেখার সাইজ ছোট করা হয়েছে */
         
         .lang-toggle-box { display: flex; gap: 8px; }
         .lang-btn {
@@ -225,6 +225,7 @@
         .sidebar-item:hover { background: rgba(0, 242, 254, 0.1); color: var(--neon-blue); }
         .sidebar-item.logout-item { margin-top: auto; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
+        /* --- Custom Custom Notice Box --- */
         .custom-gaming-notice {
             background: #221214 !important;
             border: 1px solid #FF3333 !important;
@@ -247,12 +248,26 @@
             font-size: 24px;
         }
 
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            color: #fca5a5;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .page-screen { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; z-index: 10; position: relative; }
         .page-screen.active { display: block; }
 
         .auth-container { max-width: 450px; margin: 50px auto; text-align: center; }
         .auth-brand img { height: 80px; margin-bottom: 10px; }
-        .auth-brand h2 { font-size: 1.3rem; letter-spacing: 1px; }
+        .auth-brand h2 { font-size: 1.3rem; letter-spacing: 1px; } /* লোগোর নিচের মেইন টাইটেল সাইজ ছোট করা হয়েছে */
         .auth-brand p { color: var(--neon-blue); font-size: 11px; margin-bottom: 30px; }
         
         .form-card {
@@ -266,6 +281,7 @@
         .form-group { margin-bottom: 20px; position: relative; }
         .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
         
+        /* পাসওয়ার্ড শো/হাইডের জন্য চমৎকার ইনপুট বক্স র‍্যাপার */
         .password-input-wrapper {
             position: relative;
             display: flex;
@@ -302,9 +318,10 @@
 
         .central-branded-header { text-align: center; margin-top: 15px; margin-bottom: 20px; }
         .central-branded-header img { height: 110px; filter: drop-shadow(0 0 12px rgba(0,242,254,0.4)); margin-bottom: 12px; transition: 0.3s; }
-        .central-branded-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .central-branded-header h2 { font-size: 18px; font-weight: 700; letter-spacing: 1.5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); } /* হোম পেজ লোগো নাম সাইজ রেসপন্সিভ */
         .central-branded-header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
+        .welcome-msg { font-size: 15px; color: var(--neon-blue); font-weight: 600; text-align: center; margin-bottom: 5px; }
         .greetings-text { font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; text-align: center; }
         
         .notice-board {
@@ -406,7 +423,9 @@
         .seat-node.selected { background: #22c55e; color: #000; border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,242,254,0.4); }
         .seat-node.locked-hold { background: #f5af19; color: #000; border-color: #f5af19; cursor: not-allowed; }
         .seat-node.occupied { background: #ff0000; color: #ffffff; border-color: transparent; cursor: not-allowed; }
+        .aisle-gap-space { width: 30px; }
 
+        /* --- SEARCHABLE DROPDOWN STYLE --- */
         .custom-dropdown-container {
             position: absolute;
             z-index: 50;
@@ -481,9 +500,11 @@
         .ticket-footer-subs { display: flex; justify-content: center; gap: 12px; }
         .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
 
+        /* --- PREMIUM UI/UX CONTINUED --- */
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
+        .admin-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         
         .admin-notice-update-box { background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 auto 30px; }
@@ -543,11 +564,11 @@
             transition: 0.3s;
         }
         .fb { background-color: #1877F2 !important; }
-        .yt { background-color: #FF0000 !important; }
-        .insta { background-color: #E1306C !important; }
-        .x { background-color: #000000 !important; }
-        .threads { background-color: #ffffff !important; }
-        .gmail { background-color: #EA4335 !important; }
+.yt { background-color: #FF0000 !important; }
+.insta { background-color: #E1306C !important; }
+.x { background-color: #000000 !important; }
+.threads { background-color: #ffffff !important; }
+.gmail { background-color: #EA4335 !important; }
         
         .social-link-circle:hover { transform: translateY(-5px); background: var(--neon-blue); color: #000; }
         .footer-policy-links { display: flex; justify-content: center; gap: 20px; font-size: 12px; color: var(--text-muted); margin-bottom: 25px; }
@@ -565,6 +586,7 @@
         .creator-avatar-icon { width: 28px; height: 28px; border-radius: 50%; }
         .footer-subs-flex { display: flex; justify-content: center; gap: 15px; }
 
+        /* --- PREVENT CONFLICT MODAL --- */
         .custom-welcome-modal-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -583,6 +605,7 @@
             width: 90%;
             max-width: 420px;
             text-align: center;
+            animation: fadeInModalEffect 0.4s ease;
         }
         .modal-avatar-frame {
             width: 100px;
@@ -594,25 +617,76 @@
             box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
         }
 
-        #licence-screen {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        .licence-preview-wrapper {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
+        /* --- DIGITAL DRIVING LICENCE DESIGN SYSTEM --- */
+        .licence-preview-wrapper { max-width: 550px; margin: 0 auto; text-align: center; }
         #digital-licence-card {
-            width: 100%;
-            max-width: 370px;
+           width: 330px;
+           height: 300px;
+           max-width: 330px;
+           background: #0f172a;
+           border: 3px solid var(--neon-cyan, #00e5ff);
+           border-radius: 16px;
+           padding: 14px;
+           box-sizing: border-box;
+           box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+           overflow: hidden;
+           margin: 0 auto;
+           position: relative;
+           text-align: left;
+         }
+        #digital-licence-card::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 220px;
+            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .licence-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        .licence-flag-title { display: flex; align-items: center; gap: 8px; }
+        .licence-flag { width: 30px; height: 18px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
+        .licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: #f42a41; border-radius: 50%; }
+        .licence-main-heading { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+        .licence-sub-heading { font-size: 9px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
+        
+        .licence-body-layout { display: flex; gap: 15px; position: relative; z-index: 2; }
+        .licence-photo-pane { text-align: center; width: 110px; }
+        .licence-user-photo { width: 105px; height: 125px; border-radius: 6px; object-fit: cover; border: 2px solid #334155; background: #1e293b; }
+        .licence-id-badge { margin-top: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--neon-blue); padding: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--neon-blue); font-weight: 700; text-align: center; border-radius: 4px; }
+        
+        /* লাইসেন্স স্ক্রিন ও পেজ কন্টেইনার */
+#licence-screen {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow-x: hidden;
+}
+
+.licence-preview-wrapper {
+    width: 100%;
+    max-width: 500px; /* ডেস্কটপে সুন্দর সাইজ দেখানোর জন্য */
+    margin: 0 auto;
+/* --- DIGITAL DRIVING LICENCE DESIGN SYSTEM --- */
+        .licence-preview-wrapper { max-width: 550px; margin: 0 auto; text-align: center; }
+        #digital-licence-card {
+            width: 370px;
+            height: 300px;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
             padding: 10px;
@@ -654,75 +728,148 @@
         .licence-main-heading { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
         .licence-sub-heading { font-size: 9px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
         
-        .licence-body-layout {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .licence-photo-pane {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .licence-user-photo {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            border: 2px solid var(--neon-cyan, #00e5ff);
-            object-fit: cover;
-        }
-        .licence-id-badge {
-            margin-top: 8px;
-            background: rgba(0, 229, 255, 0.15);
-            color: var(--neon-cyan, #00e5ff);
-            border: 1px solid var(--neon-cyan, #00e5ff);
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
+        .licence-body-layout { display: flex; gap: 15px; position: relative; z-index: 2; }
+        .licence-photo-pane { text-align: center; width: 110px; }
+        .licence-user-photo { width: 105px; height: 125px; border-radius: 6px; object-fit: cover; border: 2px solid #334155; background: #1e293b; }
+        .licence-id-badge { margin-top: 8px; background: rgba(0, 242, 254, 0.1); border: 1px solid var(--neon-blue); padding: 3px; font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--neon-blue); font-weight: 700; text-align: center; border-radius: 4px; }
         
-        .licence-info-pane {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            width: 100%;
-            text-align: left;
-        }
-        .licence-data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            padding-bottom: 2px;
-            font-size: 11px;
-        }
-        .licence-data-label { color: #94a3b8; font-weight: 600; }
-        .licence-data-value { color: #ffffff; font-weight: bold; word-break: break-word; }
+        /* লাইসেন্স স্ক্রিন ও পেজ কন্টেইনার */
+#licence-screen {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow-x: hidden;
+}
 
-        .licence-footer-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 10px;
-        }
-        .licence-auth-label { font-size: 8px; color: #64748b; margin-top: 2px; }
+.licence-preview-wrapper {
+    width: 100%;
+    max-width: 500px; /* ডেস্কটপে সুন্দর সাইজ দেখানোর জন্য */
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+}
 
-        @media screen and (max-width: 480px) {
-            #digital-licence-card { padding: 12px 10px; }
-            .licence-body-layout { gap: 10px; }
-            .licence-user-photo { width: 70px; height: 70px; }
-            .licence-data-row { font-size: 9.5px; }
-            .licence-id-badge { font-size: 9px; padding: 2px 6px; }
-        }
+/* ডিজিটাল লাইসেন্স কার্ড */
+#digital-licence-card {
+    width: 100%;
+    max-width: 100%;
+    background: #0f172a;
+    border: 2px solid var(--neon-cyan, #00e5ff);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* কার্ডের ভেতরের লেআউট */
+.licence-body-layout {
+    display: flex;
+    flex-direction: row; /* ডিফল্ট পাশাপাশি থাকবে */
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.licence-photo-pane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.licence-user-photo {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-cyan, #00e5ff);
+    object-fit: cover;
+}
+
+.licence-id-badge {
+    margin-top: 8px;
+    background: rgba(0, 229, 255, 0.15);
+    color: var(--neon-cyan, #00e5ff);
+    border: 1px solid var(--neon-cyan, #00e5ff);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* ডেটা রো রেসপন্সিভ ফরম্যাট */
+.licence-info-pane {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    text-align: left;
+}
+
+.licence-data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 2px;
+    font-size: 11px;
+}
+
+.licence-data-label {
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.licence-data-value {
+    color: #ffffff;
+    font-weight: bold;
+    word-break: break-word;
+}
+
+.licence-footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.licence-auth-label {
+    font-size: 8px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* 📱 মোবাইল ভার্সন রেসপন্সিভ মিডিয়া কুয়েরি */
+@media screen and (max-width: 480px) {
+    #digital-licence-card {
+        padding: 12px 10px;
+    }
+
+    .licence-body-layout {
+        gap: 10px;
+    }
+
+    .licence-user-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .licence-data-row {
+        font-size: 9.5px; /* ছোট মোবাইলে ফন্ট সাইজ অ্যাডজাস্ট হবে */
+    }
+
+    .licence-id-badge {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+}
     </style>
 </head>
 <body>
@@ -816,9 +963,9 @@
                     <label class="lang-node" data-en="Gender" data-bn="লিঙ্গ">Gender</label>
                     <select id="reg-gender" class="form-control">
                         <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
                     </select>
                 </div>
                 
@@ -930,6 +1077,8 @@
             </div>
             <div style="text-align:left; font-size:13px; color:var(--text-muted);" id="prof-meta-list-block"></div>
         </div>
+</div>
+
     </div>
 
     <div id="password-screen" class="page-screen">
@@ -1190,7 +1339,8 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-live-bookings-tbody"></tbody>
+                    <tbody id="admin-live-bookings-tbody">
+                        </tbody>
                 </table>
             </div>
         </div>
@@ -1211,27 +1361,43 @@
         <h2 style="text-align:center; margin-bottom:30px;" class="lang-node" data-en="Official Management Team" data-bn="অফিসিয়াল ম্যানেজমেন্ট টিম">Contact Panel</h2>
         <div class="admin-grid" id="contact-team-grid"></div>
     </div>
-
-    <div id="all-members-screen" class="page-screen">
-        <div class="screen-header" style="text-align: center;">
-            <h3 style="display: inline-block;">All Registered Members</h3>
-        </div>
-        <div id="all-members-list-render-node" style="margin-top:20px; border-radius:8px; overflow:hidden;"></div>
-    </div>
-
-    <footer class="global-footer-panel" id="main-global-footer">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <strong style="font-size: 18px; color: #ffffff; letter-spacing: 1px;">JOIN US</strong>
-        </div>
-
+<div id="all-members-screen" class="page-screen">
+    <div class="screen-header" style="text-align: center;">
+    <h3 style="display: inline-block;">All Registered Members</h3>
+</div>
+    <div id="all-members-list-render-node" style="margin-top:20px; border-radius:8px; overflow:hidden;"></div>
+</div>
+    <footer class="global-footer-panel" id="main-global-footer"
         <div class="social-icon-row">
-            <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle fb"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle yt"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle insta"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.x.com/m2vai380" target="_blank" class="social-link-circle x"><i class="fab fa-x"></i></a>
-            <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle threads"><i class="fab fa-threads"></i></a>
-            <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle gmail"><i class="fas fa-envelope"></i></a>
-        </div>
+            <div style="text-align: center; margin-bottom: 15px;">
+    <strong style="font-size: 18px; color: #ffffff; letter-spacing: 1px;">JOIN US</strong>
+</div>
+
+<div class="social-icon-row">
+    <a href="https://facebook.com/groups/771005197556072/" target="_blank" class="social-link-circle fb">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <a href="https://youtube.com/@m2vai?si=ls4xlp9EG8hjwE7B" target="_blank" class="social-link-circle yt">
+        <i class="fab fa-youtube"></i>
+    </a>
+
+    <a href="https://www.instagram.com/m2vai380?igsh=MzBrZmx0aTU4MW1u" target="_blank" class="social-link-circle insta">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="https://www.x.com/m2vai380" target="_blank" class="social-link-circle x">
+        <i class="fab fa-x"></i>
+    </a>
+
+    <a href="https://www.threads.com/@m2vai380" target="_blank" class="social-link-circle threads">
+        <i class="fab fa-threads"></i>
+    </a>
+
+    <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle gmail">
+        <i class="fas fa-envelope"></i>
+    </a>
+</div>
         <div class="footer-policy-links">
             <a href="#">Privacy Policy</a>
             <span>|</span>
@@ -1255,156 +1421,170 @@
             </div>
         </div>
     </footer>
+<!-- BDBUS Floating Chat Window -->
+<div id="bdbusChatBubble" onclick="toggleChatBox()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; font-size: 26px;">
+    💬
+</div>
 
-    <!-- BDBUS Floating Chat Window -->
-    <div id="bdbusChatBubble" onclick="toggleChatBox()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; font-size: 26px;">
-        💬
+<div id="bdbusChatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; background: #fff; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 9999; overflow: hidden; font-family: Arial, sans-serif;">
+    <div style="background: #007bff; color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; font-size: 15px;">BDBUS Live AI Chat</span>
+        <span onclick="toggleChatBox()" style="cursor: pointer; font-size: 18px; font-weight: bold;">✕</span>
+    </div>
+    
+    <div style="background: #fff3cd; color: #856404; font-size: 11px; padding: 5px 10px; text-align: center; border-bottom: 1px solid #ffeeba;">
+        ⚠️ ৭২ ঘণ্টা পর সমস্ত চ্যাট অটো-ডিলিট হয়ে যায়।
     </div>
 
-    <div id="bdbusChatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; background: #fff; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 9999; overflow: hidden; font-family: Arial, sans-serif;">
-        <div style="background: #007bff; color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: bold; font-size: 15px;">BDBUS Live AI Chat</span>
-            <span onclick="toggleChatBox()" style="cursor: pointer; font-size: 18px; font-weight: bold;">✕</span>
-        </div>
+    <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 8px;"></div>
+
+    <div style="padding: 10px; background: #fff; border-top: 1px solid #ddd; display: flex; gap: 5px;">
+        <input type="text" id="chatInput" placeholder="@BDBUS লিখে প্রশ্ন করুন..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 13px;">
+        <button onclick="sendChatMessage()" style="background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Send</button>
+    </div>
+</div>
+
+<script>
+        // BDBUS Floating Chat Window Toggle Engine
+function toggleChatBox() {
+    let win = document.getElementById('bdbusChatWindow');
+    if (!win) return;
+    win.style.display = (win.style.display === 'none' || win.style.display === '') ? 'flex' : 'none';
+    if(win.style.display === 'flex') {
+        loadAndCleanMessages();
+    }
+}
+
+// BDBUS Chat Storage & Personalized Welcome Engine
+function loadAndCleanMessages() {
+    let rawData = localStorage.getItem('bdbus_chat_history');
+    let messages = rawData ? JSON.parse(rawData) : [];
+    
+    let now = Date.now();
+    let threeDaysInMillis = 72 * 60 * 60 * 1000; // ৭২ ঘণ্টা অটো-ডিলিট
+
+    let validMessages = messages.filter(msg => (now - msg.timestamp) < threeDaysInMillis);
+
+    // প্রথমবার চ্যাট খুললে বা কোনো মেসেজ না থাকলে ইউজারের নাম ধরে ওয়েলকাম বার্তা
+    if (validMessages.length === 0) {
+        let userName = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
         
-        <div style="background: #fff3cd; color: #856404; font-size: 11px; padding: 5px 10px; text-align: center; border-bottom: 1px solid #ffeeba;">
-            ⚠️ ৭২ ঘণ্টা পর সমস্ত চ্যাট অটো-ডিলিট হয়ে যায়।
-        </div>
+        let welcomeMsg = {
+            sender: "Bangladesh Bussid Unique Society (BDBUS)",
+            text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-এ আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সহযোগিতা করতে পারি বলুন?`,
+            isBot: true,
+            timestamp: Date.now()
+        };
+        validMessages.push(welcomeMsg);
+    }
 
-        <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 8px;"></div>
+    localStorage.setItem('bdbus_chat_history', JSON.stringify(validMessages));
 
-        <div style="padding: 10px; background: #fff; border-top: 1px solid #ddd; display: flex; gap: 5px;">
-            <input type="text" id="chatInput" placeholder="@BDBUS লিখে প্রশ্ন করুন..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 13px;">
-            <button onclick="sendChatMessage()" style="background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Send</button>
-        </div>
-    </div>
+    let chatContainer = document.getElementById('chatMessages');
+    if (!chatContainer) return;
+    chatContainer.innerHTML = '';
 
-    <script>
-        function toggleChatBox() {
-            let win = document.getElementById('bdbusChatWindow');
-            if (!win) return;
-            win.style.display = (win.style.display === 'none' || win.style.display === '') ? 'flex' : 'none';
-            if(win.style.display === 'flex') {
-                loadAndCleanMessages();
-            }
-        }
+    validMessages.forEach(msg => {
+        let msgDiv = document.createElement('div');
+        msgDiv.style.cssText = `max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; word-break: break-word; margin-bottom: 6px; ${msg.isBot ? 'background: #e2e3e5; color: #333; align-self: flex-start;' : 'background: #007bff; color: #fff; align-self: flex-end;'}`;
+        msgDiv.innerHTML = `<b>${msg.sender}:</b><br>${msg.text}`;
+        chatContainer.appendChild(msgDiv);
+    });
 
-        function loadAndCleanMessages() {
-            let rawData = localStorage.getItem('bdbus_chat_history');
-            let messages = rawData ? JSON.parse(rawData) : [];
-            let now = Date.now();
-            let threeDaysInMillis = 72 * 60 * 60 * 1000;
-            let validMessages = messages.filter(msg => (now - msg.timestamp) < threeDaysInMillis);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
-            if (validMessages.length === 0) {
-                let userName = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
-                let welcomeMsg = {
-                    sender: "Bangladesh Bussid Unique Society (BDBUS)",
-                    text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-এ আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সহযোগিতা করতে পারি বলুন?`,
-                    isBot: true,
-                    timestamp: Date.now()
-                };
-                validMessages.push(welcomeMsg);
-            }
+// BDBUS AI Bot Smart Reply Engine (All-Religions, Advisory & Safety Filter)
+function getBDBUSBotReply(userMessage) {
+    let text = userMessage.toLowerCase().trim();
 
-            localStorage.setItem('bdbus_chat_history', JSON.stringify(validMessages));
+    // ১. সর্বধর্মীয় অভিবাদন ও কুশলাদি
+    if (text.includes("সালাম") || text.includes("আসসালামু আলাইকুম") || text.includes("salam") || text.includes("assalamu alaikum") || text.includes("assalam")) {
+        return "ওয়ালাইকুমুসসালাম ওয়া রাহমাতুল্লাহ! BDBUS Digital Hub-এ আপনাকে স্বাগতম। কীভাবে সাহায্য করতে পারি?";
+    }
+    if (text.includes("নমস্কার") || text.includes("নমস্তে") || text.includes("nomoshkar") || text.includes("adab") || text.includes("আদাব")) {
+        return "নমস্কার/আদাব! BDBUS হাবে আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সাহায্য করতে পারি বলুন?";
+    }
+    if (text.includes("কেমন আছো") || text.includes("কেমন আছেন") || text.includes("ভালো") || text.includes("hi") || text.includes("hello") || text.includes("হাই") || text.includes("হ্যালো")) {
+        return "আলহামদুলিল্লাহ্‌ / ঈশ্বর বা আল্লাহর অশেষ রহমতে আমি খুব ভালো আছি! BDBUS-এ আপনার যাত্রা কেমন কাটছে বলুন?";
+    }
+    if (text.includes("ধন্যবাদ") || text.includes("thanks") || text.includes("thank you")) {
+        return "আপনাকেও অনেক ধন্যবাদ! BDBUS-এর সাথেই থাকুন। 🚌✨";
+    }
 
-            let chatContainer = document.getElementById('chatMessages');
-            if (!chatContainer) return;
-            chatContainer.innerHTML = '';
+    // ২. প্ল্যাটফর্ম সম্পর্কিত সুনির্দিষ্ট তথ্য
+    if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
+        return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
+    }
+    if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
+        return "নতুন অ্যাকাউন্টে ওয়েলকাম ও সাবস্ক্রিপশন বোনাস পেয়ে যাবেন। ওয়ালেটে পর্যাপ্ত ব্যালেন্স না থাকলে রিচার্জ অপশন থেকে ব্যালেন্স যোগ করে নিতে পারবেন।";
+    }
+    if (text.includes("ticket") || text.includes("টিকিট") || text.includes("booking") || text.includes("বুকিং") || text.includes("রুম") || text.includes("সিট")) {
+        return "ওয়ালেট ব্যালেন্স ব্যবহার করে নির্দিষ্ট রুট, সময় ও সিট সিলেক্ট করে টিকিট কাটুন। টিকিটে থাকা রুম আইডি বা পাসকোড দিয়ে মাল্টিপ্লেয়ার ট্রিপে জয়েন করতে পারবেন।";
+    }
 
-            validMessages.forEach(msg => {
-                let msgDiv = document.createElement('div');
-                msgDiv.style.cssText = `max-width: 80%; padding: 8px 12px; border-radius: 8px; font-size: 13px; word-break: break-word; margin-bottom: 6px; ${msg.isBot ? 'background: #e2e3e5; color: #333; align-self: flex-start;' : 'background: #007bff; color: #fff; align-self: flex-end;'}`;
-                msgDiv.innerHTML = `<b>${msg.sender}:</b><br>${msg.text}`;
-                chatContainer.appendChild(msgDiv);
-            });
+    // ৩. বিনোদনমূলক, সাধারণ আলাপ ও গেম সম্পর্কিত প্রশ্ন বা পরামর্শ
+    if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম") || text.includes("খেলবো") || text.includes("মাল্টিপ্লেয়ার")) {
+        return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ দারুণ সব বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়। একসাথে ড্রাইভ করার আনন্দই আলাদা!";
+    }
+    if (text.includes("মজা") || text.includes("আনন্দ") || text.includes("বিনোদন") || text.includes("আড্ডা") || text.includes("পরামর্শ") || text.includes("help") || text.includes("সাহায্য")) {
+        return "BDBUS হলো আপনাদের নিজস্ব বিনোদন ও আড্ডার জায়গা! বাস ড্রাইভিং, ট্রিপ প্ল্যানিং বা যেকোনো ফ্রেন্ডলি আড্ডার বিষয়ে আমাকে বলতে পারেন, আমি সবসময় প্রস্তুত আছি।";
+    }
 
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
+    // ৪. কঠোরভাবে নিষিদ্ধ বিষয়সমূহ
+    const prohibitedKeywords = [
+        "রাজনীতি", "political", "election", "বিএনপি", "আওয়ামী লীগ", "জামায়াত", "সরকার", "minister", "mp", 
+        "sex", "adult", "porn", "১৪+", "১৮+", "অগ্ন্যাশয়", "অশালীন", "গালাগালি", "খারাপ ভাষায়", "বেশ্যা", "মাগি", 
+        "ঝগড়া", "মারামারি", "হ্যাক", "crack", "scam", "ধর্ষণ", "খুন", "আত্মহত্যা", "suicide"
+    ];
+    
+    if (prohibitedKeywords.some(word => text.includes(word))) {
+        return "⚠️ BDBUS একটি পরিচ্ছন্ন ও সৌহার্দ্যপূর্ণ বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, আক্রমণাত্মক বা অশালীন কোনো আলোচনার সুযোগ নেই। দয়া করে কমিউনিটির নিয়ম বজায় রাখুন।";
+    }
 
-        function getBDBUSBotReply(userMessage) {
-            let text = userMessage.toLowerCase().trim();
+    // ৫. সাধারণ যেকোনো বিনোদনমূলক প্রশ্নের উত্তর/পরামর্শ
+    return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
+}
 
-            if (text.includes("সালাম") || text.includes("আসসালামু আলাইকুম") || text.includes("salam") || text.includes("assalamu alaikum") || text.includes("assalam")) {
-                return "ওয়ালাইকুমুসসালাম ওয়া রাহমাতুল্লাহ! BDBUS Digital Hub-এ আপনাকে স্বাগতম। কীভাবে সাহায্য করতে পারি?";
-            }
-            if (text.includes("নমস্কার") || text.includes("নমস্তে") || text.includes("nomoshkar") || text.includes("adab") || text.includes("আদাব")) {
-                return "নমস্কার/আদাব! BDBUS হাবে আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সাহায্য করতে পারি বলুন?";
-            }
-            if (text.includes("কেমন আছো") || text.includes("কেমন আছেন") || text.includes("ভালো") || text.includes("hi") || text.includes("hello") || text.includes("হাই") || text.includes("হ্যালো")) {
-                return "আলহামদুলিল্লাহ্‌ / ঈশ্বর বা আল্লাহর অশেষ রহমতে আমি খুব ভালো আছি! BDBUS-এ আপনার যাত্রা কেমন কাটছে বলুন?";
-            }
-            if (text.includes("ধন্যবাদ") || text.includes("thanks") || text.includes("thank you")) {
-                return "আপনাকেও অনেক ধন্যবাদ! BDBUS-এর সাথেই থাকুন। 🚌✨";
-            }
+// Message Sending Engine
+function sendChatMessage() {
+    let inputField = document.getElementById('chatInput');
+    if (!inputField) return;
+    let text = inputField.value.trim();
+    if(!text) return;
 
-            if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
-                return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
-            }
-            if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
-                return "নতুন অ্যাকাউন্টে ওয়েলকাম ও সাবস্ক্রিপশন বোনাস পেয়ে যাবেন। ওয়ালেটে পর্যাপ্ত ব্যালেন্স না থাকলে রিচার্জ অপশন থেকে ব্যালেন্স যোগ করে নিতে পারবেন।";
-            }
-            if (text.includes("ticket") || text.includes("টিকিট") || text.includes("booking") || text.includes("বুকিং") || text.includes("রুম") || text.includes("সিট")) {
-                return "ওয়ালেট ব্যালেন্স ব্যবহার করে নির্দিষ্ট রুট, সময় ও সিট সিলেক্ট করে টিকিট কাটুন। টিকিটে থাকা রুম আইডি বা পাসকোড দিয়ে মাল্টিপ্লেয়ার ট্রিপে জয়েন করতে পারবেন।";
-            }
+    let rawData = localStorage.getItem('bdbus_chat_history');
+    let messages = rawData ? JSON.parse(rawData) : [];
 
-            if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম") || text.includes("খেলবো") || text.includes("মাল্টিপ্লেয়ার")) {
-                return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ দারুণ সব বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়। একসাথে ড্রাইভ করার আনন্দই আলাদা!";
-            }
-            if (text.includes("মজা") || text.includes("আনন্দ") || text.includes("বিনোদন") || text.includes("আড্ডা") || text.includes("পরামর্শ") || text.includes("help") || text.includes("সাহায্য")) {
-                return "BDBUS হলো আপনাদের নিজস্ব বিনোদন ও আড্ডার জায়গা! বাস ড্রাইভিং, ট্রিপ প্ল্যানিং বা যেকোনো ফ্রেন্ডলি আড্ডার বিষয়ে আমাকে বলতে পারেন, আমি সবসময় প্রস্তুত আছি।";
-            }
+    let currentUser = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
 
-            const prohibitedKeywords = [
-                "রাজনীতি", "political", "election", "বিএনপি", "আওয়ামী লীগ", "জামায়াত", "সরকার", "minister", "mp", 
-                "sex", "adult", "porn", "১৪+", "১৮+", "অগ্ন্যাশয়", "অশালীন", "গালাগালি", "খারাপ ভাষায়", "বেশ্যা", "মাগি", 
-                "ঝগড়া", "মারামারি", "হ্যাক", "crack", "scam", "ধর্ষণ", "খুন", "আত্মহত্যা", "suicide"
-            ];
-            
-            if (prohibitedKeywords.some(word => text.includes(word))) {
-                return "⚠️ BDBUS একটি পরিচ্ছন্ন ও সৌহার্দ্যপূর্ণ বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, আক্রমণাত্মক বা অশালীন কোনো আলোচনার সুযোগ নেই। দয়া করে কমিউনিটির নিয়ম বজায় রাখুন।";
-            }
+    messages.push({
+        sender: currentUser,
+        text: text,
+        isBot: false,
+        timestamp: Date.now()
+    });
 
-            return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
-        }
+    inputField.value = '';
+    localStorage.setItem('bdbus_chat_history', JSON.stringify(messages));
+    loadAndCleanMessages();
 
-        function sendChatMessage() {
-            let inputField = document.getElementById('chatInput');
-            if (!inputField) return;
-            let text = inputField.value.trim();
-            if(!text) return;
+    setTimeout(() => {
+        let botReplyText = getBDBUSBotReply(text);
+        
+        let currentRaw = localStorage.getItem('bdbus_chat_history');
+        let currentMessages = currentRaw ? JSON.parse(currentRaw) : [];
+        currentMessages.push({
+            sender: "Bangladesh Bussid Unique Society (BDBUS)",
+            text: botReplyText,
+            isBot: true,
+            timestamp: Date.now()
+        });
 
-            let rawData = localStorage.getItem('bdbus_chat_history');
-            let messages = rawData ? JSON.parse(rawData) : [];
-            let currentUser = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
-
-            messages.push({
-                sender: currentUser,
-                text: text,
-                isBot: false,
-                timestamp: Date.now()
-            });
-
-            inputField.value = '';
-            localStorage.setItem('bdbus_chat_history', JSON.stringify(messages));
-            loadAndCleanMessages();
-
-            setTimeout(() => {
-                let botReplyText = getBDBUSBotReply(text);
-                let currentRaw = localStorage.getItem('bdbus_chat_history');
-                let currentMessages = currentRaw ? JSON.parse(currentRaw) : [];
-                currentMessages.push({
-                    sender: "Bangladesh Bussid Unique Society (BDBUS)",
-                    text: botReplyText,
-                    isBot: true,
-                    timestamp: Date.now()
-                });
-
-                localStorage.setItem('bdbus_chat_history', JSON.stringify(currentMessages));
-                loadAndCleanMessages();
-            }, 600);
-        }
+        localStorage.setItem('bdbus_chat_history', JSON.stringify(currentMessages));
+        loadAndCleanMessages();
+    }, 600);
+}
         
         const SUPER_ADMIN_EMAIL = "info.m2vai380@gmail.com";
         let db = JSON.parse(localStorage.getItem('bdbus_local_db')) || {
@@ -1415,11 +1595,13 @@
         };
 
         let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
-        let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+        let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en'; // প্রাথমিক ভাষা সবসময় ইংরেজি
         let currentlyChosenSeatNode = null;
         let selectedFareGlobalRate = 0;
+        
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
 
+        // বাংলাদেশের ৮টি বিভাগ ও ৬৪টি জেলার ডাটা অ্যারে
         const bangladeshDivisions = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
         const bangladeshDistricts = [
             "Bagerhat", "Bandarban", "Barguna", "Barishal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapai Nawabganj", 
@@ -1432,1099 +1614,1103 @@
         ];
 
         function verifyDatabaseStructureSeeding() {
-            let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
-            if (!adminCheck) {
-                db.users.push({
-                    id: db.sysConfigIdCounter++,
-                    name: "M2VAI",
-                    gameid: "M2Vai",
-                    dob: "1992-09-10",
-                    phone: "01878335098",
-                    gender: "Male",
-                    division: "Sylhet",
-                    district: "Sunamganj",
-                    fb: "https://facebook.com/groups/771005197556072/",
-                    email: SUPER_ADMIN_EMAIL,
-                    pass: "admin123",
-                    role: "Admin",
-                    wallet: 1000,
-                    avatar: "images/M2Vai.png",
-                    isBanned: false,
-                    claimedWelcome: true,
-                    claimedSubs: true
-                });
-            }
-            saveDataEngine();
-        }
+    // ১. অ্যাডমিন অ্যাকাউন্ট চেক ও সেভ
+    let adminCheck = db.users.find(u => u.email === SUPER_ADMIN_EMAIL);
+    if (!adminCheck) {
+        db.users.push({
+            id: db.sysConfigIdCounter++,
+            name: "M2VAI",
+            gameid: "M2Vai",
+            dob: "1992-09-10",
+            phone: "01878335098",
+            gender: "Male",
+            division: "Sylhet",
+            district: "Sunamganj",
+            fb: "https://facebook.com/groups/771005197556072/",
+            email: SUPER_ADMIN_EMAIL,
+            pass: "admin123",
+            role: "Admin",
+            wallet: 1000,
+            avatar: "images/M2Vai.png",
+            isBanned: false,
+            claimedWelcome: true,
+            claimedSubs: true
+        });
+    }
+    
+    saveDataEngine();
+}
+                // ==========================================
+// BDBUS CORE ENGINE - POWERED WITH FULL ROLES & SEARCH ENGINE
+// ==========================================
 
-        function saveDataEngine() {
-            localStorage.setItem('bdbus_local_db', JSON.stringify(db));
-        }
+function saveDataEngine() {
+    localStorage.setItem('bdbus_local_db', JSON.stringify(db));
+}
 
-        function initialClockHeartbeatEngine() {
-            setInterval(() => {
-                const now = new Date();
-                if (activeUserSession) {
-                    let currentUser = db.users.find(u => u.id === activeUserSession.id);
-                    if (currentUser) {
-                        currentUser.lastActive = Date.now();
-                        saveDataEngine();
-                    }
-                }
-
-                let hrs = now.getHours();
-                const mins = String(now.getMinutes()).padStart(2, '0');
-                const secs = String(now.getSeconds()).padStart(2, '0');
-                const ampm = hrs >= 12 ? 'PM' : 'AM';
-                hrs = hrs % 12;
-                hrs = hrs ? hrs : 12;
-                const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
-                
-                const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-                const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
-                const dateString = `LIVE DATE: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-
-                if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
-                if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
-                if(document.getElementById('booking-clock-digits')) document.getElementById('booking-clock-digits').innerText = timeString;
-                if(document.getElementById('booking-clock-date')) document.getElementById('booking-clock-date').innerText = dateString;
-                if(document.getElementById('seat-clock-digits')) document.getElementById('seat-clock-digits').innerText = timeString;
-                if(document.getElementById('seat-live-date-node')) document.getElementById('seat-live-date-node').innerText = dateString;
-
-                let greeting = "GOOD MORNING";
-                if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
-                else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
-                else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
-                if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
-
-                evaluateSeatLockTimerExpirations();
-            }, 1000);
-        }
-
-        function checkSessionTimeoutRules() {
-            if (activeUserSession) {
-                let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
-                if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
-                    alert("Session expired! 30 minutes timeout reached.");
-                    executeLogoutAction();
-                }
-            }
-        }
+function initialClockHeartbeatEngine() {
+    setInterval(() => {
+        const now = new Date();
         
-        function togglePasswordInputVisibility(inputId, iconEl) {
-            const field = document.getElementById(inputId);
-            if(field.type === "password") {
-                field.type = "text";
-                iconEl.classList.remove('fa-eye');
-                iconEl.classList.add('fa-eye-slash');
-            } else {
-                field.type = "password";
-                iconEl.classList.remove('fa-eye-slash');
-                iconEl.classList.add('fa-eye');
+        // ইউজারের লাইভ অ্যাক্টিভিটি টাইম আপডেট করার কোড
+        if (activeUserSession) {
+            let currentUser = db.users.find(u => u.id === activeUserSession.id);
+            if (currentUser) {
+                currentUser.lastActive = Date.now();
+                saveDataEngine();
             }
         }
 
-        function navigatePage(screenId, saveHistory = true) {
-            toggleSidebarMenu(false);
-            sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
+        let hrs = now.getHours();
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hrs >= 12 ? 'PM' : 'AM';
+        hrs = hrs % 12;
+        hrs = hrs ? hrs : 12;
+        const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
+        
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
+        const dateString = `LIVE DATE: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+        if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
+        if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
+        if(document.getElementById('booking-clock-digits')) document.getElementById('booking-clock-digits').innerText = timeString;
+        if(document.getElementById('booking-clock-date')) document.getElementById('booking-clock-date').innerText = dateString;
+        if(document.getElementById('seat-clock-digits')) document.getElementById('seat-clock-digits').innerText = timeString;
+        if(document.getElementById('seat-live-date-node')) document.getElementById('seat-live-date-node').innerText = dateString;
+
+        let greeting = "GOOD MORNING";
+        if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
+        else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
+        else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
+        if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
+
+        evaluateSeatLockTimerExpirations();
+    }, 1000);
+}
+
+function checkSessionTimeoutRules() {
+    if (activeUserSession) {
+        let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
+        if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
+            alert("Session expired! 30 minutes timeout reached.");
+            executeLogoutAction();
+        }
+    }
+}
+        
+function togglePasswordInputVisibility(inputId, iconEl) {
+    const field = document.getElementById(inputId);
+    if(field.type === "password") {
+        field.type = "text";
+        iconEl.classList.remove('fa-eye');
+        iconEl.classList.add('fa-eye-slash');
+    } else {
+        field.type = "password";
+        iconEl.classList.remove('fa-eye-slash');
+        iconEl.classList.add('fa-eye');
+    }
+}
+
+function navigatePage(screenId, saveHistory = true) {
+    toggleSidebarMenu(false);
+    sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
+    
+    const backBtn = document.getElementById('global-back-nav-btn');
+    const menuBtn = document.getElementById('global-menu-trigger-btn');
+    const navControls = document.getElementById('header-nav-controls');
+    const emptySpace = document.getElementById('header-empty-space');
+    const globalFooter = document.getElementById('main-global-footer'); // <-- ফুটার ভ্যারিয়েবল ট্র্যাক করার জন্য
+
+    if(!activeUserSession || screenId === 'auth-screen') {
+        if(navControls) navControls.style.display = 'none';
+        if(emptySpace) emptySpace.style.display = 'block';
+        if(backBtn) backBtn.style.display = 'none';
+        if(menuBtn) menuBtn.style.display = 'none';
+        if(globalFooter) globalFooter.style.display = 'none'; // <-- লগআউট বা অথ স্ক্রিনে ফুটার ১০০% হাইড থাকবে
+    } else if (screenId === 'home-screen') {
+        if(navControls) navControls.style.display = 'flex';
+        if(emptySpace) emptySpace.style.display = 'none';
+        if(backBtn) backBtn.style.display = 'none';
+        if(menuBtn) menuBtn.style.display = 'block';
+        if(globalFooter) globalFooter.style.display = 'block'; // <-- হোম স্ক্রিনে ফুটার শো করবে
+        if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
+    } else {
+        if(navControls) navControls.style.display = 'flex';
+        if(emptySpace) emptySpace.style.display = 'none';
+        if(backBtn) backBtn.style.display = 'flex'; 
+        if(menuBtn) menuBtn.style.display = 'block';
+        if(globalFooter) globalFooter.style.display = 'block'; // <-- অন্যান্য অভ্যন্তরীণ স্ক্রিনেও ফুটার শো করবে
+        
+        if(saveHistory) {
+            if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
+                internalNavigationHistoryArray.push(screenId);
+            }
+        }
+    }
+    
+    sessionStorage.setItem('bdbus_nav_history', JSON.stringify(internalNavigationHistoryArray));
+
+    document.querySelectorAll('.page-screen').forEach(scr => scr.classList.remove('active'));
+    const activeTargetScreen = document.getElementById(screenId);
+    if(activeTargetScreen) activeTargetScreen.classList.add('active');
+    
+    if (screenId === 'home-screen') renderHomeMembersCarousel();
+    if (screenId === 'profile-screen') renderUserProfileView();
+    if (screenId === 'admin-screen') renderAdminPanelDashboard();
+    if (screenId === 'contact-screen') renderContactTeamPanel();
+    if (screenId === 'licence-screen') renderDigitalLicenceData();
+    if (screenId === 'all-members-screen') renderAllRegisteredMembersPage();
+}
+
+function executeHardwareBackTrigger() {
+    if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
+        return; 
+    }
+    internalNavigationHistoryArray.pop(); 
+    const targetPreviousScreenId = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] || 'home-screen';
+    navigatePage(targetPreviousScreenId, false);
+}
+
+function toggleSidebarMenu(open) {
+    const menu = document.getElementById('sidebar-drawer-menu');
+    if (open) menu.classList.add('active');
+    else menu.classList.remove('active');
+}
+
+function toggleAuthSubView(view) {
+    const mainTitle = document.getElementById('auth-main-title');
+    const subTitle = document.getElementById('auth-sub-title');
+    if(view === 'signup') {
+        document.getElementById('login-sub-card').style.display = 'none';
+        document.getElementById('signup-sub-card').style.display = 'block';
+        mainTitle.innerText = "Bangladesh Bussid Unique Society";
+        subTitle.innerText = "BDBUS REGISTRATION FORM";
+    } else {
+        document.getElementById('login-sub-card').style.display = 'block';
+        document.getElementById('signup-sub-card').style.display = 'none';
+        mainTitle.innerText = "Bangladesh Bussid Unique Society";
+        subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
+    }
+}
+
+async function executeRegistrationLogic() {
+    const name = document.getElementById('reg-name').value.trim();
+    const gameid = document.getElementById('reg-gameid').value.trim();
+    const dob = document.getElementById('reg-dob').value;
+    const phone = document.getElementById('reg-phone').value.trim();
+    const gender = document.getElementById('reg-gender').value;
+    const division = document.getElementById('reg-division').value.trim();
+    const district = document.getElementById('reg-district').value.trim();
+    const fb = document.getElementById('reg-fb').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const confpass = document.getElementById('reg-confpass').value;
+    const agree = document.getElementById('reg-agree').checked;
+
+    if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
+        alert("Please fill in all required fields!");
+        return;
+    }
+    if (pass !== confpass) { alert("Passwords do not match!"); return; }
+    if (!agree) { alert("Please verify declarations checklist authorization!"); return; }
+
+    try {
+        const userId = "USER_" + Date.now();
+        const newUser = {
+            id: userId,
+            name, gameid, dob, phone, gender, division, district, fb, email, pass,
+            role: "Regular Member",
+            wallet: 0,
+            avatar: "https://via.placeholder.com/150",
+            isBanned: false, 
+            claimedWelcome: false, 
+            claimedSubs: false,
+            createdAt: Date.now()
+        };
+
+        // ফায়ারবেস ফায়ারস্টোরে ডাটা সেভ করার কমান্ড
+        await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.firebaseDb, "users", email), newUser);
+        alert("Registration successful! Please login.");
+        toggleAuthSubView('login');
+    } catch (error) {
+        console.error("Error writing document: ", error);
+        alert("Registration failed. Please try again.");
+    }
+}
+
+function triggerGlobalWelcomePopup(user) {
+    document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    document.getElementById('pop-user-name').innerText = user.name;
+    document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
+    document.getElementById('global-welcome-popup-layer').style.display = "flex";
+}
+
+function dismissGlobalWelcomePopup() {
+    document.getElementById('global-welcome-popup-layer').style.display = "none";
+}
+
+function executeLoginLogic() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+
+    let user = db.users.find(u => u.email === email && u.pass === pass);
+    if(!user) { alert("Invalid credentials verified."); return; }
+    if(user.isBanned) { alert("Your profile account is banned indefinitely from accessing BDBUS consoles."); return; }
+
+    activeUserSession = user;
+    sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
+    sessionStorage.setItem('bdbus_login_timestamp', Date.now());
+
+    document.body.classList.add('logged-in');
+    document.getElementById('header-nav-controls').style.display = 'flex';
+    document.getElementById('header-empty-space').style.display = 'none';
+    document.getElementById('main-global-footer').style.display = 'block';
+    
+    if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master') { 
+        document.getElementById('admin-menu-link').style.display = 'flex'; 
+    } else { 
+        document.getElementById('admin-menu-link').style.display = 'none'; 
+    }
+
+    document.getElementById('live-marquee-node').innerText = db.notices;
+
+    triggerGlobalWelcomePopup(user);
+    navigatePage('home-screen');
+}
+
+function executeLogoutAction() {
+    activeUserSession = null;
+    sessionStorage.clear();
+    internalNavigationHistoryArray = [];
+    document.body.classList.remove('logged-in');
+    document.getElementById('header-nav-controls').style.display = 'none';
+    document.getElementById('header-empty-space').style.display = 'block';
+    document.getElementById('main-global-footer').style.display = 'none';
+    navigatePage('auth-screen');
+}
+
+function triggerForgotPassword() {
+    let email = prompt("Enter your registered email address:");
+    if(!email) return;
+    let user = db.users.find(u => u.email === email);
+    if(user) alert(`Your system password recovery response is: ${user.pass}`);
+    else alert("No verified account located using this email identifier.");
+}
+
+function claimWelcomeRewardLogic() {
+    let user = db.users.find(u => u.id === activeUserSession.id);
+    if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
+    user.wallet += 5000;
+    user.claimedWelcome = true;
+    saveDataEngine();
+    syncSessionState(user);
+    alert("5000 BDT Welcome allocation credited into wallet console successfully!");
+    document.getElementById('claim-welcome-btn').disabled = true;
+}
+
+        function triggerYoutubeSubscribeReward() {
+        let user = db.users.find(u => u.id === activeUserSession.id);
+        
+        // সরাসরি অফিশিয়াল অ্যাপ বা ব্রাউজারে ট্রিগার করার জন্য লোকেশন ফোর্স করা
+        let ytUrl = "https://youtube.com/@m2vai?sub_confirmation=1";
+        
+        // এটি অ্যাপের নিজস্ব ব্রাউজারের বদলে বাইরে বা সরাসরি অ্যাপে পাঠাতে সাহায্য করবে
+        window.location.href = ytUrl;
+        
+        if (user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
+        setTimeout(() => {
+            user.wallet += 10000;
+            user.claimedSubs = true;
+            saveDataEngine();
+            syncSessionState(user);
+            alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
+        }, 5000);
+    }
+
+function triggerWatchVideoReward() {
+    let user = db.users.find(u => u.id === activeUserSession.id);
+    window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
+    alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
+    setTimeout(() => {
+        user.wallet += 3000;
+        saveDataEngine();
+        syncSessionState(user);
+        alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
+    }, 61000); 
+}
+
+function syncSessionState(updatedUser) {
+    activeUserSession = updatedUser;
+    sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
+}
+
+function renderUserProfileView() {
+    let user = db.users.find(u => u.id === activeUserSession.id);
+    document.getElementById('profile-avatar-render').src = user.avatar;
+    document.getElementById('prof-render-name').innerText = user.name;
+    document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
+    document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
+
+    document.getElementById('prof-meta-list-block').innerHTML = `
+        <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
+        <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
+        <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
+        <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
+        <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
+        <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
+        <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
+        <p><strong>System Auth Email:</strong> ${user.email}</p>
+    `;
+}
+
+function processAvatarUpload(event) {
+    const file = event.target.files[0];
+    if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        let user = db.users.find(u => u.id === activeUserSession.id);
+        user.avatar = e.target.result;
+        saveDataEngine();
+        syncSessionState(user);
+        document.getElementById('profile-avatar-render').src = user.avatar;
+        alert("Avatar uploaded and compiled successfully!");
+    };
+    reader.readAsDataURL(file);
+}
+
+function executePasswordChangeLogic() {
+    const curr = document.getElementById('pwd-curr').value;
+    const nxt = document.getElementById('pwd-new').value;
+    const conf = document.getElementById('pwd-conf').value;
+    let user = db.users.find(u => u.id === activeUserSession.id);
+
+    if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
+    if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
+
+    user.pass = nxt;
+    saveDataEngine();
+    alert("Password updated securely. Use updated variables during subsequent login loops.");
+    document.getElementById('pwd-curr').value = "";
+    document.getElementById('pwd-new').value = "";
+    document.getElementById('pwd-conf').value = "";
+}
+
+function renderDigitalLicenceData() {
+    let user = db.users.find(u => u.id === activeUserSession.id);
+    if(!user) return;
+    
+    document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
+    document.getElementById('dl-name').innerText = user.name.toUpperCase();
+    document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
+    document.getElementById('dl-dob').innerText = user.dob;
+    document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
+    document.getElementById('dl-phone').innerText = user.phone;
+    document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
+    document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
+    document.getElementById('dl-sign-name').innerText = user.name;
+}
+
+function executeDrivingLicenceDownloadEngine() {
+    alert("Compiling high resolution smart driving licence graphics asset...");
+    const target = document.getElementById('digital-licence-card');
+    
+    html2canvas(target, { 
+        scale: 3, 
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = `BDBUS_Driving_Licence_ID_${activeUserSession.id}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        alert("Driving Licence downloaded successfully!");
+    });
+}
+
+function calculateFareSystemLogic() {
+    const fromLoc = document.getElementById('route-from').value.trim();
+    const toLoc = document.getElementById('route-to').value.trim();
+    const type = document.getElementById('route-bustype').value;
+
+    if(!fromLoc || !toLoc) {
+        document.getElementById('booking-fare-render').innerText = `0 BDT`;
+        return;
+    }
+
+    let charSum = 0;
+    for(let i=0; i<fromLoc.length; i++) charSum += fromLoc.charCodeAt(i);
+    for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
+    
+    let generatedBaseDistance = (charSum % 400) + 120;
+    let perKmRate = 2.15;
+    let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
+
+    if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
+        calculatedBaseFare = 680;
+    } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
+        calculatedBaseFare = 850;
+    } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "chattogram") || (fromLoc.toLowerCase() === "chattogram" && toLoc.toLowerCase() === "dhaka")) {
+        calculatedBaseFare = 750;
+    } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "cox's bazar") || (fromLoc.toLowerCase() === "cox's bazar" && toLoc.toLowerCase() === "dhaka")) {
+        calculatedBaseFare = 1100;
+    }
+
+    if (type === "Premium AC Coach") {
+        selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
+    } else {
+        selectedFareGlobalRate = calculatedBaseFare;
+    }
+
+    document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
+}
+
+function openSeatSelectionEngine() {
+    const from = document.getElementById('route-from').value;
+    const to = document.getElementById('route-to').value;
+    const date = document.getElementById('route-date').value;
+    const time = document.getElementById('route-time').value;
+    const type = document.getElementById('route-bustype').value;
+
+    if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
+    if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
+
+    document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
+    document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
+    currentlyChosenSeatNode = null;
+
+    generateBusCabinGridBlueprint(type);
+    initSeatLockCountdownTimer();
+    navigatePage('seat-screen');
+}
+
+function initSeatLockCountdownTimer() {
+    const countdownEl = document.getElementById('countdown');
+    if(!countdownEl) return;
+    
+    let timeLeft = 120;
+    if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
+    
+    window.seatTimerIntervalId = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        countdownEl.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(window.seatTimerIntervalId);
+            alert("Seat booking time has expired! Please refresh the website to see the seat again.");
+            navigatePage('home-screen');
+        } else {
+            timeLeft -= 1;
+        }
+    }, 1000);
+}
+
+function generateBusCabinGridBlueprint(coachType) {
+    const root = document.getElementById('dynamic-cabin-root');
+    root.innerHTML = `<div class="cabin-front-header"><span>🚪 DOOR</span><span>🧑‍✈️ DRIVER</span></div>`;
+    
+    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    
+    if(coachType === "Non-AC Coach") {
+        rows.forEach(r => {
+            let rowDiv = document.createElement('div');
+            rowDiv.className = 'seat-row-grid';
             
-            const backBtn = document.getElementById('global-back-nav-btn');
-            const menuBtn = document.getElementById('global-menu-trigger-btn');
-            const navControls = document.getElementById('header-nav-controls');
-            const emptySpace = document.getElementById('header-empty-space');
-            const globalFooter = document.getElementById('main-global-footer');
+            let leftBlock = document.createElement('div');
+            leftBlock.className = 'seat-side-block';
+            leftBlock.appendChild(createSeatElement(`${r}1`));
+            leftBlock.appendChild(createSeatElement(`${r}2`));
 
-            if(!activeUserSession || screenId === 'auth-screen') {
-                if(navControls) navControls.style.display = 'none';
-                if(emptySpace) emptySpace.style.display = 'block';
-                if(backBtn) backBtn.style.display = 'none';
-                if(menuBtn) menuBtn.style.display = 'none';
-                if(globalFooter) globalFooter.style.display = 'none';
-            } else if (screenId === 'home-screen') {
-                if(navControls) navControls.style.display = 'flex';
-                if(emptySpace) emptySpace.style.display = 'none';
-                if(backBtn) backBtn.style.display = 'none';
-                if(menuBtn) menuBtn.style.display = 'block';
-                if(globalFooter) globalFooter.style.display = 'block';
-                if(saveHistory) internalNavigationHistoryArray = ['home-screen'];
-            } else {
-                if(navControls) navControls.style.display = 'flex';
-                if(emptySpace) emptySpace.style.display = 'none';
-                if(backBtn) backBtn.style.display = 'flex'; 
-                if(menuBtn) menuBtn.style.display = 'block';
-                if(globalFooter) globalFooter.style.display = 'block';
-                
-                if(saveHistory) {
-                    if(internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] !== screenId) {
-                        internalNavigationHistoryArray.push(screenId);
-                    }
-                }
-            }
+            let rightBlock = document.createElement('div');
+            rightBlock.className = 'seat-side-block';
+            rightBlock.appendChild(createSeatElement(`${r}3`));
+            rightBlock.appendChild(createSeatElement(`${r}4`));
+
+            rowDiv.appendChild(leftBlock);
+            rowDiv.appendChild(rightBlock); 
+            root.appendChild(rowDiv);
+        });
+    } else {
+        rows.forEach(r => {
+            let rowDiv = document.createElement('div');
+            rowDiv.className = 'seat-row-grid';
             
-            sessionStorage.setItem('bdbus_nav_history', JSON.stringify(internalNavigationHistoryArray));
+            let leftBlock = document.createElement('div');
+            leftBlock.className = 'seat-side-block';
+            leftBlock.appendChild(createSeatElement(`${r}1`));
 
-            document.querySelectorAll('.page-screen').forEach(scr => scr.classList.remove('active'));
-            const activeTargetScreen = document.getElementById(screenId);
-            if(activeTargetScreen) activeTargetScreen.classList.add('active');
-            
-            if (screenId === 'home-screen') renderHomeMembersCarousel();
-            if (screenId === 'profile-screen') renderUserProfileView();
-            if (screenId === 'admin-screen') renderAdminPanelDashboard();
-            if (screenId === 'contact-screen') renderContactTeamPanel();
-            if (screenId === 'licence-screen') renderDigitalLicenceData();
-            if (screenId === 'all-members-screen') renderAllRegisteredMembersPage();
+            let rightBlock = document.createElement('div');
+            rightBlock.className = 'seat-side-block';
+            rightBlock.appendChild(createSeatElement(`${r}2`));
+            rightBlock.appendChild(createSeatElement(`${r}3`));
+
+            rowDiv.appendChild(leftBlock);
+            rowDiv.appendChild(rightBlock);
+            rowDiv.appendChild(leftBlock);
+            rowDiv.appendChild(rightBlock);
+            root.appendChild(rowDiv);
+        });
+    }
+}
+
+function createSeatElement(idStr) {
+    let seat = document.createElement('div');
+    seat.className = 'seat-node';
+    seat.innerText = idStr;
+    
+    const type = document.getElementById('route-bustype').value;
+    const globalKey = `${type}_Seat-${idStr}`;
+    
+    if(db.occupiedSeats[globalKey]) {
+        let lockData = db.occupiedSeats[globalKey];
+        if(Date.now() < lockData.expireTime) {
+            if(lockData.isConfirmed) { seat.classList.add('occupied'); }
+            else { seat.classList.add('locked-hold'); }
+        }
+    }
+
+    seat.onclick = () => {
+        if(seat.classList.contains('occupied') || seat.classList.contains('locked-hold')) return;
+        
+        document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
+        seat.classList.add('selected');
+        currentlyChosenSeatNode = idStr;
+        
+        executeTemporary2MinuteSeatLock(globalKey);
+        document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+    };
+    return seat;
+}
+
+function executeTemporary2MinuteSeatLock(globalKey) {
+    for(let key in db.occupiedSeats) {
+        if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
+            delete db.occupiedSeats[key];
+        }
+    }
+    db.occupiedSeats[globalKey] = {
+        expireTime: Date.now() + (2 * 60 * 1000), 
+        userId: activeUserSession.id,
+        isConfirmed: false,
+        timestampLocked: Date.now()
+    };
+    saveDataEngine();
+}
+
+function evaluateSeatLockTimerExpirations() {
+    let stateChanged = false;
+    for(let key in db.occupiedSeats) {
+        let lock = db.occupiedSeats[key];
+        if(!lock.isConfirmed && (Date.now() > lock.expireTime)) {
+            delete db.occupiedSeats[key];
+            stateChanged = true;
+        }
+        else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
+            delete db.occupiedSeats[key];
+            stateChanged = true;
+        }
+    }
+    if(stateChanged) {
+        saveDataEngine();
+        if(sessionStorage.getItem('bdbus_persistent_screen_id') === 'admin-screen') {
+            renderLiveBookingsMonitorTable();
+        }
+    }
+}
+
+function executeTicketConfirmationEngine() {
+    if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
+    
+    let user = db.users.find(u => u.id === activeUserSession.id);
+    if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
+
+    const type = document.getElementById('route-bustype').value;
+    const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
+
+    user.wallet -= selectedFareGlobalRate;
+    
+    db.occupiedSeats[globalKey] = {
+        expireTime: Date.now() + (60 * 60 * 1000), 
+        userId: user.id,
+        isConfirmed: true,
+        timestampLocked: Date.now()
+    };
+    saveDataEngine();
+    syncSessionState(user);
+
+    if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
+
+    document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
+    document.getElementById('tk-name').innerText = user.name;
+    document.getElementById('tk-gid').innerText = user.gameid;
+    document.getElementById('tk-phone').innerText = user.phone;
+    document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
+    document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
+    document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
+    document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
+    document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
+    
+    const now = new Date();
+    document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+
+    navigatePage('ticket-view-screen');
+    
+}
+
+function executeTicketDownloadAndRedirect() {
+    alert("Compiling extreme high resolution ticket graphics assets...");
+    const target = document.getElementById('digital-ticket-canvas');
+    
+    html2canvas(target, { 
+        scale: 3, 
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        alert("Download successful! Returning safely back to your home command dashboard layout.");
+        navigatePage('home-screen');
+    });
+}
+
+function renderHomeMembersCarousel() {
+    const track = document.getElementById('home-carousel-track');
+    if(!track) return;
+    track.innerHTML = "";
+    
+    let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
+
+    let cardsHTML = "";
+    activePool.forEach(u => {
+        let isOnline = u.lastActive && (Date.now() - u.lastActive < 45000);
+        let statusText = isOnline ? "ACTIVE" : "OFFLINE";
+        let statusColor = isOnline ? "var(--neon-green)" : "#94a3b8";
+
+        cardsHTML += `
+            <div class="member-card-node">
+                <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
+                <div class="member-meta">
+                    <h5>${u.name}</h5>
+                    <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
+                    <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${statusText}</span>
+                </div>
+            </div>
+        `;
+    });
+
+    track.innerHTML = cardsHTML + cardsHTML;
+}
+
+function renderContactTeamPanel() {
+    const grid = document.getElementById('contact-team-grid');
+    grid.innerHTML = "";
+    
+    let coreStaff = db.users.filter(u => {
+        const role = u.role ? u.role.toLowerCase() : '';
+        return role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master';
+    });
+
+    const rolePriority = {
+        'admin': 1,
+        'moderator': 2,
+        'counter master': 3,
+        'trip master': 4
+    };
+
+    coreStaff.sort((a, b) => {
+        let roleA = a.role ? a.role.toLowerCase() : '';
+        let roleB = b.role ? b.role.toLowerCase() : '';
+        return (rolePriority[roleA] || 99) - (rolePriority[roleB] || 99);
+    });
+
+    coreStaff.forEach(u => {
+        let card = document.createElement('div');
+        card.className = 'admin-control-card';
+        card.style.textAlign = 'center';
+        card.innerHTML = `
+            <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
+            <h4>${u.name}</h4>
+            <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
+            <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
+            <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function renderLiveBookingsMonitorTable() {
+    const tbody = document.getElementById('admin-live-bookings-tbody');
+    if(!tbody) return;
+    tbody.innerHTML = "";
+
+    let bookingKeysArray = Object.keys(db.occupiedSeats);
+
+    if(bookingKeysArray.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
+        return;
+    }
+
+    bookingKeysArray.forEach(globalKey => {
+        let bookingInfo = db.occupiedSeats[globalKey];
+        let associatedUser = db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
+        
+        let tr = document.createElement('tr');
+        
+        let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
+        let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
+
+        let actionBtnHtml = "";
+        if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Moderator') {
+            actionBtnHtml = `
+                <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
+                    <i class="fa-solid fa-trash-can"></i> Reset Seat
+                </button>
+            `;
+        } else {
+            actionBtnHtml = `<span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only</span>`;
         }
 
-        function executeHardwareBackTrigger() {
-            if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
-                return; 
-            }
-            internalNavigationHistoryArray.pop(); 
-            const targetPreviousScreenId = internalNavigationHistoryArray[internalNavigationHistoryArray.length - 1] || 'home-screen';
-            navigatePage(targetPreviousScreenId, false);
+        tr.innerHTML = `
+            <td>
+                <strong>${associatedUser.name}</strong><br>
+                <span style="color:var(--text-muted); font-size:11px;">ID: BDBUS-${associatedUser.id}</span>
+            </td>
+            <td style="color: var(--neon-blue); font-weight:600;">
+                ${globalKey.replace('_', ' | ')}
+            </td>
+            <td style="color: ${badgeColor}; font-weight:500;">
+                ${statusText}
+            </td>
+            <td>
+                ${actionBtnHtml}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function adminDirectResetSingleSeat(globalKey) {
+    if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
+        delete db.occupiedSeats[globalKey];
+        saveDataEngine();
+        renderLiveBookingsMonitorTable();
+        alert("Seat reservation track cleared successfully!");
+    }
+}
+
+function renderAdminPanelDashboard() {
+    if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
+        alert("Unauthorized console routing breach validation rejected.");
+        navigatePage('home-screen');
+        return;
+    }
+    
+    const noticeBox = document.getElementById('admin-notice-manager-wrapper');
+    if(activeUserSession.role === 'Admin') {
+        noticeBox.style.display = 'block';
+        document.getElementById('admin-notice-input-field').value = db.notices;
+    } else {
+        noticeBox.style.display = 'none';
+    }
+
+    renderLiveBookingsMonitorTable();
+    
+    const grid = document.getElementById('admin-user-cards-grid');
+    if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+}
+
+function executeAdminNoticeBroadcastSave() {
+    if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
+    const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
+    if(!freshNoticeText) { alert("Notice text body cannot execute blank strings empty logs."); return; }
+    
+    db.notices = freshNoticeText;
+    saveDataEngine();
+    
+    const liveMarquee = document.getElementById('live-marquee-node');
+    if(liveMarquee) liveMarquee.innerText = db.notices;
+    
+    alert("Global notice feed synchronized across cluster terminals successfully!");
+}
+
+function buildUserAdminDisplayCards(userArray) {
+    const grid = document.getElementById('admin-user-cards-grid');
+    if(!grid) return;
+    grid.innerHTML = "";
+    const currentRole = activeUserSession.role;
+
+    if(userArray.length === 0) {
+        grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">কোনো সদস্য পাওয়া যায়নি!</div>`;
+        return;
+    }
+
+    userArray.forEach(u => {
+        let card = document.createElement('div');
+        card.className = 'admin-control-card';
+        card.style.padding = '15px';
+        card.style.background = '#1e293b';
+        card.style.borderRadius = '8px';
+        card.style.marginBottom = '12px';
+        
+        let actionControlsHTML = "";
+        const btnBase = 'padding:4px 8px; font-size:11px; font-weight:bold; border-radius:3px; border:none; cursor:pointer; color:#fff; transition: opacity 0.2s;';
+
+        if(currentRole === 'Admin') {
+            actionControlsHTML = `
+                <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet(${u.id}, 'Regular Member')">Regular Member</button>
+                <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet(${u.id}, 'Trip Master')">Trip Master</button>
+                <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet(${u.id}, 'Counter Master')">Counter Master</button>
+                <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet(${u.id}, 'Moderator')">Moderator</button>
+                <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt(${u.id})">Gift</button>
+                <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
+                <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem(${u.id})">Remove</button>
+            `;
+        } else if(currentRole === 'Moderator') {
+            actionControlsHTML = `
+                <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+                <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
+            `;
+        } else if(currentRole === 'Counter Master') {
+            actionControlsHTML = `
+                <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
+            `;
+        } else if(currentRole === 'Trip Master') {
+            actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Only Mode (No Actions Allowed)</span>`;
         }
 
-        function toggleSidebarMenu(open) {
-            const menu = document.getElementById('sidebar-drawer-menu');
-            if (open) menu.classList.add('active');
-            else menu.classList.remove('active');
+        card.innerHTML = `
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+                <img src="${u.avatar}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/45'">
+                <div>
+                    <h5 style="margin:0; font-size:14px; color:#fff;">${u.name} (ID: BDBUS-${u.id})</h5>
+                    <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8;">Email: ${u.email} | Nickname: <strong>${u.gameid || 'N/A'}</strong></p>
+                </div>
+            </div>
+            <p style="margin:4px 0; font-size:12px; color:#fff;">Role: <span style="color:#00b4d8; font-weight:bold;">${u.role}</span> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span> | Status: <span style="color:${u.isBanned ? '#ef4444':'#10b981'}; font-weight:bold;">${u.isBanned ? 'Banned':'Active'}</span></p>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; border-top:1px solid #334155; padding-top:8px;">${actionControlsHTML}</div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function executeAdminSearchLogic() {
+    let term = document.getElementById('admin-search-input').value.trim();
+    const grid = document.getElementById('admin-user-cards-grid');
+    
+    if(!term) { 
+        if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+        return; 
+    }
+    let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
+    buildUserAdminDisplayCards(filtered);
+}
+
+function adminDirectRoleSet(id, roleName) {
+    if(id === 1000) { alert("Root Super Admin privileges cannot be modified."); return; }
+    let user = db.users.find(u => u.id === id);
+    user.role = roleName;
+    saveDataEngine();
+    alert(`Successfully updated role to ${roleName}`);
+    executeAdminSearchLogic();
+}
+
+function adminBanToggle(id) {
+    if(id === 1000) { alert("Root Super Admin cannot be targeted for restriction bans."); return; }
+    let user = db.users.find(u => u.id === id);
+    user.isBanned = !user.isBanned;
+    saveDataEngine();
+    alert(user.isBanned ? "Member has been Banned." : "Member has been Unbanned.");
+    executeAdminSearchLogic();
+}
+
+function adminGiftWalletPrompt(id) {
+    let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
+    if(!amount || amount <= 0) return;
+    let user = db.users.find(u => u.id === id);
+    user.wallet += amount;
+    saveDataEngine();
+    alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
+    executeAdminSearchLogic();
+}
+
+function adminRemoveMemberFromSystem(id) {
+    if(id === 1000) { alert("Root Super Admin cannot be removed."); return; }
+    if(confirm("Are you absolutely sure you want to permanently REMOVE this member from the database?")) {
+        db.users = db.users.filter(u => u.id !== id);
+        saveDataEngine();
+        alert("Member removed successfully from system.");
+        executeAdminSearchLogic();
+    }
+}
+
+function adminResetSeatsEngine(userId) {
+    let keysRemoved = 0;
+    for(let key in db.occupiedSeats) {
+        if(db.occupiedSeats[key].userId === userId) {
+            delete db.occupiedSeats[key];
+            keysRemoved++;
         }
+    }
+    if(keysRemoved > 0) {
+        saveDataEngine();
+        renderLiveBookingsMonitorTable();
+        alert(`Purged ${keysRemoved} active reservation tracks from database.`);
+        executeAdminSearchLogic();
+    } else {
+        alert("No active matching booking tracks matched user parameters.");
+    }
+}
 
-        function toggleAuthSubView(view) {
-            const mainTitle = document.getElementById('auth-main-title');
-            const subTitle = document.getElementById('auth-sub-title');
-            if(view === 'signup') {
-                document.getElementById('login-sub-card').style.display = 'none';
-                document.getElementById('signup-sub-card').style.display = 'block';
-                mainTitle.innerText = "Bangladesh Bussid Unique Society";
-                subTitle.innerText = "BDBUS REGISTRATION FORM";
-            } else {
-                document.getElementById('login-sub-card').style.display = 'block';
-                document.getElementById('signup-sub-card').style.display = 'none';
-                mainTitle.innerText = "Bangladesh Bussid Unique Society";
-                subTitle.innerText = "BDBUS OFFICIAL WEBSITE";
-            }
+function loadAllRegisteredMembersList() {
+    renderAllRegisteredMembersPage();
+}
+
+function renderAllRegisteredMembersPage() {
+    const rootNode = document.getElementById('all-members-list-render-node');
+    if(!rootNode) return;
+    rootNode.innerHTML = "";
+
+    let sortedMembers = [...db.users].sort((a, b) => a.id - b.id);
+
+    sortedMembers.forEach((u, index) => {
+        let row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between'; 
+        row.style.alignItems = 'center';
+        row.style.padding = '10px 15px';
+        row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
+        row.style.borderBottom = '1px solid #334155';
+        row.style.fontSize = '13px';
+        row.style.color = '#fff';
+
+        row.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="color:#94a3b8; font-weight:bold; width:30px;">#${index + 1}</span>
+                <span style="color:#00b4d8; font-weight:bold; width:90px;">ID: ${u.id}</span>
+                <span style="font-weight:500;">${u.name}</span>
+            </div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <span style="background:rgba(0,180,216,0.2); color:#00b4d8; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold;">${u.role}</span>
+                <span style="color:#10b981; font-weight:bold;">${u.wallet} BDT</span>
+            </div>
+        `;
+        rootNode.appendChild(row);
+    });
+}
+
+function setLanguageSystem(locale) {
+    selectedLanguage = locale;
+    localStorage.setItem('bdbus_lang', locale);
+    
+    document.querySelectorAll('.lang-btn').forEach(b => b.style.opacity = '0.5');
+    const targetLangButtonNode = document.querySelector(`.lang-btn.${locale}`);
+    if(targetLangButtonNode) targetLangButtonNode.style.opacity = '1';
+
+    document.querySelectorAll('.lang-node').forEach(el => {
+        let text = el.getAttribute(`data-${locale}`);
+        if(text) el.innerText = text;
+    });
+}
+
+window.addEventListener('popstate', (event) => {
+    if(activeUserSession && internalNavigationHistoryArray.length > 1) {
+        history.pushState(null, null, window.location.pathname);
+        executeHardwareBackTrigger();
+    }
+});
+
+function initSearchableDropdownSystem() {
+    setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
+    setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
+    setupCustomDropdown('reg-division', 'reg-division-dropdown', bangladeshDivisions);
+    setupCustomDropdown('reg-district', 'reg-district-dropdown', bangladeshDistricts);
+}
+
+function setupCustomDropdown(inputId, dropdownId, dataPool) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+
+    if(!input || !dropdown) return;
+
+    input.addEventListener('focus', () => filterDataNodes(input, dropdown, dataPool));
+    input.addEventListener('input', () => {
+        filterDataNodes(input, dropdown, dataPool);
+        if(inputId === 'route-from' || inputId === 'route-to') calculateFareSystemLogic();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
         }
+    });
+}
 
-        async function executeRegistrationLogic() {
-            const name = document.getElementById('reg-name').value.trim();
-            const gameid = document.getElementById('reg-gameid').value.trim();
-            const dob = document.getElementById('reg-dob').value;
-            const phone = document.getElementById('reg-phone').value.trim();
-            const gender = document.getElementById('reg-gender').value;
-            const division = document.getElementById('reg-division').value.trim();
-            const district = document.getElementById('reg-district').value.trim();
-            const fb = document.getElementById('reg-fb').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-pass').value;
-            const confpass = document.getElementById('reg-confpass').value;
-            const agree = document.getElementById('reg-agree').checked;
+function filterDataNodes(input, dropdown, dataPool) {
+    const val = input.value.toLowerCase().trim();
+    dropdown.innerHTML = '';
 
-            if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
-                alert("Please fill in all required fields!");
-                return;
-            }
-            if (pass !== confpass) { alert("Passwords do not match!"); return; }
-            if (!agree) { alert("Please verify declarations checklist authorization!"); return; }
+    const filtered = dataPool.filter(d => d.toLowerCase().includes(val));
 
-            try {
-                const userId = "USER_" + Date.now();
-                const newUser = {
-                    id: userId,
-                    name, gameid, dob, phone, gender, division, district, fb, email, pass,
-                    role: "Regular Member",
-                    wallet: 0,
-                    avatar: "https://via.placeholder.com/150",
-                    isBanned: false, 
-                    claimedWelcome: false, 
-                    claimedSubs: false,
-                    createdAt: Date.now()
-                };
+    if (filtered.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+    }
 
-                await window.firebaseFirestore.setDoc(window.firebaseFirestore.doc(window.firebaseDb, "users", email), newUser);
-                alert("Registration successful! Please login.");
-                toggleAuthSubView('login');
-            } catch (error) {
-                console.error("Error writing document: ", error);
-                alert("Registration failed. Please try again.");
-            }
-        }
+    dropdown.style.display = 'block';
+    filtered.forEach(itemText => {
+        const item = document.createElement('div');
+        item.className = 'custom-dropdown-item';
+        item.innerText = itemText;
 
-        function triggerGlobalWelcomePopup(user) {
-            document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('pop-user-name').innerText = user.name;
-            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('global-welcome-popup-layer').style.display = "flex";
-        }
+        item.onclick = () => {
+            input.value = itemText;
+            dropdown.style.display = 'none';
+            if(input.id === 'route-from' || input.id === 'route-to') calculateFareSystemLogic();
+        };
+        dropdown.appendChild(item);
+    });
+}
 
-        function dismissGlobalWelcomePopup() {
-            document.getElementById('global-welcome-popup-layer').style.display = "none";
-        }
+window.addEventListener('DOMContentLoaded', () => {
+    verifyDatabaseStructureSeeding();
+    initialClockHeartbeatEngine();
+    setLanguageSystem(selectedLanguage);
+    initSearchableDropdownSystem();
+    setInterval(checkSessionTimeoutRules, 10000); 
 
-        // --- ফায়ারবেস ডাটাবেজ থেকে লগইন চেক করার সংশোধিত ফাংশন ---
-        async function executeLoginLogic() {
-            const email = document.getElementById('login-email').value.trim();
-            const pass = document.getElementById('login-pass').value;
+    history.pushState(null, null, window.location.pathname);
 
-            if (!email || !pass) {
-                alert("দয়া করে ইমেইল এবং পাসওয়ার্ড দিন।");
-                return;
-            }
+    const globalFooter = document.getElementById('main-global-footer'); // <-- লোড হওয়ার শুরুতেই ফুটার প্যানেল লক করার জন্য
 
-            try {
-                // ১. যদি হার্ডকোডেড অ্যাডমিন ইমেইল হয়, তাহলে লোকাল থেকে চেক করবে
-                if (email === SUPER_ADMIN_EMAIL) {
-                    let adminUser = db.users.find(u => u.email === email && u.pass === pass);
-                    if (adminUser) {
-                        proceedLoginSession(adminUser);
-                        return;
-                    }
-                }
-
-                // ২. ফায়ারবেস ডাটাবেজ থেকে ইউজারের ডাটা নিয়ে আসা
-                const docRef = window.firebaseFirestore.doc(window.firebaseDb, "users", email);
-                const docSnap = await window.firebaseFirestore.getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const user = docSnap.data();
-
-                    if (user.pass === pass) {
-                        if (user.isBanned) {
-                            alert("আপনার অ্যাকাউন্টটি ব্লক করা হয়েছে।");
-                            return;
-                        }
-                        proceedLoginSession(user);
-                    } else {
-                        alert("পাসওয়ার্ড ভুল হয়েছে!");
-                    }
-                } else {
-                    alert("এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট রেজিস্ট্রেশন করা হয়নি!");
-                }
-            } catch (error) {
-                console.error("Login error: ", error);
-                alert("লগইন করার সময় সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।");
-            }
-        }
-
-        function proceedLoginSession(user) {
-            activeUserSession = user;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
-            sessionStorage.setItem('bdbus_login_timestamp', Date.now());
-
+    if(activeUserSession) {
+        let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
+        if(refreshedUser && !refreshedUser.isBanned) {
             document.body.classList.add('logged-in');
             document.getElementById('header-nav-controls').style.display = 'flex';
             document.getElementById('header-empty-space').style.display = 'none';
-            document.getElementById('main-global-footer').style.display = 'block';
+            if(globalFooter) globalFooter.style.display = 'block'; // <-- লগইন সেশন থাকলে ফুটার দেখাবে
             
-            if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master') { 
-                document.getElementById('admin-menu-link').style.display = 'flex'; 
-            } else { 
-                document.getElementById('admin-menu-link').style.display = 'none'; 
-            }
-
-            document.getElementById('live-marquee-node').innerText = db.notices;
-
-            triggerGlobalWelcomePopup(user);
-            navigatePage('home-screen');
-        }
-
-        function executeLogoutAction() {
-            activeUserSession = null;
-            sessionStorage.clear();
-            internalNavigationHistoryArray = [];
-            document.body.classList.remove('logged-in');
-            document.getElementById('header-nav-controls').style.display = 'none';
-            document.getElementById('header-empty-space').style.display = 'block';
-            document.getElementById('main-global-footer').style.display = 'none';
-            navigatePage('auth-screen');
-        }
-
-        function triggerForgotPassword() {
-            let email = prompt("Enter your registered email address:");
-            if(!email) return;
-            let user = db.users.find(u => u.email === email);
-            if(user) alert(`Your system password recovery response is: ${user.pass}`);
-            else alert("No verified account located using this email identifier.");
-        }
-
-        function claimWelcomeRewardLogic() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.claimedWelcome) { alert("Your account already verified and claimed this welcome reward allocation."); return; }
-            user.wallet += 5000;
-            user.claimedWelcome = true;
-            saveDataEngine();
-            syncSessionState(user);
-            alert("5000 BDT Welcome allocation credited into wallet console successfully!");
-            document.getElementById('claim-welcome-btn').disabled = true;
-        }
-
-        function triggerYoutubeSubscribeReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            let ytUrl = "https://youtube.com/@m2vai?sub_confirmation=1";
-            window.location.href = ytUrl;
-            
-            if (user.claimedSubs) { alert("Navigating to Channel. (Allocation already claimed previously)."); return; }
-            setTimeout(() => {
-                user.wallet += 10000;
-                user.claimedSubs = true;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Subscription detected! 10000 BDT allocated into account wallet nodes!");
-            }, 5000);
-        }
-
-        function triggerWatchVideoReward() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            window.open("https://youtu.be/aYwYMretqvE?si=mb0PkhaaiU8GmnT7", "_blank");
-            alert("Keep stream window open for 1 minute minimum. System verified tokens will award 3000 BDT upon successful complete stream session.");
-            setTimeout(() => {
-                user.wallet += 3000;
-                saveDataEngine();
-                syncSessionState(user);
-                alert("Stream watching verified! 3000 BDT successfully updated into wallet logs.");
-            }, 61000); 
-        }
-
-        function syncSessionState(updatedUser) {
-            activeUserSession = updatedUser;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
-        }
-
-        function renderUserProfileView() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            document.getElementById('profile-avatar-render').src = user.avatar;
-            document.getElementById('prof-render-name').innerText = user.name;
-            document.getElementById('prof-render-id').innerText = `ID: BDBUS-${user.id} [${user.role}]`;
-            document.getElementById('prof-render-wallet').innerText = `${user.wallet} BDT`;
-
-            document.getElementById('prof-meta-list-block').innerHTML = `
-                <p style="margin-bottom:8px;"><strong>Nickname/Game ID:</strong> ${user.gameid}</p>
-                <p style="margin-bottom:8px;"><strong>Mobile Contact:</strong> ${user.phone}</p>
-                <p style="margin-bottom:8px;"><strong>Birthdate Logged:</strong> ${user.dob}</p>
-                <p style="margin-bottom:8px;"><strong>Gender Node:</strong> ${user.gender}</p>
-                <p style="margin-bottom:8px;"><strong>Division:</strong> ${user.division || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>District:</strong> ${user.district || '-'}</p>
-                <p style="margin-bottom:8px;"><strong>Facebook Connection:</strong> <a href="${user.fb}" target="_blank" style="color:var(--neon-blue)">View Link</a></p>
-                <p><strong>System Auth Email:</strong> ${user.email}</p>
-            `;
-        }
-
-        function processAvatarUpload(event) {
-            const file = event.target.files[0];
-            if(file.size > 300 * 1024) { alert("File limit exception: Maximum allowed sizing target parameters is 300KB!"); return; }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let user = db.users.find(u => u.id === activeUserSession.id);
-                user.avatar = e.target.result;
-                saveDataEngine();
-                syncSessionState(user);
-                document.getElementById('profile-avatar-render').src = user.avatar;
-                alert("Avatar uploaded and compiled successfully!");
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function executePasswordChangeLogic() {
-            const curr = document.getElementById('pwd-curr').value;
-            const nxt = document.getElementById('pwd-new').value;
-            const conf = document.getElementById('pwd-conf').value;
-            let user = db.users.find(u => u.id === activeUserSession.id);
-
-            if(user.pass !== curr) { alert("Current password matching verification logic mismatched!"); return; }
-            if(nxt !== conf) { alert("New confirmation tracking variables fields mismatched!"); return; }
-
-            user.pass = nxt;
-            saveDataEngine();
-            alert("Password updated securely. Use updated variables during subsequent login loops.");
-            document.getElementById('pwd-curr').value = "";
-            document.getElementById('pwd-new').value = "";
-            document.getElementById('pwd-conf').value = "";
-        }
-
-        function renderDigitalLicenceData() {
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(!user) return;
-            
-            document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('dl-name').innerText = user.name.toUpperCase();
-            document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-            document.getElementById('dl-dob').innerText = user.dob;
-            document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-            document.getElementById('dl-phone').innerText = user.phone;
-            document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
-            document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-            document.getElementById('dl-sign-name').innerText = user.name;
-        }
-
-        function executeDrivingLicenceDownloadEngine() {
-            alert("Compiling high resolution smart driving licence graphics asset...");
-            const target = document.getElementById('digital-licence-card');
-            
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_Driving_Licence_ID_${activeUserSession.id}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                alert("Driving Licence downloaded successfully!");
-            });
-        }
-
-        function calculateFareSystemLogic() {
-            const fromLoc = document.getElementById('route-from').value.trim();
-            const toLoc = document.getElementById('route-to').value.trim();
-            const type = document.getElementById('route-bustype').value;
-
-            if(!fromLoc || !toLoc) {
-                document.getElementById('booking-fare-render').innerText = `0 BDT`;
-                return;
-            }
-
-            let charSum = 0;
-            for(let i=0; i<fromLoc.length; i++) charSum += fromLoc.charCodeAt(i);
-            for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
-            
-            let generatedBaseDistance = (charSum % 400) + 120;
-            let perKmRate = 2.15;
-            let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
-
-            if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "sylhet") || (fromLoc.toLowerCase() === "sylhet" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 680;
-            } else if((fromLoc.toLowerCase() === "gazipur" && toLoc.toLowerCase() === "sunamganj") || (fromLoc.toLowerCase() === "sunamganj" && toLoc.toLowerCase() === "gazipur")) {
-                calculatedBaseFare = 850;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "chattogram") || (fromLoc.toLowerCase() === "chattogram" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 750;
-            } else if((fromLoc.toLowerCase() === "dhaka" && toLoc.toLowerCase() === "cox's bazar") || (fromLoc.toLowerCase() === "cox's bazar" && toLoc.toLowerCase() === "dhaka")) {
-                calculatedBaseFare = 1100;
-            }
-
-            if (type === "Premium AC Coach") {
-                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
-            } else {
-                selectedFareGlobalRate = calculatedBaseFare;
-            }
-
-            document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
-        }
-
-        function openSeatSelectionEngine() {
-            const from = document.getElementById('route-from').value;
-            const to = document.getElementById('route-to').value;
-            const date = document.getElementById('route-date').value;
-            const time = document.getElementById('route-time').value;
-            const type = document.getElementById('route-bustype').value;
-
-            if(!from || !to || !date || !time) { alert("Please complete full route processing metadata entries!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient active account wallet balance token limits to initiate routing selections."); return; }
-
-            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
-            document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
-            currentlyChosenSeatNode = null;
-
-            generateBusCabinGridBlueprint(type);
-            initSeatLockCountdownTimer();
-            navigatePage('seat-screen');
-        }
-
-        function initSeatLockCountdownTimer() {
-            const countdownEl = document.getElementById('countdown');
-            if(!countdownEl) return;
-            
-            let timeLeft = 120;
-            if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
-            
-            window.seatTimerIntervalId = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                
-                countdownEl.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(window.seatTimerIntervalId);
-                    alert("Seat booking time has expired! Please refresh the website to see the seat again.");
-                    navigatePage('home-screen');
-                } else {
-                    timeLeft -= 1;
-                }
-            }, 1000);
-        }
-
-        function generateBusCabinGridBlueprint(coachType) {
-            const root = document.getElementById('dynamic-cabin-root');
-            root.innerHTML = `<div class="cabin-front-header"><span>🚪 DOOR</span><span>🧑‍✈️ DRIVER</span></div>`;
-            
-            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-            
-            if(coachType === "Non-AC Coach") {
-                rows.forEach(r => {
-                    let rowDiv = document.createElement('div');
-                    rowDiv.className = 'seat-row-grid';
-                    
-                    let leftBlock = document.createElement('div');
-                    leftBlock.className = 'seat-side-block';
-                    leftBlock.appendChild(createSeatElement(`${r}1`));
-                    leftBlock.appendChild(createSeatElement(`${r}2`));
-
-                    let rightBlock = document.createElement('div');
-                    rightBlock.className = 'seat-side-block';
-                    rightBlock.appendChild(createSeatElement(`${r}3`));
-                    rightBlock.appendChild(createSeatElement(`${r}4`));
-
-                    rowDiv.appendChild(leftBlock);
-                    rowDiv.appendChild(rightBlock); 
-                    root.appendChild(rowDiv);
-                });
-            } else {
-                rows.forEach(r => {
-                    let rowDiv = document.createElement('div');
-                    rowDiv.className = 'seat-row-grid';
-                    
-                    let leftBlock = document.createElement('div');
-                    leftBlock.className = 'seat-side-block';
-                    leftBlock.appendChild(createSeatElement(`${r}1`));
-
-                    let rightBlock = document.createElement('div');
-                    rightBlock.className = 'seat-side-block';
-                    rightBlock.appendChild(createSeatElement(`${r}2`));
-                    rightBlock.appendChild(createSeatElement(`${r}3`));
-
-                    rowDiv.appendChild(leftBlock);
-                    rowDiv.appendChild(rightBlock);
-                    root.appendChild(rowDiv);
-                });
-            }
-        }
-
-        function createSeatElement(idStr) {
-            let seat = document.createElement('div');
-            seat.className = 'seat-node';
-            seat.innerText = idStr;
-            
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${idStr}`;
-            
-            if(db.occupiedSeats[globalKey]) {
-                let lockData = db.occupiedSeats[globalKey];
-                if(Date.now() < lockData.expireTime) {
-                    if(lockData.isConfirmed) { seat.classList.add('occupied'); }
-                    else { seat.classList.add('locked-hold'); }
-                }
-            }
-
-            seat.onclick = () => {
-                if(seat.classList.contains('occupied') || seat.classList.contains('locked-hold')) return;
-                
-                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
-                seat.classList.add('selected');
-                currentlyChosenSeatNode = idStr;
-                
-                executeTemporary2MinuteSeatLock(globalKey);
-                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
-            };
-            return seat;
-        }
-
-        function executeTemporary2MinuteSeatLock(globalKey) {
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
-                    delete db.occupiedSeats[key];
-                }
-            }
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (2 * 60 * 1000), 
-                userId: activeUserSession.id,
-                isConfirmed: false,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
-        }
-
-        function evaluateSeatLockTimerExpirations() {
-            let stateChanged = false;
-            for(let key in db.occupiedSeats) {
-                let lock = db.occupiedSeats[key];
-                if(!lock.isConfirmed && (Date.now() > lock.expireTime)) {
-                    delete db.occupiedSeats[key];
-                    stateChanged = true;
-                }
-                else if(lock.isConfirmed && (Date.now() - lock.timestampLocked > 60 * 60 * 1000)) {
-                    delete db.occupiedSeats[key];
-                    stateChanged = true;
-                }
-            }
-            if(stateChanged) {
-                saveDataEngine();
-                if(sessionStorage.getItem('bdbus_persistent_screen_id') === 'admin-screen') {
-                    renderLiveBookingsMonitorTable();
-                }
-            }
-        }
-
-        function executeTicketConfirmationEngine() {
-            if(!currentlyChosenSeatNode) { alert("Please select an available seating node allocation map coordinates!"); return; }
-            
-            let user = db.users.find(u => u.id === activeUserSession.id);
-            if(user.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
-
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
-
-            user.wallet -= selectedFareGlobalRate;
-            
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (60 * 60 * 1000), 
-                userId: user.id,
-                isConfirmed: true,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
-            syncSessionState(user);
-
-            if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
-
-            document.getElementById('tk-mid').innerText = `BDBUS-${user.id}`;
-            document.getElementById('tk-name').innerText = user.name;
-            document.getElementById('tk-gid').innerText = user.gameid;
-            document.getElementById('tk-phone').innerText = user.phone;
-            document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
-            document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
-            document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
-            document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-            document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
-            
-            const now = new Date();
-            document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
-
-            navigatePage('ticket-view-screen');
-        }
-
-        function executeTicketDownloadAndRedirect() {
-            alert("Compiling extreme high resolution ticket graphics assets...");
-            const target = document.getElementById('digital-ticket-canvas');
-            
-            html2canvas(target, { 
-                scale: 3, 
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                alert("Download successful! Returning safely back to your home command dashboard layout.");
-                navigatePage('home-screen');
-            });
-        }
-
-        function renderHomeMembersCarousel() {
-            const track = document.getElementById('home-carousel-track');
-            if(!track) return;
-            track.innerHTML = "";
-            
-            let activePool = [...db.users].sort((a,b) => b.wallet - a.wallet);
-            let cardsHTML = "";
-            activePool.forEach(u => {
-                let isOnline = u.lastActive && (Date.now() - u.lastActive < 45000);
-                let statusText = isOnline ? "ACTIVE" : "OFFLINE";
-                let statusColor = isOnline ? "var(--neon-green)" : "#94a3b8";
-
-                cardsHTML += `
-                    <div class="member-card-node">
-                        <img src="${u.avatar}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/55'">
-                        <div class="member-meta">
-                            <h5>${u.name}</h5>
-                            <p>ID: BDBUS-${u.id} | <strong>${u.role}</strong><br>Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span></p>
-                            <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${statusText}</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            track.innerHTML = cardsHTML + cardsHTML;
-        }
-
-        function renderContactTeamPanel() {
-            const grid = document.getElementById('contact-team-grid');
-            grid.innerHTML = "";
-            
-            let coreStaff = db.users.filter(u => {
-                const role = u.role ? u.role.toLowerCase() : '';
-                return role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master';
-            });
-
-            const rolePriority = { 'admin': 1, 'moderator': 2, 'counter master': 3, 'trip master': 4 };
-            coreStaff.sort((a, b) => {
-                let roleA = a.role ? a.role.toLowerCase() : '';
-                let roleB = b.role ? b.role.toLowerCase() : '';
-                return (rolePriority[roleA] || 99) - (rolePriority[roleB] || 99);
-            });
-
-            coreStaff.forEach(u => {
-                let card = document.createElement('div');
-                card.className = 'admin-control-card';
-                card.style.textAlign = 'center';
-                card.innerHTML = `
-                    <img src="${u.avatar}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; margin-bottom:10px; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/70'">
-                    <h4>${u.name}</h4>
-                    <p style="color:var(--neon-blue); font-size:12px; font-weight:bold;">${u.role}</p>
-                    <p style="font-size:11px; color:var(--text-muted); margin:5px 0;">ID: BDBUS-${u.id}</p>
-                    <div style="background:#1e293b; padding:6px; border-radius:6px; font-size:12px; color:var(--neon-green)">Wallet: ${u.wallet} BDT</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderLiveBookingsMonitorTable() {
-            const tbody = document.getElementById('admin-live-bookings-tbody');
-            if(!tbody) return;
-            tbody.innerHTML = "";
-
-            let bookingKeysArray = Object.keys(db.occupiedSeats);
-            if(bookingKeysArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
-                return;
-            }
-
-            bookingKeysArray.forEach(globalKey => {
-                let bookingInfo = db.occupiedSeats[globalKey];
-                let associatedUser = db.users.find(u => u.id === bookingInfo.userId) || { name: "Unknown Member", id: bookingInfo.userId };
-                let tr = document.createElement('tr');
-                let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
-                let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
-
-                let actionBtnHtml = "";
-                if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Moderator') {
-                    actionBtnHtml = `
-                        <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
-                            <i class="fa-solid fa-trash-can"></i> Reset Seat
-                        </button>
-                    `;
-                } else {
-                    actionBtnHtml = `<span style="font-size:11px; color:var(--text-muted); font-style:italic;">View Only</span>`;
-                }
-
-                tr.innerHTML = `
-                    <td>
-                        <strong>${associatedUser.name}</strong><br>
-                        <span style="color:var(--text-muted); font-size:11px;">ID: BDBUS-${associatedUser.id}</span>
-                    </td>
-                    <td style="color: var(--neon-blue); font-weight:600;">${globalKey.replace('_', ' | ')}</td>
-                    <td style="color: ${badgeColor}; font-weight:500;">${statusText}</td>
-                    <td>${actionBtnHtml}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function adminDirectResetSingleSeat(globalKey) {
-            if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
-                delete db.occupiedSeats[globalKey];
-                saveDataEngine();
-                renderLiveBookingsMonitorTable();
-                alert("Seat reservation track cleared successfully!");
-            }
-        }
-
-        function renderAdminPanelDashboard() {
-            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
-                alert("Unauthorized console routing breach validation rejected.");
-                navigatePage('home-screen');
-                return;
+            if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
+                document.getElementById('admin-menu-link').style.display = 'flex';
             }
             
-            const noticeBox = document.getElementById('admin-notice-manager-wrapper');
-            if(activeUserSession.role === 'Admin') {
-                noticeBox.style.display = 'block';
-                document.getElementById('admin-notice-input-field').value = db.notices;
-            } else {
-                noticeBox.style.display = 'none';
-            }
-
-            renderLiveBookingsMonitorTable();
-            const grid = document.getElementById('admin-user-cards-grid');
-            if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+            const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+            navigatePage(savedScreenTargetPersistedId);
+            return;
         }
-
-        function executeAdminNoticeBroadcastSave() {
-            if(activeUserSession.role !== 'Admin') { alert("Permission denied exception."); return; }
-            const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
-            if(!freshNoticeText) { alert("Notice text body cannot execute blank strings empty logs."); return; }
-            
-            db.notices = freshNoticeText;
-            saveDataEngine();
-            
-            const liveMarquee = document.getElementById('live-marquee-node');
-            if(liveMarquee) liveMarquee.innerText = db.notices;
-            
-            alert("Global notice feed synchronized across cluster terminals successfully!");
-        }
-
-        function buildUserAdminDisplayCards(userArray) {
-            const grid = document.getElementById('admin-user-cards-grid');
-            if(!grid) return;
-            grid.innerHTML = "";
-            const currentRole = activeUserSession.role;
-
-            if(userArray.length === 0) {
-                grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">কোনো সদস্য পাওয়া যায়নি!</div>`;
-                return;
-            }
-
-            userArray.forEach(u => {
-                let card = document.createElement('div');
-                card.className = 'admin-control-card';
-                card.style.padding = '15px';
-                card.style.background = '#1e293b';
-                card.style.borderRadius = '8px';
-                card.style.marginBottom = '12px';
-                
-                let actionControlsHTML = "";
-                const btnBase = 'padding:4px 8px; font-size:11px; font-weight:bold; border-radius:3px; border:none; cursor:pointer; color:#fff; transition: opacity 0.2s;';
-
-                if(currentRole === 'Admin') {
-                    actionControlsHTML = `
-                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet(${u.id}, 'Regular Member')">Regular Member</button>
-                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet(${u.id}, 'Trip Master')">Trip Master</button>
-                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet(${u.id}, 'Counter Master')">Counter Master</button>
-                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet(${u.id}, 'Moderator')">Moderator</button>
-                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt(${u.id})">Gift</button>
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem(${u.id})">Remove</button>
-                    `;
-                } else if(currentRole === 'Moderator') {
-                    actionControlsHTML = `
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle(${u.id})">${u.isBanned ? 'Unban':'Ban'}</button>
-                    `;
-                } else if(currentRole === 'Counter Master') {
-                    actionControlsHTML = `<button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>`;
-                } else if(currentRole === 'Trip Master') {
-                    actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Only Mode</span>`;
-                }
-
-                card.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-                        <img src="${u.avatar}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/45'">
-                        <div>
-                            <h5 style="margin:0; font-size:14px; color:#fff;">${u.name} (ID: BDBUS-${u.id})</h5>
-                            <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8;">Email: ${u.email} | Nickname: <strong>${u.gameid || 'N/A'}</strong></p>
-                        </div>
-                    </div>
-                    <p style="margin:4px 0; font-size:12px; color:#fff;">Role: <span style="color:#00b4d8; font-weight:bold;">${u.role}</span> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span> | Status: <span style="color:${u.isBanned ? '#ef4444':'#10b981'}; font-weight:bold;">${u.isBanned ? 'Banned':'Active'}</span></p>
-                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; border-top:1px solid #334155; padding-top:8px;">${actionControlsHTML}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function executeAdminSearchLogic() {
-            let term = document.getElementById('admin-search-input').value.trim();
-            const grid = document.getElementById('admin-user-cards-grid');
-            if(!term) { 
-                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
-                return; 
-            }
-            let filtered = db.users.filter(u => u.id.toString().includes(term) || u.name.toLowerCase().includes(term.toLowerCase()));
-            buildUserAdminDisplayCards(filtered);
-        }
-
-        function adminDirectRoleSet(id, roleName) {
-            let user = db.users.find(u => u.id === id);
-            user.role = roleName;
-            saveDataEngine();
-            alert(`Successfully updated role to ${roleName}`);
-            executeAdminSearchLogic();
-        }
-
-        function adminBanToggle(id) {
-            let user = db.users.find(u => u.id === id);
-            user.isBanned = !user.isBanned;
-            saveDataEngine();
-            alert(user.isBanned ? "Member has been Banned." : "Member has been Unbanned.");
-            executeAdminSearchLogic();
-        }
-
-        function adminGiftWalletPrompt(id) {
-            let amount = parseInt(prompt("Enter BDT credit allocation to grant this user node:"));
-            if(!amount || amount <= 0) return;
-            let user = db.users.find(u => u.id === id);
-            user.wallet += amount;
-            saveDataEngine();
-            alert(`Credited ${amount} BDT successfully to user transaction profiles.`);
-            executeAdminSearchLogic();
-        }
-
-        function adminRemoveMemberFromSystem(id) {
-            if(confirm("Are you absolutely sure you want to permanently REMOVE this member from the database?")) {
-                db.users = db.users.filter(u => u.id !== id);
-                saveDataEngine();
-                alert("Member removed successfully from system.");
-                executeAdminSearchLogic();
-            }
-        }
-
-        function adminResetSeatsEngine(userId) {
-            let keysRemoved = 0;
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === userId) {
-                    delete db.occupiedSeats[key];
-                    keysRemoved++;
-                }
-            }
-            if(keysRemoved > 0) {
-                saveDataEngine();
-                renderLiveBookingsMonitorTable();
-                alert(`Purged ${keysRemoved} active reservation tracks from database.`);
-                executeAdminSearchLogic();
-            } else {
-                alert("No active matching booking tracks matched user parameters.");
-            }
-        }
-
-        function loadAllRegisteredMembersList() {
-            renderAllRegisteredMembersPage();
-        }
-
-        function renderAllRegisteredMembersPage() {
-            const rootNode = document.getElementById('all-members-list-render-node');
-            if(!rootNode) return;
-            rootNode.innerHTML = "";
-
-            let sortedMembers = [...db.users].sort((a, b) => a.id - b.id);
-            sortedMembers.forEach((u, index) => {
-                let row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.justifyContent = 'space-between'; 
-                row.style.alignItems = 'center';
-                row.style.padding = '10px 15px';
-                row.style.background = index % 2 === 0 ? '#1e293b' : '#0f172a';
-                row.style.borderBottom = '1px solid #334155';
-                row.style.fontSize = '13px';
-                row.style.color = '#fff';
-
-                row.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="color:#94a3b8; font-weight:bold; width:30px;">#${index + 1}</span>
-                        <span style="color:#00b4d8; font-weight:bold; width:90px;">ID: ${u.id}</span>
-                        <span style="font-weight:500;">${u.name}</span>
-                    </div>
-                    <div style="display:flex; gap:15px; align-items:center;">
-                        <span style="background:rgba(0,180,216,0.2); color:#00b4d8; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold;">${u.role}</span>
-                        <span style="color:#10b981; font-weight:bold;">${u.wallet} BDT</span>
-                    </div>
-                `;
-                rootNode.appendChild(row);
-            });
-        }
-
-        function setLanguageSystem(locale) {
-            selectedLanguage = locale;
-            localStorage.setItem('bdbus_lang', locale);
-            
-            document.querySelectorAll('.lang-btn').forEach(b => b.style.opacity = '0.5');
-            const targetLangButtonNode = document.querySelector(`.lang-btn.${locale}`);
-            if(targetLangButtonNode) targetLangButtonNode.style.opacity = '1';
-
-            document.querySelectorAll('.lang-node').forEach(el => {
-                let text = el.getAttribute(`data-${locale}`);
-                if(text) el.innerText = text;
-            });
-        }
-
-        window.addEventListener('popstate', (event) => {
-            if(activeUserSession && internalNavigationHistoryArray.length > 1) {
-                history.pushState(null, null, window.location.pathname);
-                executeHardwareBackTrigger();
-            }
-        });
-
-        function initSearchableDropdownSystem() {
-            setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts);
-            setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts);
-            setupCustomDropdown('reg-division', 'reg-division-dropdown', bangladeshDivisions);
-            setupCustomDropdown('reg-district', 'reg-district-dropdown', bangladeshDistricts);
-        }
-
-        function setupCustomDropdown(inputId, dropdownId, dataPool) {
-            const input = document.getElementById(inputId);
-            const dropdown = document.getElementById(dropdownId);
-
-            if(!input || !dropdown) return;
-
-            input.addEventListener('focus', () => filterDataNodes(input, dropdown, dataPool));
-            input.addEventListener('input', () => {
-                filterDataNodes(input, dropdown, dataPool);
-                if(inputId === 'route-from' || inputId === 'route-to') calculateFareSystemLogic();
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        }
-
-        function filterDataNodes(input, dropdown, dataPool) {
-            const val = input.value.toLowerCase().trim();
-            dropdown.innerHTML = '';
-            const filtered = dataPool.filter(d => d.toLowerCase().includes(val));
-
-            if (filtered.length === 0) {
-                dropdown.style.display = 'none';
-                return;
-            }
-
-            dropdown.style.display = 'block';
-            filtered.forEach(itemText => {
-                const item = document.createElement('div');
-                item.className = 'custom-dropdown-item';
-                item.innerText = itemText;
-
-                item.onclick = () => {
-                    input.value = itemText;
-                    dropdown.style.display = 'none';
-                    if(input.id === 'route-from' || input.id === 'route-to') calculateFareSystemLogic();
-                };
-                dropdown.appendChild(item);
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            verifyDatabaseStructureSeeding();
-            initialClockHeartbeatEngine();
-            setLanguageSystem(selectedLanguage);
-            initSearchableDropdownSystem();
-            setInterval(checkSessionTimeoutRules, 10000); 
-
-            history.pushState(null, null, window.location.pathname);
-            const globalFooter = document.getElementById('main-global-footer');
-
-            if(activeUserSession) {
-                let refreshedUser = db.users.find(u => u.id === activeUserSession.id);
-                if(refreshedUser && !refreshedUser.isBanned) {
-                    document.body.classList.add('logged-in');
-                    document.getElementById('header-nav-controls').style.display = 'flex';
-                    document.getElementById('header-empty-space').style.display = 'none';
-                    if(globalFooter) globalFooter.style.display = 'block';
-                    
-                    if(refreshedUser.role === 'Admin' || refreshedUser.role === 'Moderator' || refreshedUser.role === 'Counter Master' || refreshedUser.role === 'Trip Master') {
-                        document.getElementById('admin-menu-link').style.display = 'flex';
-                    }
-                    
-                    const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
-                    navigatePage(savedScreenTargetPersistedId);
-                    return;
-                }
-            }
-            if(globalFooter) globalFooter.style.display = 'none'; 
-            navigatePage('auth-screen');
-        });
-    </script>
+    }
+    // যদি ইউজার লগইন না থাকে, তাহলে ফুটার আগে থেকেই হাইড হয়ে সোজা অথ স্ক্রিনে যাবে
+    if(globalFooter) globalFooter.style.display = 'none'; 
+    navigatePage('auth-screen');
+ });
+  </script>
 </body>
 </html>
