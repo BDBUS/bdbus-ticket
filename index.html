@@ -2041,20 +2041,25 @@
             return seat;
         }
 
-        function executeTemporary2MinuteSeatLock(globalKey) {
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === activeUserSession.id && !db.occupiedSeats[key].isConfirmed) {
-                    delete db.occupiedSeats[key];
-                }
-            }
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (2 * 60 * 1000), 
-                userId: activeUserSession.id,
-                isConfirmed: false,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
+        async function executeTemporary2MinuteSeatLock(globalKey) {
+    const lockData = {
+        expireTime: Date.now() + (2 * 60 * 1000), 
+        userId: activeUserSession.id,
+        userName: activeUserSession.name,
+        isConfirmed: false,
+        timestampLocked: Date.now()
+    };
+
+    // ফায়ারবেসের 'bookings' কালেকশনে সেভ করা
+    try {
+        if (window.FirebaseDb && window.FirebaseFirestore) {
+            const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+            await window.FirebaseFirestore.setDoc(bookingDocRef, lockData);
         }
+    } catch (err) {
+        console.error("Firebase Seat Lock Error:", err);
+    }
+}
 
         function evaluateSeatLockTimerExpirations() {
             let stateChanged = false;
@@ -2074,42 +2079,55 @@
         }
 
         async function executeTicketConfirmationEngine() {
-            if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
-            
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
+    if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
+    if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
+    const type = document.getElementById('route-bustype').value;
+    const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
-            activeUserSession.wallet -= selectedFareGlobalRate;
-            
-            db.occupiedSeats[globalKey] = {
-                expireTime: Date.now() + (60 * 60 * 1000), 
-                userId: activeUserSession.id,
-                isConfirmed: true,
-                timestampLocked: Date.now()
-            };
-            saveDataEngine();
-            await updateCloudUserDocument(activeUserSession);
-            syncSessionState(activeUserSession);
+    activeUserSession.wallet -= selectedFareGlobalRate;
+    
+    const confirmData = {
+        expireTime: Date.now() + (60 * 60 * 1000), 
+        userId: activeUserSession.id,
+        userName: activeUserSession.name,
+        isConfirmed: true,
+        timestampLocked: Date.now()
+    };
 
-            if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
-
-            document.getElementById('tk-mid').innerText = `BDBUS-${activeUserSession.id}`;
-            document.getElementById('tk-name').innerText = activeUserSession.name;
-            document.getElementById('tk-gid').innerText = activeUserSession.gameid;
-            document.getElementById('tk-phone').innerText = activeUserSession.phone;
-            document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
-            document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
-            document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
-            document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
-            document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
-            
-            const now = new Date();
-            document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
-
-            navigatePage('ticket-view-screen');
+    try {
+        // ১. ফায়ারবেসে সিট বুকিং কনফার্ম করা
+        if (window.FirebaseDb && window.FirebaseFirestore) {
+            const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+            await window.FirebaseFirestore.setDoc(bookingDocRef, confirmData);
         }
+
+        // ২. ইউজারের ওয়ালেট ব্যালেন্স ফায়ারবেসে আপডেট করা
+        await updateCloudUserDocument(activeUserSession);
+        syncSessionState(activeUserSession);
+
+        if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
+
+        document.getElementById('tk-mid').innerText = `BDBUS-${activeUserSession.id}`;
+        document.getElementById('tk-name').innerText = activeUserSession.name;
+        document.getElementById('tk-gid').innerText = activeUserSession.gameid;
+        document.getElementById('tk-phone').innerText = activeUserSession.phone;
+        document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
+        document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
+        document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
+        document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
+        document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
+        
+        const now = new Date();
+        document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+
+        navigatePage('ticket-view-screen');
+    } catch (err) {
+        console.error("Ticket Confirm Error:", err);
+        alert("টিকিট বুকিং নিশ্চিত করতে সমস্যা হয়েছে।");
+    }
+}
+
 
         function executeTicketDownloadAndRedirect() {
             alert("Compiling ticket graphics assets...");
@@ -2204,49 +2222,77 @@
             }
         }
 
-        function renderLiveBookingsMonitorTable() {
-            const tbody = document.getElementById('admin-live-bookings-tbody');
-            if(!tbody) return;
-            tbody.innerHTML = "";
+        async function renderLiveBookingsMonitorTable() {
+    const tbody = document.getElementById('admin-live-bookings-tbody');
+    if(!tbody) return;
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Loading live bookings from Firebase...</td></tr>`;
 
-            let bookingKeysArray = Object.keys(db.occupiedSeats);
-            if(bookingKeysArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
-                return;
-            }
+    try {
+        if (!window.FirebaseDb || !window.FirebaseFirestore) return;
 
-            bookingKeysArray.forEach(globalKey => {
-                let bookingInfo = db.occupiedSeats[globalKey];
-                let tr = document.createElement('tr');
-                let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
-                let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
+        // ফায়ারবেস থেকে লাইভ বুকিং নিয়ে আসা
+        const querySnapshot = await window.FirebaseFirestore.getDocs(
+            window.FirebaseFirestore.collection(window.FirebaseDb, "bookings")
+        );
 
-                let actionBtnHtml = `
-                    <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
-                        <i class="fa-solid fa-trash-can"></i> Reset Seat
-                    </button>
-                `;
-
-                tr.innerHTML = `
-                    <td>
-                        <strong>User ID: BDBUS-${bookingInfo.userId}</strong>
-                    </td>
-                    <td style="color: var(--neon-blue); font-weight:600;">${globalKey.replace('_', ' | ')}</td>
-                    <td style="color: ${badgeColor}; font-weight:500;">${statusText}</td>
-                    <td>${actionBtnHtml}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+        if(querySnapshot.empty) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
+            return;
         }
 
-        function adminDirectResetSingleSeat(globalKey) {
-            if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
-                delete db.occupiedSeats[globalKey];
-                saveDataEngine();
+        tbody.innerHTML = "";
+        querySnapshot.forEach(docSnap => {
+            let globalKey = docSnap.id;
+            let bookingInfo = docSnap.data();
+
+            // এক্সপায়ার হয়ে যাওয়া লোকাল লকিং ক্লিয়ার করা
+            if(!bookingInfo.isConfirmed && (Date.now() > bookingInfo.expireTime)) {
+                return; // সময় শেষ হলে দেখাবে না
+            }
+
+            let tr = document.createElement('tr');
+            let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
+            let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
+
+            let actionBtnHtml = `
+                <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
+                    <i class="fa-solid fa-trash-can"></i> Reset Seat
+                </button>
+            `;
+
+            tr.innerHTML = `
+                <td>
+                    <strong>${bookingInfo.userName || 'Member'}</strong><br>
+                    <span style="color:var(--text-muted); font-size:11px;">ID: BDBUS-${bookingInfo.userId}</span>
+                </td>
+                <td style="color: var(--neon-blue); font-weight:600;">${globalKey.replace('_', ' | ')}</td>
+                <td style="color: ${badgeColor}; font-weight:500;">${statusText}</td>
+                <td>${actionBtnHtml}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error("Live Booking Load Error:", err);
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4d4d;">Error loading live bookings.</td></tr>`;
+    }
+}
+
+        async function adminDirectResetSingleSeat(globalKey) {
+    if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
+        try {
+            if (window.FirebaseDb && window.FirebaseFirestore) {
+                await window.FirebaseFirestore.deleteDoc(
+                    window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey)
+                );
+                alert("Seat reservation track cleared successfully from Firebase!");
                 renderLiveBookingsMonitorTable();
-                alert("Seat reservation track cleared successfully!");
             }
+        } catch (err) {
+            console.error("Seat Reset Error:", err);
+            alert("সিট রিসেট করতে সমস্যা হয়েছে।");
         }
+    }
+}
 
         function renderAdminPanelDashboard() {
             if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
