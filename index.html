@@ -2175,7 +2175,30 @@
             }
         }
 
-
+        // ফায়ারবেস থেকে রিয়েল-টাইম বুকিং ডাটা এনে সিট ম্যাপ আপডেট ও লাল/হলুদ রঙ দেখানোর ফাংশন
+async function loadFirebaseBookingsAndRenderMap() {
+    try {
+        if (window.FirebaseDb && window.FirebaseFirestore) {
+            const querySnapshot = await window.FirebaseFirestore.getDocs(
+                window.FirebaseFirestore.collection(window.FirebaseDb, "bookings")
+            );
+            
+            // ফায়ারবেস থেকে ডাটা এনে লোকাল অবজেক্ট আপডেট করা
+            db.occupiedSeats = {};
+            querySnapshot.forEach((doc) => {
+                db.occupiedSeats[doc.id] = doc.data();
+            });
+            
+            // সিট ম্যাপ রি-রেন্ডার করা যাতে কনফার্মড সিটগুলো লাল (Occupied) দেখায়
+            if (typeof renderCurrentBusSeatLayout === 'function') {
+                renderCurrentBusSeatLayout();
+            }
+        }
+    } catch (err) {
+        console.error("Error loading bookings from Firebase:", err);
+    }
+}
+        
         function executeTicketDownloadAndRedirect() {
             alert("Compiling ticket graphics assets...");
             const target = document.getElementById('digital-ticket-canvas');
