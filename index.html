@@ -1897,12 +1897,12 @@
             });
         }
 
-                function calculateFareSystemLogic() {
+           function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
             const type = document.getElementById('route-bustype').value.trim();
 
-            // ১. যদি From এবং To একই জেলা হয়, তবে ভাড়া দেখাবে না এবং অ্যালার্ট দিতে পারেন
+            // ১. যদি From এবং To একই জেলা হয়, তবে ভাড়া দেখাবে না
             if (fromLoc && toLoc && fromLoc === toLoc) {
                 document.getElementById('booking-fare-render').innerText = `0 BDT`;
                 selectedFareGlobalRate = 0;
@@ -1933,6 +1933,43 @@
 
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
+
+        // ড্রপডাউন ফিল্টার করার ফাংশন
+        function updateDistrictDropdowns() {
+            const fromSelect = document.getElementById('route-from');
+            const toSelect = document.getElementById('route-to');
+            
+            const selectedFrom = fromSelect.value;
+            const selectedTo = toSelect.value;
+
+            Array.from(toSelect.options).forEach(option => {
+                if (option.value === selectedFrom && option.value !== "") {
+                    option.style.display = "none";
+                } else {
+                    option.style.display = "block";
+                }
+            });
+
+            Array.from(fromSelect.options).forEach(option => {
+                if (option.value === selectedTo && option.value !== "") {
+                    option.style.display = "none";
+                } else {
+                    option.style.display = "block";
+                }
+            });
+        }
+
+        // ইভেন্ট লিসেনার যুক্ত করা
+        document.getElementById('route-from').addEventListener('change', () => {
+            updateDistrictDropdowns();
+            calculateFareSystemLogic();
+        });
+
+        document.getElementById('route-to').addEventListener('change', () => {
+            updateDistrictDropdowns();
+            calculateFareSystemLogic();
+        });
+
 
      function openSeatSelectionEngine() {
         const from = document.getElementById('route-from').value;
