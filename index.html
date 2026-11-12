@@ -1897,12 +1897,19 @@
             });
         }
 
-        function calculateFareSystemLogic() {
+                function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
             const type = document.getElementById('route-bustype').value.trim();
 
-            // যদি রুট পূরণ করা না থাকে অথবা কোচ সিলেক্ট করা না থাকে
+            // ১. যদি From এবং To একই জেলা হয়, তবে ভাড়া দেখাবে না এবং অ্যালার্ট দিতে পারেন
+            if (fromLoc && toLoc && fromLoc === toLoc) {
+                document.getElementById('booking-fare-render').innerText = `0 BDT`;
+                selectedFareGlobalRate = 0;
+                return;
+            }
+
+            // ২. যদি রুট বা কোচ সিলেক্ট করা না থাকে
             if (!fromLoc || !toLoc || !type || type === "Select Coach") {
                 document.getElementById('booking-fare-render').innerText = `0 BDT`;
                 selectedFareGlobalRate = 0;
@@ -1917,21 +1924,17 @@
             let perKmRate = 2.15;
             let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
 
-            // কোচ ভেদে ভাড়ার হিসাব (লোয়ার কেস বা স্পেস ইমব্যালেন্স এড়াতে lowercase করা হয়েছে)
             const cleanType = type.toLowerCase();
-            
             if (cleanType.includes("premium ac")) {
                 selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
             } else {
-                // নন-এসি বা অন্য কোনো কোচ হলে মূল ভাড়া দেখাবে
                 selectedFareGlobalRate = calculatedBaseFare;
             }
 
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-
-                    function openSeatSelectionEngine() {
+     function openSeatSelectionEngine() {
         const from = document.getElementById('route-from').value;
         const to = document.getElementById('route-to').value;
         const date = document.getElementById('route-date').value;
