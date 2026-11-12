@@ -1897,13 +1897,13 @@
             });
         }
 
-                function calculateFareSystemLogic() {
+        function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
             const type = document.getElementById('route-bustype').value;
 
-            // যদি রুট পূরণ করা না থাকে অথবা কোচ যদি "Select Coach" বা ফাঁকা থাকে, তবে ভাড়া 0 দেখাবে
-            if(!fromLoc || !toLoc || type === "Select Coach" || !type) {
+            // যদি রুট সিলেক্ট করা না থাকে অথবা কোচ যদি "Select Coach" বা ফাঁকা থাকে, তবে ভাড়া 0 দেখাবে
+            if (!fromLoc || !toLoc || !type || type === "Select Coach") {
                 document.getElementById('booking-fare-render').innerText = `0 BDT`;
                 selectedFareGlobalRate = 0;
                 return;
@@ -1914,14 +1914,14 @@
             for(let i=0; i<toLoc.length; i++) charSum += toLoc.charCodeAt(i);
             
             let generatedBaseDistance = (charSum % 400) + 120;
-            let perKmRate = 2.15; // সরকার নির্ধারিত বেস রেট
+            let perKmRate = 2.15;
             let calculatedBaseFare = Math.round(generatedBaseDistance * perKmRate);
 
-            // নন-এসি বনাম প্রিমিয়াম এসি কোচের ভাড়া আলাদা করার লজিক
+            // কোচ ভেদে ভাড়ার হিসাব (নন-এসি ও প্রিমিয়াম এসি আলাদা রেট)
             if (type === "Premium AC Coach") {
-                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85); // এসি কোচের ভাড়া বেশি
+                selectedFareGlobalRate = Math.round(calculatedBaseFare * 1.85);
             } else if (type === "Non - AC Coach") {
-                selectedFareGlobalRate = calculatedBaseFare; // নন-এসি কোচের মূল ভাড়া
+                selectedFareGlobalRate = calculatedBaseFare;
             } else {
                 selectedFareGlobalRate = 0;
             }
