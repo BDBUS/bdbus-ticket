@@ -2166,12 +2166,19 @@
             const target = document.getElementById('digital-ticket-canvas');
             
             html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                let imageURL = canvas.toDataURL('image/png');
                 
-                alert("Download successful! Returning safely back to home command dashboard.");
+                // অ্যান্ড্রয়েড অ্যাপ ও ব্রাউজার উভয়ের জন্য নিরাপদ ডাউনলোড পদ্ধতি
+                let link = document.createElement('a');
+                link.href = imageURL;
+                link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
+                
+                // ডোমেইনে অ্যাটাচ করে ক্লিক ট্রিগার করা
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                alert("Download triggered successfully! Returning safely back to home command dashboard.");
                 navigatePage('home-screen');
             });
         }
