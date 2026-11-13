@@ -1897,12 +1897,12 @@
             });
         }
 
-           function calculateFareSystemLogic() {
+                 function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
             const type = document.getElementById('route-bustype').value.trim();
 
-            // ১. যদি From এবং To একই জেলা হয়, তবে ভাড়া দেখাবে না
+            // ১. যদি From এবং To একই জেলা হয়, তবে ভাড়া দেখাবে না এবং অ্যালার্ট বা মেসেজ দিতে পারেন
             if (fromLoc && toLoc && fromLoc === toLoc) {
                 document.getElementById('booking-fare-render').innerText = `0 BDT`;
                 selectedFareGlobalRate = 0;
@@ -1934,7 +1934,7 @@
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-        // ড্রপডাউন ফিল্টার করার ফাংশন
+        // ড্রপডাউন ফিল্টার করার উন্নত এবং কার্যকর ফাংশন
         function updateDistrictDropdowns() {
             const fromSelect = document.getElementById('route-from');
             const toSelect = document.getElementById('route-to');
@@ -1942,21 +1942,34 @@
             const selectedFrom = fromSelect.value;
             const selectedTo = toSelect.value;
 
+            // To ড্রপডাউনের অপশনগুলো ফিল্টার করা
             Array.from(toSelect.options).forEach(option => {
                 if (option.value === selectedFrom && option.value !== "") {
+                    option.disabled = true;  // সিলেক্ট করা জেলাটি ডিজেবল করে দেওয়া যাতে সিলেক্ট করা না যায়
                     option.style.display = "none";
                 } else {
-                    option.style.display = "block";
+                    option.disabled = false;
+                    option.style.display = "";
                 }
             });
 
+            // From ড্রপডাউনের অপশনগুলো ফিল্টার করা
             Array.from(fromSelect.options).forEach(option => {
                 if (option.value === selectedTo && option.value !== "") {
+                    option.disabled = true;  // সিলেক্ট করা জেলাটি ডিজেবল করে দেওয়া
                     option.style.display = "none";
                 } else {
-                    option.style.display = "block";
+                    option.disabled = false;
+                    option.style.display = "";
                 }
             });
+
+            // যদি বর্তমান সিলেকশনে দুটোই একই জেলা হয়ে যায়, তবে To ফিল্ড রিসেট করে দেওয়া
+            if (selectedFrom && selectedTo && selectedFrom === selectedTo) {
+                toSelect.value = "";
+                document.getElementById('booking-fare-render').innerText = `0 BDT`;
+                selectedFareGlobalRate = 0;
+            }
         }
 
         // ইভেন্ট লিসেনার যুক্ত করা
@@ -1969,6 +1982,7 @@
             updateDistrictDropdowns();
             calculateFareSystemLogic();
         });
+
 
 
      function openSeatSelectionEngine() {
