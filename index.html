@@ -285,6 +285,7 @@
         .notice-tag { background: #FF3333; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; flex-shrink: 0; }
         .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; width: 100%; display: block; }
 
+        /* মেম্বার ক্যারোসেল: ডান থেকে বামে স্ক্রোলিং (Right to Left Continuous Marquee) */
         .carousel-container { 
             background: var(--panel-bg); 
             padding: 20px 0; 
@@ -1008,7 +1009,6 @@
         </div>
     </footer>
 
-    <!-- BDBUS Floating Chat Window -->
     <div id="bdbusChatBubble" onclick="toggleChatBox()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; font-size: 26px;">
         💬
     </div>
@@ -1045,7 +1045,7 @@
                 let userName = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
                 validMessages.push({
                     sender: "Bangladesh Bussid Unique Society (BDBUS)",
-                    text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-এ আপনাকে স্বাগতম।`,
+                    text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-ه‌ আপনাকে স্বাগতম।`,
                     isBot: true,
                     timestamp: Date.now()
                 });
@@ -1128,8 +1128,28 @@
                     if (!docSnap.exists()) {
                         await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
                     }
+                    await syncLiveNoticeFromCloud();
                 }
             } catch (error) { console.error(error); }
+        }
+
+        async function syncLiveNoticeFromCloud() {
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const noticeRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "live_notice");
+                    const noticeSnap = await window.FirebaseFirestore.getDoc(noticeRef);
+                    if (noticeSnap.exists() && noticeSnap.data().text) {
+                        db.notices = noticeSnap.data().text;
+                        saveDataEngine();
+                        const marqueeEl = document.getElementById('live-marquee-node');
+                        if (marqueeEl && marqueeEl.innerText !== db.notices) {
+                            marqueeEl.innerText = db.notices;
+                        }
+                    } else {
+                        await window.FirebaseFirestore.setDoc(noticeRef, { text: db.notices, updatedAt: Date.now() });
+                    }
+                }
+            } catch (e) { console.error(e); }
         }
 
         function saveDataEngine() { localStorage.setItem('bdbus_local_db', JSON.stringify(db)); }
@@ -1165,13 +1185,17 @@
 
                 if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
                 if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
-            }, 5000);
+            }, 1000);
         }
 
+        // প্রতি ৫ সেকেন্ড পর পর ব্যাকগ্রাউন্ডে মেম্বার তালিকা এবং নোটিশ সিঙ্ক হবে
         function initBackgroundAutoSyncEngine() {
             setInterval(() => {
-                if (activeUserSession && document.getElementById('home-screen').classList.contains('active')) {
-                    renderHomeMembersCarouselSilently();
+                if (activeUserSession) {
+                    syncLiveNoticeFromCloud();
+                    if (document.getElementById('home-screen').classList.contains('active')) {
+                        renderHomeMembersCarouselSilently();
+                    }
                 }
             }, 5000);
         }
@@ -1216,7 +1240,10 @@
             const activeTargetScreen = document.getElementById(screenId);
             if(activeTargetScreen) activeTargetScreen.classList.add('active');
             
-            if (screenId === 'home-screen') renderHomeMembersCarousel();
+            if (screenId === 'home-screen') {
+                syncLiveNoticeFromCloud();
+                renderHomeMembersCarousel();
+            }
             if (screenId === 'profile-screen') renderUserProfileView();
             if (screenId === 'admin-screen') renderAdminPanelDashboard();
             if (screenId === 'contact-screen') renderContactTeamPanel();
@@ -1238,7 +1265,6 @@
         }
 
         function toggleAuthSubView(view) {
-            const mainTitle = document.getElementById('auth-main-title');
             const subTitle = document.getElementById('auth-sub-title');
             if(view === 'signup') {
                 document.getElementById('login-sub-card').style.display = 'none';
@@ -1336,7 +1362,7 @@
                 document.getElementById('admin-menu-link').style.display = 'none'; 
             }
 
-            document.getElementById('live-marquee-node').innerText = db.notices;
+            syncLiveNoticeFromCloud();
             triggerGlobalWelcomePopup(user);
             navigatePage('home-screen');
         }
@@ -1492,7 +1518,7 @@
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-        // ফিক্সড: "Select Seat" এ ক্লিক করার সাথে সাথে ফায়ারবেস থেকে লাইভ সিট ডাটা ফেচ করে ইনস্ট্যান্ট সিট স্ক্রিনে নিয়ে যাওয়া হবে
+        // সিলেক্ট সিট বাটনে ক্লিক করার সাথে সাথেই মিলি সেকেন্ডের মধ্যে ফায়ারবেস থেকে লাইভ সিট ডাটা ফেচ হবে
         async function openSeatSelectionEngine() {
             const type = document.getElementById('route-bustype').value;
             const from = document.getElementById('route-from').value.trim();
@@ -1508,12 +1534,10 @@
             currentlyChosenSeatNode = null;
             document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout`;
 
-            // সিট স্ক্রিনে যাওয়ার ঠিক আগে ফায়ারবেস থেকে লাইভ বুকিং ডেটা সিকিউরলি ফেচ করা হচ্ছে
+            // মিলিসেকেন্ডে ফায়ারবেস থেকে লাইভ সিট ফেচ করা
             await loadFirebaseBookingsAndRenderMap();
-
             generateBusCabinGridBlueprint(type);
             initSeatLockCountdownTimer();
-
             navigatePage('seat-screen');
         }
 
@@ -1651,6 +1675,7 @@
             await fetchAndBuildMemberCards(false);
         }
 
+        // মেম্বার আইডি লিস্ট ডান থেকে বামে স্ক্রোলিং এবং অনলাইন/অফলাইন সবুজ/সাদা ব্যাজ স্ট্যাটাস লজিক
         async function fetchAndBuildMemberCards(showLoading) {
             const track = document.getElementById('home-carousel-track');
             if (!track) return;
@@ -1667,7 +1692,7 @@
                 usersList.forEach(user => {
                     let isOnline = user.isOnline;
                     let statusText = isOnline ? "ONLINE" : "OFFLINE";
-                    let statusColor = isOnline ? "var(--neon-green)" : "#ffffff";
+                    let statusColor = isOnline ? "var(--neon-green)" : "#ffffff"; // অনলাইন হলে সবুজ, অফলাইন হলে সাদা কালার
                     cardsHTML += `
                         <div class="member-card-node">
                             <img src="${user.avatar || 'https://via.placeholder.com/150'}" class="member-avatar-round" onerror="this.src='https://via.placeholder.com/150'">
@@ -1680,7 +1705,7 @@
                     `;
                 });
 
-                track.innerHTML = cardsHTML + cardsHTML;
+                track.innerHTML = cardsHTML + cardsHTML; // নিখুঁত ইনফিনিট লুপের জন্য ডাবল রেন্ডার
                 let loadingMsg = document.getElementById('carousel-loading-msg');
                 if (loadingMsg) loadingMsg.style.display = 'none';
             } catch (error) { console.error(error); }
@@ -1755,12 +1780,22 @@
             renderLiveBookingsMonitorTable();
         }
 
-        function executeAdminNoticeBroadcastSave() {
+        async function executeAdminNoticeBroadcastSave() {
             if(activeUserSession.role !== 'Admin') return;
-            db.notices = document.getElementById('admin-notice-input-field').value.trim();
+            const newNoticeText = document.getElementById('admin-notice-input-field').value.trim();
+            if(!newNoticeText) { alert("নোটিশ খালি রাখা যাবে না!"); return; }
+            
+            db.notices = newNoticeText;
             saveDataEngine();
             document.getElementById('live-marquee-node').innerText = db.notices;
-            alert("Notice updated!");
+
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const noticeRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "live_notice");
+                    await window.FirebaseFirestore.setDoc(noticeRef, { text: newNoticeText, updatedAt: Date.now() });
+                    alert("নোটিশ সফলভাবে লাইভ আপডেট হয়েছে!");
+                }
+            } catch (e) { console.error(e); }
         }
 
         async function executeAdminSearchLogic() {
