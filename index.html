@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- EmailJS SDK অটোমেটিক জিমেইল পাঠানোর জন্য -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <!-- ফায়ারবেস মডিউল সবার উপরে নিরাপদে ইনিশিয়ালাইজ করা হলো -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyOjAnL3e7KAOUf4hEXWD0l8KY7fvsE",
@@ -32,9 +35,13 @@
                 getDoc: getDoc,
                 collection: collection,
                 getDocs: getDocs,
-                deleteDoc: deleteDoc
+                deleteDoc: deleteDoc,
+                onSnapshot: onSnapshot
             };
             console.log("Firebase Connected Safely!");
+            if (typeof initRealtimeRoomSettingsListener === 'function') {
+                initRealtimeRoomSettingsListener();
+            }
         } catch (error) {
             console.error("Firebase Initialization Error:", error);
         }
@@ -339,7 +346,7 @@
             display: flex; 
             gap: 20px; 
             width: max-content; 
-            animation: continuousMarqueeAnimation 35s linear infinite;
+            animation: continuousMarqueeAnimation 25s linear infinite;
         }
         .carousel-container:hover .member-track {
             animation-play-state: paused;
@@ -1045,9 +1052,11 @@
                 <div class="form-group">
                     <label>Journey Time</label>
                     <select id="route-time" class="form-control">
-                        <option value="10:00 AM — Select Trip">Select Trip</option>
-                        <option value="11:00 PM — Night Trip">00:00 PM Night Trip V3.7.1 Upcoming</option>
-                        <option value="01:00 AM — Late Night Trip">01:00 AM Late Night Trip V3.6.1</option>
+                        <option value="Morning Trip V-3.6.1 :- 10:00 Am">Morning Trip V-3.6.1 :- 10:00 Am</option>
+                        <option value="Afternoon Trip V-3.6.1 :- 03:00 Pm">Afternoon Trip V-3.6.1 :- 03:00 Pm</option>
+                        <option value="Evening Trip V-3.6.1 :- 07:00 Pm">Evening Trip V-3.6.1 :- 07:00 Pm</option>
+                        <option value="Night Trip V-3.6.1 :- 12:00 Am">Night Trip V-3.6.1 :- 12:00 Am</option>
+                        <option value="Night Trip V-3.6.1 :- 01:20 Am">Night Trip V-3.6.1 :- 01:20 Am</option>
                     </select>
                 </div>
             </div>
@@ -1144,11 +1153,11 @@
                     <tr><td class="label-txt">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
                     <tr><td class="label-txt">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
                     <tr><td class="label-txt">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
-                    <tr><td class="label-txt">Server Name:</td><td class="val-txt" id="tk-room">Asia</td></tr>
+                    <tr><td class="label-txt">Server Name:</td><td class="val-txt" id="tk-server">Asia</td></tr>
                     <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS</td></tr>
                     <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">7799</td></tr>
                     <tr><td class="label-txt">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
-                    <tr><td class="label-txt">Room Master Name:</td><td class="val-txt" id="tk-room">Alom</td></tr>
+                    <tr><td class="label-txt">Room Master Name:</td><td class="val-txt" id="tk-rmaster">Alom</td></tr>
                 </table>
                 <div class="ticket-rules-box">
                     <strong>⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:</strong><br>
@@ -1178,6 +1187,35 @@
                 <textarea id="admin-notice-input-field" class="form-control" rows="3" style="resize: none;"></textarea>
             </div>
             <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
+        </div>
+
+        <!-- নতুন সেকশন: Multiplayer Room & Server Control -->
+        <div class="admin-notice-update-box" id="admin-room-server-wrapper" style="display: none;">
+            <h4 style="margin-bottom: 15px; color: var(--neon-green);"><i class="fa-solid fa-server"></i> Multiplayer Room & Server Control</h4>
+            <div class="form-group">
+                <label>Server Name</label>
+                <select id="admin-server-name-select" class="form-control">
+                    <option value="Asia">Asia</option>
+                    <option value="India">India</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="USA">USA</option>
+                    <option value="Australia">Australia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Room Name</label>
+                <input type="text" id="admin-room-name-input" class="form-control" placeholder="e.g. BDBUS">
+            </div>
+            <div class="form-group">
+                <label>Room Password</label>
+                <input type="text" id="admin-room-pass-input" class="form-control" placeholder="e.g. 7799">
+            </div>
+            <div class="form-group">
+                <label>Room Master Name</label>
+                <input type="text" id="admin-room-master-input" class="form-control" placeholder="e.g. Alom">
+            </div>
+            <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminRoomConfigSave()">Update Room & Server Info</button>
         </div>
 
         <div class="admin-booking-monitor-card">
@@ -1283,6 +1321,68 @@
     </div>
 
     <script>
+        // ================= EMAILJS CONFIGURATION =================
+        // আপনার EmailJS অ্যাকাউন্ট (Bangladeshbussiduniquesociety@gmail.com) থেকে নিচের ৩টি তথ্য বসিয়ে দিন:
+        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     // এখানে আপনার Public Key বসান
+        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     // এখানে আপনার Service ID বসান
+        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   // এখানে আপনার Template ID বসান
+
+        if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+
+        function sendTicketConfirmationEmail(ticketPayload) {
+            if (typeof emailjs === 'undefined' || EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
+                console.warn("EmailJS keys not configured yet. Skipping email dispatch.");
+                return;
+            }
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, ticketPayload)
+                .then(() => {
+                    console.log("Ticket confirmation email sent successfully to:", ticketPayload.to_email);
+                })
+                .catch((err) => {
+                    console.error("Failed to send ticket email:", err);
+                });
+        }
+        // =========================================================
+
+        // রিয়েল-টাইম রুম ও সার্ভার সেটিংস ভেরিয়েবল
+        let liveRoomSettings = {
+            serverName: "Asia",
+            roomName: "BDBUS",
+            roomPassword: "7799",
+            roomMasterName: "Alom"
+        };
+
+        // ফায়ারবেস থেকে মিলি সেকেন্ডে লাইভ রুম এবং নোটিশ আপডেট রিসিভার
+        function initRealtimeRoomSettingsListener() {
+            if (!window.FirebaseDb || !window.FirebaseFirestore) return;
+            try {
+                const roomDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings");
+                window.FirebaseFirestore.onSnapshot(roomDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        liveRoomSettings = {
+                            serverName: data.serverName || "Asia",
+                            roomName: data.roomName || "BDBUS",
+                            roomPassword: data.roomPassword || "7799",
+                            roomMasterName: data.roomMasterName || "Alom"
+                        };
+                        applyLiveRoomSettingsToTicketUI();
+                    }
+                });
+            } catch (e) {
+                console.error("Realtime Room Listener Error:", e);
+            }
+        }
+
+        function applyLiveRoomSettingsToTicketUI() {
+            if (document.getElementById('tk-server')) document.getElementById('tk-server').innerText = liveRoomSettings.serverName;
+            if (document.getElementById('tk-room')) document.getElementById('tk-room').innerText = liveRoomSettings.roomName;
+            if (document.getElementById('tk-rpass')) document.getElementById('tk-rpass').innerText = liveRoomSettings.roomPassword;
+            if (document.getElementById('tk-rmaster')) document.getElementById('tk-rmaster').innerText = liveRoomSettings.roomMasterName;
+        }
+
         function toggleChatBox() {
             let win = document.getElementById('bdbusChatWindow');
             if (!win) return;
@@ -1369,7 +1469,7 @@
                 return "⚠️ BDBUS একটি পরিচ্ছন্ন ও সৌহার্দ্যপূর্ণ বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, আক্রমণাত্মক বা অশালীন কোনো আলোচনার সুযোগ নেই। দয়া করে কমিউনিটির নিয়ম বজায় রাখুন।";
             }
 
-            return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
+            return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
         }
 
         function sendChatMessage() {
@@ -1470,6 +1570,15 @@
                     if (!counterSnap.exists()) {
                         await window.FirebaseFirestore.setDoc(counterRef, { lastId: 1000 });
                     }
+
+                    // রুম সেটিংস ডিফল্ট ভ্যালু সিড করা
+                    const roomRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings");
+                    const roomSnap = await window.FirebaseFirestore.getDoc(roomRef);
+                    if (!roomSnap.exists()) {
+                        await window.FirebaseFirestore.setDoc(roomRef, liveRoomSettings);
+                    } else {
+                        liveRoomSettings = roomSnap.data();
+                    }
                 }
             } catch (err) {
                 console.error("Firebase Admin Sync Error:", err);
@@ -1480,7 +1589,6 @@
             localStorage.setItem('bdbus_local_db', JSON.stringify(db));
         }
 
-        // ব্যবহারকারীর হার্টবিট ও ঘড়ি আপডেট (প্রতি ৪ সেকেন্ডে একবার আপডেট হবে যাতে স্ট্যাটাস লাইভ থাকে)
         async function updateActiveUserHeartbeat() {
             if (!activeUserSession || !activeUserSession.email) return;
             activeUserSession.lastActive = Date.now();
@@ -1526,7 +1634,6 @@
             }, 1000);
         }
 
-        // ব্যাকগ্রাউন্ডে প্রতি ৪ সেকেন্ড পর পর হোমপেজ মেম্বার ক্যারোসেল সাইলেন্ট আপডেট
         function initBackgroundAutoSyncEngine() {
             setInterval(() => {
                 if (activeUserSession && document.getElementById('home-screen').classList.contains('active')) {
@@ -1679,7 +1786,6 @@
                     isBanned: false, 
                     claimedWelcome: false, 
                     claimedSubs: false,
-                    lastActive: Date.now(),
                     createdAt: Date.now()
                 };
 
@@ -1726,8 +1832,6 @@
                             alert("আপনার অ্যাকাউন্টটি ব্লক করা হয়েছে।");
                             return;
                         }
-                        user.lastActive = Date.now();
-                        await updateCloudUserDocument(user);
                         proceedLoginSession(user);
                     } else {
                         alert("পাসওয়ার্ড ভুল হয়েছে!");
@@ -1984,7 +2088,6 @@
             document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
             currentlyChosenSeatNode = null;
 
-            // মিলি সেকেন্ডে সিট আপডেট নিশ্চিত করতে সিট স্ক্রিনে যাওয়ার ঠিক পূর্বে ফায়ারবেস থেকে সিট ফেচ করা
             await loadFirebaseBookingsAndRenderMap();
             generateBusCabinGridBlueprint(type);
             initSeatLockCountdownTimer();
@@ -2127,6 +2230,18 @@
             const type = document.getElementById('route-bustype').value;
             const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
+            // কনফার্ম করার আগে ফায়ারবেস থেকে সর্বশেষ রুম ও সার্ভার সেটিংস নিশ্চিত করা
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const roomSnap = await window.FirebaseFirestore.getDoc(
+                        window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings")
+                    );
+                    if (roomSnap.exists()) {
+                        liveRoomSettings = roomSnap.data();
+                    }
+                }
+            } catch (e) { console.error(e); }
+
             activeUserSession.wallet -= selectedFareGlobalRate;
             
             const confirmData = {
@@ -2148,18 +2263,46 @@
 
                 if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
 
+                const fromVal = document.getElementById('route-from').value;
+                const toVal = document.getElementById('route-to').value;
+                const dateVal = document.getElementById('route-date').value;
+                const timeVal = document.getElementById('route-time').value;
+                const now = new Date();
+                const issueStr = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+
                 document.getElementById('tk-mid').innerText = `BDBUS-${activeUserSession.id}`;
                 document.getElementById('tk-name').innerText = activeUserSession.name;
                 document.getElementById('tk-gid').innerText = activeUserSession.gameid;
                 document.getElementById('tk-phone').innerText = activeUserSession.phone;
-                document.getElementById('tk-from').innerText = document.getElementById('route-from').value;
-                document.getElementById('tk-to').innerText = document.getElementById('route-to').value;
-                document.getElementById('tk-date').innerText = document.getElementById('route-date').value;
-                document.getElementById('tk-time').innerText = document.getElementById('route-time').value;
+                document.getElementById('tk-from').innerText = fromVal;
+                document.getElementById('tk-to').innerText = toVal;
+                document.getElementById('tk-date').innerText = dateVal;
+                document.getElementById('tk-time').innerText = timeVal;
                 document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
-                
-                const now = new Date();
-                document.getElementById('tk-issue').innerText = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+                document.getElementById('tk-issue').innerText = issueStr;
+
+                // লাইভ রুম ও সার্ভার তথ্য টিকিটে বসানো
+                applyLiveRoomSettingsToTicketUI();
+
+                // মেম্বারের জিমেইলে অটোমেটিক কনফার্মেশন টিকিট পাঠানো (Bangladeshbussiduniquesociety@gmail.com থেকে)
+                sendTicketConfirmationEmail({
+                    to_email: activeUserSession.email,
+                    to_name: activeUserSession.name,
+                    member_id: `BDBUS-${activeUserSession.id}`,
+                    game_id: activeUserSession.gameid,
+                    phone: activeUserSession.phone,
+                    from_loc: fromVal,
+                    to_loc: toVal,
+                    journey_date: dateVal,
+                    journey_time: timeVal,
+                    coach_type: type,
+                    seat_no: currentlyChosenSeatNode,
+                    issue_time: issueStr,
+                    server_name: liveRoomSettings.serverName,
+                    room_name: liveRoomSettings.roomName,
+                    room_password: liveRoomSettings.roomPassword,
+                    room_master: liveRoomSettings.roomMasterName
+                });
 
                 navigatePage('ticket-view-screen');
             } catch (err) {
@@ -2185,7 +2328,6 @@
             }
         }
         
-        // এইচডি পিএনজি ফরম্যাটে টিকিট ডাউনলোড ইঞ্জিন (ওয়েব ও অ্যাপ উপযোগী)
         function executeTicketDownloadAndRedirect() {
             alert("Compiling ticket graphics assets in HD PNG...");
             const target = document.getElementById('digital-ticket-canvas');
@@ -2193,12 +2335,10 @@
             html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
                 let imageURL = canvas.toDataURL('image/png');
                 
-                // অ্যান্ড্রয়েড অ্যাপ ও ব্রাউজার উভয়ের জন্য নিরাপদ ডাউনলোড পদ্ধতি
                 let link = document.createElement('a');
                 link.href = imageURL;
                 link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
                 
-                // ডোমেইনে অ্যাটাচ করে ক্লিক ট্রিগার করা
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -2216,8 +2356,6 @@
         }
 
         async function renderHomeMembersCarouselSilently() {
-            const track = document.getElementById('home-carousel-track');
-            if (!track) return;
             await fetchAndBuildMemberCards();
         }
 
@@ -2237,7 +2375,6 @@
 
                 const now = Date.now();
                 usersList.forEach(u => {
-                    // গত ২০ সেকেন্ডের মধ্যে একটিভিটি থাকলে অনলাইন ধরবে
                     u.isOnline = u.lastActive && (now - u.lastActive < 20000);
                 });
 
@@ -2246,8 +2383,7 @@
                 let cardsHTML = "";
                 usersList.forEach(user => {
                     let isOnline = user.isOnline;
-                    let statusText = isOnline ? "ONLINE" : "OFFLINE";
-                    // অনলাইনে থাকলে সবুজ কালার, অফলাইনে থাকলে সাদা কালার
+                    let statusText = isOnline ? "ACTIVE" : "OFFLINE";
                     let statusColor = isOnline ? "var(--neon-green)" : "#ffffff";
 
                     cardsHTML += `
@@ -2262,7 +2398,6 @@
                     `;
                 });
 
-                // লুপ স্মুথ রাখার জন্য কার্ডগুলো ডাবল রেন্ডার করা হলো
                 track.innerHTML = cardsHTML + cardsHTML;
             } catch (error) {
                 console.error("Error loading carousel members from Firebase:", error);
@@ -2383,11 +2518,23 @@
             }
             
             const noticeBox = document.getElementById('admin-notice-manager-wrapper');
-            if(activeUserSession.role === 'Admin') {
-                noticeBox.style.display = 'block';
-                document.getElementById('admin-notice-input-field').value = db.notices;
+            const roomBox = document.getElementById('admin-room-server-wrapper');
+
+            if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master') {
+                if(activeUserSession.role === 'Admin') {
+                    noticeBox.style.display = 'block';
+                    document.getElementById('admin-notice-input-field').value = db.notices;
+                } else {
+                    noticeBox.style.display = 'none';
+                }
+                roomBox.style.display = 'block';
+                document.getElementById('admin-server-name-select').value = liveRoomSettings.serverName;
+                document.getElementById('admin-room-name-input').value = liveRoomSettings.roomName;
+                document.getElementById('admin-room-pass-input').value = liveRoomSettings.roomPassword;
+                document.getElementById('admin-room-master-input').value = liveRoomSettings.roomMasterName;
             } else {
                 noticeBox.style.display = 'none';
+                roomBox.style.display = 'none';
             }
 
             renderLiveBookingsMonitorTable();
@@ -2407,6 +2554,45 @@
             if(liveMarquee) liveMarquee.innerText = db.notices;
             
             alert("Global notice feed updated successfully!");
+        }
+
+        // এডমিন প্যানেল থেকে রুম এবং সার্ভার সেটিংস ফায়ারবেসে সেভ করার ফাংশন
+        async function executeAdminRoomConfigSave() {
+            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Trip Master') {
+                alert("Permission denied.");
+                return;
+            }
+
+            const sName = document.getElementById('admin-server-name-select').value;
+            const rName = document.getElementById('admin-room-name-input').value.trim();
+            const rPass = document.getElementById('admin-room-pass-input').value.trim();
+            const rMaster = document.getElementById('admin-room-master-input').value.trim();
+
+            if (!rName || !rPass || !rMaster) {
+                alert("দয়া করে Room Name, Room Password এবং Room Master Name পূরণ করুন!");
+                return;
+            }
+
+            const updatedRoomConfig = {
+                serverName: sName,
+                roomName: rName,
+                roomPassword: rPass,
+                roomMasterName: rMaster,
+                updatedAt: Date.now()
+            };
+
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const roomRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings");
+                    await window.FirebaseFirestore.setDoc(roomRef, updatedRoomConfig, { merge: true });
+                    liveRoomSettings = updatedRoomConfig;
+                    applyLiveRoomSettingsToTicketUI();
+                    alert("Multiplayer Room & Server info updated live! এখন থেকে কনফার্ম করা টিকিটে এই তথ্য দেখাবে।");
+                }
+            } catch (err) {
+                console.error("Room Config Update Error:", err);
+                alert("রুমের তথ্য আপডেট করতে সমস্যা হয়েছে।");
+            }
         }
 
         function buildUserAdminDisplayCards(userArray) {
@@ -2637,7 +2823,6 @@
             }
         });
 
-        // কাস্টম সার্চেবল ড্রপডাউন এবং From/To এক্সক্লুশন ফিল্টার সিস্টেম
         function initSearchableDropdownSystem() {
             setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts, 'from');
             setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts, 'to');
@@ -2708,6 +2893,7 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             await verifyDatabaseStructureSeeding();
+            initRealtimeRoomSettingsListener();
             initialClockHeartbeatEngine();
             initBackgroundAutoSyncEngine();
             setLanguageSystem(selectedLanguage);
