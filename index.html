@@ -1322,10 +1322,9 @@
 
     <script>
         // ================= EMAILJS CONFIGURATION =================
-        // আপনার EmailJS অ্যাকাউন্ট (Bangladeshbussiduniquesociety@gmail.com) থেকে নিচের ৩টি তথ্য বসিয়ে দিন:
-        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     // এখানে আপনার Public Key বসান
-        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     // এখানে আপনার Service ID বসান
-        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   // এখানে আপনার Template ID বসান
+        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     
+        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     
+        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   
 
         if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -1346,7 +1345,6 @@
         }
         // =========================================================
 
-        // রিয়েল-টাইম রুম ও সার্ভার সেটিংস ভেরিয়েবল
         let liveRoomSettings = {
             serverName: "Asia",
             roomName: "BDBUS",
@@ -1354,7 +1352,6 @@
             roomMasterName: "Alom"
         };
 
-        // ফায়ারবেস থেকে মিলি সেকেন্ডে লাইভ রুম এবং নোটিশ আপডেট রিসিভার
         function initRealtimeRoomSettingsListener() {
             if (!window.FirebaseDb || !window.FirebaseFirestore) return;
             try {
@@ -1547,6 +1544,7 @@
                 email: SUPER_ADMIN_EMAIL,
                 pass: "admin123",
                 role: "Admin",
+                permissions: { canUpdateNotice: true, canUpdateRoom: true },
                 wallet: 100000,
                 avatar: "images/M2Vai.png",
                 isBanned: false,
@@ -1563,6 +1561,9 @@
                     if (!docSnap.exists()) {
                         await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
                         console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
+                    } else {
+                        // সুপার এডমিনের পারমিশন সব সময় ট্রু নিশ্চিত করা
+                        await window.FirebaseFirestore.setDoc(adminDocRef, { permissions: { canUpdateNotice: true, canUpdateRoom: true } }, { merge: true });
                     }
 
                     const counterRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "user_counter");
@@ -1571,7 +1572,6 @@
                         await window.FirebaseFirestore.setDoc(counterRef, { lastId: 1000 });
                     }
 
-                    // রুম সেটিংস ডিফল্ট ভ্যালু সিড করা
                     const roomRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings");
                     const roomSnap = await window.FirebaseFirestore.getDoc(roomRef);
                     if (!roomSnap.exists()) {
@@ -1781,6 +1781,7 @@
                     id: nextId,
                     name, gameid, dob, phone, gender, division, district, fb, email, pass,
                     role: "Regular Member",
+                    permissions: { canUpdateNotice: false, canUpdateRoom: false },
                     wallet: 0,
                     avatar: "https://via.placeholder.com/150",
                     isBanned: false, 
@@ -1855,7 +1856,7 @@
             document.getElementById('header-empty-space').style.display = 'none';
             document.getElementById('main-global-footer').style.display = 'block';
             
-            if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master') { 
+            if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master' || (user.permissions && (user.permissions.canUpdateNotice || user.permissions.canUpdateRoom))) { 
                 document.getElementById('admin-menu-link').style.display = 'flex'; 
             } else { 
                 document.getElementById('admin-menu-link').style.display = 'none'; 
@@ -2021,7 +2022,6 @@
             });
         }
 
-        // ভাড়ার হিসাব এবং রুট লজিক
         function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
@@ -2230,7 +2230,6 @@
             const type = document.getElementById('route-bustype').value;
             const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
-            // কনফার্ম করার আগে ফায়ারবেস থেকে সর্বশেষ রুম ও সার্ভার সেটিংস নিশ্চিত করা
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
                     const roomSnap = await window.FirebaseFirestore.getDoc(
@@ -2281,10 +2280,8 @@
                 document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
                 document.getElementById('tk-issue').innerText = issueStr;
 
-                // লাইভ রুম ও সার্ভার তথ্য টিকিটে বসানো
                 applyLiveRoomSettingsToTicketUI();
 
-                // মেম্বারের জিমেইলে অটোমেটিক কনফার্মেশন টিকিট পাঠানো (Bangladeshbussiduniquesociety@gmail.com থেকে)
                 sendTicketConfirmationEmail({
                     to_email: activeUserSession.email,
                     to_name: activeUserSession.name,
@@ -2417,7 +2414,7 @@
                 querySnapshot.forEach((doc) => {
                     let u = doc.data();
                     const role = u.role ? u.role.toLowerCase() : '';
-                    if (role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master') {
+                    if (role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master' || (u.permissions && (u.permissions.canUpdateNotice || u.permissions.canUpdateRoom))) {
                         coreStaff.push(u);
                     }
                 });
@@ -2511,7 +2508,15 @@
         }
 
         function renderAdminPanelDashboard() {
-            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Moderator' && activeUserSession.role !== 'Counter Master' && activeUserSession.role !== 'Trip Master') {
+            const hasAccess = activeUserSession && (
+                activeUserSession.role === 'Admin' || 
+                activeUserSession.role === 'Moderator' || 
+                activeUserSession.role === 'Counter Master' || 
+                activeUserSession.role === 'Trip Master' ||
+                (activeUserSession.permissions && (activeUserSession.permissions.canUpdateNotice || activeUserSession.permissions.canUpdateRoom))
+            );
+
+            if(!hasAccess) {
                 alert("Unauthorized access denied.");
                 navigatePage('home-screen');
                 return;
@@ -2520,20 +2525,23 @@
             const noticeBox = document.getElementById('admin-notice-manager-wrapper');
             const roomBox = document.getElementById('admin-room-server-wrapper');
 
-            if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master') {
-                if(activeUserSession.role === 'Admin') {
-                    noticeBox.style.display = 'block';
-                    document.getElementById('admin-notice-input-field').value = db.notices;
-                } else {
-                    noticeBox.style.display = 'none';
-                }
+            const canNotice = activeUserSession.role === 'Admin' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateNotice);
+            const canRoom = activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateRoom);
+
+            if(canNotice) {
+                noticeBox.style.display = 'block';
+                document.getElementById('admin-notice-input-field').value = db.notices;
+            } else {
+                noticeBox.style.display = 'none';
+            }
+
+            if(canRoom) {
                 roomBox.style.display = 'block';
                 document.getElementById('admin-server-name-select').value = liveRoomSettings.serverName;
                 document.getElementById('admin-room-name-input').value = liveRoomSettings.roomName;
                 document.getElementById('admin-room-pass-input').value = liveRoomSettings.roomPassword;
                 document.getElementById('admin-room-master-input').value = liveRoomSettings.roomMasterName;
             } else {
-                noticeBox.style.display = 'none';
                 roomBox.style.display = 'none';
             }
 
@@ -2543,7 +2551,8 @@
         }
 
         function executeAdminNoticeBroadcastSave() {
-            if(activeUserSession.role !== 'Admin') { alert("Permission denied."); return; }
+            const canNotice = activeUserSession.role === 'Admin' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateNotice);
+            if(!canNotice) { alert("Permission denied."); return; }
             const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
             if(!freshNoticeText) { alert("Notice text cannot be blank."); return; }
             
@@ -2556,9 +2565,9 @@
             alert("Global notice feed updated successfully!");
         }
 
-        // এডমিন প্যানেল থেকে রুম এবং সার্ভার সেটিংস ফায়ারবেসে সেভ করার ফাংশন
         async function executeAdminRoomConfigSave() {
-            if(activeUserSession.role !== 'Admin' && activeUserSession.role !== 'Trip Master') {
+            const canRoom = activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateRoom);
+            if(!canRoom) {
                 alert("Permission denied.");
                 return;
             }
@@ -2600,6 +2609,7 @@
             if(!grid) return;
             grid.innerHTML = "";
             const currentRole = activeUserSession.role;
+            const isSuperAdmin = (currentRole === 'Admin');
 
             if(userArray.length === 0) {
                 grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">কোনো সদস্য পাওয়া যায়নি!</div>`;
@@ -2617,7 +2627,9 @@
                 let actionControlsHTML = "";
                 const btnBase = 'padding:4px 8px; font-size:11px; font-weight:bold; border-radius:3px; border:none; cursor:pointer; color:#fff; transition: opacity 0.2s;';
 
-                if(currentRole === 'Admin') {
+                let uPerms = u.permissions || { canUpdateNotice: false, canUpdateRoom: false };
+
+                if(isSuperAdmin) {
                     actionControlsHTML = `
                         <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet('${u.email}', 'Regular Member')">Member</button>
                         <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet('${u.email}', 'Trip Master')">Trip Master</button>
@@ -2627,6 +2639,10 @@
                         <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
                         <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle('${u.email}', ${u.isBanned})">${u.isBanned ? 'Unban':'Ban'}</button>
                         <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem('${u.email}')">Remove</button>
+                        <div style="width:100%; margin-top:6px; display:flex; gap:10px; font-size:11px; align-items:center; background:#0f172a; padding:6px; border-radius:4px;">
+                            <label><input type="checkbox" id="perm-notice-${u.id}" ${uPerms.canUpdateNotice ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateNotice', this.checked)"> Notice Control</label>
+                            <label><input type="checkbox" id="perm-room-${u.id}" ${uPerms.canUpdateRoom ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateRoom', this.checked)"> Room Control</label>
+                        </div>
                     `;
                 } else {
                     actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Mode</span>`;
@@ -2645,6 +2661,30 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        async function adminTogglePermission(email, permKey, value) {
+            try {
+                const querySnapshot = await window.FirebaseFirestore.getDocs(
+                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
+                );
+                let targetUser = null;
+                querySnapshot.forEach((d) => {
+                    if(d.data().email === email) targetUser = d.data();
+                });
+
+                if(targetUser) {
+                    if(!targetUser.permissions) targetUser.permissions = { canUpdateNotice: false, canUpdateRoom: false };
+                    targetUser.permissions[permKey] = value;
+
+                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                    await window.FirebaseFirestore.setDoc(docRef, { permissions: targetUser.permissions }, { merge: true });
+                    alert("Permission updated successfully!");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Failed to update permission.");
+            }
         }
 
         async function executeAdminSearchLogic() {
@@ -2910,7 +2950,7 @@
                     document.getElementById('header-empty-space').style.display = 'none';
                     if(globalFooter) globalFooter.style.display = 'block';
                     
-                    if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Moderator' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Trip Master') {
+                    if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Moderator' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && (activeUserSession.permissions.canUpdateNotice || activeUserSession.permissions.canUpdateRoom))) {
                         document.getElementById('admin-menu-link').style.display = 'flex';
                     }
                     
