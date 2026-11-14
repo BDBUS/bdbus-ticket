@@ -320,8 +320,8 @@
             display: flex;
             align-items: center;
         }
-        .notice-tag { background: #FF3333; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; }
-        .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; }
+        .notice-tag { background: #FF3333; color: #fff; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-right: 15px; flex-shrink: 0; }
+        .notice-board marquee { color: #fff; font-size: 14px; font-weight: 500; width: 100%; display: block; }
 
         .carousel-container { 
             background: var(--panel-bg); 
@@ -357,7 +357,7 @@
         .member-avatar-round { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-green); }
         .member-meta h5 { font-size: 14px; margin-bottom: 2px; }
         .member-meta p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-        .status-badge { color: var(--neon-green); font-weight: bold; font-size: 10px; letter-spacing: 1px; display: block; margin-top: 2px;}
+        .status-badge { font-weight: bold; font-size: 10px; letter-spacing: 1px; display: block; margin-top: 2px;}
 
         @keyframes continuousMarqueeAnimation {
             0% { transform: translateX(0); }
@@ -886,7 +886,7 @@
 
         <div class="notice-board">
             <span class="notice-tag">NOTICE</span>
-            <marquee id="live-marquee-node" scrollamount="6">Welcome to Bangladesh Bussid Unique Society (BDBUS)</marquee>
+            <marquee id="live-marquee-node" scrollamount="6">Welcome to BDBUS Official Ticket Counter Simulator Hub!</marquee>
         </div>
 
         <div class="carousel-container">
@@ -1430,7 +1430,7 @@
             "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", 
             "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon", "Narail", "Narayanganj", "Narsingdi", "Natore", 
             "Netrokona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", 
-            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
+            "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajगंज", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
         ];
 
         async function verifyDatabaseStructureSeeding() {
@@ -1480,9 +1480,31 @@
             localStorage.setItem('bdbus_local_db', JSON.stringify(db));
         }
 
+        // রিয়েল-টাইম হার্টবিট: প্রতি ৫ সেকেন্ডে ইউজারের lastActive টাইমস্ট্যাম্প আপডেট করা
+        async function updateActiveUserHeartbeat() {
+            if (!activeUserSession || !activeUserSession.email) return;
+            activeUserSession.lastActive = Date.now();
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", activeUserSession.email);
+                    await window.FirebaseFirestore.setDoc(docRef, { lastActive: activeUserSession.lastActive }, { merge: true });
+                }
+            } catch (e) {
+                console.error("Heartbeat error:", e);
+            }
+        }
+
         function initialClockHeartbeatEngine() {
             setInterval(() => {
                 const now = new Date();
+                if (activeUserSession) {
+                    updateActiveUserHeartbeat();
+                    // হোম স্ক্রিনে থাকলে মেম্বার ক্যারোসেল রিফ্রেশ করা যাতে অনলাইন/অফলাইন স্ট্যাটাস লাইভ আপডেট হয়
+                    if (document.getElementById('home-screen').classList.contains('active')) {
+                        renderHomeMembersCarousel();
+                    }
+                }
+
                 let hrs = now.getHours();
                 const mins = String(now.getMinutes()).padStart(2, '0');
                 const secs = String(now.getSeconds()).padStart(2, '0');
@@ -1507,7 +1529,7 @@
                 else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
                 else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
                 if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
-            }, 1000);
+            }, 5000); // প্রতি ৫ সেকেন্ডে আপডেট হবে
         }
 
         function checkSessionTimeoutRules() {
@@ -1654,6 +1676,7 @@
                     isBanned: false, 
                     claimedWelcome: false, 
                     claimedSubs: false,
+                    lastActive: Date.now(),
                     createdAt: Date.now()
                 };
 
@@ -1700,6 +1723,8 @@
                             alert("আপনার অ্যাকাউন্টটি ব্লক করা হয়েছে।");
                             return;
                         }
+                        user.lastActive = Date.now();
+                        await updateCloudUserDocument(user);
                         proceedLoginSession(user);
                     } else {
                         alert("পাসওয়ার্ড ভুল হয়েছে!");
@@ -1889,7 +1914,6 @@
             });
         }
 
-        // ভাড়ার হিসাব এবং রুট লজিক
         function calculateFareSystemLogic() {
             const fromLoc = document.getElementById('route-from').value.trim();
             const toLoc = document.getElementById('route-to').value.trim();
@@ -2160,29 +2184,22 @@
             }
         }
         
-        // এইচডি পিএনজি ফরম্যাটে টিকিট ডাউনলোড ইঞ্জিন (ওয়েব ও অ্যাপ উপযোগী)
         function executeTicketDownloadAndRedirect() {
             alert("Compiling ticket graphics assets in HD PNG...");
             const target = document.getElementById('digital-ticket-canvas');
             
             html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
-                let imageURL = canvas.toDataURL('image/png');
-                
-                // অ্যান্ড্রয়েড অ্যাপ ও ব্রাউজার উভয়ের জন্য নিরাপদ ডাউনলোড পদ্ধতি
                 let link = document.createElement('a');
-                link.href = imageURL;
                 link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
-                
-                // ডোমেইনে অ্যাটাচ করে ক্লিক ট্রিগার করা
-                document.body.appendChild(link);
+                link.href = canvas.toDataURL('image/png');
                 link.click();
-                document.body.removeChild(link);
                 
-                alert("Download triggered successfully! Returning safely back to home command dashboard.");
+                alert("Download successful! Returning safely back to home command dashboard.");
                 navigatePage('home-screen');
             });
         }
 
+        // হোমপেজে মেম্বার ক্যারোসেল রেন্ডার করার আপডেট করা ফাংশন (অনলাইন মেম্বাররা প্রথমে থাকবে এবং স্ট্যাটাস কালার ঠিক করা)
         async function renderHomeMembersCarousel() {
             const track = document.getElementById('home-carousel-track');
             if (!track) return;
@@ -2198,13 +2215,25 @@
                     usersList.push(doc.data());
                 });
 
-                usersList.sort((a, b) => b.wallet - a.wallet);
+                const now = Date.now();
+                // অনলাইন মেম্বার নির্ধারণের শর্ত: গত ২০ সেকেন্ডের মধ্যে একটিভ থাকলে অনলাইন গণ্য হবে
+                usersList.forEach(u => {
+                    u.isOnline = u.lastActive && (now - u.lastActive < 20000);
+                });
+
+                // অনলাইন মেম্বারদের সবার আগে (প্রথমে) এবং বাকিদের পরে সাজানো
+                usersList.sort((a, b) => {
+                    if (a.isOnline === b.isOnline) {
+                        return b.wallet - a.wallet; // ব্যালেন্স অনুযায়ী সাব-সটিং
+                    }
+                    return b.isOnline ? 1 : -1;
+                });
 
                 let cardsHTML = "";
                 usersList.forEach(user => {
-                    let isOnline = user.lastActive && (Date.now() - user.lastActive < 45000);
-                    let statusText = isOnline ? "ACTIVE" : "OFFLINE";
-                    let statusColor = isOnline ? "var(--neon-green)" : "#094a36";
+                    let isOnline = user.isOnline;
+                    let statusText = isOnline ? "ONLINE" : "OFFLINE";
+                    let statusColor = isOnline ? "var(--neon-green)" : "#ffffff"; // অনলাইন সবুজ, অফলাইন সাদা
 
                     cardsHTML += `
                         <div class="member-card-node">
@@ -2212,13 +2241,14 @@
                             <div class="member-meta">
                                 <h5>${user.name}</h5>
                                 <p>ID: BDBUS-${user.id} | <strong>${user.role}</strong><br>Balance: <span style="color:var(--neon-green);">${user.wallet} BDT</span></p>
-                                <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle"></i> ${statusText}</span>
+                                <span class="status-badge" style="color: ${statusColor};"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> ${statusText}</span>
                             </div>
                         </div>
                     `;
                 });
 
-                track.innerHTML = cardsHTML;
+                // লুপ স্মুথ অ্যানিমেশনের জন্য কার্ডগুলো ডাবল করে দেওয়া
+                track.innerHTML = cardsHTML + cardsHTML;
             } catch (error) {
                 console.error("Error loading carousel members from Firebase:", error);
                 track.innerHTML = `<div style="color: #ff4d4d; padding: 10px; text-align: center;">Failed to load live members.</div>`;
@@ -2593,7 +2623,6 @@
             }
         });
 
-        // কাস্টম সার্চেবল ড্রপডাউন এবং From/To এক্সক্লুশন ফিল্টার সিস্টেম
         function initSearchableDropdownSystem() {
             setupCustomDropdown('route-from', 'from-custom-dropdown', bangladeshDistricts, 'from');
             setupCustomDropdown('route-to', 'to-custom-dropdown', bangladeshDistricts, 'to');
@@ -2625,7 +2654,6 @@
             dropdown.innerHTML = '';
             
             let currentPool = dataPool;
-            // From এ যা সিলেক্ট করা হবে, সেটি To এর লিস্ট থেকে ফিল্টার করে বাদ দেওয়া
             if (typeIndicator === 'to') {
                 const fromVal = document.getElementById('route-from').value.trim();
                 currentPool = dataPool.filter(d => d.toLowerCase() !== fromVal.toLowerCase());
@@ -2651,13 +2679,12 @@
                     input.value = itemText;
                     dropdown.style.display = 'none';
                     if(input.id === 'route-from' || input.id === 'route-to') {
-                        // যদি From এবং To এ একই জেলা হয়ে যায়, তবে To ফিল্ড রিসেট করা
                         const fVal = document.getElementById('route-from').value.trim();
                         const tVal = document.getElementById('route-to').value.trim();
                         if (fVal && tVal && fVal === tVal) {
                             document.getElementById('route-to').value = '';
                         }
-                        calculateFareSystemLogic();
+                        calculateFareServiceLogic();
                     }
                 };
                 dropdown.appendChild(item);
