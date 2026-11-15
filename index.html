@@ -746,7 +746,14 @@
             <button class="btn-premium" style="width: 130px; justify-content: center;" onclick="dismissGlobalWelcomePopup()">Thanks</button>
         </div>
     </div>
-
+<!-- নতুন দ্বিতীয় নোটিশ পপ-আপটি ঠিক এখানে বসবে -->
+<div class="custom-welcome-modal-layer" id="second-notice-popup" style="display: none;" data-global-second-popup-layer>
+    <div class="custom-welcome-modal-card" style="max-width: 450px; width: 90%; background: #1a1a2e; padding: 20px; border-radius: 12px; text-align: center;">
+        <img src="images/notice.jpg" alt="Urgent Notice" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--nman-blue);">
+        <button class="btn-premium" style="width: 140px; margin: 0 auto; justify-content: center;" onclick="dismissSecondPopup()">Okay</button>
+    </div>
+</div>
+    
     <header class="global-header" id="main-global-header">
         <div class="header-left" id="header-nav-controls" style="display: none;">
             <i class="fa-solid fa-arrow-left manual-back-trigger" id="global-back-nav-btn" onclick="executeHardwareBackTrigger()"></i>
@@ -1803,17 +1810,32 @@
         }
 
         function triggerGlobalWelcomePopup(user) {
-            document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('pop-user-name').innerText = user.name;
-            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('global-welcome-popup-layer').style.display = "flex";
-        }
+    document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
+    document.getElementById('pop-user-name').innerText = user.name;
+    document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
+    document.getElementById('global-welcome-popup-layer').style.display = "flex";
+}
 
-        function dismissGlobalWelcomePopup() {
-            document.getElementById('global-welcome-popup-layer').style.display = "none";
-        }
+function dismissGlobalWelcomePopup() {
+    // প্রথম ওয়েলকাম পপ-আপটি বন্ধ করবে
+    document.getElementById('global-welcome-popup-layer').style.display = "none";
 
-        async function executeLoginLogic() {
+    // সাথে সাথেই দ্বিতীয় নোটিশ পপ-আপটি স্ক্রিনে নিয়ে আসবে
+    const secondModal = document.getElementById('second-notice-popup');
+    if (secondModal) {
+        secondModal.style.display = 'flex';
+    }
+}
+
+// দ্বিতীয় পপ-আপের Okay বাটনের জন্য ফাংশন
+function dismissSecondPopup() {
+    const secondModal = document.getElementById('second-notice-popup');
+    if (secondModal) {
+        secondModal.style.display = 'none';
+    }
+}
+
+   async function executeLoginLogic() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
 
