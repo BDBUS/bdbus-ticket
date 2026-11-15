@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- EmailJS SDK অটোমেটিক জিমেইল পাঠানোর জন্য -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+<!-- ফায়ারবেস মডিউল সবার উপরে নিরাপদে ইনিশিয়ালাইজ করা হলো -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -45,6 +47,7 @@
         }
     </script>
     <style>
+        /* --- PREMIUM UI/UX DESIGN SYSTEM --- */
         :root {
             --bg-dark: #070b12;
             --panel-bg: #0f172a;
@@ -1186,6 +1189,7 @@
             <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
         </div>
 
+        <!-- নতুন সেকশন: Multiplayer Room & Server Control -->
         <div class="admin-notice-update-box" id="admin-room-server-wrapper" style="display: none;">
             <h4 style="margin-bottom: 15px; color: var(--neon-green);"><i class="fa-solid fa-server"></i> Multiplayer Room & Server Control</h4>
             <div class="form-group">
@@ -1293,6 +1297,7 @@
         </div>
     </footer>
 
+    <!-- BDBUS Floating Chat Window -->
     <div id="bdbusChatBubble" onclick="toggleChatBox()" style="position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; font-size: 26px;">
         💬
     </div>
@@ -1316,9 +1321,10 @@
     </div>
 
     <script>
-        const EMAILJS_PUBLIC_KEY = "lbruLyBBidpOs5Sh";[span_0](start_span)[span_0](end_span)
-        const EMAILJS_SERVICE_ID = "service_yavaOaq";[span_1](start_span)[span_1](end_span)
-        const EMAILJS_TEMPLATE_ID = "template_mvqi9fg";[span_2](start_span)[span_2](end_span)
+        // ================= EMAILJS CONFIGURATION =================
+        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     
+        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     
+        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   
 
         if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -1331,12 +1337,13 @@
             }
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, ticketPayload)
                 .then(() => {
-                    console.log("Ticket confirmation email with image sent successfully to:", ticketPayload.to_email);
+                    console.log("Ticket confirmation email sent successfully to:", ticketPayload.to_email);
                 })
                 .catch((err) => {
                     console.error("Failed to send ticket email:", err);
                 });
         }
+        // =========================================================
 
         let liveRoomSettings = {
             serverName: "Asia",
@@ -1555,6 +1562,7 @@
                         await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
                         console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
                     } else {
+                        // সুপার এডমিনের পারমিশন সব সময় ট্রু নিশ্চিত করা
                         await window.FirebaseFirestore.setDoc(adminDocRef, { permissions: { canUpdateNotice: true, canUpdateRoom: true } }, { merge: true });
                     }
 
@@ -2274,29 +2282,23 @@
 
                 applyLiveRoomSettingsToTicketUI();
 
-                const ticketCanvasElement = document.getElementById('digital-ticket-canvas');
-                html2canvas(ticketCanvasElement, { scale: 2, useCORS: true, logging: false }).then(canvas => {
-                    const ticketImageBase64 = canvas.toDataURL('image/png');
-
-                    sendTicketConfirmationEmail({
-                        to_email: activeUserSession.email,
-                        to_name: activeUserSession.name,
-                        member_id: `BDBUS-${activeUserSession.id}`,
-                        game_id: activeUserSession.gameid,
-                        phone: activeUserSession.phone,
-                        from_loc: fromVal,
-                        to_loc: toVal,
-                        journey_date: dateVal,
-                        journey_time: timeVal,
-                        coach_type: type,
-                        seat_no: currentlyChosenSeatNode,
-                        issue_time: issueStr,
-                        server_name: liveRoomSettings.serverName,
-                        room_name: liveRoomSettings.roomName,
-                        room_password: liveRoomSettings.roomPassword,
-                        room_master: liveRoomSettings.roomMasterName,
-                        ticket_image: ticketImageBase64
-                    });
+                sendTicketConfirmationEmail({
+                    to_email: activeUserSession.email,
+                    to_name: activeUserSession.name,
+                    member_id: `BDBUS-${activeUserSession.id}`,
+                    game_id: activeUserSession.gameid,
+                    phone: activeUserSession.phone,
+                    from_loc: fromVal,
+                    to_loc: toVal,
+                    journey_date: dateVal,
+                    journey_time: timeVal,
+                    coach_type: type,
+                    seat_no: currentlyChosenSeatNode,
+                    issue_time: issueStr,
+                    server_name: liveRoomSettings.serverName,
+                    room_name: liveRoomSettings.roomName,
+                    room_password: liveRoomSettings.roomPassword,
+                    room_master: liveRoomSettings.roomMasterName
                 });
 
                 navigatePage('ticket-view-screen');
