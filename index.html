@@ -2058,45 +2058,59 @@
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-        async function openSeatSelectionEngine() {
-            const from = document.getElementById('route-from').value.trim();
-            const to = document.getElementById('route-to').value.trim();
-            const date = document.getElementById('route-date').value;
-            const time = document.getElementById('route-time').value;
-            const type = document.getElementById('route-bustype').value;
+async function openSeatSelectionEngine() {
+    const from = document.getElementById('route-from').value.trim();
+    const to = document.getElementById('route-to').value.trim();
+    const date = document.getElementById('route-date').value;
+    const time = document.getElementById('route-time').value;
+    const type = document.getElementById('route-bustype').value;
 
-            if (!type || type === "Select Coach") {
-                alert("দয়া করে সিট দেখতে প্রথমে 'Non - AC Coach' অথবা 'Premium AC Coach' সিলেক্ট করুন!");
-                return;
-            }
+    if (!from || from === "" || from.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
+        alert("দয়া করে আপনার যাত্রার সঠিক প্রস্থান জেলা (From) নির্বাচন করুন।");
+        return;
+    }
 
-            if (from && to && from === to) {
-                alert("যাত্রার স্থান এবং গন্তব্য একই জেলা হতে পারে না!");
-                return;
-            }
+    if (!to || to === "" || to.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
+        alert("দয়া করে আপনার যাত্রার সঠিক গন্তব্য জেলা (To) নির্বাচন করুন।");
+        return;
+    }
 
-            if (!from || !to || !date || !time) { 
-                alert("Please complete full route processing metadata entries!"); 
-                return; 
-            }
-            
-            if (activeUserSession.wallet < selectedFareGlobalRate) { 
-                alert("Insufficient active account wallet balance for execution."); 
-                return; 
-            }
+    if (from === to) {
+        alert("যাত্রার স্থান এবং গন্তব্য একই জেলা হতে পারে না!");
+        return;
+    }
 
-            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid Plan`;
-            document.getElementById('seat-calculated-total-fare').innerText = `0 BDT`;
-            currentlyChosenSeatNode = null;
+    if (!date || date === "") {
+        alert("দয়া করে আপনার যাত্রার সঠিক তারিখ নির্বাচন করুন।");
+        return;
+    }
 
-            await loadFirebaseBookingsAndRenderMap();
-            generateBusCabinGridBlueprint(type);
-            initSeatLockCountdownTimer();
+    if (!time || time === "" || time.includes("Select Trip Time")) {
+        alert("দয়া করে আপনার সঠিক ট্রিপ টাইম (Journey Time) নির্বাচন করুন।");
+        return;
+    }
 
-            navigatePage('seat-screen');
-        }
+    if (!type || type === "Select Coach") {
+        alert("দয়া করে সিট দেখতে প্রথমে 'Non - AC Coach' অথবা 'Premium AC Coach' সিলেক্ট করুন!");
+        return;
+    }
 
-        function initSeatLockCountdownTimer() {
+    if (activeUserSession.wallet < selectedFareGlobalRate) {
+        alert("Insufficient active account wallet balance for execution.");
+        return;
+    }
+
+    document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid`;
+    document.getElementById('seat-calculated-total-fare').innerText = '0 BDT';
+    currentlyChosenSeatNode = null;
+
+    await loadFirebaseBookingsAndRenderMap();
+    generateBusCabinGridBlueprint(type);
+    initSeatLockCountdownTimer();
+
+    navigatePage('seat-screen');
+}
+     function initSeatLockCountdownTimer() {
             const countdownEl = document.getElementById('countdown');
             if(!countdownEl) return;
             
