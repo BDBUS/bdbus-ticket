@@ -1052,6 +1052,7 @@
                 <div class="form-group">
                     <label>Journey Time</label>
                     <select id="route-time" class="form-control">
+                        <option value="Select Time">Select Time</option>
                         <option value="Morning Trip V-3.6.1 :- 10:00 Am">Morning Trip V-3.6.1 :- 10:00 Am</option>
                         <option value="Afternoon Trip V-3.6.1 :- 03:00 Pm">Afternoon Trip V-3.6.1 :- 03:00 Pm</option>
                         <option value="Evening Trip V-3.6.1 :- 07:00 Pm">Evening Trip V-3.6.1 :- 07:00 Pm</option>
@@ -1322,9 +1323,9 @@
 
     <script>
         // ================= EMAILJS CONFIGURATION =================
-        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     
-        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     
-        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   
+        const EMAILJS_PUBLIC_KEY = "lbruLyBBidpOs5Sh";[span_3](start_span)[span_3](end_span)
+        const EMAILJS_SERVICE_ID = "service_yavaOaq";[span_4](start_span)[span_4](end_span)
+        const EMAILJS_TEMPLATE_ID = "template_mvqi9fg";[span_5](start_span)[span_5](end_span)
 
         if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -1337,7 +1338,7 @@
             }
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, ticketPayload)
                 .then(() => {
-                    console.log("Ticket confirmation email sent successfully to:", ticketPayload.to_email);
+                    console.log("Ticket confirmation email with HD image sent successfully from bangladeshbussiduniquesociety@gmail.com to:", ticketPayload.to_email);
                 })
                 .catch((err) => {
                     console.error("Failed to send ticket email:", err);
@@ -1562,7 +1563,6 @@
                         await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
                         console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
                     } else {
-                        // সুপার এডমিনের পারমিশন সব সময় ট্রু নিশ্চিত করা
                         await window.FirebaseFirestore.setDoc(adminDocRef, { permissions: { canUpdateNotice: true, canUpdateRoom: true } }, { merge: true });
                     }
 
@@ -2282,23 +2282,30 @@
 
                 applyLiveRoomSettingsToTicketUI();
 
-                sendTicketConfirmationEmail({
-                    to_email: activeUserSession.email,
-                    to_name: activeUserSession.name,
-                    member_id: `BDBUS-${activeUserSession.id}`,
-                    game_id: activeUserSession.gameid,
-                    phone: activeUserSession.phone,
-                    from_loc: fromVal,
-                    to_loc: toVal,
-                    journey_date: dateVal,
-                    journey_time: timeVal,
-                    coach_type: type,
-                    seat_no: currentlyChosenSeatNode,
-                    issue_time: issueStr,
-                    server_name: liveRoomSettings.serverName,
-                    room_name: liveRoomSettings.roomName,
-                    room_password: liveRoomSettings.roomPassword,
-                    room_master: liveRoomSettings.roomMasterName
+                // টিকিট ক্যানভাসকে ইমেজ ডেটা (Base64) এ রূপান্তর করে জিমেইলে ছবিসহ পাঠানোর ব্যবস্থা
+                const ticketCanvasElement = document.getElementById('digital-ticket-canvas');
+                html2canvas(ticketCanvasElement, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                    const ticketImageBase64 = canvas.toDataURL('image/png');
+
+                    sendTicketConfirmationEmail({
+                        to_email: activeUserSession.email,
+                        to_name: activeUserSession.name,
+                        member_id: `BDBUS-${activeUserSession.id}`,
+                        game_id: activeUserSession.gameid,
+                        phone: activeUserSession.phone,
+                        from_loc: fromVal,
+                        to_loc: toVal,
+                        journey_date: dateVal,
+                        journey_time: timeVal,
+                        coach_type: type,
+                        seat_no: currentlyChosenSeatNode,
+                        issue_time: issueStr,
+                        server_name: liveRoomSettings.serverName,
+                        room_name: liveRoomSettings.roomName,
+                        room_password: liveRoomSettings.roomPassword,
+                        room_master: liveRoomSettings.roomMasterName,
+                        ticket_image: ticketImageBase64
+                    });
                 });
 
                 navigatePage('ticket-view-screen');
