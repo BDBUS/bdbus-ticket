@@ -2281,9 +2281,8 @@
                 document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
                 document.getElementById('tk-issue').innerText = issueStr;
 
-                                applyLiveRoomSettingsToTicketUI();
+              applyLiveRoomSettingsToTicketUI();
 
-                // সরাসরি EmailJS এর মাধ্যমে ইমেইল পাঠানোর সুরক্ষিত কোড
                 sendTicketConfirmationEmail({
                     to_email: activeUserSession.email,
                     to_name: activeUserSession.name,
@@ -2301,10 +2300,11 @@
                     room_name: liveRoomSettings.roomName,
                     room_password: liveRoomSettings.roomPassword,
                     room_master: liveRoomSettings.roomMasterName,
-                    ticket_image: "https://via.placeholder.com/350x150.png?text=BDBUS+Digital+Ticket+Confirmed" // সাময়িকভাবে টেমপ্লেটের ইমেজ এরর এড়ানোর জন্য ব্যাকআপ লিংক
+                    ticket_image: "https://via.placeholder.com/350x150.png?text=BDBUS+Digital+Ticket"
                 });
 
                 navigatePage('ticket-view-screen');
+
             } catch (err) {
                 console.error("Ticket Confirm Error:", err);
                 alert("টিকিট বুকিং নিশ্চিত করতে সমস্যা হয়েছে।");
