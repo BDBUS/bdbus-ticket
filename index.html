@@ -1321,10 +1321,10 @@
     </div>
 
     <script>
-        // ================= EMAILJS CONFIGURATION =================
-        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";     
-        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";     
-        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";   
+                // ================= EMAILJS CONFIGURATION =================
+        const EMAILJS_PUBLIC_KEY = "lbruLyBBlldpOs5Sh";     
+        const EMAILJS_SERVICE_ID = "service_yavaoaq";     
+        const EMAILJS_TEMPLATE_ID = "template_mvqi9fg";   
 
         if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
             emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -2223,7 +2223,7 @@
             }
         }
 
-        async function executeTicketConfirmationEngine() {
+     async function executeTicketConfirmationEngine() {
             if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
             if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
@@ -2282,23 +2282,30 @@
 
                 applyLiveRoomSettingsToTicketUI();
 
-                sendTicketConfirmationEmail({
-                    to_email: activeUserSession.email,
-                    to_name: activeUserSession.name,
-                    member_id: `BDBUS-${activeUserSession.id}`,
-                    game_id: activeUserSession.gameid,
-                    phone: activeUserSession.phone,
-                    from_loc: fromVal,
-                    to_loc: toVal,
-                    journey_date: dateVal,
-                    journey_time: timeVal,
-                    coach_type: type,
-                    seat_no: currentlyChosenSeatNode,
-                    issue_time: issueStr,
-                    server_name: liveRoomSettings.serverName,
-                    room_name: liveRoomSettings.roomName,
-                    room_password: liveRoomSettings.roomPassword,
-                    room_master: liveRoomSettings.roomMasterName
+                // html2canvas দিয়ে টিকিটের ছবি জেনারেট করে ইমেইলে পাঠানোর ব্যবস্থা
+                const targetCanvas = document.getElementById('digital-ticket-canvas');
+                html2canvas(targetCanvas, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                    const ticketImageUrl = canvas.toDataURL('image/png');
+
+                    sendTicketConfirmationEmail({
+                        to_email: activeUserSession.email,
+                        to_name: activeUserSession.name,
+                        member_id: `BDBUS-${activeUserSession.id}`,
+                        game_id: activeUserSession.gameid,
+                        phone: activeUserSession.phone,
+                        from_loc: fromVal,
+                        to_loc: toVal,
+                        journey_date: dateVal,
+                        journey_time: timeVal,
+                        coach_type: type,
+                        seat_no: currentlyChosenSeatNode,
+                        issue_time: issueStr,
+                        server_name: liveRoomSettings.serverName,
+                        room_name: liveRoomSettings.roomName,
+                        room_password: liveRoomSettings.roomPassword,
+                        room_master: liveRoomSettings.roomMasterName,
+                        ticket_image: ticketImageUrl // ইমেইলে টিকিটের ছবি পাঠানোর জন্য এটি আবশ্যক
+                    });
                 });
 
                 navigatePage('ticket-view-screen');
