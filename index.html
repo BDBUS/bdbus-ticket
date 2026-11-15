@@ -2281,32 +2281,27 @@
                 document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
                 document.getElementById('tk-issue').innerText = issueStr;
 
-                applyLiveRoomSettingsToTicketUI();
+                                applyLiveRoomSettingsToTicketUI();
 
-                // html2canvas দিয়ে টিকিটের ছবি জেনারেট করে ইমেইলে পাঠানোর ব্যবস্থা
-                const targetCanvas = document.getElementById('digital-ticket-canvas');
-                html2canvas(targetCanvas, { scale: 2, useCORS: true, logging: false }).then(canvas => {
-                    const ticketImageUrl = canvas.toDataURL('image/png');
-
-                    sendTicketConfirmationEmail({
-                        to_email: activeUserSession.email,
-                        to_name: activeUserSession.name,
-                        member_id: `BDBUS-${activeUserSession.id}`,
-                        game_id: activeUserSession.gameid,
-                        phone: activeUserSession.phone,
-                        from_loc: fromVal,
-                        to_loc: toVal,
-                        journey_date: dateVal,
-                        journey_time: timeVal,
-                        coach_type: type,
-                        seat_no: currentlyChosenSeatNode,
-                        issue_time: issueStr,
-                        server_name: liveRoomSettings.serverName,
-                        room_name: liveRoomSettings.roomName,
-                        room_password: liveRoomSettings.roomPassword,
-                        room_master: liveRoomSettings.roomMasterName,
-                        ticket_image: ticketImageUrl // ইমেইলে টিকিটের ছবি পাঠানোর জন্য এটি আবশ্যক
-                    });
+                // সরাসরি EmailJS এর মাধ্যমে ইমেইল পাঠানোর সুরক্ষিত কোড
+                sendTicketConfirmationEmail({
+                    to_email: activeUserSession.email,
+                    to_name: activeUserSession.name,
+                    member_id: `BDBUS-${activeUserSession.id}`,
+                    game_id: activeUserSession.gameid,
+                    phone: activeUserSession.phone,
+                    from_loc: fromVal,
+                    to_loc: toVal,
+                    journey_date: dateVal,
+                    journey_time: timeVal,
+                    coach_type: type,
+                    seat_no: currentlyChosenSeatNode,
+                    issue_time: issueStr,
+                    server_name: liveRoomSettings.serverName,
+                    room_name: liveRoomSettings.roomName,
+                    room_password: liveRoomSettings.roomPassword,
+                    room_master: liveRoomSettings.roomMasterName,
+                    ticket_image: "https://via.placeholder.com/350x150.png?text=BDBUS+Digital+Ticket+Confirmed" // সাময়িকভাবে টেমপ্লেটের ইমেজ এরর এড়ানোর জন্য ব্যাকআপ লিংক
                 });
 
                 navigatePage('ticket-view-screen');
