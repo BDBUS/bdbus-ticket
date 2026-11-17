@@ -2260,7 +2260,86 @@ async function openSeatSelectionEngine() {
             }
         }
 
-             async function executeTicketConfirmationEngine() {
+                     async function executeTemporary30SecSeatLock(globalKey) {
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+                    const docSnap = await window.FirebaseFirestore.getDoc(bookingDocRef);
+
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const now = Date.now();
+                        // যদি সিটটি অলরেডি কনফার্ম করা থাকে অথবা অন্য কারো ৩০ সেকেন্ডের হোল্ডের মধ্যে থাকে
+                        if (data.isConfirmed || now < data.expireTime) {
+                            return false; // লক করা যাবে না
+                        }
+                    }
+
+                    const lockData = {
+                        expireTime: Date.now() + (30 * 1000), // ৩০ সেকেন্ডের হোল্ড
+                        userId: activeUserSession.id,
+                        userName: activeUserSession.name,
+                        isConfirmed: false,
+                        timestampLocked: Date.now()
+                    };
+
+                    db.occupiedSeats[globalKey] = lockData;
+                    saveDataEngine();
+                    await window.FirebaseFirestore.setDoc(bookingDocRef, lockData);
+                    return true;
+                }
+            } catch (err) {
+                console.error("Firebase Seat Lock Error:", err);
+                return false;
+            }
+        }
+
+        function createSeatElement(idStr) {
+            let seat = document.createElement('div');
+            seat.className = 'seat-node';
+            seat.innerText = idStr;
+            
+            const type = document.getElementById('route-bustype').value;
+            const globalKey = `${type}_Seat-${idStr}`;
+            
+            if(db.occupiedSeats[globalKey]) {
+                let lockData = db.occupiedSeats[globalKey];
+                if(lockData.isConfirmed) { 
+                    seat.classList.add('occupied'); 
+                } else if(Date.now() < lockData.expireTime) { 
+                    seat.classList.add('locked-hold'); 
+                }
+            }
+
+            seat.onclick = async () => {
+                if(seat.classList.contains('occupied')) {
+                    alert("⚠️ এই সিটটি ইতিমধ্যে অন্য মেম্বার কনফার্ম করে ফেলেছেন!");
+                    return;
+                }
+                if(seat.classList.contains('locked-hold')) {
+                    alert("⚠️ এই সিটটি বর্তমানে অন্য একজন মেম্বার সিলেক্ট করে হোল্ডে রেখেছেন। অনুগ্রহ করে অন্য সিট বেছে নিন।");
+                    return;
+                }
+                
+                // রিয়েল-টাইম সার্ভার চেক ও ৩০ সেকেন্ডের হোল্ড রিকোয়েস্ট
+                let successLocked = await executeTemporary30SecSeatLock(globalKey);
+                if (!successLocked) {
+                    alert("⚠️ দুঃখিত, সিটটি এই মুহূর্তে ফাঁকা নেই বা অন্য কেউ নিয়ে নিয়েছে।");
+                    await loadFirebaseBookingsAndRenderMap();
+                    generateBusCabinGridBlueprint(type);
+                    return;
+                }
+
+                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
+                seat.classList.add('selected');
+                currentlyChosenSeatNode = idStr;
+                
+                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+            };
+            return seat;
+        }
+
+        async function executeTicketConfirmationEngine() {
             if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
             if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
@@ -2269,14 +2348,18 @@ async function openSeatSelectionEngine() {
 
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
-                    // 🔒 ডাবল বুকিং রোধ করতে রিয়েল-টাইম চেক
+                    // 🔒 কনফার্ম করার ঠিক আগ মুহূর্তে ফায়ারবেসে কঠোর রিয়েল-টাইম চেক
                     const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
                     const docSnap = await window.FirebaseFirestore.getDoc(bookingDocRef);
 
-                    if (docSnap.exists() && docSnap.data().isConfirmed) {
-                        alert("⚠️ দুঃখিত! এই সিটটি আপনার ঠিক এই মুহূর্তে অন্য একজন মেম্বার বুকিং করে ফেলেছেন। দয়া করে অন্য সিট সিলেক্ট করুন।");
-                        navigatePage('booking-screen');
-                        return;
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        // যদি অন্য কেউ অলরেডি কনফার্ম করে ফেলে কিংবা আপনার হোল্ডের সময় পার হয়ে গিয়ে অন্য কেউ দখল করে
+                        if (data.isConfirmed && data.userId !== activeUserSession.id) {
+                            alert("⚠️ ট্রানজাকশন ফেইলড! এই সিটটি আপনার ঠিক এই মুহূর্তে অন্য একজন মেম্বার কনফার্ম করে ফেলেছেন।");
+                            navigatePage('booking-screen');
+                            return;
+                        }
                     }
 
                     const roomSnap = await window.FirebaseFirestore.getDoc(
@@ -2294,15 +2377,13 @@ async function openSeatSelectionEngine() {
                 expireTime: Date.now() + (60 * 60 * 1000), 
                 userId: activeUserSession.id,
                 userName: activeUserSession.name,
-                isConfirmed: true,
+                isConfirmed: true, // ফাইনাল কনফার্মড
                 timestampLocked: Date.now()
             };
 
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
                     const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
-                    
-                    // চূড়ান্তভাবে সিটটি কনফার্ম করে ফায়ারবেসে সেভ করা
                     await window.FirebaseFirestore.setDoc(bookingDocRef, confirmData);
                 }
 
