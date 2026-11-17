@@ -2260,7 +2260,7 @@ async function openSeatSelectionEngine() {
             }
         }
 
-     async function executeTicketConfirmationEngine() {
+             async function executeTicketConfirmationEngine() {
             if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
             if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
 
@@ -2269,6 +2269,16 @@ async function openSeatSelectionEngine() {
 
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
+                    // 🔒 ডাবল বুকিং রোধ করতে রিয়েল-টাইম চেক
+                    const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+                    const docSnap = await window.FirebaseFirestore.getDoc(bookingDocRef);
+
+                    if (docSnap.exists() && docSnap.data().isConfirmed) {
+                        alert("⚠️ দুঃখিত! এই সিটটি আপনার ঠিক এই মুহূর্তে অন্য একজন মেম্বার বুকিং করে ফেলেছেন। দয়া করে অন্য সিট সিলেক্ট করুন।");
+                        navigatePage('booking-screen');
+                        return;
+                    }
+
                     const roomSnap = await window.FirebaseFirestore.getDoc(
                         window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings")
                     );
@@ -2291,6 +2301,8 @@ async function openSeatSelectionEngine() {
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
                     const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+                    
+                    // চূড়ান্তভাবে সিটটি কনফার্ম করে ফায়ারবেসে সেভ করা
                     await window.FirebaseFirestore.setDoc(bookingDocRef, confirmData);
                 }
 
@@ -2317,26 +2329,31 @@ async function openSeatSelectionEngine() {
                 document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
                 document.getElementById('tk-issue').innerText = issueStr;
 
-              applyLiveRoomSettingsToTicketUI();
+                applyLiveRoomSettingsToTicketUI();
 
-                sendTicketConfirmationEmail({
-                    to_email: activeUserSession.email,
-                    to_name: activeUserSession.name,
-                    member_id: `BDBUS-${activeUserSession.id}`,
-                    game_id: activeUserSession.gameid,
-                    phone: activeUserSession.phone,
-                    from_loc: fromVal,
-                    to_loc: toVal,
-                    journey_date: dateVal,
-                    journey_time: timeVal,
-                    coach_type: type,
-                    seat_no: currentlyChosenSeatNode,
-                    issue_time: issueStr,
-                    server_name: liveRoomSettings.serverName,
-                    room_name: liveRoomSettings.roomName,
-                    room_password: liveRoomSettings.roomPassword,
-                    room_master: liveRoomSettings.roomMasterName,
-                    ticket_image: "https://via.placeholder.com/350x150.png?text=BDBUS+Digital+Ticket"
+                const ticketCanvasElement = document.getElementById('digital-ticket-canvas');
+                html2canvas(ticketCanvasElement, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                    const ticketImageBase64 = canvas.toDataURL('image/png');
+
+                    sendTicketConfirmationEmail({
+                        to_email: activeUserSession.email,
+                        to_name: activeUserSession.name,
+                        member_id: `BDBUS-${activeUserSession.id}`,
+                        game_id: activeUserSession.gameid,
+                        phone: activeUserSession.phone,
+                        from_loc: fromVal,
+                        to_loc: toVal,
+                        journey_date: dateVal,
+                        journey_time: timeVal,
+                        coach_type: type,
+                        seat_no: currentlyChosenSeatNode,
+                        issue_time: issueStr,
+                        server_name: liveRoomSettings.serverName,
+                        room_name: liveRoomSettings.roomName,
+                        room_password: liveRoomSettings.roomPassword,
+                        room_master: liveRoomSettings.roomMasterName,
+                        ticket_image: ticketImageBase64
+                    });
                 });
 
                 navigatePage('ticket-view-screen');
@@ -2346,6 +2363,7 @@ async function openSeatSelectionEngine() {
                 alert("টিকিট বুকিং নিশ্চিত করতে সমস্যা হয়েছে।");
             }
         }
+
 
         async function loadFirebaseBookingsAndRenderMap() {
             try {
