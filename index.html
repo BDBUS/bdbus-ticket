@@ -659,7 +659,7 @@
             box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
         }
 
-        #licence-screen {
+    #licence-screen {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
@@ -669,7 +669,7 @@
 
 .licence-preview-wrapper {
     width: 100%;
-    max-width: 500px;
+    max-width: 650px; /* ১০৫০x৬৫০ অনুপাতে সামঞ্জস্যপূর্ণ করার জন্য বাড়ানো হলো */
     margin: 0 auto;
     text-align: center;
     box-sizing: border-box;
@@ -677,17 +677,21 @@
 
 #digital-licence-card {
     width: 100%;
-    max-width: 370px;
+    max-width: 560px; /* ১০৫০ × ৬৫০ পিক্সেল রেশিও (প্রায় ১.৬১ অনুপাত) পারফেক্ট রাখার জন্য */
+    aspect-ratio: 1050 / 650; /* সুনির্দিষ্ট পিক্সেল রেশিও লক করা হলো */
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     color: #ffffff;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 16px 20px;
+    border-radius: 14px;
     margin: 20px auto;
-    border: 2px solid var(--neon-blue, #00f2fe);
+    border: 2px solid var(--neon-blue);
     position: relative;
     box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     overflow: hidden;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     box-sizing: border-box;
 }
 
@@ -697,8 +701,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 220px;
-    height: 220px;
+    width: 280px;
+    height: 280px;
     background: url('images/BDBUS Group Official Logo.png') no-repeat center;
     background-size: contain;
     opacity: 0.12;
@@ -712,26 +716,24 @@
     align-items: center;
     border-bottom: 1px solid rgba(0, 242, 254, 0.3);
     padding-bottom: 8px;
-    margin-bottom: 12px;
     position: relative;
     z-index: 2;
 }
 
-.licence-flag-title { display: flex; align-items: center; gap: 8px; }
-.licence-flag { width: 30px; height: 18px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
-.licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: #f42a41; border-radius: 50%; }
-.licence-main-heading { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
-.licence-sub-heading { font-size: 9px; color: var(--neon-green, #00ff87); font-weight: 600; text-transform: uppercase; }
+.licence-flag-title { display: flex; align-items: center; gap: 10px; }
+.licence-flag { width: 34px; height: 20px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
+.licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 11px; height: 11px; background: #f42a41; border-radius: 50%; }
+.licence-main-heading { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+.licence-sub-heading { font-size: 10px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
 
 .licence-body-layout {
     display: flex;
     flex-direction: row;
-    align-items: flex-start; /* উপর থেকে সামঞ্জস্য রাখার জন্য */
-    gap: 15px;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    align-items: center;
+    gap: 20px;
     position: relative;
     z-index: 2;
+    margin: 10px 0;
 }
 
 .licence-photo-pane {
@@ -742,8 +744,8 @@
 }
 
 .licence-user-photo {
-    width: 80px;
-    height: 80px;
+    width: 95px;
+    height: 95px;
     border-radius: 50%;
     border: 2px solid var(--neon-cyan, #00e5ff);
     object-fit: cover;
@@ -754,8 +756,8 @@
     background: rgba(0, 229, 255, 0.15);
     color: var(--neon-cyan, #00e5ff);
     border: 1px solid var(--neon-cyan, #00e5ff);
-    font-size: 10px;
-    padding: 3px 8px;
+    font-size: 11px;
+    padding: 3px 10px;
     border-radius: 6px;
     font-weight: bold;
     white-space: nowrap;
@@ -765,7 +767,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
     width: 100%;
     text-align: left;
 }
@@ -775,8 +777,8 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-    padding-bottom: 2px;
-    font-size: 11px;
+    padding-bottom: 3px;
+    font-size: 12px;
 }
 
 .licence-data-label { color: #94a3b8; font-weight: 600; }
@@ -786,23 +788,21 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 8px;
     position: relative;
     z-index: 2;
 }
 
-.licence-auth-label { font-size: 8px; color: #64748b; margin-top: 2px; }
+.licence-auth-label { font-size: 9px; color: #64748b; margin-top: 2px; }
 
 @media screen and (max-width: 480px) {
-    #digital-licence-card { padding: 10px 8px; }
-    .licence-body-layout { gap: 10px; }
-    .licence-user-photo { width: 70px; height: 70px; }
-    .licence-data-row { font-size: 9.5px; }
-    .licence-id-badge { font-size: 9px; padding: 2px 6px; }
+    #digital-licence-card { padding: 12px 14px; }
+    .licence-body-layout { gap: 12px; }
+    .licence-user-photo { width: 75px; height: 75px; }
+    .licence-data-row { font-size: 10px; }
+    .licence-id-badge { font-size: 9.5px; padding: 2px 6px; }
 }
-
     </style>
 </head>
 <body>
