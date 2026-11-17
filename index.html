@@ -10,7 +10,7 @@
     <!-- EmailJS SDK অটোমেটিক জিমেইল পাঠানোর জন্য -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-<!-- ফায়ারবেস মডিউল সবার উপরে নিরাপদে ইনিশিয়ালাইজ করা হলো -->
+<!-- ফায়ারবেস মডিউল সবার উপরে নিরাপде ইনিশিয়ালাইজ করা হলো -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -795,17 +795,17 @@
     <div class="custom-welcome-modal-layer" id="global-welcome-popup-layer">
         <div class="custom-welcome-modal-card">
             <img src="https://via.placeholder.com/150" id="pop-user-avatar" class="modal-avatar-frame" alt="Avatar">
-            <h3 style="color: var(--neon-blue); font-size: 20px; margin-bottom: 5px;">WELCOME</h3>
+            <h3 style="color: var(--neon-blue); font-size: 20px; margin-bottom: 5px;" class="lang-node" data-en="WELCOME" data-bn="স্বাগতম">WELCOME</h3>
             <h4 id="pop-user-name" style="font-size: 18px; margin-bottom: 5px; color: #fff;">User Name</h4>
             <p id="pop-user-id" style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">ID: BDBUS-1000</p>
-            <button class="btn-premium" style="width: 130px; justify-content: center;" onclick="dismissGlobalWelcomePopup()">Thanks</button>
+            <button class="btn-premium lang-node" data-en="Thanks" data-bn="ধন্যবাদ" style="width: 130px; justify-content: center;" onclick="dismissGlobalWelcomePopup()">Thanks</button>
         </div>
     </div>
 
     <div class="custom-welcome-modal-layer" id="second-notice-popup" style="display: none;" data-global-second-popup-layer>
         <div class="custom-welcome-modal-card" style="max-width: 450px; width: 90%; background: #1a1a2e; padding: 20px; border-radius: 12px; text-align: center;">
             <img src="images/notice.jpg" alt="Urgent Notice" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--neon-blue);">
-            <button class="btn-premium" style="width: 140px; margin: 0 auto; justify-content: center;" onclick="dismissSecondPopup()">Okay</button>
+            <button class="btn-premium lang-node" data-en="Okay" data-bn="ঠিক আছে" style="width: 140px; margin: 0 auto; justify-content: center;" onclick="dismissSecondPopup()">Okay</button>
         </div>
     </div>
     
@@ -887,10 +887,10 @@
                 <div class="form-group">
                     <label class="lang-node" data-en="Gender" data-bn="লিঙ্গ">Gender</label>
                     <select id="reg-gender" class="form-control">
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="" class="lang-node" data-en="Select Gender" data-bn="লিঙ্গ নির্বাচন করুন">Select Gender</option>
+                        <option value="Male" class="lang-node" data-en="Male" data-bn="পুরুষ">Male</option>
+                        <option value="Female" class="lang-node" data-en="Female" data-bn="মহিলা">Female</option>
+                        <option value="Other" class="lang-node" data-en="Other" data-bn="অন্যান্য">Other</option>
                     </select>
                 </div>
                 
@@ -954,7 +954,7 @@
         </div>
 
         <div class="notice-board">
-            <span class="notice-tag">NOTICE</span>
+            <span class="notice-tag lang-node" data-en="NOTICE" data-bn="নোটিশ">NOTICE</span>
             <marquee id="live-marquee-node" scrollamount="6">Welcome to Bangladesh Bussid Unique Society (BDBUS)</marquee>
         </div>
 
@@ -964,19 +964,19 @@
 
         <div class="reward-grid">
             <div class="reward-card">
-                <h4><i class="fa-solid fa-gift" style="color:var(--neon-green)"></i> Welcome Bonus</h4>
+                <h4 class="lang-node" data-en="Welcome Bonus" data-bn="ওয়েলকাম বোনাস"><i class="fa-solid fa-gift" style="color:var(--neon-green)"></i> Welcome Bonus</h4>
                 <p class="lang-node" data-en="Get 5000 BDT instantly on your first signup." data-bn="প্রথমবার রেজিস্ট্রেশন করলে পাবেন ৫০০০ BDT (একটি অ্যাকাউন্ট একবারই পাবেন)">Get 5000 BDT instantly on your first signup.</p>
-                <button class="btn-premium btn-secondary" id="claim-welcome-btn" onclick="claimWelcomeRewardLogic()">Claim 5000 BDT</button>
+                <button class="btn-premium btn-secondary lang-node" data-en="Claim 5000 BDT" data-bn="৫০০০ BDT ক্লেইম করুন" id="claim-welcome-btn" onclick="claimWelcomeRewardLogic()">Claim 5000 BDT</button>
             </div>
             <div class="reward-card">
-                <h4><i class="fa-brands fa-youtube" style="color:var(--yt-red)"></i> Subscribe YouTube</h4>
-                <p class="lang-node" data-en="Subscribe M2Vai official channel to claim 10000 BDT reward." data-bn="ইউটিউব চ্যানেল সাবস্মক্রাইব করলে পাবেন ১০০০০ BDT (একটি অ্যাকাউন্ট একবারেই পাবেন)">Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
-                <button class="btn-premium btn-yt" onclick="triggerYoutubeSubscribeReward()">Subscribe Now</button>
+                <h4 class="lang-node" data-en="Subscribe YouTube" data-bn="ইউটিউব সাবস্ক্রাইব"><i class="fa-brands fa-youtube" style="color:var(--yt-red)"></i> Subscribe YouTube</h4>
+                <p class="lang-node" data-en="Subscribe M2Vai official channel to claim 10000 BDT reward." data-bn="ইউটিউব চ্যানেল সাবস্ক্রাইব করলে পাবেন ১০০০০ BDT (একটি অ্যাকাউন্ট একবারেই পাবেন)">Subscribe M2Vai official channel to claim 10000 BDT reward.</p>
+                <button class="btn-premium btn-yt lang-node" data-en="Subscribe Now" data-bn="সাবস্ক্রাইব করুন" onclick="triggerYoutubeSubscribeReward()">Subscribe Now</button>
             </div>
             <div class="reward-card">
-                <h4><i class="fa-solid fa-video" style="color:var(--neon-blue)"></i> Watch Video Stream</h4>
+                <h4 class="lang-node" data-en="Watch Video Stream" data-bn="ভিডিও স্ট্রিম দেখুন"><i class="fa-solid fa-video" style="color:var(--neon-blue)"></i> Watch Video Stream</h4>
                 <p class="lang-node" data-en="Watch stream video over 1 minute to receive unlimited 3000 BDT rewards." data-bn="ভিডিও দেখলে ৩০০০ BDT (যতবার ভিডিও দেখবে ততবার পাবে)">Watch stream video over 1 minute to receive unlimited 3000 BDT rewards.</p>
-                <button class="btn-premium" onclick="triggerWatchVideoReward()"><i class="fa-solid fa-play"></i> Watch Video</button>
+                <button class="btn-premium lang-node" data-en="Watch Video" data-bn="ভিডিও দেখুন" onclick="triggerWatchVideoReward()"><i class="fa-solid fa-play"></i> Watch Video</button>
             </div>
         </div>
     </div>
@@ -1028,7 +1028,7 @@
                     <i class="fa-solid fa-eye password-toggle-icon" onclick="togglePasswordInputVisibility('pwd-conf', this)"></i>
                 </div>
             </div>
-            <button class="btn-premium" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submit Password</button>
+            <button class="btn-premium lang-node" data-en="Submit Password" data-bn="পাসওয়ার্ড সাবমিট করুন" style="width:100%; justify-content:center; margin-top:10px;" onclick="executePasswordChangeLogic()">Submit Password</button>
         </div>
     </div>
 
@@ -1055,25 +1055,25 @@
                     </div>
                     
                     <div class="licence-info-pane">
-                        <div class="licence-data-row"><div class="licence-data-label">NAME:</div><div class="licence-data-value" id="dl-name">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">GAME NICKNAME:</div><div class="licence-data-value" id="dl-gameid">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">BIRTH DATE:</div><div class="licence-data-value" id="dl-dob">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">GENDER:</div><div class="licence-data-value" id="dl-gender">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">MOBILE NO:</div><div class="licence-data-value" id="dl-phone">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">DIVISION:</div><div class="licence-data-value" id="dl-division">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">DISTRICT:</div><div class="licence-data-value" id="dl-district">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label">VEHICLE TYPE:</div><div class="licence-data-value" style="color: var(--neon-green);">HEAVY BUSSID COACH</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="NAME:" data-bn="নাম:">NAME:</div><div class="licence-data-value" id="dl-name">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="GAME NICKNAME:" data-bn="গেম নিকনেম:">GAME NICKNAME:</div><div class="licence-data-value" id="dl-gameid">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="BIRTH DATE:" data-bn="জন্ম তারিখ:">BIRTH DATE:</div><div class="licence-data-value" id="dl-dob">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="GENDER:" data-bn="লিঙ্গ:">GENDER:</div><div class="licence-data-value" id="dl-gender">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="MOBILE NO:" data-bn="মোবাইল নম্বর:">MOBILE NO:</div><div class="licence-data-value" id="dl-phone">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="DIVISION:" data-bn="বিভাগ:">DIVISION:</div><div class="licence-data-value" id="dl-division">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="DISTRICT:" data-bn="জেলা:">DISTRICT:</div><div class="licence-data-value" id="dl-district">-</div></div>
+                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="VEHICLE TYPE:" data-bn="গাড়ির ধরণ:">VEHICLE TYPE:</div><div class="licence-data-value lang-node" data-en="HEAVY BUSSID COACH" data-bn="হেভি বিডিবাস কোচ" style="color: var(--neon-green);">HEAVY BUSSID COACH</div></div>
                     </div>
                 </div>
                 
                 <div class="licence-footer-bar">
                     <div class="licence-auth-sign">
                         <div class="licence-sign-img">𝓑𝓓𝓑𝓤𝓢</div>
-                        <div class="licence-auth-label">ISSUING AUTHORITY</div>
+                        <div class="licence-auth-label lang-node" data-en="ISSUING AUTHORITY" data-bn="ইস্যুকারী কর্তৃপক্ষ">ISSUING AUTHORITY</div>
                     </div>
                     <div class="licence-auth-sign" style="text-align: right;">
                         <div class="licence-sign-img" id="dl-sign-name" style="font-family:'Poppins',sans-serif;">Holder Sign</div>
-                        <div class="licence-auth-label">HOLDER SIGNATURE</div>
+                        <div class="licence-auth-label lang-node" data-en="HOLDER SIGNATURE" data-bn="ধারকের স্বাক্ষর">HOLDER SIGNATURE</div>
                     </div>
                 </div>
             </div>
@@ -1088,7 +1088,7 @@
         <div class="central-branded-header">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
-            <p style="font-weight: 700; font-size: 14px; color: #ffd700; letter-spacing: 1px; margin-top: 5px;">BDBUS MULTIPLAYER TICKET BOOKING</p>
+            <p style="font-weight: 700; font-size: 14px; color: #ffd700; letter-spacing: 1px; margin-top: 5px;" class="lang-node" data-en="BDBUS MULTIPLAYER TICKET BOOKING" data-bn="বিডিবাস মাল্টিপ্লেয়ার টিকিট বুকিং">BDBUS MULTIPLAYER TICKET BOOKING</p>
         </div>
 
         <div class="neon-clock">
@@ -1099,22 +1099,22 @@
         <div class="form-card" style="max-width:650px; margin:20px auto;">
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:0; max-width:none;">
                 <div class="form-group" style="position: relative;">
-                    <label>From</label>
+                    <label class="lang-node" data-en="From" data-bn="কোথা থেকে (From)">From</label>
                     <input type="text" id="route-from" autocomplete="off" class="form-control" placeholder="Search or type district...">
                     <div id="from-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
                 </div>
                 <div class="form-group" style="position: relative;">
-                    <label>To</label>
+                    <label class="lang-node" data-en="To" data-bn="কোথায় যাবেন (To)">To</label>
                     <input type="text" id="route-to" autocomplete="off" class="form-control" placeholder="Search or type district...">
                     <div id="to-custom-dropdown" class="custom-dropdown-container" style="display: none;"></div>
                 </div>
             </div>
             <div class="booking-layout" style="grid-template-columns:1fr 1fr; margin:20px 0 0; max-width:none;">
-                <div class="form-group"><label>Journey Date</label><input type="date" id="route-date" class="form-control"></div>
+                <div class="form-group"><label class="lang-node" data-en="Journey Date" data-bn="যাত্রার তারিখ">Journey Date</label><input type="date" id="route-date" class="form-control"></div>
                 <div class="form-group">
-                    <label>Journey Time</label>
+                    <label class="lang-node" data-en="Journey Time" data-bn="যাত্রার সময়">Journey Time</label>
                     <select id="route-time" class="form-control">
-                        <option value="Select Trip Time">Select Trip Time</option>
+                        <option value="Select Trip Time" class="lang-node" data-en="Select Trip Time" data-bn="ট্রিপের সময় নির্বাচন করুন">Select Trip Time</option>
                         <option value="Morning Trip V-3.6.1 :- 10:00 Am">Morning Trip V-3.6.1 :- 10:00 Am</option>
                         <option value="Afternoon Trip V-3.6.1 :- 03:00 Pm">Afternoon Trip V-3.6.1 :- 03:00 Pm</option>
                         <option value="Evening Trip V-3.6.1 :- 07:00 Pm">Evening Trip V-3.6.1 :- 07:00 Pm</option>
@@ -1124,30 +1124,30 @@
                 </div>
             </div>
             <div class="form-group" style="margin-top:20px;">
-                <label>Bus Type Selection</label>
+                <label class="lang-node" data-en="Bus Type Selection" data-bn="বাসের ধরণ নির্বাচন">Bus Type Selection</label>
                 <select id="route-bustype" class="form-control" onchange="calculateFareSystemLogic()">
-                    <option value="Select Coach">Select Coach</option>
-                    <option value="Non-AC Coach">Non - AC Coach</option>
-                    <option value="Premium AC Coach">Premium AC Coach</option>
+                    <option value="Select Coach" class="lang-node" data-en="Select Coach" data-bn="কোচ নির্বাচন করুন">Select Coach</option>
+                    <option value="Non-AC Coach" class="lang-node" data-en="Non - AC Coach" data-bn="নন-এসি কোচ">Non - AC Coach</option>
+                    <option value="Premium AC Coach" class="lang-node" data-en="Premium AC Coach" data-bn="প্রিমিয়াম এসি কোচ">Premium AC Coach</option>
                 </select>
             </div>
 
             <div style="background:#1e293b; padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin:25px 0 15px;">
-                <span>Estimated Ticket Fare Rate:</span>
+                <span class="lang-node" data-en="Estimated Ticket Fare Rate:" data-bn="নির্ধারিত টিকিটের মূল্য হার:">Estimated Ticket Fare Rate:</span>
                 <span style="color:var(--neon-blue); font-weight:700; font-size:20px;" id="booking-fare-render">0 BDT</span>
             </div>
 
             <div class="custom-gaming-notice">
                 <i class="fa-solid fa-triangle-exclamation"></i>
                 <div>
-                    <span class="notice-heading">⚠️ Important Notice</span><br>
-                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
-                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
+                    <span class="notice-heading lang-node" data-en="⚠️ Important Notice" data-bn="⚠️ গুরুত্বপূর্ণ নির্দেশাবলী">⚠️ Important Notice</span><br>
+                    <span class="lang-node" data-en="Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable." data-bn="মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না।">Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</span><br>
+                    <span style="display:block; margin-top:4px;" class="lang-node" data-en="If lagging midway, your bus will skid and cause accidents for others!" data-bn="মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top:20px;">
-                <button class="btn-premium" onclick="openSeatSelectionEngine()"><i class="fa-solid fa-couch"></i> 🪑 Select Seat 💺</button>
+                <button class="btn-premium lang-node" data-en="🪑 Select Seat 💺" data-bn="🪑 সিট নির্বাচন করুন 💺" onclick="openSeatSelectionEngine()"><i class="fa-solid fa-couch"></i> 🪑 Select Seat 💺</button>
             </div>
         </div>
     </div>
@@ -1156,7 +1156,7 @@
         <div class="central-branded-header">
             <img src="images/BDBUS Group Official Logo.png" alt="Logo">
             <h2>Bangladesh Bussid Unique Society</h2>
-            <p id="seat-title-coach-type">Seating Plan Configuration Layout</p>
+            <p id="seat-title-coach-type" class="lang-node" data-en="Seating Plan Configuration Layout" data-bn="সিটিং প্ল্যান কনফিগারেশন লেআউট">Seating Plan Configuration Layout</p>
         </div>
 
         <div class="neon-clock">
@@ -1166,13 +1166,13 @@
 
         <div class="seat-map-wrapper">
             <div class="seat-legend-row">
-                <div class="legend-item"><div class="legend-box l-avail"></div><span>Available</span></div>
-                <div class="legend-item"><div class="legend-box l-select"></div><span>Selected</span></div>
-                <div class="legend-item"><div class="legend-box l-book"></div><span>Booking</span></div>
+                <div class="legend-item"><div class="legend-box l-avail"></div><span class="lang-node" data-en="Available" data-bn="খালি">Available</span></div>
+                <div class="legend-item"><div class="legend-box l-select"></div><span class="lang-node" data-en="Selected" data-bn="সিলেক্টেড">Selected</span></div>
+                <div class="legend-item"><div class="legend-box l-book"></div><span class="lang-node" data-en="Booking" data-bn="বুকড">Booking</span></div>
             </div>
 
-            <p id="seat-selection-limit-msg" style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Select 1 seat. Selected seat holds locked for 30 seconds.</p>
-            <p id="seat-lock-timer" style="font-size: 14px; color: #ff9900; font-weight: bold;">Time Remaining: <span id="countdown">00:30</span></p>
+            <p id="seat-selection-limit-msg" style="font-size:12px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Select 1 seat. Selected seat holds locked for 30 seconds." data-bn="১টি সিট সিলেক্ট করুন। নির্বাচিত সিটটি ৩০ সেকেন্ডের জন্য লক থাকবে।">Select 1 seat. Selected seat holds locked for 30 seconds.</p>
+            <p id="seat-lock-timer" style="font-size: 14px; color: #ff9900; font-weight: bold;"><span class="lang-node" data-en="Time Remaining:" data-bn="বাকি সময়:">Time Remaining:</span> <span id="countdown">00:30</span></p>
             
             <div class="bus-cabin-container" id="dynamic-cabin-root"></div>
 
@@ -1183,13 +1183,13 @@
 
             <div class="custom-gaming-notice" style="text-align: left;">
                 <div>
-                    <span class="notice-heading">⚠️ Important Notice</span><br>
-                    Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.<br>
-                    <span style="display:block; margin-top:4px;">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
+                    <span class="notice-heading lang-node" data-en="⚠️ Important Notice" data-bn="⚠️ গুরুত্বপূর্ণ নির্দেশাবলী">⚠️ Important Notice</span><br>
+                    <span class="lang-node" data-en="Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable." data-bn="মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না।">Stable internet is required for BUSSID Multiplayer. Do not book a ticket if your connection is unstable.</span><br>
+                    <span style="display:block; margin-top:4px;" class="lang-node" data-en="If lagging midway, your bus will skid and cause accidents for others!" data-bn="মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!">মাল্টিপ্লেয়ারে স্মুথ ড্রাইভিংয়ের জন্য ভালো ইন্টারনেট প্রয়োজন। আপনার নেট স্লো থাকলে বা পিং হাই থাকলে দয়া করে টিকিট কাটবেন না। মাঝপথে ল্যাগ করলে আপনার বাস কিন্তু ছিটকে যাবে এবং অন্যদেরও এক্সিডেন্ট করাবে!</span>
                 </div>
             </div>
 
-            <button class="btn-premium" style="width:100%; justify-content:center;" onclick="executeTicketConfirmationEngine()">Confirm Ticket</button>
+            <button class="btn-premium lang-node" data-en="Confirm Ticket" data-bn="টিকিট কনফার্ম করুন" style="width:100%; justify-content:center;" onclick="executeTicketConfirmationEngine()">Confirm Ticket</button>
         </div>
     </div>
 
@@ -1202,41 +1202,40 @@
                 <div class="ticket-header-block">
                     <img src="images/BDBUS Group Official Logo.png" class="ticket-logo" alt="Logo">
                     <div class="ticket-title-meta">
-                        <h3>BDBUS DIGITAL TICKET</h3>
-                        <p>Official Online Counter</p>
+                        <h3 class="lang-node" data-en="BDBUS DIGITAL TICKET" data-bn="বিডিবাস ডিজিটাল টিকিট">BDBUS DIGITAL TICKET</h3>
+                        <p class="lang-node" data-en="Official Online Counter" data-bn="অফিসিয়াল অনলাইন কাউন্টার">Official Online Counter</p>
                     </div>
                 </div>
                 <table class="ticket-data-table">
-                    <tr><td class="label-txt">Member ID:</td><td class="val-txt" id="tk-mid">BDBUS-1001</td></tr>
-                    <tr><td class="label-txt">Full Name:</td><td class="val-txt" id="tk-name">-</td></tr>
-                    <tr><td class="label-txt">Game Nickname / ID:</td><td class="val-txt" id="tk-gid">-</td></tr>
-                    <tr><td class="label-txt">Mobile No:</td><td class="val-txt" id="tk-phone">-</td></tr>
-                    <tr><td class="label-txt">From:</td><td class="val-txt" id="tk-from">-</td></tr>
-                    <tr><td class="label-txt">To:</td><td class="val-txt" id="tk-to">-</td></tr>
-                    <tr><td class="label-txt">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
-                    <tr><td class="label-txt">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
-                    <tr><td class="label-txt">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
-                    <tr><td class="label-txt">Server Name:</td><td class="val-txt" id="tk-server">Asia</td></tr>
-                    <tr><td class="label-txt">Room Name:</td><td class="val-txt" id="tk-room">BDBUS</td></tr>
-                    <tr><td class="label-txt">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">7799</td></tr>
-                    <tr><td class="label-txt">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
-                    <tr><td class="label-txt">Room Master Name:</td><td class="val-txt" id="tk-rmaster">Alom</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Member ID:" data-bn="মেম্বার আইডি:">Member ID:</td><td class="val-txt" id="tk-mid">BDBUS-1001</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Full Name:" data-bn="পূর্ণ নাম:">Full Name:</td><td class="val-txt" id="tk-name">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Game Nickname / ID:" data-bn="গেম নিকনেম / আইডি:">Game Nickname / ID:</td><td class="val-txt" id="tk-gid">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Mobile No:" data-bn="মোবাইল নম্বর:">Mobile No:</td><td class="val-txt" id="tk-phone">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="From:" data-bn="কোথা থেকে:">From:</td><td class="val-txt" id="tk-from">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="To:" data-bn="কোথায়:">To:</td><td class="val-txt" id="tk-to">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Date:" data-bn="তারিখ:">Date:</td><td class="val-txt" id="tk-date">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Time:" data-bn="সময়:">Time:</td><td class="val-txt" id="tk-time">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Seat Number:" data-bn="সিট নম্বর:">Seat Number:</td><td class="val-txt highlight-val" id="tk-seat">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Server Name:" data-bn="সার্ভার নাম:">Server Name:</td><td class="val-txt" id="tk-server">Asia</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Room Name:" data-bn="রুমের নাম:">Room Name:</td><td class="val-txt" id="tk-room">BDBUS</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Room Password:" data-bn="রুম পাসওয়ার্ড:">Room Password:</td><td class="val-txt highlight-val" id="tk-rpass">7799</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Issue Time & Date:" data-bn="ইস্যুর সময় ও তারিখ:">Issue Time & Date:</td><td class="val-txt" id="tk-issue">-</td></tr>
+                    <tr><td class="label-txt lang-node" data-en="Room Master Name:" data-bn="রুম মাস্টার নাম:">Room Master Name:</td><td class="val-txt" id="tk-rmaster">Alom</td></tr>
                 </table>
                 <div class="ticket-rules-box">
-                    <strong>⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:</strong><br>
-                    • <b>EN:</b> Gaming room passwords must not be shared under any circumstances. Ensure a stable internet connection. Intentional ramming, toxic behavior, or hacking tools will result in a permanent account ban. Drive realistically.<br>
-                    • <b>বাংলা:</b> গেম রুমের পাসওয়ার্ড কোনোভাবেই কারো কাছে শেয়ার করা যাবে না। ইন্টারনেট কানেকশন অবশ্যই ভালো থাকতে হবে। খেলার সময় কোনো প্রকার গালিগালাজ বা বাজে ব্যবহার করা যাবে না। রিয়েল ড্রাইভিং করতে হবে এবং কোন ধরনের হ্যাক বা স্ক্রিপ্ট ব্যবহার করে খেলা সম্পূর্ণ নিষিদ্ধ।
+                    <strong class="lang-node" data-en="⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:" data-bn="⚠️ কঠোর গেমিং নির্দেশনাবলী / বিশেষ নির্দেশনাবলী:">⚠️ STRICT GAMING NOTICE / বিশেষ নির্দেশনাবলী:</strong><br>
+                    <span class="lang-node" data-en="• EN: Gaming room passwords must not be shared under any circumstances. Ensure a stable internet connection. Intentional ramming, toxic behavior, or hacking tools will result in a permanent account ban. Drive realistically." data-bn="• বাংলা: গেম রুমের পাসওয়ার্ড কোনোভাবেই কারো কাছে শেয়ার করা যাবে না। ইন্টারনেট কানেকশন অবশ্যই ভালো থাকতে হবে। খেলার সময় কোনো প্রকার গালিগালাজ বা বাজে ব্যবহার করা যাবে না। রিয়েল ড্রাইভিং করতে হবে এবং কোন ধরনের হ্যাক বা স্ক্রিপ্ট ব্যবহার করে খেলা সম্পূর্ণ নিষিদ্ধ।">• EN: Gaming room passwords must not be shared under any circumstances. Ensure a stable internet connection. Intentional ramming, toxic behavior, or hacking tools will result in a permanent account ban. Drive realistically.</span>
                 </div>
                 <div class="ticket-footer-brand">
-                    <p>WEBSITE CREATED BY <strong>M2Vai</strong></p>
+                    <p><span class="lang-node" data-en="WEBSITE CREATED BY" data-bn="ওয়েবসাইট তৈরি করেছেন">WEBSITE CREATED BY</span> <strong>M2Vai</strong></p>
                     <div class="ticket-footer-subs">
                         <span class="ticket-sub-badge">M2Vai</span>
-                        <span class="ticket-sub-badge" style="background:#555;">Traveller</span>
+                        <span class="ticket-sub-badge" style="background:#555;" class="lang-node" data-en="Traveller" data-bn="ট্রাভেলার">Traveller</span>
                     </div>
                 </div>
             </div>
 
-            <button class="btn-premium btn-secondary" style="margin-top:15px; width:100%; max-width:450px; justify-content:center;" onclick="executeTicketDownloadAndRedirect()"><i class="fa-solid fa-download"></i> Ticket & Download (HD)</button>
+            <button class="btn-premium btn-secondary lang-node" data-en="Ticket & Download (HD)" data-bn="টিকিট ডাউনলোড (HD)" style="margin-top:15px; width:100%; max-width:450px; justify-content:center;" onclick="executeTicketDownloadAndRedirect()"><i class="fa-solid fa-download"></i> Ticket & Download (HD)</button>
         </div>
     </div>
 
@@ -1244,18 +1243,18 @@
         <h2 style="text-align:center; margin-bottom:25px;" class="lang-node" data-en="Admin Operational Console" data-bn="এডমিন অপারেশনাল কনসোল">Admin Panel</h2>
         
         <div class="admin-notice-update-box" id="admin-notice-manager-wrapper" style="display: none;">
-            <h4 style="margin-bottom: 10px; color: var(--neon-blue);"><i class="fa-solid fa-bullhorn"></i> Live Notice Board Update Control</h4>
+            <h4 style="margin-bottom: 10px; color: var(--neon-blue);" class="lang-node" data-en="Live Notice Board Update Control" data-bn="লাইভ নোটিশ বোর্ড আপডেট কন্ট্রোল"><i class="fa-solid fa-bullhorn"></i> Live Notice Board Update Control</h4>
             <div class="form-group">
-                <label>System Notice Text Content</label>
+                <label class="lang-node" data-en="System Notice Text Content" data-bn="সিস্টেম নোটিশ টেক্সট কন্টেন্ট">System Notice Text Content</label>
                 <textarea id="admin-notice-input-field" class="form-control" rows="3" style="resize: none;"></textarea>
             </div>
-            <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
+            <button class="btn-premium lang-node" data-en="Update Live Notice" data-bn="লাইভ নোটিশ আপডেট করুন" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
         </div>
 
         <div class="admin-notice-update-box" id="admin-room-server-wrapper" style="display: none;">
-            <h4 style="margin-bottom: 15px; color: var(--neon-green);"><i class="fa-solid fa-server"></i> Multiplayer Room & Server Control</h4>
+            <h4 style="margin-bottom: 15px; color: var(--neon-green);" class="lang-node" data-en="Multiplayer Room & Server Control" data-bn="মাল্টিপ্লেয়ার রুম ও সার্ভার কন্ট্রোল"><i class="fa-solid fa-server"></i> Multiplayer Room & Server Control</h4>
             <div class="form-group">
-                <label>Server Name</label>
+                <label class="lang-node" data-en="Server Name" data-bn="সার্ভার নাম">Server Name</label>
                 <select id="admin-server-name-select" class="form-control">
                     <option value="Asia">Asia</option>
                     <option value="India">India</option>
@@ -1266,31 +1265,31 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Room Name</label>
+                <label class="lang-node" data-en="Room Name" data-bn="রুমের নাম">Room Name</label>
                 <input type="text" id="admin-room-name-input" class="form-control" placeholder="e.g. BDBUS">
             </div>
             <div class="form-group">
-                <label>Room Password</label>
+                <label class="lang-node" data-en="Room Password" data-bn="রুম পাসওয়ার্ড">Room Password</label>
                 <input type="text" id="admin-room-pass-input" class="form-control" placeholder="e.g. 7799">
             </div>
             <div class="form-group">
-                <label>Room Master Name</label>
+                <label class="lang-node" data-en="Room Master Name" data-bn="রুম মাস্টার নাম">Room Master Name</label>
                 <input type="text" id="admin-room-master-input" class="form-control" placeholder="e.g. Alom">
             </div>
-            <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminRoomConfigSave()">Update Room & Server Info</button>
+            <button class="btn-premium lang-node" data-en="Update Room & Server Info" data-bn="রুম ও সার্ভার তথ্য আপডেট করুন" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminRoomConfigSave()">Update Room & Server Info</button>
         </div>
 
         <div class="admin-booking-monitor-card" id="admin-live-bookings-wrapper" style="display: none;">
-            <h4 style="color: var(--neon-blue); margin-bottom: 5px;"><i class="fa-solid fa-chair"></i> Live Seat Bookings Dashboard</h4>
-            <p style="font-size: 11px; color: var(--text-muted);">মেম্বারদের বুকিং করা লাইভ সিট ডাটা মনিটর এবং এক এক করে রিসেট কন্ট্রোল প্যানেল।</p>
+            <h4 style="color: var(--neon-blue); margin-bottom: 5px;" class="lang-node" data-en="Live Seat Bookings Dashboard" data-bn="লাইভ সিট বুকিং ড্যাশবোর্ড"><i class="fa-solid fa-chair"></i> Live Seat Bookings Dashboard</h4>
+            <p style="font-size: 11px; color: var(--text-muted);" class="lang-node" data-en="Monitor active member seat bookings and manage resets." data-bn="মেম্বারদের বুকিং করা লাইভ সিট ডাটা মনিটর এবং এক এক করে রিসেট কন্ট্রোল প্যানেল।">Monitor active member seat bookings and manage resets.</p>
             <div class="admin-table-container">
                 <table class="admin-data-table">
                     <thead>
                         <tr>
-                            <th>User Details</th>
-                            <th>Coach & Seat Key</th>
-                            <th>Lock Status</th>
-                            <th>Action</th>
+                            <th class="lang-node" data-en="User Details" data-bn="ব্যবহারকারীর বিবরণ">User Details</th>
+                            <th class="lang-node" data-en="Coach & Seat Key" data-bn="কোচ ও সিট কি">Coach & Seat Key</th>
+                            <th class="lang-node" data-en="Lock Status" data-bn="লক স্ট্যাটাস">Lock Status</th>
+                            <th class="lang-node" data-en="Action" data-bn="অ্যাকশন">Action</th>
                         </tr>
                     </thead>
                     <tbody id="admin-live-bookings-tbody"></tbody>
@@ -1299,12 +1298,12 @@
         </div>
 
         <div id="admin-view-all-members-wrapper" style="text-align: center; margin-bottom: 30px; display: none;">
-            <button class="btn-premium" style="background: var(--btn-gradient-2); color: #fff;" onclick="loadAllRegisteredMembersList(); navigatePage('all-members-screen')"> <i class="fa-solid fa-users"></i> View All Registered Members</button>
+            <button class="btn-premium lang-node" data-en="View All Registered Members" data-bn="সকল নিবন্ধিত সদস্য দেখুন" style="background: var(--btn-gradient-2); color: #fff;" onclick="loadAllRegisteredMembersList(); navigatePage('all-members-screen')"> <i class="fa-solid fa-users"></i> View All Registered Members</button>
         </div>
 
         <div class="admin-search-wrapper" id="admin-search-box-wrapper" style="display: none;">
             <input type="text" id="admin-search-input" class="form-control" placeholder="Search Member ID (e.g. 1001) or Name">
-            <button class="btn-premium" onclick="executeAdminSearchLogic()">Search</button>
+            <button class="btn-premium lang-node" data-en="Search" data-bn="অনুসন্ধান" onclick="executeAdminSearchLogic()">Search</button>
         </div>
 
         <div class="admin-grid" id="admin-user-cards-grid"></div>
@@ -1317,14 +1316,14 @@
 
     <div id="all-members-screen" class="page-screen">
         <div class="screen-header" style="text-align: center;">
-            <h3 style="display: inline-block;">All Registered Members</h3>
+            <h3 style="display: inline-block;" class="lang-node" data-en="All Registered Members" data-bn="সকল নিবন্ধিত সদস্যবৃন্দ">All Registered Members</h3>
         </div>
         <div id="all-members-list-render-node" style="margin-top:20px; border-radius:8px; overflow:hidden;"></div>
     </div>
 
     <footer class="global-footer-panel" id="main-global-footer">
         <div style="text-align: center; margin-bottom: 15px;">
-            <strong style="font-size: 18px; color: #ffffff; letter-spacing: 1px;">JOIN US</strong>
+            <strong style="font-size: 18px; color: #ffffff; letter-spacing: 1px;" class="lang-node" data-en="JOIN US" data-bn="আমাদের সাথে যুক্ত হোন">JOIN US</strong>
         </div>
 
         <div class="social-icon-row">
@@ -1336,14 +1335,14 @@
             <a href="mailto:info.m2vai380@gmail.com" class="social-link-circle gmail"><i class="fas fa-envelope"></i></a>
         </div>
         <div class="footer-policy-links">
-            <a href="#">Privacy Policy</a>
+            <a href="#" class="lang-node" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a>
             <span>|</span>
-            <a href="#">Terms & Conditions</a>
+            <a href="#" class="lang-node" data-en="Terms & Conditions" data-bn="শর্তাবলী">Terms & Conditions</a>
             <span>|</span>
-            <a href="#">Refund Policy</a>
+            <a href="#" class="lang-node" data-en="Refund Policy" data-bn="রিফান্ড পলিসি">Refund Policy</a>
         </div>
         <div class="footer-creator-box">
-            <div class="creator-title">Website Created By</div>
+            <div class="creator-title lang-node" data-en="Website Created By" data-bn="ওয়েবসাইট তৈরি করেছেন">Website Created By</div>
             <div class="creator-identity">
                 <img src="images/M2Vai Official YouTube Channel Logo.png" class="creator-avatar-icon" onerror="this.src='https://via.placeholder.com/30'">
                 M2Vai
@@ -1353,7 +1352,7 @@
                     <img src="images/M2Vai Official YouTube Channel Logo.png" style="width:16px; border-radius:50%;"> M2Vai
                 </a>
                 <a href="https://youtube.com/@travellerm2vai?si=PDkl_nDGIb5il-bj" target="_blank" class="btn-premium btn-yt" style="padding: 8px 14px; font-size:12px; background:#475569;">
-                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> Traveller M2Vai
+                    <img src="images/Traveller M2Vai.png" style="width:16px; border-radius:50%;"> <span class="lang-node" data-en="Traveller M2Vai" data-bn="ট্রাভেলার এম২ভাই">Traveller M2Vai</span>
                 </a>
             </div>
         </div>
@@ -1366,11 +1365,11 @@
 
     <div id="bdbusChatWindow" style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; background: #fff; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 9999; overflow: hidden; font-family: Arial, sans-serif;">
         <div style="background: #007bff; color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: bold; font-size: 15px;">BDBUS Live AI Chat</span>
+            <span style="font-weight: bold; font-size: 15px;" class="lang-node" data-en="BDBUS Live AI Chat" data-bn="বিডিবাস লাইভ এআই চ্যাট">BDBUS Live AI Chat</span>
             <span onclick="toggleChatBox()" style="cursor: pointer; font-size: 18px; font-weight: bold;">✕</span>
         </div>
         
-        <div style="background: #fff3cd; color: #856404; font-size: 11px; padding: 5px 10px; text-align: center; border-bottom: 1px solid #ffeeba;">
+        <div style="background: #fff3cd; color: #856404; font-size: 11px; padding: 5px 10px; text-align: center; border-bottom: 1px solid #ffeeba;" class="lang-node" data-en="⚠️ All chats auto-delete after 72 hours." data-bn="⚠️ ৭২ ঘণ্টা পর সমস্ত চ্যাট অটো-ডিলিট হয়ে যায়।">
             ⚠️ ৭২ ঘণ্টা পর সমস্ত চ্যাট অটো-ডিলিট হয়ে যায়।
         </div>
 
@@ -1378,7 +1377,7 @@
 
         <div style="padding: 10px; background: #fff; border-top: 1px solid #ddd; display: flex; gap: 5px;">
             <input type="text" id="chatInput" placeholder="@BDBUS লিখে প্রশ্ন করুন..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 13px;">
-            <button onclick="sendChatMessage()" style="background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Send</button>
+            <button onclick="sendChatMessage()" style="background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;" class="lang-node" data-en="Send" data-bn="সেন্ড">Send</button>
         </div>
     </div>
 
@@ -1462,7 +1461,7 @@
                 let userName = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.name) ? activeUserSession.name : "Member";
                 let welcomeMsg = {
                     sender: "Bangladesh Bussid Unique Society (BDBUS)",
-                    text: `শুভকামনা ${userName} ভাই! 🚌 BDBUS Digital Hub-এ আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সহযোগিতা করতে পারি বলুন?`,
+                    text: `Hello ${userName}! 🚌 Welcome to BDBUS Digital Hub. How can I help you today?`,
                     isBot: true,
                     timestamp: Date.now()
                 };
@@ -1489,33 +1488,33 @@
             let text = userMessage.toLowerCase().trim();
 
             if (text.includes("সালাম") || text.includes("আসসালামু আলাইকুম") || text.includes("salam") || text.includes("assalamu alaikum") || text.includes("assalam")) {
-                return "ওয়ালাইকুমুসসালাম ওয়া রাহমাতুল্লাহ! BDBUS Digital Hub-এ আপনাকে স্বাগতম। কীভাবে সাহায্য করতে পারি?";
+                return "Walaikum Assalam Warahmatullahi Wabarakatuh! Welcome to BDBUS Digital Hub. How can I help you?";
             }
             if (text.includes("নমস্কার") || text.includes("নমস্তে") || text.includes("nomoshkar") || text.includes("adab") || text.includes("আদাব")) {
-                return "নমস্কার/আদাব! BDBUS হাবে আপনাকে স্বাগতম। আজ আপনাকে কীভাবে সাহায্য করতে পারি বলুন?";
+                return "Namaskar / Adab! Welcome to BDBUS Hub. How can I help you today?";
             }
             if (text.includes("কেমন আছো") || text.includes("কেমন আছেন") || text.includes("ভালো") || text.includes("hi") || text.includes("hello") || text.includes("হাই") || text.includes("হ্যালো")) {
-                return "আলহামদুলিল্লাহ্‌ / ঈশ্বর বা আল্লাহর অশেষ রহমতে আমি খুব ভালো আছি! BDBUS-এ আপনার যাত্রা কেমন কাটছে বলুন?";
+                return "Alhamdulillah / By God's grace I am doing great! How is your journey going at BDBUS?";
             }
             if (text.includes("ধন্যবাদ") || text.includes("thanks") || text.includes("thank you")) {
-                return "আপনাকেও অনেক ধন্যবাদ! BDBUS-এর সাথেই থাকুন। 🚌✨";
+                return "Thank you too! Stay with BDBUS. 🚌✨";
             }
 
             if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
-                return "রেজিস্ট্রেশন বা লগইন করার পর প্রোফাইল সেকশনে আপনার 'ডিজিটাল ড্রাইভিং লাইসেন্স পারমিট' পাবেন। নিচে থাকা 'Download Driving Licence' বাটনে ক্লিক করে কার্ডটি সেভ করে নিন।";
+                return "After registration or login, you will find your 'Digital Driving Licence Permit' in the profile section. Save the card by clicking 'Download Driving Licence' below.";
             }
             if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
-                return "নতুন অ্যাকাউন্টে ওয়েলকাম ও সাবস্ক্রিপশন বোনাস পেয়ে যাবেন। ওয়ালেটে পর্যাপ্ত ব্যালেন্স না থাকলে রিচার্জ অপশন থেকে ব্যালেন্স যোগ করে নিতে পারবেন।";
+                return "You will get welcome and subscription bonuses in your new account. If wallet balance is insufficient, you can top up from the recharge options.";
             }
             if (text.includes("ticket") || text.includes("টিকিট") || text.includes("booking") || text.includes("বুকিং") || text.includes("রুম") || text.includes("সিট")) {
-                return "ওয়ালেট ব্যালেন্স ব্যবহার করে নির্দিষ্ট রুট, সময় ও সিট সিলেক্ট করে টিকিট কাটুন। টিকিটে থাকা রুম আইডি বা পাসকোড দিয়ে মাল্টিপ্লেয়ার ট্রিপে জয়েন করতে পারবেন।";
+                return "Book tickets using wallet balance by selecting specific route, time and seat. You can join multiplayer trips using the room ID or passcode on the ticket.";
             }
 
             if (text.includes("game") || text.includes("গেম") || text.includes("bussid") || text.includes("বাস গেম") || text.includes("খেলবো") || text.includes("মাল্টিপ্লেয়ার")) {
-                return "আমাদের প্ল্যাটফর্মে 'Bus Simulator Indonesia (BUSSID)' সহ দারুণ সব বাস সিমুলেটর গেমের মাল্টিপ্লেয়ার ট্রিপ আয়োজন করা হয়। একসাথে ড্রাইভ করার আনন্দই আলাদা!";
+                return "We organize wonderful bus simulator multiplayer trips including 'Bus Simulator Indonesia (BUSSID)'. Driving together is a different kind of joy!";
             }
             if (text.includes("মজা") || text.includes("আনন্দ") || text.includes("বিনোদন") || text.includes("আড্ডা") || text.includes("পরামর্শ") || text.includes("help") || text.includes("সাহায্য")) {
-                return "BDBUS হলো আপনাদের নিজস্ব বিনোদন ও আড্ডার জায়গা! বাস ড্রাইভিং, ট্রিপ প্ল্যানিং বা যেকোনো ফ্রেন্ডলি আড্ডার বিষয়ে আমাকে বলতে পারেন, আমি সবসময় প্রস্তুত আছি।";
+                return "BDBUS is your own entertainment and hangout place! Feel free to ask about bus driving, trip planning, or casual friendly chat, I am always ready.";
             }
 
             const prohibitedKeywords = [
@@ -1525,10 +1524,10 @@
             ];
             
             if (prohibitedKeywords.some(word => text.includes(word))) {
-                return "⚠️ BDBUS একটি পরিচ্ছন্ন ও সৌহার্দ্যপূর্ণ বিনোদনমূলক প্ল্যাটফর্ম। এখানে রাজনৈতিক, আক্রমণাত্মক বা অশালীন কোনো আলোচনার সুযোগ নেই। দয়া করে কমিউনিটির নিয়ম বজায় রাখুন।";
+                return "⚠️ BDBUS is a clean and friendly entertainment platform. Political, aggressive, or obscene discussions are not permitted. Please maintain community guidelines.";
             }
 
-            return "আপনার কথাটি বুঝতে পেরেছি! BDBUS হাবে ড্রাইভিং লাইসেন্স, টিকিট বুকিং, বাস গেম বা সাধারণ আড্ডা ও বিনোদন নিয়ে যেকোনো প্রশ্ন বা পরামর্শ চাইতে পারেন। কীভাবে সাহায্য করতে পারি বলুন?";
+            return "I understand! You can ask any question or suggestions regarding driving licence, ticket booking, bus games, or general chat in BDBUS Hub. How can I help you?";
         }
 
         function sendChatMessage() {
@@ -1576,7 +1575,10 @@
         };
 
         let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
+        
+        // ডিফল্ট ভাষা সবসময় 'en' (ইংরেজি) সেট করা হলো
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+        
         let currentlyChosenSeats = [];
         let selectedFareGlobalRate = 0;
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
@@ -1872,11 +1874,11 @@
             const agree = document.getElementById('reg-agree').checked;
 
             if (!name || !gameid || !dob || !phone || !email || !pass || !division || !district) {
-                alert("দয়া করে সব প্রয়োজনীয় ঘরগুলো পূরণ করুন!");
+                alert("Please fill in all required fields!");
                 return;
             }
-            if (pass !== confpass) { alert("পাসওয়ার্ড দুটি মিলছে না!"); return; }
-            if (!agree) { alert("শর্তাবলীতে টিক চিহ্ন দিন!"); return; }
+            if (pass !== confpass) { alert("Passwords do not match!"); return; }
+            if (!agree) { alert("Please check agreement declaration!"); return; }
 
             try {
                 const counterRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "user_counter");
@@ -1903,11 +1905,11 @@
                 await window.FirebaseFirestore.setDoc(window.FirebaseFirestore.doc(window.FirebaseDb, "users", email), newUser);
                 await window.FirebaseFirestore.setDoc(counterRef, { lastId: nextId });
 
-                alert(`রেজিস্ট্রেশন সফল হয়েছে! আপনার আইডি নম্বর: BDBUS-${nextId}`);
+                alert(`Registration successful! Your ID: BDBUS-${nextId}`);
                 toggleAuthSubView('login');
             } catch (error) {
                 console.error("Error writing document: ", error);
-                alert("রেজিস্ট্রেশন করতে সমস্যা হয়েছে।");
+                alert("Registration error occurred.");
             }
         }
 
@@ -1938,7 +1940,7 @@
             const pass = document.getElementById('login-pass').value;
 
             if (!email || !pass) {
-                alert("দয়া করে ইমেইল এবং পাসওয়ার্ড দিন।");
+                alert("Please enter email and password.");
                 return;
             }
 
@@ -1951,19 +1953,19 @@
 
                     if (user.pass === pass) {
                         if (user.isBanned) {
-                            alert("আপনার অ্যাকাউন্টটি ব্লক করা হয়েছে।");
+                            alert("Your account has been banned.");
                             return;
                         }
                         proceedLoginSession(user);
                     } else {
-                        alert("পাসওয়ার্ড ভুল হয়েছে!");
+                        alert("Incorrect password!");
                     }
                 } else {
-                    alert("এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট রেজিস্ট্রেশন করা হয়নি!");
+                    alert("No account registered with this email!");
                 }
             } catch (error) {
                 console.error("Login error: ", error);
-                alert("লগইন করার সময় সমস্যা হয়েছে।");
+                alert("Login process error.");
             }
         }
 
@@ -2186,32 +2188,32 @@
             const type = document.getElementById('route-bustype').value;
 
             if (!from || from === "" || from.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
-                alert("দয়া করে আপনার যাত্রার সঠিক প্রস্থান জেলা (From) নির্বাচন করুন।");
+                alert("Please select departure district (From).");
                 return;
             }
 
             if (!to || to === "" || to.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
-                alert("দয়া করে আপনার যাত্রার সঠিক গন্তব্য জেলা (To) নির্বাচন করুন।");
+                alert("Please select destination district (To).");
                 return;
             }
 
             if (from === to) {
-                alert("যাত্রার স্থান এবং গন্তব্য একই জেলা হতে পারে না!");
+                alert("Departure and destination cannot be the same!");
                 return;
             }
 
             if (!date || date === "") {
-                alert("দয়া করে আপনার যাত্রার সঠিক তারিখ নির্বাচন করুন।");
+                alert("Please select journey date.");
                 return;
             }
 
             if (!time || time === "" || time.includes("Select Trip Time")) {
-                alert("দয়া করে আপনার সঠিক ট্রিপ টাইম (Journey Time) নির্বাচন করুন।");
+                alert("Please select trip time.");
                 return;
             }
 
             if (!type || type === "Select Coach") {
-                alert("দয়া করে সিট দেখতে প্রথমে 'Non - AC Coach' অথবা 'Premium AC Coach' সিলেক্ট করুন!");
+                alert("Please select 'Non - AC Coach' or 'Premium AC Coach' first!");
                 return;
             }
 
@@ -2224,7 +2226,7 @@
             const limitMsgEl = document.getElementById('seat-selection-limit-msg');
             if (limitMsgEl) {
                 if (canMultiBook) {
-                    limitMsgEl.innerHTML = `<span style="color:var(--neon-green); font-weight:600;">★ Multi-Seat Booking Enabled:</span> আপনি একসাথে একাধিক সিট সিলেক্ট করে বুকিং করতে পারবেন।`;
+                    limitMsgEl.innerHTML = `<span style="color:var(--neon-green); font-weight:600;">★ Multi-Seat Booking Enabled:</span> You can select and book multiple seats together.`;
                 } else {
                     limitMsgEl.innerText = `Select 1 seat. Selected seat holds locked for 30 seconds.`;
                 }
@@ -2254,7 +2256,7 @@
                 
                 if (timeLeft <= 0) {
                     clearInterval(window.seatTimerIntervalId);
-                    alert("সিট হোল্ড করার সময় শেষ হয়ে গেছে! দয়া করে আবার চেষ্টা করুন।");
+                    alert("Seat hold time expired! Please try again.");
                     navigatePage('home-screen');
                 } else {
                     timeLeft -= 1;
@@ -2374,17 +2376,16 @@
 
             seat.onclick = async () => {
                 if(seat.classList.contains('occupied')) {
-                    alert("⚠️ এই সিটটি ইতিমধ্যে অন্য মেম্বার কনফার্ম করে ফেলেছেন!");
+                    alert("⚠️ This seat is already confirmed by another member!");
                     return;
                 }
                 if(seat.classList.contains('locked-hold')) {
-                    alert("⚠️ এই সিটটি বর্তমানে অন্য একজন মেম্বার সিলেক্ট করে হোল্ডে রেখেছেন। অনুগ্রহ করে অন্য সিট বেছে নিন।");
+                    alert("⚠️ This seat is currently held by another member. Please choose another.");
                     return;
                 }
 
                 const canMultiBook = userHasPermission('canMultiSeatBook');
 
-                // যদি সিটটি আগে থেকেই এই ইউজারের সিলেক্ট করা থাকে তবে আনসিলেক্ট হবে
                 if (currentlyChosenSeats.includes(idStr)) {
                     currentlyChosenSeats = currentlyChosenSeats.filter(s => s !== idStr);
                     seat.classList.remove('selected');
@@ -2394,7 +2395,6 @@
                     return;
                 }
 
-                // সাধারণ ইউজারদের জন্য ১টি সিট লিমিট
                 if (!canMultiBook && currentlyChosenSeats.length >= 1) {
                     const prevSeatId = currentlyChosenSeats[0];
                     const prevGlobalKey = `${type}_Seat-${prevSeatId}`;
@@ -2405,13 +2405,13 @@
 
                 const nextTotalFare = (currentlyChosenSeats.length + 1) * selectedFareGlobalRate;
                 if (activeUserSession.wallet < nextTotalFare) {
-                    alert(`⚠️ পর্যাপ্ত ব্যালেন্স নেই! ${currentlyChosenSeats.length + 1}টি সিটের জন্য ${nextTotalFare} BDT প্রয়োজন।`);
+                    alert(`⚠️ Insufficient balance! ${nextTotalFare} BDT required for ${currentlyChosenSeats.length + 1} seats.`);
                     return;
                 }
                 
                 let successLocked = await executeTemporary30SecSeatLock(globalKey);
                 if (!successLocked) {
-                    alert("⚠️ দুঃখিত, সিটটি এই মুহূর্তে ফাঁকা নেই বা অন্য কেউ নিয়ে নিয়েছে।");
+                    alert("⚠️ Sorry, seat is not available or taken by someone else.");
                     await loadFirebaseBookingsAndRenderMap();
                     generateBusCabinGridBlueprint(type);
                     return;
@@ -2443,7 +2443,7 @@
                         if (docSnap.exists()) {
                             const data = docSnap.data();
                             if (data.isConfirmed && data.userId !== activeUserSession.id) {
-                                alert(`⚠️ ট্রানজাকশন ফেইলড! [${seatId}] সিটটি এই মুহূর্তে অন্য একজন মেম্বার কনফার্ম করে ফেলেছেন।`);
+                                alert(`⚠️ Transaction failed! Seat [${seatId}] was just confirmed by another member.`);
                                 navigatePage('booking-screen');
                                 return;
                             }
@@ -2535,7 +2535,7 @@
 
             } catch (err) {
                 console.error("Ticket Confirm Error:", err);
-                alert("টিকিট বুকিং নিশ্চিত করতে সমস্যা হয়েছে।");
+                alert("Ticket confirmation error.");
             }
         }
 
@@ -2705,7 +2705,6 @@
                         return;
                     }
 
-                    // যদি শুধুমাত্র Multi-Seat পারমিশন থাকে তবে সে নিজের বুক করা সিটগুলো এক এক করে দেখতে ও রিসেট করতে পারবে
                     if (!canResetAnySeat && canResetOwnSeats && bookingInfo.userId !== activeUserSession.id) {
                         return;
                     }
@@ -2756,7 +2755,7 @@
                     }
                 } catch (err) {
                     console.error("Seat Reset Error:", err);
-                    alert("সিট রিসেট করতে সমস্যা হয়েছে।");
+                    alert("Seat reset error.");
                 }
             }
         }
@@ -2813,7 +2812,7 @@
 
             if(canSearch) {
                 searchBox.style.display = 'flex';
-                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের সার্চ বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">Search member name or ID above to view details.</div>`;
             } else {
                 searchBox.style.display = 'none';
                 if(grid) grid.innerHTML = '';
@@ -2846,7 +2845,7 @@
             const rMaster = document.getElementById('admin-room-master-input').value.trim();
 
             if (!rName || !rPass || !rMaster) {
-                alert("দয়া করে Room Name, Room Password এবং Room Master Name পূরণ করুন!");
+                alert("Please fill Room Name, Room Password and Room Master Name!");
                 return;
             }
 
@@ -2864,11 +2863,11 @@
                     await window.FirebaseFirestore.setDoc(roomRef, updatedRoomConfig, { merge: true });
                     liveRoomSettings = updatedRoomConfig;
                     applyLiveRoomSettingsToTicketUI();
-                    alert("Multiplayer Room & Server info updated live! এখন থেকে কনফার্ম করা টিকিটে এই তথ্য দেখাবে।");
+                    alert("Multiplayer Room & Server info updated live!");
                 }
             } catch (err) {
                 console.error("Room Config Update Error:", err);
-                alert("রুমের তথ্য আপডেট করতে সমস্যা হয়েছে।");
+                alert("Room config update error.");
             }
         }
 
@@ -2882,7 +2881,7 @@
             const canReset = isSuperAdmin || userHasPermission('canResetSeat');
 
             if(userArray.length === 0) {
-                grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">কোনো সদস্য পাওয়া যায়নি!</div>`;
+                grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">No members found!</div>`;
                 return;
             }
 
@@ -3024,7 +3023,7 @@
             let term = document.getElementById('admin-search-input').value.trim();
             const grid = document.getElementById('admin-user-cards-grid');
             if(!term) { 
-                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের সার্চ বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">Search member name or ID above to view details.</div>`;
                 return; 
             }
 
@@ -3042,7 +3041,7 @@
                 buildUserAdminDisplayCards(filtered);
             } catch (e) {
                 console.error("Search error:", e);
-                alert("সার্চ করতে সমস্যা হয়েছে।");
+                alert("Search error.");
             }
         }
 
@@ -3187,9 +3186,15 @@
             selectedLanguage = locale;
             localStorage.setItem('bdbus_lang', locale);
             
-            document.querySelectorAll('.lang-btn').forEach(b => b.style.opacity = '0.5');
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.style.background = '#334155';
+                b.style.color = '#fff';
+            });
             const targetLangButtonNode = document.querySelector(`.lang-btn.${locale}`);
-            if(targetLangButtonNode) targetLangButtonNode.style.opacity = '1';
+            if(targetLangButtonNode) {
+                targetLangButtonNode.style.background = '#00f2fe';
+                targetLangButtonNode.style.color = '#000';
+            }
 
             document.querySelectorAll('.lang-node').forEach(el => {
                 let text = el.getAttribute(`data-${locale}`);
@@ -3277,7 +3282,11 @@
             initRealtimeRoomSettingsListener();
             initialClockHeartbeatEngine();
             initBackgroundAutoSyncEngine();
-            setLanguageSystem(selectedLanguage);
+            
+            // ডিফল্ট ভাষা হিসেবে সবসময় ইংরেজি (en) লোড করা নিশ্চিত করা হলো
+            let initialLang = localStorage.getItem('bdbus_lang') || 'en';
+            setLanguageSystem(initialLang);
+
             initSearchableDropdownSystem();
             setInterval(checkSessionTimeoutRules, 10000); 
 
