@@ -128,6 +128,61 @@
             transform: translateY(-2px);
         }
 
+        /* --- PREMIUM ROLE & PERMISSION CHECKBOX BADGES --- */
+        .role-pill-btn {
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .role-pill-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+        }
+        .role-pill-btn.active-role {
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+            transform: scale(1.04);
+        }
+
+        .perm-checkbox-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+            border: 1px solid transparent;
+        }
+        .perm-checkbox-pill input[type="checkbox"] {
+            accent-color: #ffffff;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+        .perm-checkbox-pill:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.12);
+        }
+
+        .perm-c1 { background: rgba(0, 242, 254, 0.14); border-color: #00f2fe; color: #00f2fe; }
+        .perm-c2 { background: rgba(0, 255, 135, 0.14); border-color: #00ff87; color: #00ff87; }
+        .perm-c3 { background: rgba(245, 175, 25, 0.14); border-color: #f5af19; color: #f5af19; }
+        .perm-c4 { background: rgba(236, 72, 153, 0.14); border-color: #ec4899; color: #f472b6; }
+        .perm-c5 { background: rgba(239, 68, 68, 0.14); border-color: #ef4444; color: #f87171; }
+        .perm-c6 { background: rgba(139, 92, 246, 0.14); border-color: #8b5cf6; color: #a78bfa; }
+        .perm-c7 { background: rgba(14, 165, 233, 0.14); border-color: #0ea5e9; color: #38bdf8; }
+        .perm-c8 { background: rgba(249, 115, 22, 0.14); border-color: #f97316; color: #fb923c; }
+
         .neon-clock {
             background: rgba(15, 23, 42, 0.8);
             border: 2px solid var(--neon-blue);
@@ -492,7 +547,7 @@
         .ticket-sub-badge { background: #ff0000; font-size: 10px; padding: 4px 10px; border-radius: 4px; font-weight: bold; }
 
         .admin-search-wrapper { max-width: 500px; margin: 0 auto 25px; display: flex; gap: 10px; }
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; }
         .admin-control-card { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; }
         .btn-admin-small { padding: 6px 12px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
         
@@ -746,13 +801,13 @@
             <button class="btn-premium" style="width: 130px; justify-content: center;" onclick="dismissGlobalWelcomePopup()">Thanks</button>
         </div>
     </div>
-<!-- নতুন দ্বিতীয় নোটিশ পপ-আপটি ঠিক এখানে বসবে -->
-<div class="custom-welcome-modal-layer" id="second-notice-popup" style="display: none;" data-global-second-popup-layer>
-    <div class="custom-welcome-modal-card" style="max-width: 450px; width: 90%; background: #1a1a2e; padding: 20px; border-radius: 12px; text-align: center;">
-        <img src="images/notice.jpg" alt="Urgent Notice" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--nman-blue);">
-        <button class="btn-premium" style="width: 140px; margin: 0 auto; justify-content: center;" onclick="dismissSecondPopup()">Okay</button>
+
+    <div class="custom-welcome-modal-layer" id="second-notice-popup" style="display: none;" data-global-second-popup-layer>
+        <div class="custom-welcome-modal-card" style="max-width: 450px; width: 90%; background: #1a1a2e; padding: 20px; border-radius: 12px; text-align: center;">
+            <img src="images/notice.jpg" alt="Urgent Notice" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--neon-blue);">
+            <button class="btn-premium" style="width: 140px; margin: 0 auto; justify-content: center;" onclick="dismissSecondPopup()">Okay</button>
+        </div>
     </div>
-</div>
     
     <header class="global-header" id="main-global-header">
         <div class="header-left" id="header-nav-controls" style="display: none;">
@@ -1116,8 +1171,8 @@
                 <div class="legend-item"><div class="legend-box l-book"></div><span>Booking</span></div>
             </div>
 
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;" class="lang-node" data-en="Select 1 seat. Selected seat holds locked for 30 second." data-bn="১টি সিট সিলেক্ট করুন। নির্বাচিত সিট ৩০ সেকেন্ড জন্য হোল্ড লক থাকবে।">Select 1 seat. Selected holds for 2 mins.</p>
-            <p id="seat-lock-timer" style="font-size: 14px; color: #ff9900; font-weight: bold;">Time Remaining: <span id="countdown">02:00</span></p>
+            <p id="seat-selection-limit-msg" style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Select 1 seat. Selected seat holds locked for 30 seconds.</p>
+            <p id="seat-lock-timer" style="font-size: 14px; color: #ff9900; font-weight: bold;">Time Remaining: <span id="countdown">00:30</span></p>
             
             <div class="bus-cabin-container" id="dynamic-cabin-root"></div>
 
@@ -1197,7 +1252,6 @@
             <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminNoticeBroadcastSave()">Update Live Notice</button>
         </div>
 
-        <!-- নতুন সেকশন: Multiplayer Room & Server Control -->
         <div class="admin-notice-update-box" id="admin-room-server-wrapper" style="display: none;">
             <h4 style="margin-bottom: 15px; color: var(--neon-green);"><i class="fa-solid fa-server"></i> Multiplayer Room & Server Control</h4>
             <div class="form-group">
@@ -1226,9 +1280,9 @@
             <button class="btn-premium" style="padding: 8px 18px; font-size: 13px;" onclick="executeAdminRoomConfigSave()">Update Room & Server Info</button>
         </div>
 
-        <div class="admin-booking-monitor-card">
+        <div class="admin-booking-monitor-card" id="admin-live-bookings-wrapper" style="display: none;">
             <h4 style="color: var(--neon-blue); margin-bottom: 5px;"><i class="fa-solid fa-chair"></i> Live Seat Bookings Dashboard</h4>
-            <p style="font-size: 11px; color: var(--text-muted);">মেম্বারদের বুকিং করা লাইভ সিট ডাটা মনিটর এবং রিসেট কন্ট্রোল প্যানেল।</p>
+            <p style="font-size: 11px; color: var(--text-muted);">মেম্বারদের বুকিং করা লাইভ সিট ডাটা মনিটর এবং এক এক করে রিসেট কন্ট্রোল প্যানেল।</p>
             <div class="admin-table-container">
                 <table class="admin-data-table">
                     <thead>
@@ -1244,12 +1298,12 @@
             </div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 30px;">
+        <div id="admin-view-all-members-wrapper" style="text-align: center; margin-bottom: 30px; display: none;">
             <button class="btn-premium" style="background: var(--btn-gradient-2); color: #fff;" onclick="loadAllRegisteredMembersList(); navigatePage('all-members-screen')"> <i class="fa-solid fa-users"></i> View All Registered Members</button>
         </div>
 
-        <div class="admin-search-wrapper">
-            <input type="text" id="admin-search-input" class="form-control" placeholder="Search Member ID (e.g. 1001)">
+        <div class="admin-search-wrapper" id="admin-search-box-wrapper" style="display: none;">
+            <input type="text" id="admin-search-input" class="form-control" placeholder="Search Member ID (e.g. 1001) or Name">
             <button class="btn-premium" onclick="executeAdminSearchLogic()">Search</button>
         </div>
 
@@ -1329,7 +1383,7 @@
     </div>
 
     <script>
-                // ================= EMAILJS CONFIGURATION =================
+        // ================= EMAILJS CONFIGURATION =================
         const EMAILJS_PUBLIC_KEY = "lbruLyBBlldpOs5Sh";     
         const EMAILJS_SERVICE_ID = "service_yavaoaq";     
         const EMAILJS_TEMPLATE_ID = "template_mvqi9fg";   
@@ -1523,7 +1577,7 @@
 
         let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
-        let currentlyChosenSeatNode = null;
+        let currentlyChosenSeats = [];
         let selectedFareGlobalRate = 0;
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
 
@@ -1538,7 +1592,53 @@
             "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
         ];
 
+        function getDefaultPermissions() {
+            return {
+                canUpdateNotice: false,
+                canUpdateRoom: false,
+                canResetSeat: false,
+                canGiftWallet: false,
+                canBanRemove: false,
+                canViewAllMembers: false,
+                canSearchUsers: false,
+                canMultiSeatBook: false
+            };
+        }
+
+        function hasAnyAdminPanelPermission(user) {
+            if (!user) return false;
+            if (user.email === SUPER_ADMIN_EMAIL || user.role === 'Super Admin') return true;
+            const p = user.permissions || {};
+            return Boolean(
+                p.canUpdateNotice ||
+                p.canUpdateRoom ||
+                p.canResetSeat ||
+                p.canGiftWallet ||
+                p.canBanRemove ||
+                p.canViewAllMembers ||
+                p.canSearchUsers ||
+                p.canMultiSeatBook
+            );
+        }
+
+        function userHasPermission(permKey) {
+            if (!activeUserSession) return false;
+            if (activeUserSession.email === SUPER_ADMIN_EMAIL || activeUserSession.role === 'Super Admin') return true;
+            return Boolean(activeUserSession.permissions && activeUserSession.permissions[permKey]);
+        }
+
         async function verifyDatabaseStructureSeeding() {
+            const fullAdminPermissions = {
+                canUpdateNotice: true,
+                canUpdateRoom: true,
+                canResetSeat: true,
+                canGiftWallet: true,
+                canBanRemove: true,
+                canViewAllMembers: true,
+                canSearchUsers: true,
+                canMultiSeatBook: true
+            };
+
             const adminData = {
                 id: 1000,
                 name: "M2VAI",
@@ -1551,8 +1651,8 @@
                 fb: "https://facebook.com/groups/771005197556072/",
                 email: SUPER_ADMIN_EMAIL,
                 pass: "admin123",
-                role: "Admin",
-                permissions: { canUpdateNotice: true, canUpdateRoom: true },
+                role: "Super Admin",
+                permissions: fullAdminPermissions,
                 wallet: 100000,
                 avatar: "images/M2Vai.png",
                 isBanned: false,
@@ -1570,8 +1670,10 @@
                         await window.FirebaseFirestore.setDoc(adminDocRef, adminData);
                         console.log("Super Admin M2VAI auto-created in Firebase Cloud!");
                     } else {
-                        // সুপার এডমিনের পারমিশন সব সময় ট্রু নিশ্চিত করা
-                        await window.FirebaseFirestore.setDoc(adminDocRef, { permissions: { canUpdateNotice: true, canUpdateRoom: true } }, { merge: true });
+                        await window.FirebaseFirestore.setDoc(adminDocRef, { 
+                            role: "Super Admin",
+                            permissions: fullAdminPermissions 
+                        }, { merge: true });
                     }
 
                     const counterRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "user_counter");
@@ -1788,8 +1890,8 @@
                 const newUser = {
                     id: nextId,
                     name, gameid, dob, phone, gender, division, district, fb, email, pass,
-                    role: "Regular Member",
-                    permissions: { canUpdateNotice: false, canUpdateRoom: false },
+                    role: "New Member",
+                    permissions: getDefaultPermissions(),
                     wallet: 0,
                     avatar: "https://via.placeholder.com/150",
                     isBanned: false, 
@@ -1810,32 +1912,28 @@
         }
 
         function triggerGlobalWelcomePopup(user) {
-    document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
-    document.getElementById('pop-user-name').innerText = user.name;
-    document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
-    document.getElementById('global-welcome-popup-layer').style.display = "flex";
-}
+            document.getElementById('pop-user-avatar').src = user.avatar || "https://via.placeholder.com/150";
+            document.getElementById('pop-user-name').innerText = user.name;
+            document.getElementById('pop-user-id').innerText = `ID: BDBUS-${user.id}`;
+            document.getElementById('global-welcome-popup-layer').style.display = "flex";
+        }
 
-function dismissGlobalWelcomePopup() {
-    // প্রথম ওয়েলকাম পপ-আপটি বন্ধ করবে
-    document.getElementById('global-welcome-popup-layer').style.display = "none";
+        function dismissGlobalWelcomePopup() {
+            document.getElementById('global-welcome-popup-layer').style.display = "none";
+            const secondModal = document.getElementById('second-notice-popup');
+            if (secondModal) {
+                secondModal.style.display = 'flex';
+            }
+        }
 
-    // সাথে সাথেই দ্বিতীয় নোটিশ পপ-আপটি স্ক্রিনে নিয়ে আসবে
-    const secondModal = document.getElementById('second-notice-popup');
-    if (secondModal) {
-        secondModal.style.display = 'flex';
-    }
-}
+        function dismissSecondPopup() {
+            const secondModal = document.getElementById('second-notice-popup');
+            if (secondModal) {
+                secondModal.style.display = 'none';
+            }
+        }
 
-// দ্বিতীয় পপ-আপের Okay বাটনের জন্য ফাংশন
-function dismissSecondPopup() {
-    const secondModal = document.getElementById('second-notice-popup');
-    if (secondModal) {
-        secondModal.style.display = 'none';
-    }
-}
-
-   async function executeLoginLogic() {
+        async function executeLoginLogic() {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
 
@@ -1879,7 +1977,7 @@ function dismissSecondPopup() {
             document.getElementById('header-empty-space').style.display = 'none';
             document.getElementById('main-global-footer').style.display = 'block';
             
-            if(user.role === 'Admin' || user.role === 'Moderator' || user.role === 'Counter Master' || user.role === 'Trip Master' || (user.permissions && (user.permissions.canUpdateNotice || user.permissions.canUpdateRoom))) { 
+            if(hasAnyAdminPanelPermission(user)) { 
                 document.getElementById('admin-menu-link').style.display = 'flex'; 
             } else { 
                 document.getElementById('admin-menu-link').style.display = 'none'; 
@@ -2080,59 +2178,70 @@ function dismissSecondPopup() {
             document.getElementById('booking-fare-render').innerText = `${selectedFareGlobalRate} BDT`;
         }
 
-async function openSeatSelectionEngine() {
-    const from = document.getElementById('route-from').value.trim();
-    const to = document.getElementById('route-to').value.trim();
-    const date = document.getElementById('route-date').value;
-    const time = document.getElementById('route-time').value;
-    const type = document.getElementById('route-bustype').value;
+        async function openSeatSelectionEngine() {
+            const from = document.getElementById('route-from').value.trim();
+            const to = document.getElementById('route-to').value.trim();
+            const date = document.getElementById('route-date').value;
+            const time = document.getElementById('route-time').value;
+            const type = document.getElementById('route-bustype').value;
 
-    if (!from || from === "" || from.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
-        alert("দয়া করে আপনার যাত্রার সঠিক প্রস্থান জেলা (From) নির্বাচন করুন।");
-        return;
-    }
+            if (!from || from === "" || from.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
+                alert("দয়া করে আপনার যাত্রার সঠিক প্রস্থান জেলা (From) নির্বাচন করুন।");
+                return;
+            }
 
-    if (!to || to === "" || to.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
-        alert("দয়া করে আপনার যাত্রার সঠিক গন্তব্য জেলা (To) নির্বাচন করুন।");
-        return;
-    }
+            if (!to || to === "" || to.includes("আপনার সঠিক জেলা নির্বাচন করুন")) {
+                alert("দয়া করে আপনার যাত্রার সঠিক গন্তব্য জেলা (To) নির্বাচন করুন।");
+                return;
+            }
 
-    if (from === to) {
-        alert("যাত্রার স্থান এবং গন্তব্য একই জেলা হতে পারে না!");
-        return;
-    }
+            if (from === to) {
+                alert("যাত্রার স্থান এবং গন্তব্য একই জেলা হতে পারে না!");
+                return;
+            }
 
-    if (!date || date === "") {
-        alert("দয়া করে আপনার যাত্রার সঠিক তারিখ নির্বাচন করুন।");
-        return;
-    }
+            if (!date || date === "") {
+                alert("দয়া করে আপনার যাত্রার সঠিক তারিখ নির্বাচন করুন।");
+                return;
+            }
 
-    if (!time || time === "" || time.includes("Select Trip Time")) {
-        alert("দয়া করে আপনার সঠিক ট্রিপ টাইম (Journey Time) নির্বাচন করুন।");
-        return;
-    }
+            if (!time || time === "" || time.includes("Select Trip Time")) {
+                alert("দয়া করে আপনার সঠিক ট্রিপ টাইম (Journey Time) নির্বাচন করুন।");
+                return;
+            }
 
-    if (!type || type === "Select Coach") {
-        alert("দয়া করে সিট দেখতে প্রথমে 'Non - AC Coach' অথবা 'Premium AC Coach' সিলেক্ট করুন!");
-        return;
-    }
+            if (!type || type === "Select Coach") {
+                alert("দয়া করে সিট দেখতে প্রথমে 'Non - AC Coach' অথবা 'Premium AC Coach' সিলেক্ট করুন!");
+                return;
+            }
 
-    if (activeUserSession.wallet < selectedFareGlobalRate) {
-        alert("Insufficient active account wallet balance for execution.");
-        return;
-    }
+            if (activeUserSession.wallet < selectedFareGlobalRate) {
+                alert("Insufficient active account wallet balance for execution.");
+                return;
+            }
 
-    document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid`;
-    document.getElementById('seat-calculated-total-fare').innerText = '0 BDT';
-    currentlyChosenSeatNode = null;
+            const canMultiBook = userHasPermission('canMultiSeatBook');
+            const limitMsgEl = document.getElementById('seat-selection-limit-msg');
+            if (limitMsgEl) {
+                if (canMultiBook) {
+                    limitMsgEl.innerHTML = `<span style="color:var(--neon-green); font-weight:600;">★ Multi-Seat Booking Enabled:</span> আপনি একসাথে একাধিক সিট সিলেক্ট করে বুকিং করতে পারবেন।`;
+                } else {
+                    limitMsgEl.innerText = `Select 1 seat. Selected seat holds locked for 30 seconds.`;
+                }
+            }
 
-    await loadFirebaseBookingsAndRenderMap();
-    generateBusCabinGridBlueprint(type);
-    initSeatLockCountdownTimer();
+            document.getElementById('seat-title-coach-type').innerText = `${type} Seating Layout Grid`;
+            document.getElementById('seat-calculated-total-fare').innerText = '0 BDT';
+            currentlyChosenSeats = [];
 
-    navigatePage('seat-screen');
-}
-     function initSeatLockCountdownTimer() {
+            await loadFirebaseBookingsAndRenderMap();
+            generateBusCabinGridBlueprint(type);
+            initSeatLockCountdownTimer();
+
+            navigatePage('seat-screen');
+        }
+
+        function initSeatLockCountdownTimer() {
             const countdownEl = document.getElementById('countdown');
             if(!countdownEl) return;
             
@@ -2140,9 +2249,7 @@ async function openSeatSelectionEngine() {
             if(window.seatTimerIntervalId) clearInterval(window.seatTimerIntervalId);
             
             window.seatTimerIntervalId = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                
                 countdownEl.innerHTML = `00:${seconds.toString().padStart(2, '0')}`;
                 
                 if (timeLeft <= 0) {
@@ -2201,66 +2308,7 @@ async function openSeatSelectionEngine() {
             }
         }
 
-        function createSeatElement(idStr) {
-            let seat = document.createElement('div');
-            seat.className = 'seat-node';
-            seat.innerText = idStr;
-            
-            const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${idStr}`;
-            
-            if(db.occupiedSeats[globalKey]) {
-                let lockData = db.occupiedSeats[globalKey];
-                if(lockData.isConfirmed) { 
-                    seat.classList.add('occupied'); 
-                } else if(Date.now() < lockData.expireTime) { 
-                    seat.classList.add('locked-hold'); 
-                }
-            }
-
-            seat.onclick = () => {
-                if(seat.classList.contains('occupied')) {
-                    alert("এই সিটটি ইতিমধ্যে অন্য মেম্বার বুকিং করে ফেলেছেন!");
-                    return;
-                }
-                if(seat.classList.contains('locked-hold')) {
-                    alert("এই সিটটি বর্তমানে অন্য একজন মেম্বার সিলেক্ট করে হোল্ডে রেখেছেন।");
-                    return;
-                }
-                
-                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
-                seat.classList.add('selected');
-                currentlyChosenSeatNode = idStr;
-                
-                executeTemporary30SecSeatLock(globalKey);
-                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
-            };
-            return seat;
-        }
-
         async function executeTemporary30SecSeatLock(globalKey) {
-            const lockData = {
-                expireTime: Date.now() + (30 * 1000), 
-                userId: activeUserSession.id,
-                userName: activeUserSession.name,
-                isConfirmed: false,
-                timestampLocked: Date.now()
-            };
-
-            try {
-                db.occupiedSeats[globalKey] = lockData;
-                saveDataEngine();
-
-                if (window.FirebaseDb && window.FirebaseFirestore) {
-                    const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
-                    await window.FirebaseFirestore.setDoc(bookingDocRef, lockData);
-                }
-            } catch (err) {
-                console.error("Firebase Seat Lock Error:", err);
-            }
-        }
-
-                     async function executeTemporary30SecSeatLock(globalKey) {
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
                     const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
@@ -2269,14 +2317,13 @@ async function openSeatSelectionEngine() {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         const now = Date.now();
-                        // যদি সিটটি অলরেডি কনফার্ম করা থাকে অথবা অন্য কারো ৩০ সেকেন্ডের হোল্ডের মধ্যে থাকে
-                        if (data.isConfirmed || now < data.expireTime) {
-                            return false; // লক করা যাবে না
+                        if (data.isConfirmed || (now < data.expireTime && data.userId !== activeUserSession.id)) {
+                            return false;
                         }
                     }
 
                     const lockData = {
-                        expireTime: Date.now() + (30 * 1000), // ৩০ সেকেন্ডের হোল্ড
+                        expireTime: Date.now() + (30 * 1000),
                         userId: activeUserSession.id,
                         userName: activeUserSession.name,
                         isConfirmed: false,
@@ -2294,6 +2341,20 @@ async function openSeatSelectionEngine() {
             }
         }
 
+        async function releaseTemporarySeatLock(globalKey) {
+            try {
+                delete db.occupiedSeats[globalKey];
+                saveDataEngine();
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    await window.FirebaseFirestore.deleteDoc(
+                        window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey)
+                    );
+                }
+            } catch (err) {
+                console.error("Release seat lock error:", err);
+            }
+        }
+
         function createSeatElement(idStr) {
             let seat = document.createElement('div');
             seat.className = 'seat-node';
@@ -2306,7 +2367,7 @@ async function openSeatSelectionEngine() {
                 let lockData = db.occupiedSeats[globalKey];
                 if(lockData.isConfirmed) { 
                     seat.classList.add('occupied'); 
-                } else if(Date.now() < lockData.expireTime) { 
+                } else if(Date.now() < lockData.expireTime && lockData.userId !== activeUserSession.id) { 
                     seat.classList.add('locked-hold'); 
                 }
             }
@@ -2320,8 +2381,34 @@ async function openSeatSelectionEngine() {
                     alert("⚠️ এই সিটটি বর্তমানে অন্য একজন মেম্বার সিলেক্ট করে হোল্ডে রেখেছেন। অনুগ্রহ করে অন্য সিট বেছে নিন।");
                     return;
                 }
+
+                const canMultiBook = userHasPermission('canMultiSeatBook');
+
+                // যদি সিটটি আগে থেকেই এই ইউজারের সিলেক্ট করা থাকে তবে আনসিলেক্ট হবে
+                if (currentlyChosenSeats.includes(idStr)) {
+                    currentlyChosenSeats = currentlyChosenSeats.filter(s => s !== idStr);
+                    seat.classList.remove('selected');
+                    await releaseTemporarySeatLock(globalKey);
+                    const totalFare = currentlyChosenSeats.length * selectedFareGlobalRate;
+                    document.getElementById('seat-calculated-total-fare').innerText = `${totalFare} BDT`;
+                    return;
+                }
+
+                // সাধারণ ইউজারদের জন্য ১টি সিট লিমিট
+                if (!canMultiBook && currentlyChosenSeats.length >= 1) {
+                    const prevSeatId = currentlyChosenSeats[0];
+                    const prevGlobalKey = `${type}_Seat-${prevSeatId}`;
+                    await releaseTemporarySeatLock(prevGlobalKey);
+                    document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
+                    currentlyChosenSeats = [];
+                }
+
+                const nextTotalFare = (currentlyChosenSeats.length + 1) * selectedFareGlobalRate;
+                if (activeUserSession.wallet < nextTotalFare) {
+                    alert(`⚠️ পর্যাপ্ত ব্যালেন্স নেই! ${currentlyChosenSeats.length + 1}টি সিটের জন্য ${nextTotalFare} BDT প্রয়োজন।`);
+                    return;
+                }
                 
-                // রিয়েল-টাইম সার্ভার চেক ও ৩০ সেকেন্ডের হোল্ড রিকোয়েস্ট
                 let successLocked = await executeTemporary30SecSeatLock(globalKey);
                 if (!successLocked) {
                     alert("⚠️ দুঃখিত, সিটটি এই মুহূর্তে ফাঁকা নেই বা অন্য কেউ নিয়ে নিয়েছে।");
@@ -2330,35 +2417,36 @@ async function openSeatSelectionEngine() {
                     return;
                 }
 
-                document.querySelectorAll('.seat-node').forEach(s => s.classList.remove('selected'));
                 seat.classList.add('selected');
-                currentlyChosenSeatNode = idStr;
+                currentlyChosenSeats.push(idStr);
                 
-                document.getElementById('seat-calculated-total-fare').innerText = `${selectedFareGlobalRate} BDT`;
+                document.getElementById('seat-calculated-total-fare').innerText = `${nextTotalFare} BDT`;
             };
             return seat;
         }
 
         async function executeTicketConfirmationEngine() {
-            if(!currentlyChosenSeatNode) { alert("Please select a seat!"); return; }
-            if(activeUserSession.wallet < selectedFareGlobalRate) { alert("Insufficient execution credits."); return; }
+            if(currentlyChosenSeats.length === 0) { alert("Please select at least one seat!"); return; }
+            
+            const totalPayable = currentlyChosenSeats.length * selectedFareGlobalRate;
+            if(activeUserSession.wallet < totalPayable) { alert("Insufficient execution credits."); return; }
 
             const type = document.getElementById('route-bustype').value;
-            const globalKey = `${type}_Seat-${currentlyChosenSeatNode}`;
 
             try {
                 if (window.FirebaseDb && window.FirebaseFirestore) {
-                    // 🔒 কনফার্ম করার ঠিক আগ মুহূর্তে ফায়ারবেসে কঠোর রিয়েল-টাইম চেক
-                    const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
-                    const docSnap = await window.FirebaseFirestore.getDoc(bookingDocRef);
+                    for (let seatId of currentlyChosenSeats) {
+                        const globalKey = `${type}_Seat-${seatId}`;
+                        const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+                        const docSnap = await window.FirebaseFirestore.getDoc(bookingDocRef);
 
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        // যদি অন্য কেউ অলরেডি কনফার্ম করে ফেলে কিংবা আপনার হোল্ডের সময় পার হয়ে গিয়ে অন্য কেউ দখল করে
-                        if (data.isConfirmed && data.userId !== activeUserSession.id) {
-                            alert("⚠️ ট্রানজাকশন ফেইলড! এই সিটটি আপনার ঠিক এই মুহূর্তে অন্য একজন মেম্বার কনফার্ম করে ফেলেছেন।");
-                            navigatePage('booking-screen');
-                            return;
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            if (data.isConfirmed && data.userId !== activeUserSession.id) {
+                                alert(`⚠️ ট্রানজাকশন ফেইলড! [${seatId}] সিটটি এই মুহূর্তে অন্য একজন মেম্বার কনফার্ম করে ফেলেছেন।`);
+                                navigatePage('booking-screen');
+                                return;
+                            }
                         }
                     }
 
@@ -2371,21 +2459,26 @@ async function openSeatSelectionEngine() {
                 }
             } catch (e) { console.error(e); }
 
-            activeUserSession.wallet -= selectedFareGlobalRate;
-            
-            const confirmData = {
-                expireTime: Date.now() + (60 * 60 * 1000), 
-                userId: activeUserSession.id,
-                userName: activeUserSession.name,
-                isConfirmed: true, // ফাইনাল কনফার্মড
-                timestampLocked: Date.now()
-            };
+            activeUserSession.wallet -= totalPayable;
 
             try {
-                if (window.FirebaseDb && window.FirebaseFirestore) {
-                    const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
-                    await window.FirebaseFirestore.setDoc(bookingDocRef, confirmData);
+                for (let seatId of currentlyChosenSeats) {
+                    const globalKey = `${type}_Seat-${seatId}`;
+                    const confirmData = {
+                        expireTime: Date.now() + (60 * 60 * 1000), 
+                        userId: activeUserSession.id,
+                        userName: activeUserSession.name,
+                        isConfirmed: true,
+                        timestampLocked: Date.now()
+                    };
+                    db.occupiedSeats[globalKey] = confirmData;
+
+                    if (window.FirebaseDb && window.FirebaseFirestore) {
+                        const bookingDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey);
+                        await window.FirebaseFirestore.setDoc(bookingDocRef, confirmData);
+                    }
                 }
+                saveDataEngine();
 
                 await updateCloudUserDocument(activeUserSession);
                 syncSessionState(activeUserSession);
@@ -2398,6 +2491,7 @@ async function openSeatSelectionEngine() {
                 const timeVal = document.getElementById('route-time').value;
                 const now = new Date();
                 const issueStr = `${now.toLocaleTimeString()} | ${now.toLocaleDateString()}`;
+                const seatsFormattedStr = currentlyChosenSeats.join(", ");
 
                 document.getElementById('tk-mid').innerText = `BDBUS-${activeUserSession.id}`;
                 document.getElementById('tk-name').innerText = activeUserSession.name;
@@ -2407,7 +2501,7 @@ async function openSeatSelectionEngine() {
                 document.getElementById('tk-to').innerText = toVal;
                 document.getElementById('tk-date').innerText = dateVal;
                 document.getElementById('tk-time').innerText = timeVal;
-                document.getElementById('tk-seat').innerText = currentlyChosenSeatNode;
+                document.getElementById('tk-seat').innerText = seatsFormattedStr;
                 document.getElementById('tk-issue').innerText = issueStr;
 
                 applyLiveRoomSettingsToTicketUI();
@@ -2427,7 +2521,7 @@ async function openSeatSelectionEngine() {
                         journey_date: dateVal,
                         journey_time: timeVal,
                         coach_type: type,
-                        seat_no: currentlyChosenSeatNode,
+                        seat_no: seatsFormattedStr,
                         issue_time: issueStr,
                         server_name: liveRoomSettings.serverName,
                         room_name: liveRoomSettings.roomName,
@@ -2444,7 +2538,6 @@ async function openSeatSelectionEngine() {
                 alert("টিকিট বুকিং নিশ্চিত করতে সমস্যা হয়েছে।");
             }
         }
-
 
         async function loadFirebaseBookingsAndRenderMap() {
             try {
@@ -2466,13 +2559,14 @@ async function openSeatSelectionEngine() {
         function executeTicketDownloadAndRedirect() {
             alert("Compiling ticket graphics assets in HD PNG...");
             const target = document.getElementById('digital-ticket-canvas');
+            const seatFileLabel = currentlyChosenSeats.length > 0 ? currentlyChosenSeats.join('_') : 'Receipt';
             
             html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
                 let imageURL = canvas.toDataURL('image/png');
                 
                 let link = document.createElement('a');
                 link.href = imageURL;
-                link.download = `BDBUS_HD_Ticket_${currentlyChosenSeatNode || 'Receipt'}.png`;
+                link.download = `BDBUS_HD_Ticket_${seatFileLabel}.png`;
                 
                 document.body.appendChild(link);
                 link.click();
@@ -2552,7 +2646,16 @@ async function openSeatSelectionEngine() {
                 querySnapshot.forEach((doc) => {
                     let u = doc.data();
                     const role = u.role ? u.role.toLowerCase() : '';
-                    if (role === 'admin' || role === 'moderator' || role === 'counter master' || role === 'trip master' || (u.permissions && (u.permissions.canUpdateNotice || u.permissions.canUpdateRoom))) {
+                    if (
+                        role === 'super admin' || 
+                        role === 'admin' || 
+                        role === 'former admin' ||
+                        role === 'moderator' || 
+                        role === 'former moderator' ||
+                        role === 'counter master' || 
+                        role === 'trip master' || 
+                        hasAnyAdminPanelPermission(u)
+                    ) {
                         coreStaff.push(u);
                     }
                 });
@@ -2580,6 +2683,10 @@ async function openSeatSelectionEngine() {
             if(!tbody) return;
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Loading live bookings from Firebase...</td></tr>`;
 
+            const isSuperAdmin = (activeUserSession.email === SUPER_ADMIN_EMAIL || activeUserSession.role === 'Super Admin');
+            const canResetAnySeat = isSuperAdmin || userHasPermission('canResetSeat');
+            const canResetOwnSeats = userHasPermission('canMultiSeatBook');
+
             try {
                 if (!window.FirebaseDb || !window.FirebaseFirestore) return;
 
@@ -2587,12 +2694,9 @@ async function openSeatSelectionEngine() {
                     window.FirebaseFirestore.collection(window.FirebaseDb, "bookings")
                 );
 
-                if(querySnapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
-                    return;
-                }
-
+                let rowsRendered = 0;
                 tbody.innerHTML = "";
+
                 querySnapshot.forEach(docSnap => {
                     let globalKey = docSnap.id;
                     let bookingInfo = docSnap.data();
@@ -2601,9 +2705,15 @@ async function openSeatSelectionEngine() {
                         return;
                     }
 
+                    // যদি শুধুমাত্র Multi-Seat পারমিশন থাকে তবে সে নিজের বুক করা সিটগুলো এক এক করে দেখতে ও রিসেট করতে পারবে
+                    if (!canResetAnySeat && canResetOwnSeats && bookingInfo.userId !== activeUserSession.id) {
+                        return;
+                    }
+
+                    rowsRendered++;
                     let tr = document.createElement('tr');
                     let badgeColor = bookingInfo.isConfirmed ? 'var(--neon-green)' : '#f5af19';
-                    let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (2 min Lock)';
+                    let statusText = bookingInfo.isConfirmed ? 'Confirmed Ticket' : 'Holding (30s Lock)';
 
                     let actionBtnHtml = `
                         <button class="btn-admin-small" style="background:#ef4444; color:#fff;" onclick="adminDirectResetSingleSeat('${globalKey}')">
@@ -2622,6 +2732,10 @@ async function openSeatSelectionEngine() {
                     `;
                     tbody.appendChild(tr);
                 });
+
+                if(rowsRendered === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active or locked seat bookings found in database.</td></tr>`;
+                }
             } catch (err) {
                 console.error("Live Booking Load Error:", err);
                 tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4d4d;">Error loading live bookings.</td></tr>`;
@@ -2631,6 +2745,8 @@ async function openSeatSelectionEngine() {
         async function adminDirectResetSingleSeat(globalKey) {
             if(confirm(`Are you sure you want to reset and clear [${globalKey}]?`)) {
                 try {
+                    delete db.occupiedSeats[globalKey];
+                    saveDataEngine();
                     if (window.FirebaseDb && window.FirebaseFirestore) {
                         await window.FirebaseFirestore.deleteDoc(
                             window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", globalKey)
@@ -2646,15 +2762,7 @@ async function openSeatSelectionEngine() {
         }
 
         function renderAdminPanelDashboard() {
-            const hasAccess = activeUserSession && (
-                activeUserSession.role === 'Admin' || 
-                activeUserSession.role === 'Moderator' || 
-                activeUserSession.role === 'Counter Master' || 
-                activeUserSession.role === 'Trip Master' ||
-                (activeUserSession.permissions && (activeUserSession.permissions.canUpdateNotice || activeUserSession.permissions.canUpdateRoom))
-            );
-
-            if(!hasAccess) {
+            if(!hasAnyAdminPanelPermission(activeUserSession)) {
                 alert("Unauthorized access denied.");
                 navigatePage('home-screen');
                 return;
@@ -2662,9 +2770,16 @@ async function openSeatSelectionEngine() {
             
             const noticeBox = document.getElementById('admin-notice-manager-wrapper');
             const roomBox = document.getElementById('admin-room-server-wrapper');
+            const bookingsBox = document.getElementById('admin-live-bookings-wrapper');
+            const viewAllMembersBox = document.getElementById('admin-view-all-members-wrapper');
+            const searchBox = document.getElementById('admin-search-box-wrapper');
+            const grid = document.getElementById('admin-user-cards-grid');
 
-            const canNotice = activeUserSession.role === 'Admin' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateNotice);
-            const canRoom = activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateRoom);
+            const canNotice = userHasPermission('canUpdateNotice');
+            const canRoom = userHasPermission('canUpdateRoom');
+            const canResetSeat = userHasPermission('canResetSeat') || userHasPermission('canMultiSeatBook');
+            const canViewMembers = userHasPermission('canViewAllMembers');
+            const canSearch = userHasPermission('canSearchUsers') || userHasPermission('canGiftWallet') || userHasPermission('canBanRemove');
 
             if(canNotice) {
                 noticeBox.style.display = 'block';
@@ -2683,14 +2798,30 @@ async function openSeatSelectionEngine() {
                 roomBox.style.display = 'none';
             }
 
-            renderLiveBookingsMonitorTable();
-            const grid = document.getElementById('admin-user-cards-grid');
-            if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+            if(canResetSeat) {
+                bookingsBox.style.display = 'block';
+                renderLiveBookingsMonitorTable();
+            } else {
+                bookingsBox.style.display = 'none';
+            }
+
+            if(canViewMembers) {
+                viewAllMembersBox.style.display = 'block';
+            } else {
+                viewAllMembersBox.style.display = 'none';
+            }
+
+            if(canSearch) {
+                searchBox.style.display = 'flex';
+                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের সার্চ বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+            } else {
+                searchBox.style.display = 'none';
+                if(grid) grid.innerHTML = '';
+            }
         }
 
         function executeAdminNoticeBroadcastSave() {
-            const canNotice = activeUserSession.role === 'Admin' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateNotice);
-            if(!canNotice) { alert("Permission denied."); return; }
+            if(!userHasPermission('canUpdateNotice')) { alert("Permission denied."); return; }
             const freshNoticeText = document.getElementById('admin-notice-input-field').value.trim();
             if(!freshNoticeText) { alert("Notice text cannot be blank."); return; }
             
@@ -2704,8 +2835,7 @@ async function openSeatSelectionEngine() {
         }
 
         async function executeAdminRoomConfigSave() {
-            const canRoom = activeUserSession.role === 'Admin' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && activeUserSession.permissions.canUpdateRoom);
-            if(!canRoom) {
+            if(!userHasPermission('canUpdateRoom')) {
                 alert("Permission denied.");
                 return;
             }
@@ -2746,56 +2876,127 @@ async function openSeatSelectionEngine() {
             const grid = document.getElementById('admin-user-cards-grid');
             if(!grid) return;
             grid.innerHTML = "";
-            const currentRole = activeUserSession.role;
-            const isSuperAdmin = (currentRole === 'Admin');
+            const isSuperAdmin = (activeUserSession.email === SUPER_ADMIN_EMAIL || activeUserSession.role === 'Super Admin');
+            const canGift = isSuperAdmin || userHasPermission('canGiftWallet');
+            const canBanRem = isSuperAdmin || userHasPermission('canBanRemove');
+            const canReset = isSuperAdmin || userHasPermission('canResetSeat');
 
             if(userArray.length === 0) {
                 grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">কোনো সদস্য পাওয়া যায়নি!</div>`;
                 return;
             }
 
+            const rolesPalette = [
+                { name: "New Member", bg: "linear-gradient(135deg, #475569, #334155)" },
+                { name: "Regular Member", bg: "linear-gradient(135deg, #2563eb, #1d4ed8)" },
+                { name: "Trip Master", bg: "linear-gradient(135deg, #059669, #047857)" },
+                { name: "Counter Master", bg: "linear-gradient(135deg, #d97706, #b45309)" },
+                { name: "Former Moderator", bg: "linear-gradient(135deg, #6366f1, #4338ca)" },
+                { name: "Moderator", bg: "linear-gradient(135deg, #7c3aed, #6d28d9)" },
+                { name: "Former Admin", bg: "linear-gradient(135deg, #db2777, #be185d)" },
+                { name: "Admin", bg: "linear-gradient(135deg, #dc2626, #b91c1c)" }
+            ];
+
             userArray.forEach(u => {
                 let card = document.createElement('div');
                 card.className = 'admin-control-card';
-                card.style.padding = '15px';
+                card.style.padding = '18px';
                 card.style.background = '#1e293b';
-                card.style.borderRadius = '8px';
+                card.style.borderRadius = '14px';
                 card.style.marginBottom = '12px';
+                card.style.border = '1px solid rgba(0, 242, 254, 0.15)';
                 
-                let actionControlsHTML = "";
-                const btnBase = 'padding:4px 8px; font-size:11px; font-weight:bold; border-radius:3px; border:none; cursor:pointer; color:#fff; transition: opacity 0.2s;';
+                let uPerms = Object.assign(getDefaultPermissions(), u.permissions || {});
+                let roleButtonsHTML = "";
+                let permCheckboxesHTML = "";
+                let utilityActionsHTML = "";
 
-                let uPerms = u.permissions || { canUpdateNotice: false, canUpdateRoom: false };
-
-                if(isSuperAdmin) {
-                    actionControlsHTML = `
-                        <button style="${btnBase} background:#3b82f6;" onclick="adminDirectRoleSet('${u.email}', 'Regular Member')">Member</button>
-                        <button style="${btnBase} background:#10b981;" onclick="adminDirectRoleSet('${u.email}', 'Trip Master')">Trip Master</button>
-                        <button style="${btnBase} background:#f59e0b; color:#000;" onclick="adminDirectRoleSet('${u.email}', 'Counter Master')">Counter</button>
-                        <button style="${btnBase} background:#8b5cf6;" onclick="adminDirectRoleSet('${u.email}', 'Moderator')">Mod</button>
-                        <button style="${btnBase} background:#ec4899;" onclick="adminGiftWalletPrompt('${u.email}')">Gift</button>
-                        <button style="${btnBase} background:#06b6d4;" onclick="adminResetSeatsEngine(${u.id})">Reset Seats</button>
-                        <button style="${btnBase} background:#ef4444;" onclick="adminBanToggle('${u.email}', ${u.isBanned})">${u.isBanned ? 'Unban':'Ban'}</button>
-                        <button style="${btnBase} background:#64748b;" onclick="adminRemoveMemberFromSystem('${u.email}')">Remove</button>
-                        <div style="width:100%; margin-top:6px; display:flex; gap:10px; font-size:11px; align-items:center; background:#0f172a; padding:6px; border-radius:4px;">
-                            <label><input type="checkbox" id="perm-notice-${u.id}" ${uPerms.canUpdateNotice ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateNotice', this.checked)"> Notice Control</label>
-                            <label><input type="checkbox" id="perm-room-${u.id}" ${uPerms.canUpdateRoom ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateRoom', this.checked)"> Room Control</label>
+                if (isSuperAdmin && u.email !== SUPER_ADMIN_EMAIL) {
+                    roleButtonsHTML = `
+                        <div style="margin-top:10px; padding-top:10px; border-top:1px solid #334155;">
+                            <div style="font-size:11px; color:#94a3b8; margin-bottom:6px; font-weight:600;">🎖️ Assign Designation (Role):</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                                ${rolesPalette.map(r => `
+                                    <button class="role-pill-btn ${u.role === r.name ? 'active-role' : ''}" 
+                                            style="background:${r.bg};" 
+                                            onclick="adminDirectRoleSet('${u.email}', '${r.name}')">
+                                        ${r.name}
+                                    </button>
+                                `).join('')}
+                            </div>
                         </div>
                     `;
-                } else {
-                    actionControlsHTML = `<span style="font-size:11px; color:#94a3b8; font-style:italic;">View Mode</span>`;
+
+                    permCheckboxesHTML = `
+                        <div style="margin-top:12px; padding:10px; background:#0f172a; border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
+                            <div style="font-size:11px; color:var(--neon-blue); margin-bottom:8px; font-weight:600;">🔐 Special Access Permissions (Checkbox Controls):</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:7px;">
+                                <label class="perm-checkbox-pill perm-c1">
+                                    <input type="checkbox" ${uPerms.canUpdateNotice ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateNotice', this.checked)"> Notice Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c2">
+                                    <input type="checkbox" ${uPerms.canUpdateRoom ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canUpdateRoom', this.checked)"> Room Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c3">
+                                    <input type="checkbox" ${uPerms.canResetSeat ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canResetSeat', this.checked)"> Live Seat Reset Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c4">
+                                    <input type="checkbox" ${uPerms.canGiftWallet ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canGiftWallet', this.checked)"> Wallet Gift Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c5">
+                                    <input type="checkbox" ${uPerms.canBanRemove ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canBanRemove', this.checked)"> Ban / Unban / Remove Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c6">
+                                    <input type="checkbox" ${uPerms.canViewAllMembers ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canViewAllMembers', this.checked)"> View All Registered Members
+                                </label>
+                                <label class="perm-checkbox-pill perm-c7">
+                                    <input type="checkbox" ${uPerms.canSearchUsers ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canSearchUsers', this.checked)"> Search Box Control
+                                </label>
+                                <label class="perm-checkbox-pill perm-c8">
+                                    <input type="checkbox" ${uPerms.canMultiSeatBook ? 'checked':''} onchange="adminTogglePermission('${u.email}', 'canMultiSeatBook', this.checked)"> Multi-Seat Booking & Reset
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const btnBase = 'padding:6px 12px; font-size:11px; font-weight:bold; border-radius:6px; border:none; cursor:pointer; color:#fff; transition: 0.2s;';
+                let actionBtns = [];
+                if (canGift) {
+                    actionBtns.push(`<button style="${btnBase} background:linear-gradient(135deg,#ec4899,#db2777);" onclick="adminGiftWalletPrompt('${u.email}')"><i class="fa-solid fa-gift"></i> Gift BDT</button>`);
+                }
+                if (canReset) {
+                    actionBtns.push(`<button style="${btnBase} background:linear-gradient(135deg,#06b6d4,#0891b2);" onclick="adminResetSeatsEngine(${u.id})"><i class="fa-solid fa-rotate-left"></i> Reset User Seats</button>`);
+                }
+                if (canBanRem && u.email !== SUPER_ADMIN_EMAIL) {
+                    actionBtns.push(`<button style="${btnBase} background:${u.isBanned ? '#10b981':'#ef4444'};" onclick="adminBanToggle('${u.email}', ${u.isBanned})">${u.isBanned ? 'Unban Member':'Ban Member'}</button>`);
+                    actionBtns.push(`<button style="${btnBase} background:#475569;" onclick="adminRemoveMemberFromSystem('${u.email}')"><i class="fa-solid fa-user-xmark"></i> Remove</button>`);
+                }
+
+                if (actionBtns.length > 0) {
+                    utilityActionsHTML = `
+                        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; padding-top:10px; border-top:1px solid #334155;">
+                            ${actionBtns.join('')}
+                        </div>
+                    `;
                 }
 
                 card.innerHTML = `
                     <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-                        <img src="${u.avatar}" style="width:45px; height:45px; border-radius:50%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/45'">
+                        <img src="${u.avatar}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--neon-blue);" onerror="this.src='https://via.placeholder.com/48'">
                         <div>
-                            <h5 style="margin:0; font-size:14px; color:#fff;">${u.name} (ID: BDBUS-${u.id})</h5>
+                            <h5 style="margin:0; font-size:15px; color:#fff;">${u.name} <span style="color:var(--neon-blue); font-size:12px;">(ID: BDBUS-${u.id})</span></h5>
                             <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8;">Email: ${u.email} | Nickname: <strong>${u.gameid || 'N/A'}</strong></p>
                         </div>
                     </div>
-                    <p style="margin:4px 0; font-size:12px; color:#fff;">Role: <span style="color:#00b4d8; font-weight:bold;">${u.role}</span> | Balance: <span style="color:var(--neon-green)">${u.wallet} BDT</span> | Status: <span style="color:${u.isBanned ? '#ef4444':'#10b981'}; font-weight:bold;">${u.isBanned ? 'Banned':'Active'}</span></p>
-                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; border-top:1px solid #334155; padding-top:8px;">${actionControlsHTML}</div>
+                    <p style="margin:6px 0; font-size:12px; color:#fff;">
+                        Designation: <span style="background:rgba(0, 242, 254, 0.15); color:var(--neon-blue); padding:2px 8px; border-radius:12px; font-weight:bold;">${u.role}</span> | 
+                        Balance: <span style="color:var(--neon-green); font-weight:bold;">${u.wallet} BDT</span> | 
+                        Status: <span style="color:${u.isBanned ? '#ef4444':'#10b981'}; font-weight:bold;">${u.isBanned ? 'Banned':'Active'}</span>
+                    </p>
+                    ${roleButtonsHTML}
+                    ${permCheckboxesHTML}
+                    ${utilityActionsHTML}
                 `;
                 grid.appendChild(card);
             });
@@ -2803,21 +3004,15 @@ async function openSeatSelectionEngine() {
 
         async function adminTogglePermission(email, permKey, value) {
             try {
-                const querySnapshot = await window.FirebaseFirestore.getDocs(
-                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
-                );
-                let targetUser = null;
-                querySnapshot.forEach((d) => {
-                    if(d.data().email === email) targetUser = d.data();
-                });
+                const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                const docSnap = await window.FirebaseFirestore.getDoc(docRef);
 
-                if(targetUser) {
-                    if(!targetUser.permissions) targetUser.permissions = { canUpdateNotice: false, canUpdateRoom: false };
-                    targetUser.permissions[permKey] = value;
+                if(docSnap.exists()) {
+                    let targetUser = docSnap.data();
+                    let updatedPerms = Object.assign(getDefaultPermissions(), targetUser.permissions || {});
+                    updatedPerms[permKey] = value;
 
-                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
-                    await window.FirebaseFirestore.setDoc(docRef, { permissions: targetUser.permissions }, { merge: true });
-                    alert("Permission updated successfully!");
+                    await window.FirebaseFirestore.setDoc(docRef, { permissions: updatedPerms }, { merge: true });
                 }
             } catch (e) {
                 console.error(e);
@@ -2829,7 +3024,7 @@ async function openSeatSelectionEngine() {
             let term = document.getElementById('admin-search-input').value.trim();
             const grid = document.getElementById('admin-user-cards-grid');
             if(!term) { 
-                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
+                if(grid) grid.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-muted); padding:20px;">সদস্যদের তথ্য দেখতে উপরের সার্চ বক্সে নাম বা আইডি লিখে সার্চ করুন।</div>`;
                 return; 
             }
 
@@ -2855,7 +3050,7 @@ async function openSeatSelectionEngine() {
             try {
                 const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
                 await window.FirebaseFirestore.setDoc(docRef, { role: roleName }, { merge: true });
-                alert(`Successfully updated role to ${roleName}`);
+                alert(`Designation updated to [${roleName}] successfully!`);
                 executeAdminSearchLogic();
             } catch (e) {
                 console.error(e);
@@ -2877,17 +3072,12 @@ async function openSeatSelectionEngine() {
             let amount = parseInt(prompt("Enter BDT credit allocation:"));
             if(!amount || amount <= 0) return;
             try {
-                const querySnapshot = await window.FirebaseFirestore.getDocs(
-                    window.FirebaseFirestore.collection(window.FirebaseDb, "users")
-                );
-                let targetUser = null;
-                querySnapshot.forEach((d) => {
-                    if(d.data().email === email) targetUser = d.data();
-                });
+                const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
+                const docSnap = await window.FirebaseFirestore.getDoc(docRef);
 
-                if(targetUser) {
+                if(docSnap.exists()) {
+                    let targetUser = docSnap.data();
                     targetUser.wallet += amount;
-                    const docRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
                     await window.FirebaseFirestore.setDoc(docRef, { wallet: targetUser.wallet }, { merge: true });
                     alert(`Credited ${amount} BDT successfully!`);
                     executeAdminSearchLogic();
@@ -2910,18 +3100,31 @@ async function openSeatSelectionEngine() {
             }
         }
 
-        function adminResetSeatsEngine(userId) {
+        async function adminResetSeatsEngine(userId) {
             let keysRemoved = 0;
-            for(let key in db.occupiedSeats) {
-                if(db.occupiedSeats[key].userId === userId) {
-                    delete db.occupiedSeats[key];
-                    keysRemoved++;
+            try {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    const querySnapshot = await window.FirebaseFirestore.getDocs(
+                        window.FirebaseFirestore.collection(window.FirebaseDb, "bookings")
+                    );
+                    for (const docSnap of querySnapshot.docs) {
+                        if (docSnap.data().userId === userId) {
+                            await window.FirebaseFirestore.deleteDoc(
+                                window.FirebaseFirestore.doc(window.FirebaseDb, "bookings", docSnap.id)
+                            );
+                            delete db.occupiedSeats[docSnap.id];
+                            keysRemoved++;
+                        }
+                    }
                 }
+            } catch (e) {
+                console.error(e);
             }
+
             if(keysRemoved > 0) {
                 saveDataEngine();
                 renderLiveBookingsMonitorTable();
-                alert(`Purged ${keysRemoved} active reservation tracks.`);
+                alert(`Purged ${keysRemoved} active reservation tracks from Firebase.`);
                 executeAdminSearchLogic();
             } else {
                 alert("No active matching booking tracks found.");
@@ -3088,7 +3291,7 @@ async function openSeatSelectionEngine() {
                     document.getElementById('header-empty-space').style.display = 'none';
                     if(globalFooter) globalFooter.style.display = 'block';
                     
-                    if(activeUserSession.role === 'Admin' || activeUserSession.role === 'Moderator' || activeUserSession.role === 'Counter Master' || activeUserSession.role === 'Trip Master' || (activeUserSession.permissions && (activeUserSession.permissions.canUpdateNotice || activeUserSession.permissions.canUpdateRoom))) {
+                    if(hasAnyAdminPanelPermission(activeUserSession)) {
                         document.getElementById('admin-menu-link').style.display = 'flex';
                     }
                     
