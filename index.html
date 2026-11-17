@@ -75,6 +75,24 @@
             position: relative;
         }
 
+        /* Pull-to-Refresh Visual Indicator Styling */
+        #ptr-element {
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            color: var(--neon-blue);
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10000;
+            display: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
         body::before {
             content: "";
             position: fixed;
@@ -678,7 +696,7 @@
 #digital-licence-card {
     width: 100%;
     max-width: 560px;
-    aspect-ratio: 1050 / 650; /* ১০৫০ × ৬৫০ পিক্সেল রেশিও লক করা হলো */
+    aspect-ratio: 1050 / 650;
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     color: #ffffff;
     padding: 16px 20px;
@@ -744,8 +762,8 @@
 }
 
 .licence-user-photo {
-    width: 72px;  /* পোর্ট্রেট মোডে মানানসই করার জন্য ছবি ছোট করা হলো */
-    height: 72px; /* ছবির উচ্চতা */
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     border: 2px solid var(--neon-cyan, #00e5ff);
     object-fit: cover;
@@ -806,6 +824,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Pull-to-Refresh Indicator Element -->
+    <div id="ptr-element">🔄 রিফ্রেশ হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন</div>
 
     <div class="custom-welcome-modal-layer" id="global-welcome-popup-layer">
         <div class="custom-welcome-modal-card">
@@ -1589,9 +1610,8 @@
             sysConfigIdCounter: 1000
         };
 
-        let activeUserSession = JSON.parse(sessionStorage.getItem('bdbus_active_session')) || null;
+        let activeUserSession = JSON.parse(localStorage.getItem('bdbus_active_session')) || null;
         
-        // ডিফল্ট ভাষা সবসময় 'en' (ইংরেজি) সেট করা হলো
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
         
         let currentlyChosenSeats = [];
@@ -1769,15 +1789,7 @@
             }, 4000);
         }
 
-        function checkSessionTimeoutRules() {
-            if (activeUserSession) {
-                let loggedInTime = sessionStorage.getItem('bdbus_login_timestamp');
-                if (loggedInTime && (Date.now() - loggedInTime > 30 * 60 * 1000)) {
-                    alert("Session expired! 30 minutes timeout reached.");
-                    executeLogoutAction();
-                }
-            }
-        }
+        /* 30 মিনিটের টাইমআউট চেক রিমুভ করা হয়েছে যাতে সেশন লাইফটাইম থাকে */
         
         function togglePasswordInputVisibility(inputId, iconEl) {
             const field = document.getElementById(inputId);
@@ -1986,8 +1998,8 @@
 
         function proceedLoginSession(user) {
             activeUserSession = user;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
-            sessionStorage.setItem('bdbus_login_timestamp', Date.now());
+            // লাইফটাইম লগইনের জন্য localStorage ব্যবহার করা হলো যাতে ব্রাউজার বন্ধ করলেও লগআউট না হয়
+            localStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
 
             document.body.classList.add('logged-in');
             document.getElementById('header-nav-controls').style.display = 'flex';
@@ -2008,6 +2020,7 @@
 
         function executeLogoutAction() {
             activeUserSession = null;
+            localStorage.removeItem('bdbus_active_session'); // সেশন ডেটা সম্পূর্ণ মুছে ফেলা হলো
             sessionStorage.clear();
             internalNavigationHistoryArray = [];
             document.body.classList.remove('logged-in');
@@ -2074,7 +2087,7 @@
 
         function syncSessionState(updatedUser) {
             activeUserSession = updatedUser;
-            sessionStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
+            localStorage.setItem('bdbus_active_session', JSON.stringify(activeUserSession));
         }
 
         function renderUserProfileView() {
@@ -3292,40 +3305,81 @@
             });
         }
 
+        // ================= PULL-TO-REFRESH & SCROLL POSITION SYSTEM =================
+        let touchstartY = 0;
+        let touchendY = 0;
+
+        window.addEventListener('touchstart', e => {
+            touchstartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        window.addEventListener('touchend', e => {
+            touchendY = e.changedTouches[0].screenY;
+            handlePullToRefresh();
+        }, { passive: true });
+
+        function handlePullToRefresh() {
+            const ptrElement = document.getElementById('ptr-element');
+            // যদি পেজ একদম উপরে থাকে (scrollY === 0) এবং ইউজার নিচের দিকে ১০০ পিক্সেলের বেশি টানেন
+            if (window.scrollY === 0 && touchendY > touchstartY + 100) {
+                if (ptrElement) ptrElement.style.display = 'block';
+                
+                // রিফ্রেশ করার আগে বর্তমান পেজ আইডি ও স্ক্রোল পজিশন সেভ রাখা
+                const activeScreen = document.querySelector('.page-screen.active');
+                if (activeScreen) {
+                    sessionStorage.setItem('bdbus_persistent_screen_id', activeScreen.id);
+                }
+                sessionStorage.setItem('scrollPosition', window.scrollY);
+                
+                setTimeout(() => {
+                    location.reload();
+                }, 400);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const scrollPos = sessionStorage.getItem('scrollPosition');
+            if (scrollPos) {
+                window.scrollTo(0, parseInt(scrollPos));
+                sessionStorage.removeItem('scrollPosition');
+            }
+        });
+        // ===========================================================================
+
         window.addEventListener('DOMContentLoaded', async () => {
+            document.body.style.visibility = 'hidden';
+
             await verifyDatabaseStructureSeeding();
             initRealtimeRoomSettingsListener();
             initialClockHeartbeatEngine();
             initBackgroundAutoSyncEngine();
             
-            // ডিফল্ট ভাষা হিসেবে সবসময় ইংরেজি (en) লোড করা নিশ্চিত করা হলো
             let initialLang = localStorage.getItem('bdbus_lang') || 'en';
             setLanguageSystem(initialLang);
 
             initSearchableDropdownSystem();
-            setInterval(checkSessionTimeoutRules, 10000); 
 
             history.pushState(null, null, window.location.pathname);
             const globalFooter = document.getElementById('main-global-footer');
 
-            if(activeUserSession) {
-                if(activeUserSession && !activeUserSession.isBanned) {
-                    document.body.classList.add('logged-in');
-                    document.getElementById('header-nav-controls').style.display = 'flex';
-                    document.getElementById('header-empty-space').style.display = 'none';
-                    if(globalFooter) globalFooter.style.display = 'block';
-                    
-                    if(hasAnyAdminPanelPermission(activeUserSession)) {
-                        document.getElementById('admin-menu-link').style.display = 'flex';
-                    }
-                    
-                    const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
-                    navigatePage(savedScreenTargetPersistedId);
-                    return;
+            if(activeUserSession && !activeUserSession.isBanned) {
+                document.body.classList.add('logged-in');
+                document.getElementById('header-nav-controls').style.display = 'flex';
+                document.getElementById('header-empty-space').style.display = 'none';
+                if(globalFooter) globalFooter.style.display = 'block';
+                
+                if(hasAnyAdminPanelPermission(activeUserSession)) {
+                    document.getElementById('admin-menu-link').style.display = 'flex';
                 }
+                
+                const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+                navigatePage(savedScreenTargetPersistedId);
+            } else {
+                if(globalFooter) globalFooter.style.display = 'none'; 
+                navigatePage('auth-screen');
             }
-            if(globalFooter) globalFooter.style.display = 'none'; 
-            navigatePage('auth-screen');
+
+            document.body.style.visibility = 'visible';
         });
     </script>
 </body>
