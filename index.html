@@ -72,48 +72,29 @@
             position: relative;
         }
 
-        /* ক্লিন ডার্ক স্ক্রিন + গোল আকারে ঘূর্ণায়মান Refreshing স্পিনার */
+        /* গোল আকারের অ্যানিমেটেড রিফ্রেশ স্পিনার ওভারলে */
         #ptr-spinner-overlay {
             position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #070b12;
-            z-index: 999999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .refresh-pill-box {
-            background: rgba(15, 23, 42, 0.98);
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95);
             border: 2px solid var(--neon-blue);
             color: var(--neon-blue);
-            padding: 12px 24px;
-            border-radius: 40px;
-            display: inline-flex;
+            padding: 10px 20px;
+            border-radius: 30px;
+            z-index: 99999;
+            display: none;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.4px;
-            box-shadow: 0 0 24px rgba(0, 242, 254, 0.35);
+            font-size: 13px;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
         }
 
-        .circular-ring-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid rgba(0, 242, 254, 0.22);
-            border-top-color: var(--neon-blue);
-            border-right-color: var(--neon-blue);
-            border-radius: 50%;
-            animation: circularSpin 0.75s linear infinite;
-            flex-shrink: 0;
-        }
-
-        @keyframes circularSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        #ptr-spinner-overlay i {
+            animation: fa-spin 1s linear infinite;
+            font-size: 16px;
         }
 
         body::before {
@@ -699,160 +680,157 @@
             box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
         }
 
-        #licence-screen {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-            overflow-x: hidden;
-        }
+    #licence-screen {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    overflow-x: hidden;
+}
 
-        .licence-preview-wrapper {
-            width: 100%;
-            max-width: 650px;
-            margin: 0 auto;
-            text-align: center;
-            box-sizing: border-box;
-        }
+.licence-preview-wrapper {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+}
 
-        #digital-licence-card {
-            width: 100%;
-            max-width: 560px;
-            aspect-ratio: 1050 / 650;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #ffffff;
-            padding: 16px 20px;
-            border-radius: 14px;
-            margin: 20px auto;
-            border: 2px solid var(--neon-blue);
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            overflow: hidden;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-sizing: border-box;
-        }
+#digital-licence-card {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 1050 / 650;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin: 20px auto;
+    border: 2px solid var(--neon-blue);
+    position: relative;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    overflow: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
 
-        #digital-licence-card::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 1;
-        }
+#digital-licence-card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    background: url('images/BDBUS Group Official Logo.png') no-repeat center;
+    background-size: contain;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 1;
+}
 
-        .licence-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
-            padding-bottom: 8px;
-            position: relative;
-            z-index: 2;
-        }
+.licence-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+    padding-bottom: 8px;
+    position: relative;
+    z-index: 2;
+}
 
-        .licence-flag-title { display: flex; align-items: center; gap: 10px; }
-        .licence-flag { width: 34px; height: 20px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
-        .licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 11px; height: 11px; background: #f42a41; border-radius: 50%; }
-        .licence-main-heading { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
-        .licence-sub-heading { font-size: 10px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
+.licence-flag-title { display: flex; align-items: center; gap: 10px; }
+.licence-flag { width: 34px; height: 20px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
+.licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 11px; height: 11px; background: #f42a41; border-radius: 50%; }
+.licence-main-heading { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+.licence-sub-heading { font-size: 10px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
 
-        .licence-body-layout {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            z-index: 2;
-            margin: 8px 0;
-        }
+.licence-body-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 2;
+    margin: 8px 0;
+}
 
-        .licence-photo-pane {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-        }
+.licence-photo-pane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
 
-        .licence-user-photo {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 2px solid var(--neon-cyan, #00e5ff);
-            object-fit: cover;
-        }
+.licence-user-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-cyan, #00e5ff);
+    object-fit: cover;
+}
 
-        .licence-id-badge {
-            margin-top: 6px;
-            background: rgba(0, 229, 255, 0.15);
-            color: var(--neon-cyan, #00e5ff);
-            border: 1px solid var(--neon-cyan, #00e5ff);
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
+.licence-id-badge {
+    margin-top: 6px;
+    background: rgba(0, 229, 255, 0.15);
+    color: var(--neon-cyan, #00e5ff);
+    border: 1px solid var(--neon-cyan, #00e5ff);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-        .licence-info-pane {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            width: 100%;
-            text-align: left;
-        }
+.licence-info-pane {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    text-align: left;
+}
 
-        .licence-data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            padding-bottom: 2px;
-            font-size: 11.5px;
-        }
+.licence-data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 2px;
+    font-size: 11.5px;
+}
 
-        .licence-data-label { color: #94a3b8; font-weight: 600; }
-        .licence-data-value { color: #ffffff; font-weight: bold; word-break: break-word; text-align: right; }
+.licence-data-label { color: #94a3b8; font-weight: 600; }
+.licence-data-value { color: #ffffff; font-weight: bold; word-break: break-word; text-align: right; }
 
-        .licence-footer-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 6px;
-            position: relative;
-            z-index: 2;
-        }
+.licence-footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 6px;
+    position: relative;
+    z-index: 2;
+}
 
-        .licence-auth-label { font-size: 9px; color: #64748b; margin-top: 2px; }
+.licence-auth-label { font-size: 9px; color: #64748b; margin-top: 2px; }
 
-        @media screen and (max-width: 480px) {
-            #digital-licence-card { padding: 10px 12px; }
-            .licence-body-layout { gap: 10px; }
-            .licence-user-photo { width: 64px; height: 64px; }
-            .licence-data-row { font-size: 10px; }
-            .licence-id-badge { font-size: 9px; padding: 2px 6px; }
-        }
+@media screen and (max-width: 480px) {
+    #digital-licence-card { padding: 10px 12px; }
+    .licence-body-layout { gap: 10px; }
+    .licence-user-photo { width: 64px; height: 64px; }
+    .licence-data-row { font-size: 10px; }
+    .licence-id-badge { font-size: 9px; padding: 2px 6px; }
+}
     </style>
 </head>
 <body>
 
-    <!-- রিফ্রেশ চলাকালীন পরিষ্কার কালো স্ক্রিন ও গোল ঘূর্ণায়মান Refreshing স্পিনার -->
+    <!-- গোল আকারের অ্যানিমেটেড রিফ্রেশ বাটন -->
     <div id="ptr-spinner-overlay">
-        <div class="refresh-pill-box">
-            <div class="circular-ring-spinner"></div>
-            <span class="lang-node" data-en="Refreshing..." data-bn="রিফ্রেশ হচ্ছে...">Refreshing...</span>
-        </div>
+        <i class="fa-solid fa-spinner"></i> <span class="lang-node" data-en="Refreshing..." data-bn="রিফ্রেশ হচ্ছে...">Refreshing...</span>
     </div>
 
     <div class="custom-welcome-modal-layer" id="global-welcome-popup-layer">
@@ -1638,7 +1616,9 @@
         };
 
         let activeUserSession = JSON.parse(localStorage.getItem('bdbus_active_session')) || null;
+        
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
+        
         let currentlyChosenSeats = [];
         let selectedFareGlobalRate = 0;
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
@@ -1772,37 +1752,41 @@
             } catch (e) { console.error(e); }
         }
 
+        function updateClocksAndGreetingsOnce() {
+            const now = new Date();
+            let hrs = now.getHours();
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            const secs = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hrs >= 12 ? 'PM' : 'AM';
+            hrs = hrs % 12;
+            hrs = hrs ? hrs : 12;
+            const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
+            
+            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
+            const dateString = `LIVE DATE: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+            if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
+            if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
+            if(document.getElementById('booking-clock-digits')) document.getElementById('booking-clock-digits').innerText = timeString;
+            if(document.getElementById('booking-clock-date')) document.getElementById('booking-clock-date').innerText = dateString;
+            if(document.getElementById('seat-clock-digits')) document.getElementById('seat-clock-digits').innerText = timeString;
+            if(document.getElementById('seat-live-date-node')) document.getElementById('seat-live-date-node').innerText = dateString;
+
+            let greeting = "GOOD MORNING";
+            if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
+            else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
+            else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
+            if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
+        }
+
         function initialClockHeartbeatEngine() {
+            updateClocksAndGreetingsOnce();
             setInterval(() => {
-                const now = new Date();
                 if (activeUserSession) {
                     updateActiveUserHeartbeat();
                 }
-
-                let hrs = now.getHours();
-                const mins = String(now.getMinutes()).padStart(2, '0');
-                const secs = String(now.getSeconds()).padStart(2, '0');
-                const ampm = hrs >= 12 ? 'PM' : 'AM';
-                hrs = hrs % 12;
-                hrs = hrs ? hrs : 12;
-                const timeString = `${String(hrs).padStart(2,'0')}:${mins}:${secs} ${ampm}`;
-                
-                const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-                const months = [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC' ];
-                const dateString = `LIVE DATE: ${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-
-                if(document.getElementById('live-clock-digits')) document.getElementById('live-clock-digits').innerText = timeString;
-                if(document.getElementById('live-clock-date')) document.getElementById('live-clock-date').innerText = dateString;
-                if(document.getElementById('booking-clock-digits')) document.getElementById('booking-clock-digits').innerText = timeString;
-                if(document.getElementById('booking-clock-date')) document.getElementById('booking-clock-date').innerText = dateString;
-                if(document.getElementById('seat-clock-digits')) document.getElementById('seat-clock-digits').innerText = timeString;
-                if(document.getElementById('seat-live-date-node')) document.getElementById('seat-live-date-node').innerText = dateString;
-
-                let greeting = "GOOD MORNING";
-                if(now.getHours() >= 12 && now.getHours() < 17) greeting = "GOOD AFTERNOON";
-                else if(now.getHours() >= 17 && now.getHours() < 21) greeting = "GOOD EVENING";
-                else if(now.getHours() >= 21 || now.getHours() < 5) greeting = "GOOD NIGHT";
-                if(document.getElementById('home-greeting-txt')) document.getElementById('home-greeting-txt').innerText = greeting;
+                updateClocksAndGreetingsOnce();
             }, 1000);
         }
 
@@ -2630,7 +2614,9 @@
         async function renderHomeMembersCarousel() {
             const track = document.getElementById('home-carousel-track');
             if (!track) return;
-            track.innerHTML = `<div style="color: #fff; padding: 10px; text-align: center;">Loading Live Members...</div>`;
+            if (!track.innerHTML.trim()) {
+                track.innerHTML = `<div style="color: #fff; padding: 10px; text-align: center;">Loading Live Members...</div>`;
+            }
             await fetchAndBuildMemberCards();
         }
 
@@ -3327,30 +3313,10 @@
             });
         }
 
-        // ================= CLEAN DARK REFRESH + CIRCULAR SPINNER SYSTEM =================
+        // ================= SILENT PULL-TO-REFRESH & SPINNER SYSTEM =================
         let touchstartY = 0;
         let touchendY = 0;
-        let isRefreshingNow = false;
-
-        function showCleanDarkRefreshOverlay() {
-            const spinner = document.getElementById('ptr-spinner-overlay');
-            if (spinner) {
-                spinner.style.display = 'flex';
-            }
-            const activeScreen = document.querySelector('.page-screen.active');
-            if (activeScreen) {
-                sessionStorage.setItem('bdbus_persistent_screen_id', activeScreen.id);
-            }
-            sessionStorage.setItem('scrollPosition', String(window.scrollY || 0));
-        }
-
-        function hideCleanDarkRefreshOverlay() {
-            const spinner = document.getElementById('ptr-spinner-overlay');
-            if (spinner) {
-                spinner.style.display = 'none';
-            }
-            isRefreshingNow = false;
-        }
+        let isSilentRefreshing = false;
 
         window.addEventListener('touchstart', e => {
             touchstartY = e.changedTouches[0].screenY;
@@ -3361,69 +3327,114 @@
             handlePullToRefresh();
         }, { passive: true });
 
-        function handlePullToRefresh() {
-            if (isRefreshingNow) return;
-            if (window.scrollY === 0 && touchendY > touchstartY + 100) {
-                isRefreshingNow = true;
-                showCleanDarkRefreshOverlay();
+        async function performSilentPageRefresh() {
+            if (isSilentRefreshing) return;
+            isSilentRefreshing = true;
+
+            const spinner = document.getElementById('ptr-spinner-overlay');
+            if (spinner) spinner.style.display = 'flex';
+
+            try {
+                updateClocksAndGreetingsOnce();
+
+                if (document.getElementById('live-marquee-node')) {
+                    document.getElementById('live-marquee-node').innerText = db.notices;
+                }
+
+                if (activeUserSession && activeUserSession.email && window.FirebaseDb && window.FirebaseFirestore) {
+                    const userRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", activeUserSession.email);
+                    const userSnap = await window.FirebaseFirestore.getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const freshUser = userSnap.data();
+                        if (freshUser.isBanned) {
+                            executeLogoutAction();
+                            return;
+                        }
+                        syncSessionState(freshUser);
+                        if (hasAnyAdminPanelPermission(freshUser)) {
+                            document.getElementById('admin-menu-link').style.display = 'flex';
+                        } else {
+                            document.getElementById('admin-menu-link').style.display = 'none';
+                        }
+                    }
+
+                    const roomRef = window.FirebaseFirestore.doc(window.FirebaseDb, "system_config", "room_settings");
+                    const roomSnap = await window.FirebaseFirestore.getDoc(roomRef);
+                    if (roomSnap.exists()) {
+                        liveRoomSettings = roomSnap.data();
+                        applyLiveRoomSettingsToTicketUI();
+                    }
+                }
+
+                const activeScreen = document.querySelector('.page-screen.active');
+                const currentScreenId = activeScreen ? activeScreen.id : (activeUserSession ? 'home-screen' : 'auth-screen');
+
+                if (currentScreenId === 'home-screen') {
+                    await renderHomeMembersCarouselSilently();
+                } else if (currentScreenId === 'profile-screen') {
+                    renderUserProfileView();
+                } else if (currentScreenId === 'licence-screen') {
+                    renderDigitalLicenceData();
+                } else if (currentScreenId === 'contact-screen') {
+                    await renderContactTeamPanel();
+                } else if (currentScreenId === 'all-members-screen') {
+                    await renderAllRegisteredMembersPage();
+                } else if (currentScreenId === 'admin-screen') {
+                    if (userHasPermission('canResetSeat') || userHasPermission('canMultiSeatBook')) {
+                        await renderLiveBookingsMonitorTable();
+                    }
+                } else if (currentScreenId === 'seat-screen') {
+                    const coachType = document.getElementById('route-bustype')?.value;
+                    if (coachType && coachType !== 'Select Coach') {
+                        await loadFirebaseBookingsAndRenderMap();
+                    }
+                }
+            } catch (err) {
+                console.error("Silent refresh error:", err);
+            } finally {
                 setTimeout(() => {
-                    location.reload();
-                }, 450);
+                    if (spinner) spinner.style.display = 'none';
+                    isSilentRefreshing = false;
+                }, 600);
             }
         }
 
-        // ব্রাউজারের সাধারণ রিফ্রেশ বাটনে চাপ দিলেও যেন ক্লিন ডার্ক স্ক্রিন ও ঘূর্ণায়মান Refreshing স্পিনার দেখায়
-        window.addEventListener('beforeunload', () => {
-            showCleanDarkRefreshOverlay();
-        });
-
-        window.addEventListener('load', () => {
-            const scrollPos = sessionStorage.getItem('scrollPosition');
-            if (scrollPos) {
-                window.scrollTo(0, parseInt(scrollPos, 10) || 0);
-                sessionStorage.removeItem('scrollPosition');
+        function handlePullToRefresh() {
+            if (window.scrollY === 0 && touchendY > touchstartY + 100) {
+                performSilentPageRefresh();
             }
-            setTimeout(() => {
-                hideCleanDarkRefreshOverlay();
-            }, 250);
-        });
+        }
         // ===========================================================================
 
         window.addEventListener('DOMContentLoaded', async () => {
-            showCleanDarkRefreshOverlay();
+            await verifyDatabaseStructureSeeding();
+            initRealtimeRoomSettingsListener();
+            initialClockHeartbeatEngine();
+            initBackgroundAutoSyncEngine();
+            
+            let initialLang = localStorage.getItem('bdbus_lang') || 'en';
+            setLanguageSystem(initialLang);
 
-            try {
-                await verifyDatabaseStructureSeeding();
-                initRealtimeRoomSettingsListener();
-                initialClockHeartbeatEngine();
-                initBackgroundAutoSyncEngine();
+            initSearchableDropdownSystem();
+
+            history.pushState(null, null, window.location.pathname);
+            const globalFooter = document.getElementById('main-global-footer');
+
+            if(activeUserSession && !activeUserSession.isBanned) {
+                document.body.classList.add('logged-in');
+                document.getElementById('header-nav-controls').style.display = 'flex';
+                document.getElementById('header-empty-space').style.display = 'none';
+                if(globalFooter) globalFooter.style.display = 'block';
                 
-                let initialLang = localStorage.getItem('bdbus_lang') || 'en';
-                setLanguageSystem(initialLang);
-
-                initSearchableDropdownSystem();
-
-                history.pushState(null, null, window.location.pathname);
-                const globalFooter = document.getElementById('main-global-footer');
-
-                if(activeUserSession && !activeUserSession.isBanned) {
-                    document.body.classList.add('logged-in');
-                    document.getElementById('header-nav-controls').style.display = 'flex';
-                    document.getElementById('header-empty-space').style.display = 'none';
-                    if(globalFooter) globalFooter.style.display = 'block';
-                    
-                    if(hasAnyAdminPanelPermission(activeUserSession)) {
-                        document.getElementById('admin-menu-link').style.display = 'flex';
-                    }
-                    
-                    const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
-                    navigatePage(savedScreenTargetPersistedId);
-                } else {
-                    if(globalFooter) globalFooter.style.display = 'none'; 
-                    navigatePage('auth-screen');
+                if(hasAnyAdminPanelPermission(activeUserSession)) {
+                    document.getElementById('admin-menu-link').style.display = 'flex';
                 }
-            } finally {
-                hideCleanDarkRefreshOverlay();
+                
+                const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+                navigatePage(savedScreenTargetPersistedId);
+            } else {
+                if(globalFooter) globalFooter.style.display = 'none'; 
+                navigatePage('auth-screen');
             }
         });
     </script>
