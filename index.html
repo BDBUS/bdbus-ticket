@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bangladesh Bussid Unique Society(BDBUS)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
@@ -61,7 +62,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Hind Siliguri', sans-serif;
         }
 
         body {
@@ -680,149 +681,173 @@
             box-shadow: 0 0 15px rgba(0, 255, 135, 0.2);
         }
 
-        #licence-screen {
+        /* ==================== SMART DRIVING LICENCE STYLES (BDBUS THEME INTEGRATED) ==================== */
+        #bd-smart-dl-system {
+            font-family: 'Hind Siliguri', 'Inter', 'Poppins', sans-serif;
             width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        .licence-preview-wrapper {
-            width: 100%;
-            max-width: 650px;
+            max-width: 900px;
             margin: 0 auto;
-            text-align: center;
-            box-sizing: border-box;
+            color: var(--text-light);
+        }
+        #bd-smart-dl-system .font-en {
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+        #bd-smart-dl-system .font-signature {
+            font-family: 'Caveat', cursive;
         }
 
-        #digital-licence-card {
+        /* 3D Card Flip Container */
+        #bd-smart-dl-system .perspective-container {
+            perspective: 1400px;
             width: 100%;
-            max-width: 560px;
-            aspect-ratio: 1050 / 650;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #ffffff;
-            padding: 16px 20px;
-            border-radius: 14px;
-            margin: 20px auto;
-            border: 2px solid var(--neon-blue);
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            overflow: hidden;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-sizing: border-box;
         }
 
-        #digital-licence-card::before {
-            content: "";
+        #bd-smart-dl-system .card-flipper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 85.6 / 53.98;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        #bd-smart-dl-system .card-flipper.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        #bd-smart-dl-system .card-face {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
-            background: url('images/BDBUS Group Official Logo.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .licence-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
-            padding-bottom: 8px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .licence-flag-title { display: flex; align-items: center; gap: 10px; }
-        .licence-flag { width: 34px; height: 20px; background: #006a4e; border-radius: 2px; position: relative; overflow: hidden; }
-        .licence-flag::after { content: ""; position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 11px; height: 11px; background: #f42a41; border-radius: 50%; }
-        .licence-main-heading { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
-        .licence-sub-heading { font-size: 10px; color: var(--neon-green); font-weight: 600; text-transform: uppercase; }
-
-        .licence-body-layout {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            z-index: 2;
-            margin: 8px 0;
-        }
-
-        .licence-photo-pane {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .licence-user-photo {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 2px solid var(--neon-cyan, #00e5ff);
-            object-fit: cover;
-        }
-
-        .licence-id-badge {
-            margin-top: 6px;
-            background: rgba(0, 229, 255, 0.15);
-            color: var(--neon-cyan, #00e5ff);
-            border: 1px solid var(--neon-cyan, #00e5ff);
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .licence-info-pane {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            inset: 0;
             width: 100%;
-            text-align: left;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(0, 242, 254, 0.45);
         }
 
-        .licence-data-row {
+        #bd-smart-dl-system .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Security Backgrounds tuned to BDBUS Dark/Neon palette while keeping crisp card legibility */
+        #bd-smart-dl-system .security-bg {
+            background:
+                radial-gradient(circle at 85% 20%, rgba(0, 242, 254, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, rgba(0, 255, 135, 0.15) 0%, transparent 45%),
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(148, 163, 184, 0.06) 0px,
+                    rgba(148, 163, 184, 0.06) 2px,
+                    transparent 2px,
+                    transparent 8px
+                ),
+                linear-gradient(135deg, #ffffff 0%, #f0fdf4 55%, #e0f2fe 100%);
+        }
+
+        #bd-smart-dl-system .security-bg-back {
+            background:
+                radial-gradient(circle at 15% 25%, rgba(0, 242, 254, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(0, 255, 135, 0.14) 0%, transparent 45%),
+                repeating-linear-gradient(
+                    -45deg,
+                    rgba(148, 163, 184, 0.06) 0px,
+                    rgba(148, 163, 184, 0.06) 2px,
+                    transparent 2px,
+                    transparent 8px
+                ),
+                linear-gradient(135deg, #f8fafc 0%, #f0fdf4 50%, #eff6ff 100%);
+        }
+
+        #bd-smart-dl-system .card-watermark-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            padding-bottom: 2px;
-            font-size: 11.5px;
+            justify-content: center;
+            opacity: 0.12;
         }
 
-        .licence-data-label { color: #94a3b8; font-weight: 600; }
-        .licence-data-value { color: #ffffff; font-weight: bold; word-break: break-word; text-align: right; }
-
-        .licence-footer-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 6px;
-            position: relative;
-            z-index: 2;
+        #bd-smart-dl-system .holo-seal {
+            background: conic-gradient(
+                from 45deg,
+                rgba(0, 242, 254, 0.55),
+                rgba(0, 255, 135, 0.55),
+                rgba(79, 172, 254, 0.45),
+                rgba(245, 175, 25, 0.55),
+                rgba(0, 242, 254, 0.55)
+            );
+            backdrop-filter: blur(2px);
+            animation: dlHoloShift 6s linear infinite;
         }
 
-        .licence-auth-label { font-size: 9px; color: #64748b; margin-top: 2px; }
+        @keyframes dlHoloShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
 
-        @media screen and (max-width: 480px) {
-            #digital-licence-card { padding: 10px 12px; }
-            .licence-body-layout { gap: 10px; }
-            .licence-user-photo { width: 64px; height: 64px; }
-            .licence-data-row { font-size: 10px; }
-            .licence-id-badge { font-size: 9px; padding: 2px 6px; }
+        #bd-smart-dl-system .emv-chip {
+            background: linear-gradient(135deg, #fde68a 0%, #d97706 45%, #fef3c7 75%, #b45309 100%);
+            border: 1px solid #92400e;
+        }
+
+        #bd-smart-dl-system .microprint-strip {
+            font-size: 5px;
+            letter-spacing: 0.8px;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .dl-dark-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 242, 254, 0.18);
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .dl-dark-input {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 10px 14px;
+            border-radius: 10px;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .dl-dark-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+        }
+
+        .dl-dark-file {
+            display: block;
+            width: 100%;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 6px 8px;
+            cursor: pointer;
+        }
+
+        .dl-dark-file::file-selector-button {
+            margin-right: 10px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 11px;
+            font-weight: 700;
+            background: var(--btn-gradient-1);
+            color: #000;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -1073,55 +1098,486 @@
         </div>
     </div>
 
+    <!-- ==================== DRIVING LICENCE SCREEN (UPDATED DESIGN + UPDATE PAGE) ==================== -->
     <div id="licence-screen" class="page-screen">
-        <div class="licence-preview-wrapper">
-            <h2 class="lang-node" data-en="Official Smart Driving Licence" data-bn="অফিসিয়াল স্মার্ট ড্রাইভিং লাইসেন্স">Official Smart Driving Licence</h2>
-            <p style="color: var(--text-muted); font-size:12px; margin-bottom:15px;" class="lang-node" data-en="Your auto-generated membership simulation driving licence permit model." data-bn="আপনার মেম্বারশিপ ডাটার ভিত্তিতে অটো-জেনারেটেড সিমুলেশন লাইসেন্স পারমিট।">Your auto-generated membership simulation driving licence permit model.</p>
-
-            <div id="digital-licence-card">
-                <div class="licence-top-bar">
-                    <div class="licence-flag-title">
-                        <div class="licence-flag"></div>
-                        <div>
-                            <h3 class="licence-main-heading lang-node" data-en="BDBUS DIGITAL MULTIPLAYER HUB" data-bn="বিডিবাস ডিজিটাল মাল্টিপ্লেয়ার হাব">BDBUS DIGITAL MULTIPLAYER HUB</h3>
-                            <p class="licence-sub-heading lang-node" data-en="DRIVING LICENCE PERMIT" data-bn="ড্রাইভিং লাইসেন্স পারমিট">DRIVING LICENCE PERMIT</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="licence-body-layout">
-                    <div class="licence-photo-pane">
-                        <img src="https://via.placeholder.com/150" id="dl-avatar" class="licence-user-photo" alt="Member Avatar">
-                        <div id="dl-id" class="licence-id-badge">ID: BDBUS-1001</div>
-                    </div>
-                    
-                    <div class="licence-info-pane">
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="NAME:" data-bn="নাম:">NAME:</div><div class="licence-data-value" id="dl-name">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="GAME NICKNAME:" data-bn="গেম নিকনেম:">GAME NICKNAME:</div><div class="licence-data-value" id="dl-gameid">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="BIRTH DATE:" data-bn="জন্ম তারিখ:">BIRTH DATE:</div><div class="licence-data-value" id="dl-dob">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="GENDER:" data-bn="লিঙ্গ:">GENDER:</div><div class="licence-data-value" id="dl-gender">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="MOBILE NO:" data-bn="মোবাইল নম্বর:">MOBILE NO:</div><div class="licence-data-value" id="dl-phone">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="DIVISION:" data-bn="বিভাগ:">DIVISION:</div><div class="licence-data-value" id="dl-division">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="DISTRICT:" data-bn="জেলা:">DISTRICT:</div><div class="licence-data-value" id="dl-district">-</div></div>
-                        <div class="licence-data-row"><div class="licence-data-label lang-node" data-en="VEHICLE TYPE:" data-bn="গাড়ির ধরণ:">VEHICLE TYPE:</div><div class="licence-data-value lang-node" data-en="HEAVY BUSSID COACH" data-bn="হেভি বিডিবাস কোচ" style="color: var(--neon-green);">HEAVY BUSSID COACH</div></div>
-                    </div>
-                </div>
-                
-                <div class="licence-footer-bar">
-                    <div class="licence-auth-sign">
-                        <div class="licence-sign-img">𝓑𝓓𝓑𝓤𝓢</div>
-                        <div class="licence-auth-label lang-node" data-en="ISSUING AUTHORITY" data-bn="ইস্যুকারী কর্তৃপক্ষ">ISSUING AUTHORITY</div>
-                    </div>
-                    <div class="licence-auth-sign" style="text-align: right;">
-                        <div class="licence-sign-img" id="dl-sign-name" style="font-family:'Poppins',sans-serif;">Holder Sign</div>
-                        <div class="licence-auth-label lang-node" data-en="HOLDER SIGNATURE" data-bn="ধারকের স্বাক্ষর">HOLDER SIGNATURE</div>
-                    </div>
+        <div id="bd-smart-dl-system" style="padding: 10px 0 24px;">
+            <!-- Toast Notification -->
+            <div id="dlToastBanner" style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; display: none; transform: translateY(16px); opacity: 0; transition: all 0.3s ease;">
+                <div style="background: #0f172a; color: #f8fafc; padding: 12px 16px; border-radius: 12px; box-shadow: 0 12px 28px rgba(0,0,0,0.55); border: 1px solid var(--neon-blue); display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: var(--neon-green); display: inline-block;"></span>
+                    <span id="dlToastMessage" class="lang-node" data-en="Information updated successfully!" data-bn="তথ্য সফলভাবে আপডেট হয়েছে!">Information updated successfully!</span>
                 </div>
             </div>
 
-            <button class="btn-premium btn-secondary" style="margin-top:15px; width:100%; max-width:500px; justify-content:center;" onclick="executeDrivingLicenceDownloadEngine()">
-                <i class="fa-solid fa-download"></i> <span class="lang-node" data-en="Download Driving Licence" data-bn="ড্রাইভিং লাইসেন্স ডাউনলোড করুন">Download Driving Licence</span>
-            </button>
+            <!-- ==================== VIEW 1: LICENCE CARD ==================== -->
+            <div id="dlLicenceCardPage" style="max-width: 580px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+                <div class="central-branded-header" style="margin-top: 4px; margin-bottom: 14px;">
+                    <h2 style="font-size: 18px; color: var(--neon-blue);" class="lang-node" data-en="SMART DRIVING LICENCE" data-bn="স্মার্ট ড্রাইভিং লাইসেন্স">SMART DRIVING LICENCE</h2>
+                    <p style="font-size: 12px; color: var(--text-muted);" class="lang-node" data-en="Interactive Smart Card Preview (Front & Back)" data-bn="ইন্টারঅ্যাক্টিভ স্মার্ট কার্ড প্রিভিউ (সামনে ও পিছনে)">Interactive Smart Card Preview (Front & Back)</p>
+                </div>
+
+                <div class="perspective-container" style="width: 100%;">
+                    <div id="dlSmartCardFlipper" class="card-flipper">
+
+                        <!-- FRONT SIDE -->
+                        <div id="dlCardFrontCapture" class="card-face card-front security-bg" style="display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px; user-select: none; color: #0f172a;">
+                            <div class="card-watermark-layer" aria-hidden="true">
+                                <img class="dl-watermark-img" style="max-width: 44%; max-height: 68%; object-fit: contain; display: none;" alt="Watermark" />
+                                <span class="dl-watermark-fallback font-en" style="font-weight: 800; font-size: 16px; color: #1e293b; letter-spacing: 1px; text-align: center; padding: 0 8px;">
+                                    BDBUS Official Logo
+                                </span>
+                            </div>
+
+                            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(15, 118, 110, 0.25); padding-bottom: 6px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 38px; height: 24px; border-radius: 4px; background: #006a4e; border: 1px solid rgba(100, 116, 139, 0.7); box-shadow: 0 1px 3px rgba(0,0,0,0.15); position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" title="Flag of Bangladesh">
+                                        <span style="width: 14px; height: 14px; border-radius: 50%; background: #f42a41; margin-left: -2px; display: block;"></span>
+                                    </div>
+                                    <div>
+                                        <p class="font-en" style="font-size: 9px; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
+                                            PEOPLE'S REPUBLIC OF BANGLADESH
+                                        </p>
+                                        <h3 style="font-size: 13px; font-weight: 800; color: #b91c1c; letter-spacing: -0.2px; line-height: 1.2;">
+                                            DRIVING LICENCE <span style="font-size: 10px; font-weight: 600; color: #064e3b;">(স্মার্ট কার্ড)</span>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span class="font-en" style="display: inline-block; padding: 2px 8px; border-radius: 5px; background: #065f46; color: #ffffff; font-size: 9px; font-weight: 700; letter-spacing: 1px;">
+                                        BRTA
+                                    </span>
+                                    <p class="font-en" style="font-size: 8px; color: #475569; margin-top: 2px;">SMART CARD</p>
+                                </div>
+                            </div>
+
+                            <div style="position: relative; z-index: 10; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 10px; margin: auto 0; padding: 4px 0; align-items: center;">
+                                <!-- Left Column: Photo + Signature -->
+                                <div style="grid-column: span 4 / span 4; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 6px;">
+                                    <div style="width: 100%; aspect-ratio: 300 / 350; border-radius: 8px; border: 2px solid rgba(4, 120, 87, 0.45); background: #ffffff; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.08); position: relative;">
+                                        <img id="dlPreviewPhoto"
+                                            src="https://placehold.co/300x350/e2e8f0/334155?text=300x350+Photo"
+                                            onerror="this.src='https://placehold.co/300x350/e2e8f0/334155?text=Photo'"
+                                            alt="Driver Photo"
+                                            style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                                        <div class="font-en" style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(6, 78, 59, 0.82); color: #ffffff; font-size: 7px; text-align: center; padding: 2px 0; letter-spacing: 0.8px;">
+                                            VERIFIED PHOTO
+                                        </div>
+                                    </div>
+
+                                    <div style="width: 100%; text-align: center;">
+                                        <div style="height: 26px; width: 100%; background: rgba(255,255,255,0.85); border-radius: 5px; border: 1px solid rgba(203, 213, 225, 0.85); display: flex; align-items: center; justify-content: center; padding: 0 4px; overflow: hidden;">
+                                            <img id="dlPreviewSignatureImg" src="" alt="Signature" style="max-height: 100%; max-width: 100%; object-fit: contain; display: none;" />
+                                            <span id="dlPreviewSignatureText" class="font-signature" style="font-size: 15px; color: #0f172a; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                Ariful Islam
+                                            </span>
+                                        </div>
+                                        <p class="font-en" style="font-size: 7.5px; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;">
+                                            Holder's Signature / স্বাক্ষর
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: Licence Details -->
+                                <div style="grid-column: span 8 / span 8; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; font-size: 11px; line-height: 1.25; position: relative;">
+                                    <div>
+                                        <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                            নাম / Full Name
+                                        </span>
+                                        <p id="dlPreviewFullName" style="font-weight: 700; color: #020617; font-size: 12.5px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            MD. ARIFUL ISLAM (মোঃ আরিফুল ইসলাম)
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                            পিতা / মাতার নাম (Father / Mother)
+                                        </span>
+                                        <p id="dlPreviewParentName" style="font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            MD. ABDUR RAHMAN (মোঃ আব্দুর রহমান)
+                                        </p>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+                                        <div>
+                                            <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                                জন্ম তারিখ / Date of Birth
+                                            </span>
+                                            <p id="dlPreviewDob" class="font-en" style="font-weight: 700; color: #0f172a;">
+                                                15 AUG 1994
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                                রক্তের গ্রুপ / Blood Group
+                                            </span>
+                                            <p id="dlPreviewBloodGroup" class="font-en" style="font-weight: 800; color: #dc2626; font-size: 12.5px;">
+                                                B+
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: rgba(6, 78, 59, 0.06); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(4, 120, 87, 0.22);">
+                                        <span style="font-size: 8px; color: #065f46; font-weight: 600; text-transform: uppercase; display: block;">
+                                            ড্রাইভিং লাইসেন্স নম্বর / Licence No.
+                                        </span>
+                                        <p id="dlPreviewLicenceNo" class="font-en" style="font-weight: 800; color: #022c22; letter-spacing: 0.8px; font-size: 12.5px;">
+                                            DK0123456CL0009
+                                        </p>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+                                        <div>
+                                            <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                                ইস্যুর তারিখ / Issue Date
+                                            </span>
+                                            <p id="dlPreviewIssueDate" class="font-en" style="font-weight: 700; color: #0f172a;">
+                                                10 JAN 2024
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                                মেয়াদোত্তীর্ণ / Expiry Date
+                                            </span>
+                                            <p id="dlPreviewExpiryDate" class="font-en" style="font-weight: 700; color: #b91c1c;">
+                                                09 JAN 2034
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; align-items: flex-end; justify-content: space-between; padding-top: 2px;">
+                                        <div>
+                                            <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;">
+                                                যানবাহনের শ্রেণি / Vehicle Class
+                                            </span>
+                                            <span id="dlPreviewVehicleClass" class="font-en" style="display: inline-block; margin-top: 2px; padding: 2px 8px; border-radius: 5px; background: #0f172a; color: #fcd34d; font-weight: 700; font-size: 10.5px; letter-spacing: 0.5px;">
+                                                LIGHT, MOTORCYCLE
+                                            </span>
+                                        </div>
+
+                                        <div class="holo-seal" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.85); box-shadow: 0 2px 6px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2px; flex-shrink: 0;" title="Holographic Security Feature">
+                                            <span class="font-en" style="font-size: 6px; font-weight: 800; color: #0f172a; line-height: 1;">BRTA</span>
+                                            <span class="font-en" style="font-size: 5px; font-weight: 700; color: #1e293b; line-height: 1.1;">SECURE</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="microprint-strip font-en" style="position: relative; z-index: 10; color: rgba(6, 78, 59, 0.65); border-top: 1px solid rgba(6, 78, 59, 0.2); padding-top: 3px;">
+                                BANGLADESH ROAD TRANSPORT AUTHORITY • SMART CARD DRIVING LICENCE • SECURITY VERIFIED DOCUMENT • BRTA •
+                            </div>
+                        </div>
+
+                        <!-- BACK SIDE -->
+                        <div id="dlCardBackCapture" class="card-face card-back security-bg-back" style="display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px; user-select: none; color: #0f172a;">
+                            <div class="card-watermark-layer" aria-hidden="true">
+                                <img class="dl-watermark-img" style="max-width: 44%; max-height: 68%; object-fit: contain; display: none;" alt="Watermark" />
+                                <span class="dl-watermark-fallback font-en" style="font-weight: 800; font-size: 16px; color: #1e293b; letter-spacing: 1px; text-align: center; padding: 0 8px;">
+                                    BDBUS Official Logo
+                                </span>
+                            </div>
+
+                            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid rgba(203, 213, 225, 0.85); padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="emv-chip" style="width: 42px; height: 28px; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); position: relative; overflow: hidden; flex-shrink: 0;">
+                                        <div style="position: absolute; left: 0; right: 0; top: 33%; height: 1px; background: rgba(120, 53, 15, 0.5);"></div>
+                                        <div style="position: absolute; left: 0; right: 0; bottom: 33%; height: 1px; background: rgba(120, 53, 15, 0.5);"></div>
+                                        <div style="position: absolute; top: 0; bottom: 0; left: 33%; width: 1px; background: rgba(120, 53, 15, 0.5);"></div>
+                                        <div style="position: absolute; top: 0; bottom: 0; right: 33%; width: 1px; background: rgba(120, 53, 15, 0.5);"></div>
+                                    </div>
+                                    <div>
+                                        <p class="font-en" style="font-size: 9.5px; font-weight: 700; color: #1e293b; text-transform: uppercase;">
+                                            SMART CHIP & DIGITAL VERIFICATION
+                                        </p>
+                                        <p style="font-size: 8.5px; color: #64748b;" class="lang-node" data-en="Stored Biometric & Licence Record" data-bn="সংরক্ষিত বায়োমেট্রিক ও লাইসেন্স রেকর্ড">
+                                            সংরক্ষিত বায়োমেট্রিক ও লাইসেন্স রেকর্ড
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div style="text-align: right; background: rgba(255,255,255,0.85); padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                                    <span style="font-size: 8px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block;" class="lang-node" data-en="NID / PASSPORT NO." data-bn="NID / পাসপোর্ট নম্বর">
+                                        NID / পাসপোর্ট নম্বর
+                                    </span>
+                                    <p id="dlPreviewNid" class="font-en" style="font-weight: 800; color: #0f172a; font-size: 11px; letter-spacing: 0.4px;">
+                                        19942691234567890
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style="position: relative; z-index: 10; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 10px; margin: auto 0; padding: 6px 0; align-items: center;">
+                                <div style="grid-column: span 8 / span 8; display: flex; flex-direction: column; gap: 7px; font-size: 10.5px; line-height: 1.35;">
+                                    <div>
+                                        <span style="font-size: 8px; color: #64748b; font-weight: 700; text-transform: uppercase; display: block;">
+                                            ঠিকানা (স্থায়ী / বর্তমান) / Address
+                                        </span>
+                                        <p id="dlPreviewAddress" style="font-weight: 600; color: #0f172a; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                            বাসা-১২, রোড-০৫, ধানমন্ডি, ঢাকা-১২০৫ (House-12, Road-05, Dhanmondi, Dhaka-1205)
+                                        </p>
+                                    </div>
+
+                                    <div style="background: rgba(255,255,255,0.8); padding: 6px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                        <span style="font-size: 8px; color: #065f46; font-weight: 700; text-transform: uppercase; display: block;">
+                                            ক্যাটাগরি বিবরণ ও শর্তাবলি / Category & Conditions
+                                        </span>
+                                        <p id="dlPreviewConditions" style="font-size: 9.5px; color: #334155; font-weight: 500;">
+                                            Non-Professional (অপেশাদার) • Light Motor Vehicle & Motorcycle Only. No Special Restrictions.
+                                        </p>
+                                    </div>
+
+                                    <div style="padding-top: 2px;">
+                                        <div style="height: 18px; width: 100%; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 5px; padding: 0 6px; display: flex; align-items: center; justify-content: space-between; overflow: hidden;" aria-hidden="true">
+                                            <span class="font-en" style="font-size: 8px; letter-spacing: 3px; font-weight: 900; color: #1e293b; white-space: nowrap; overflow: hidden;">
+                                                || ||| | |||| || | ||| || |||| | ||| ||
+                                            </span>
+                                            <span id="dlPreviewBarcodeLabel" class="font-en" style="font-size: 7.5px; font-weight: 700; color: #475569; margin-left: 6px; flex-shrink: 0;">
+                                                DK0123456
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="grid-column: span 4 / span 4; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; padding: 6px; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                                    <div id="dlQrcodeContainer" style="width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; overflow: hidden;"></div>
+                                    <span class="font-en" style="font-size: 7.5px; font-weight: 700; color: #475569; margin-top: 4px; letter-spacing: 0.7px;">
+                                        SCAN TO VERIFY
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="position: relative; z-index: 10; border-top: 1px solid #cbd5e1; padding-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 8.5px; color: #475569;">
+                                <div style="line-height: 1.25;">
+                                    <p style="font-weight: 600; color: #1e293b;" class="lang-node" data-en="Instruction: Carry this licence while driving. If lost, report to nearby police station & BRTA." data-bn="নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BRTA-তে জানান।">
+                                        নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BRTA-তে জানান।
+                                    </p>
+                                    <p class="font-en" style="font-size: 7.5px; color: #64748b;">
+                                        Issuing Authority: BRTA • Digital Simulation / Sample Card Preview Only
+                                    </p>
+                                </div>
+                                <div class="font-en" style="padding: 2px 7px; border-radius: 5px; background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; font-weight: 700; font-size: 8px; flex-shrink: 0;">
+                                    ✓ VERIFIED
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Matching BDBUS Neon/Dark Palette) -->
+                <div class="dl-dark-panel" style="width: 100%; padding: 14px; margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+                    <button id="dlBtnShowFront" type="button" class="btn-premium lang-node" data-en="Show Front Side" data-bn="সামনের সাইট দেখুন" style="justify-content: center; border-radius: 12px; padding: 10px 14px; font-size: 13px;">
+                        Show Front Side
+                    </button>
+
+                    <button id="dlBtnShowBack" type="button" class="btn-premium lang-node" data-en="Show Back Side" data-bn="পিছনের সাইট দেখুন" style="justify-content: center; border-radius: 12px; padding: 10px 14px; font-size: 13px; background: #1e293b; color: var(--text-light); box-shadow: none; border: 1px solid rgba(255,255,255,0.12);">
+                        Show Back Side
+                    </button>
+
+                    <button id="dlBtnDownloadFront" type="button" class="btn-premium lang-node" data-en="Save Front Image" data-bn="সামনের ছবি সেভ" style="justify-content: center; border-radius: 12px; padding: 10px 14px; font-size: 13px; background: linear-gradient(135deg, #00ff87 0%, #059669 100%); color: #000; box-shadow: 0 4px 14px rgba(0, 255, 135, 0.25);">
+                        Save Front Image
+                    </button>
+
+                    <button id="dlBtnDownloadBack" type="button" class="btn-premium lang-node" data-en="Save Back Image" data-bn="পিছনের ছবি সেভ" style="justify-content: center; border-radius: 12px; padding: 10px 14px; font-size: 13px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #000; box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);">
+                        Save Back Image
+                    </button>
+                </div>
+
+                <div style="width: 100%; margin-top: 14px;">
+                    <button id="dlBtnGoToUpdatePage" type="button" class="btn-premium" style="width: 100%; justify-content: center; border-radius: 14px; padding: 14px 20px; font-size: 15px;">
+                        <span class="lang-node" data-en="Driving licences Update Now" data-bn="ড্রাইভিং লাইসেন্স আপডেট করুন">Driving licences Update Now</span>
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==================== VIEW 2: UPDATE FORM PAGE ==================== -->
+            <div id="dlUpdateFormPage" style="display: none; width: 100%;">
+                <div class="dl-dark-panel" style="padding: 24px;">
+                    <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; margin-bottom: 20px;">
+                        <h2 style="font-size: 19px; font-weight: 700; color: var(--neon-blue);" class="lang-node" data-en="Update Driving Licence Information" data-bn="লাইসেন্সের তথ্য আপডেট করুন">
+                            Update Driving Licence Information
+                        </h2>
+                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Changes in the form below update the front and back of your licence card." data-bn="নিচের ফর্মে তথ্য পরিবর্তন করলে কার্ডের সামনের ও পিছনের সাইডে আপডেট দেখা যাবে।">
+                            Changes in the form below update the front and back of your licence card.
+                        </p>
+                    </div>
+
+                    <form id="dlLicenceForm" style="display: flex; flex-direction: column; gap: 20px;">
+                        <!-- Front Side Fields -->
+                        <div style="background: rgba(0, 242, 254, 0.04); padding: 16px; border-radius: 14px; border: 1px solid rgba(0, 242, 254, 0.16); display: flex; flex-direction: column; gap: 14px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <h3 style="font-size: 13px; font-weight: 700; color: var(--neon-green); text-transform: uppercase; letter-spacing: 0.6px;" class="lang-node" data-en="1. Front Side Details" data-bn="১. সামনের সাইডের তথ্যসমূহ (Front Side)">
+                                    1. Front Side Details
+                                </h3>
+                                <span style="font-size: 11px; color: var(--text-muted);" class="lang-node" data-en="Serial 1 - 9" data-bn="সিরিয়াল ১ - ৯">Serial 1 - 9</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+                                <div>
+                                    <label for="dlInputPhoto" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="1. Upload Driver Photo (300×350 px, max 2 MB)" data-bn="১. চালকের রঙিন ছবি আপলোড করুন (300×350 px, সর্বোচ্চ ২ MB)">
+                                        1. Upload Driver Photo (300×350 px, max 2 MB)
+                                    </label>
+                                    <input id="dlInputPhoto" type="file" accept="image/*" class="dl-dark-file" />
+                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×350 px | Max 2 MB" data-bn="নির্ধারিত সাইজ: 300×350 px | সর্বোচ্চ ২ MB">Recommended: 300×350 px | Max 2 MB</p>
+                                </div>
+
+                                <div>
+                                    <label for="dlInputSignatureImg" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="9. Signature Image (or type name below) (300×100 px, max 2 MB)" data-bn="৯. স্বাক্ষরের ছবি (অথবা নিচে নাম লিখুন) (300×100 px, সর্বোচ্চ ২ MB)">
+                                        9. Signature Image (or type name below) (300×100 px, max 2 MB)
+                                    </label>
+                                    <input id="dlInputSignatureImg" type="file" accept="image/*" class="dl-dark-file" />
+                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×100 px | Max 2 MB" data-bn="নির্ধারিত সাইজ: 300×100 px | সর্বোচ্চ ২ MB">Recommended: 300×100 px | Max 2 MB</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="dlInputFullName" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="2. Licence Holder Full Name" data-bn="২. লাইসেন্সধারীর পূর্ণ নাম (Full Name)">
+                                    2. Licence Holder Full Name
+                                </label>
+                                <input id="dlInputFullName" type="text" placeholder="Example: MD. ARIFUL ISLAM" class="dl-dark-input" />
+                            </div>
+
+                            <div>
+                                <label for="dlInputParentName" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="3. Father's / Mother's Name" data-bn="৩. পিতা বা মাতার নাম (Father's / Mother's Name)">
+                                    3. Father's / Mother's Name
+                                </label>
+                                <input id="dlInputParentName" type="text" placeholder="Example: MD. ABDUR RAHMAN" class="dl-dark-input" />
+                            </div>
+
+                            <div>
+                                <label for="dlInputDob" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="4. Date of Birth" data-bn="৪. জন্ম তারিখ (Date of Birth)">
+                                    4. Date of Birth
+                                </label>
+                                <input id="dlInputDob" type="text" placeholder="Example: 15 AUG 1994" class="dl-dark-input font-en" />
+                            </div>
+
+                            <div>
+                                <span style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="5. Blood Group" data-bn="৫. রক্তের গ্রুপ (Blood Group)">
+                                    5. Blood Group
+                                </span>
+                                <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; background: #1e293b; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);" class="font-en">
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="A+" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>A+</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="A-" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>A-</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="B+" checked style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>B+</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="B-" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>B-</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="O+" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>O+</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="O-" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>O-</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="AB+" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>AB+</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer;">
+                                        <input type="radio" name="dlBloodGroup" value="AB-" style="accent-color: var(--neon-blue); cursor: pointer;" />
+                                        <span>AB-</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                                <div>
+                                    <label for="dlInputLicenceNo" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="6. Driving Licence No." data-bn="৬. ড্রাইভিং লাইসেন্স নম্বর (Licence No.)">
+                                        6. Driving Licence No.
+                                    </label>
+                                    <input id="dlInputLicenceNo" type="text" placeholder="Example: DK0123456CL0009" class="dl-dark-input font-en" style="text-transform: uppercase;" />
+                                </div>
+
+                                <div>
+                                    <label for="dlInputSignatureText" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="9. Digital Signature Text" data-bn="৯. ডিজিটাল স্বাক্ষর টেক্সট (Signature Text)">
+                                        9. Digital Signature Text
+                                    </label>
+                                    <input id="dlInputSignatureText" type="text" placeholder="Example: Ariful Islam" class="dl-dark-input" />
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                                <div>
+                                    <label for="dlInputIssueDate" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="7(a). Issue Date" data-bn="৭(ক). ইস্যুর তারিখ (Issue Date)">
+                                        7(a). Issue Date
+                                    </label>
+                                    <input id="dlInputIssueDate" type="text" placeholder="Example: 10 JAN 2024" class="dl-dark-input font-en" />
+                                </div>
+
+                                <div>
+                                    <label for="dlInputExpiryDate" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="7(b). Expiry Date" data-bn="৭(খ). মেয়াদোত্তীর্ণের তারিখ (Expiry Date)">
+                                        7(b). Expiry Date
+                                    </label>
+                                    <input id="dlInputExpiryDate" type="text" placeholder="Example: 09 JAN 2034" class="dl-dark-input font-en" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="dlInputVehicleClass" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="8. Vehicle Class / Category" data-bn="৮. যানবাহনের শ্রেণি / ক্যাটাগরি (Vehicle Class)">
+                                    8. Vehicle Class / Category
+                                </label>
+                                <input id="dlInputVehicleClass" type="text" placeholder="Example: LIGHT, MOTORCYCLE" class="dl-dark-input font-en" style="text-transform: uppercase;" />
+                            </div>
+                        </div>
+
+                        <!-- Back Side Fields -->
+                        <div style="background: rgba(79, 172, 254, 0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(79, 172, 254, 0.2); display: flex; flex-direction: column; gap: 14px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                                <h3 style="font-size: 13px; font-weight: 700; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 0.6px;" class="lang-node" data-en="2. Back Side Details" data-bn="২. পিছনের সাইডের তথ্যসমূহ (Back Side)">
+                                    2. Back Side Details
+                                </h3>
+                                <span style="font-size: 11px; color: var(--text-muted);" class="lang-node" data-en="Serial 1 - 5" data-bn="সিরিয়াল ১ - ৫">Serial 1 - 5</span>
+                            </div>
+
+                            <div>
+                                <label for="dlInputAddress" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="1. Address (Permanent / Present)" data-bn="১. ঠিকানা (স্থায়ী ও/অথবা বর্তমান ঠিকানা)">
+                                    1. Address (Permanent / Present)
+                                </label>
+                                <textarea id="dlInputAddress" rows="2" placeholder="Example: House-12, Road-05, Dhanmondi, Dhaka-1205" class="dl-dark-input" style="resize: vertical;"></textarea>
+                            </div>
+
+                            <div>
+                                <label for="dlInputNid" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="2. National ID (NID) or Passport No." data-bn="২. জাতীয় পরিচয়পত্র (NID) বা পাসপোর্ট নম্বর">
+                                    2. National ID (NID) or Passport No.
+                                </label>
+                                <input id="dlInputNid" type="text" placeholder="Example: 19942691234567890" class="dl-dark-input font-en" />
+                            </div>
+
+                            <div>
+                                <label for="dlInputConditions" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="3. Vehicle Category Conditions / Notes" data-bn="৩. যানবাহনের ক্যাটাগরি-সংক্রান্ত অতিরিক্ত তথ্য বা শর্তাবলি">
+                                    3. Vehicle Category Conditions / Notes
+                                </label>
+                                <input id="dlInputConditions" type="text" placeholder="Example: Non-Professional • Light Motor Vehicle & Motorcycle Only." class="dl-dark-input" />
+                            </div>
+
+                            <div style="padding-top: 4px;">
+                                <label for="dlInputConfirmTick" style="display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; font-weight: 600; color: var(--text-light); cursor: pointer; user-select: none;">
+                                    <input id="dlInputConfirmTick" type="checkbox" style="margin-top: 2px; width: 16px; height: 16px; accent-color: var(--neon-green); cursor: pointer;" />
+                                    <span class="lang-node" data-en="I confirm that all provided details are accurate and agree to update the card." data-bn="আমি নিশ্চিত করছি যে প্রদত্ত সকল তথ্য সঠিক এবং কার্ড আপডেট করার জন্য সম্মত আছি।">
+                                        I confirm that all provided details are accurate and agree to update the card.
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="dlBtnUpdateConfirm" type="submit" class="btn-premium" style="width: 100%; justify-content: center; border-radius: 14px; padding: 14px 20px; font-size: 15px;">
+                                <span class="lang-node" data-en="Update Confirm" data-bn="আপডেট নিশ্চিত করুন">Update Confirm</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1542,7 +1998,7 @@
             }
 
             if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
-                return "After registration or login, you will find your 'Digital Driving Licence Permit' in the profile section. Save the card by clicking 'Download Driving Licence' below.";
+                return "After registration or login, you will find your 'Smart Driving Licence' in the menu. You can flip front/back, save images, or update details on the update page.";
             }
             if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
                 return "You will get welcome and subscription bonuses in your new account. If wallet balance is insufficient, you can top up from the recharge options.";
@@ -1617,11 +2073,13 @@
 
         let activeUserSession = JSON.parse(localStorage.getItem('bdbus_active_session')) || null;
         
+        // Default language is always English unless changed by user
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
         
         let currentlyChosenSeats = [];
         let selectedFareGlobalRate = 0;
         let internalNavigationHistoryArray = JSON.parse(sessionStorage.getItem('bdbus_nav_history')) || [];
+        let isLicenceUpdateSubViewOpen = false;
 
         const bangladeshDivisions = ["Barishal", "Chattogram", "Dhaka", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet"];
         const bangladeshDistricts = [
@@ -1846,8 +2304,30 @@
             }
         }
 
+        function updateBackButtonVisibility() {
+            const backBtn = document.getElementById('global-back-nav-btn');
+            const activeScreen = document.querySelector('.page-screen.active');
+            const currentId = activeScreen ? activeScreen.id : '';
+
+            if (!backBtn || !activeUserSession || currentId === 'auth-screen' || currentId === 'home-screen') {
+                if (backBtn) backBtn.style.display = 'none';
+                return;
+            }
+
+            if (currentId === 'licence-screen' && isLicenceUpdateSubViewOpen) {
+                backBtn.style.display = 'flex';
+            } else if (internalNavigationHistoryArray.length > 1) {
+                backBtn.style.display = 'flex';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }
+
         function navigatePage(screenId, saveHistory = true) {
             toggleSidebarMenu(false);
+            if (screenId !== 'licence-screen') {
+                isLicenceUpdateSubViewOpen = false;
+            }
             sessionStorage.setItem('bdbus_persistent_screen_id', screenId);
             
             const backBtn = document.getElementById('global-back-nav-btn');
@@ -1872,7 +2352,6 @@
             } else {
                 if(navControls) navControls.style.display = 'flex';
                 if(emptySpace) emptySpace.style.display = 'none';
-                if(backBtn) backBtn.style.display = 'flex'; 
                 if(menuBtn) menuBtn.style.display = 'block';
                 if(globalFooter) globalFooter.style.display = 'block';
                 
@@ -1895,10 +2374,22 @@
             if (screenId === 'contact-screen') renderContactTeamPanel();
             if (screenId === 'licence-screen') renderDigitalLicenceData();
             if (screenId === 'all-members-screen') renderAllRegisteredMembersPage();
+
+            updateBackButtonVisibility();
         }
 
         function executeHardwareBackTrigger() {
-            if(!activeUserSession || internalNavigationHistoryArray.length <= 1) {
+            if (!activeUserSession) return;
+
+            const activeScreen = document.querySelector('.page-screen.active');
+            if (activeScreen && activeScreen.id === 'licence-screen' && isLicenceUpdateSubViewOpen) {
+                if (typeof window.closeLicenceUpdateSubView === 'function') {
+                    window.closeLicenceUpdateSubView();
+                }
+                return;
+            }
+
+            if (internalNavigationHistoryArray.length <= 1) {
                 return; 
             }
             internalNavigationHistoryArray.pop(); 
@@ -2064,6 +2555,7 @@
             localStorage.removeItem('bdbus_active_session');
             sessionStorage.clear();
             internalNavigationHistoryArray = [];
+            isLicenceUpdateSubViewOpen = false;
             document.body.classList.remove('logged-in');
             document.getElementById('header-nav-controls').style.display = 'none';
             document.getElementById('header-empty-space').style.display = 'block';
@@ -2162,6 +2654,9 @@
                 await updateCloudUserDocument(activeUserSession);
                 syncSessionState(activeUserSession);
                 document.getElementById('profile-avatar-render').src = activeUserSession.avatar;
+                if (typeof window.syncSessionToSmartLicence === 'function') {
+                    window.syncSessionToSmartLicence(activeUserSession);
+                }
                 alert("Avatar uploaded and compiled successfully!");
             };
             reader.readAsDataURL(file);
@@ -2186,32 +2681,9 @@
         }
 
         function renderDigitalLicenceData() {
-            if (!activeUserSession) return;
-            const user = activeUserSession;
-
-            document.getElementById('dl-avatar').src = user.avatar || "https://via.placeholder.com/150";
-            document.getElementById('dl-id').innerText = `ID: BDBUS-${user.id}`;
-            document.getElementById('dl-name').innerText = user.name.toUpperCase();
-            document.getElementById('dl-gameid').innerText = user.gameid.toUpperCase();
-            document.getElementById('dl-dob').innerText = user.dob;
-            document.getElementById('dl-gender').innerText = user.gender.toUpperCase();
-            document.getElementById('dl-phone').innerText = user.phone;
-            document.getElementById('dl-division').innerText = (user.division || "Dhaka").toUpperCase();
-            document.getElementById('dl-district').innerText = (user.district || "Dhaka").toUpperCase();
-            document.getElementById('dl-sign-name').innerText = user.name;
-        }
-        
-        function executeDrivingLicenceDownloadEngine() {
-            alert("Compiling high resolution smart driving licence graphics asset...");
-            const target = document.getElementById('digital-licence-card');
-            
-            html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = `BDBUS_Driving_Licence_ID_${activeUserSession.id}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                alert("Driving Licence downloaded successfully!");
-            });
+            if (typeof window.refreshSmartLicenceView === 'function') {
+                window.refreshSmartLicenceView(activeUserSession);
+            }
         }
 
         function calculateFareSystemLogic() {
@@ -3274,7 +3746,7 @@
         }
 
         window.addEventListener('popstate', (event) => {
-            if(activeUserSession && internalNavigationHistoryArray.length > 1) {
+            if(activeUserSession && (isLicenceUpdateSubViewOpen || internalNavigationHistoryArray.length > 1)) {
                 history.pushState(null, null, window.location.pathname);
                 executeHardwareBackTrigger();
             }
@@ -3441,37 +3913,469 @@
         }
         // ===========================================================================
 
-        window.addEventListener('DOMContentLoaded', async () => {
+        // ================= SMART DRIVING LICENCE CONTROLLER ====================
+        (function initSmartDrivingLicenceSystem() {
+            const runInit = () => {
+                const BDBUS_WATERMARK_LOGO_DATA_URL = 'images/BDBUS Group Official Logo.png';
+                const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
+                const STORAGE_KEY = 'smart_driving_licence_data_v3';
+
+                const sampleData = {
+                    fullName: 'MD. ARIFUL ISLAM (মোঃ আরিফুল ইসলাম)',
+                    parentName: 'MD. ABDUR RAHMAN (মোঃ আব্দুর রহমান)',
+                    dob: '15 AUG 1994',
+                    bloodGroup: 'B+',
+                    licenceNo: 'DK0123456CL0009',
+                    issueDate: '10 JAN 2024',
+                    expiryDate: '09 JAN 2034',
+                    vehicleClass: 'LIGHT, MOTORCYCLE',
+                    signatureText: 'Ariful Islam',
+                    address: 'বাসা-১২, রোড-০৫, ধানমন্ডি, ঢাকা-১২০৫ (House-12, Road-05, Dhanmondi, Dhaka-1205)',
+                    nid: '19942691234567890',
+                    conditions: 'Non-Professional (অপেশাদার) • Light Motor Vehicle & Motorcycle Only. No Special Restrictions.',
+                    photoDataUrl: 'https://placehold.co/300x350/e2e8f0/334155?text=300x350+Photo',
+                    signatureDataUrl: ''
+                };
+
+                const root = document.getElementById('bd-smart-dl-system');
+                if (!root) return;
+
+                const licenceCardPage = root.querySelector('#dlLicenceCardPage');
+                const updateFormPage = root.querySelector('#dlUpdateFormPage');
+                const btnGoToUpdatePage = root.querySelector('#dlBtnGoToUpdatePage');
+
+                const flipper = root.querySelector('#dlSmartCardFlipper');
+                const btnShowFront = root.querySelector('#dlBtnShowFront');
+                const btnShowBack = root.querySelector('#dlBtnShowBack');
+
+                const form = root.querySelector('#dlLicenceForm');
+                const inputPhoto = root.querySelector('#dlInputPhoto');
+                const inputSignatureImg = root.querySelector('#dlInputSignatureImg');
+                const inputFullName = root.querySelector('#dlInputFullName');
+                const inputParentName = root.querySelector('#dlInputParentName');
+                const inputDob = root.querySelector('#dlInputDob');
+                const bloodGroupRadios = root.querySelectorAll('input[name="dlBloodGroup"]');
+                const inputLicenceNo = root.querySelector('#dlInputLicenceNo');
+                const inputSignatureText = root.querySelector('#dlInputSignatureText');
+                const inputIssueDate = root.querySelector('#dlInputIssueDate');
+                const inputExpiryDate = root.querySelector('#dlInputExpiryDate');
+                const inputVehicleClass = root.querySelector('#dlInputVehicleClass');
+                const inputAddress = root.querySelector('#dlInputAddress');
+                const inputNid = root.querySelector('#dlInputNid');
+                const inputConditions = root.querySelector('#dlInputConditions');
+                const inputConfirmTick = root.querySelector('#dlInputConfirmTick');
+
+                const previewPhoto = root.querySelector('#dlPreviewPhoto');
+                const previewSignatureImg = root.querySelector('#dlPreviewSignatureImg');
+                const previewSignatureText = root.querySelector('#dlPreviewSignatureText');
+                const previewFullName = root.querySelector('#dlPreviewFullName');
+                const previewParentName = root.querySelector('#dlPreviewParentName');
+                const previewDob = root.querySelector('#dlPreviewDob');
+                const previewBloodGroup = root.querySelector('#dlPreviewBloodGroup');
+                const previewLicenceNo = root.querySelector('#dlPreviewLicenceNo');
+                const previewIssueDate = root.querySelector('#dlPreviewIssueDate');
+                const previewExpiryDate = root.querySelector('#dlPreviewExpiryDate');
+                const previewVehicleClass = root.querySelector('#dlPreviewVehicleClass');
+                const previewAddress = root.querySelector('#dlPreviewAddress');
+                const previewNid = root.querySelector('#dlPreviewNid');
+                const previewConditions = root.querySelector('#dlPreviewConditions');
+                const previewBarcodeLabel = root.querySelector('#dlPreviewBarcodeLabel');
+                const qrcodeContainer = root.querySelector('#dlQrcodeContainer');
+
+                let currentPhotoUrl = sampleData.photoDataUrl;
+                let currentSignatureUrl = sampleData.signatureDataUrl;
+
+                function applyWatermarkLogo() {
+                    const imgs = root.querySelectorAll('.dl-watermark-img');
+                    const fallbacks = root.querySelectorAll('.dl-watermark-fallback');
+
+                    if (BDBUS_WATERMARK_LOGO_DATA_URL && BDBUS_WATERMARK_LOGO_DATA_URL.trim() !== '') {
+                        imgs.forEach(img => {
+                            img.src = BDBUS_WATERMARK_LOGO_DATA_URL.trim();
+                            img.style.display = 'block';
+                            img.onerror = () => {
+                                img.style.display = 'none';
+                                fallbacks.forEach(el => el.style.display = 'block');
+                            };
+                        });
+                        fallbacks.forEach(el => el.style.display = 'none');
+                    } else {
+                        imgs.forEach(img => img.style.display = 'none');
+                        fallbacks.forEach(el => el.style.display = 'block');
+                    }
+                }
+
+                function showToast(enMsg, bnMsg) {
+                    const banner = root.querySelector('#dlToastBanner');
+                    const messageEl = root.querySelector('#dlToastMessage');
+                    const lang = localStorage.getItem('bdbus_lang') || selectedLanguage || 'en';
+                    messageEl.setAttribute('data-en', enMsg);
+                    messageEl.setAttribute('data-bn', bnMsg);
+                    messageEl.textContent = lang === 'bn' ? bnMsg : enMsg;
+                    banner.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        banner.style.transform = 'translateY(0)';
+                        banner.style.opacity = '1';
+                    });
+                    setTimeout(() => {
+                        banner.style.transform = 'translateY(16px)';
+                        banner.style.opacity = '0';
+                        setTimeout(() => { banner.style.display = 'none'; }, 300);
+                    }, 2800);
+                }
+
+                function openUpdatePage() {
+                    isLicenceUpdateSubViewOpen = true;
+                    licenceCardPage.style.display = 'none';
+                    updateFormPage.style.display = 'block';
+                    if (typeof updateBackButtonVisibility === 'function') {
+                        updateBackButtonVisibility();
+                    }
+                    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
+                function openCardPage() {
+                    isLicenceUpdateSubViewOpen = false;
+                    updateFormPage.style.display = 'none';
+                    licenceCardPage.style.display = 'flex';
+                    if (typeof updateBackButtonVisibility === 'function') {
+                        updateBackButtonVisibility();
+                    }
+                    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
+                window.closeLicenceUpdateSubView = openCardPage;
+                btnGoToUpdatePage.addEventListener('click', openUpdatePage);
+
+                function getSelectedBloodGroup() {
+                    const checked = root.querySelector('input[name="dlBloodGroup"]:checked');
+                    return checked ? checked.value : sampleData.bloodGroup;
+                }
+
+                function setSelectedBloodGroup(groupValue) {
+                    bloodGroupRadios.forEach(radio => {
+                        radio.checked = (radio.value === groupValue);
+                    });
+                }
+
+                function showFrontSide() {
+                    flipper.classList.remove('is-flipped');
+                    btnShowFront.style.background = 'var(--btn-gradient-1)';
+                    btnShowFront.style.color = '#000';
+                    btnShowFront.style.border = 'none';
+                    btnShowBack.style.background = '#1e293b';
+                    btnShowBack.style.color = 'var(--text-light)';
+                    btnShowBack.style.border = '1px solid rgba(255,255,255,0.12)';
+                }
+
+                function showBackSide() {
+                    flipper.classList.add('is-flipped');
+                    btnShowBack.style.background = 'var(--btn-gradient-1)';
+                    btnShowBack.style.color = '#000';
+                    btnShowBack.style.border = 'none';
+                    btnShowFront.style.background = '#1e293b';
+                    btnShowFront.style.color = 'var(--text-light)';
+                    btnShowFront.style.border = '1px solid rgba(255,255,255,0.12)';
+                }
+
+                btnShowFront.addEventListener('click', showFrontSide);
+                btnShowBack.addEventListener('click', showBackSide);
+
+                function renderQRCode(data) {
+                    qrcodeContainer.innerHTML = '';
+                    const qrPayload = `DL:${data.licenceNo}|NAME:${data.fullName}|DOB:${data.dob}|NID:${data.nid}|EXP:${data.expiryDate}`;
+                    try {
+                        new QRCode(qrcodeContainer, {
+                            text: qrPayload,
+                            width: 80,
+                            height: 80,
+                            colorDark: '#0f172a',
+                            colorLight: '#ffffff',
+                            correctLevel: QRCode.CorrectLevel.M
+                        });
+                    } catch (err) {
+                        qrcodeContainer.innerHTML = '<span class="font-en" style="font-size: 9px; color: #64748b;">QR READY</span>';
+                    }
+                }
+
+                function syncCardPreview(saveToStorage = false) {
+                    const data = {
+                        fullName: inputFullName.value.trim() || sampleData.fullName,
+                        parentName: inputParentName.value.trim() || sampleData.parentName,
+                        dob: inputDob.value.trim() || sampleData.dob,
+                        bloodGroup: getSelectedBloodGroup(),
+                        licenceNo: (inputLicenceNo.value.trim() || sampleData.licenceNo).toUpperCase(),
+                        issueDate: inputIssueDate.value.trim() || sampleData.issueDate,
+                        expiryDate: inputExpiryDate.value.trim() || sampleData.expiryDate,
+                        vehicleClass: (inputVehicleClass.value.trim() || sampleData.vehicleClass).toUpperCase(),
+                        signatureText: inputSignatureText.value.trim() || sampleData.signatureText,
+                        address: inputAddress.value.trim() || sampleData.address,
+                        nid: inputNid.value.trim() || sampleData.nid,
+                        conditions: inputConditions.value.trim() || sampleData.conditions,
+                        photoDataUrl: currentPhotoUrl,
+                        signatureDataUrl: currentSignatureUrl
+                    };
+
+                    previewPhoto.src = data.photoDataUrl;
+                    previewFullName.textContent = data.fullName;
+                    previewParentName.textContent = data.parentName;
+                    previewDob.textContent = data.dob;
+                    previewBloodGroup.textContent = data.bloodGroup;
+                    previewLicenceNo.textContent = data.licenceNo;
+                    previewIssueDate.textContent = data.issueDate;
+                    previewExpiryDate.textContent = data.expiryDate;
+                    previewVehicleClass.textContent = data.vehicleClass;
+
+                    if (data.signatureDataUrl) {
+                        previewSignatureImg.src = data.signatureDataUrl;
+                        previewSignatureImg.style.display = 'block';
+                        previewSignatureText.style.display = 'none';
+                    } else {
+                        previewSignatureImg.style.display = 'none';
+                        previewSignatureText.style.display = 'inline-block';
+                        previewSignatureText.textContent = data.signatureText;
+                    }
+
+                    previewAddress.textContent = data.address;
+                    previewNid.textContent = data.nid;
+                    previewConditions.textContent = data.conditions;
+                    previewBarcodeLabel.textContent = data.licenceNo.slice(0, 10);
+
+                    renderQRCode(data);
+
+                    if (saveToStorage) {
+                        try {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                        } catch (e) {
+                            console.warn('LocalStorage limit reached for large image.');
+                        }
+                    }
+                }
+
+                function loadSavedData(sessionUser = null) {
+                    try {
+                        const raw = localStorage.getItem(STORAGE_KEY);
+                        if (raw) {
+                            const saved = JSON.parse(raw);
+                            if (saved.fullName) inputFullName.value = saved.fullName;
+                            if (saved.parentName) inputParentName.value = saved.parentName;
+                            if (saved.dob) inputDob.value = saved.dob;
+                            if (saved.bloodGroup) setSelectedBloodGroup(saved.bloodGroup);
+                            if (saved.licenceNo) inputLicenceNo.value = saved.licenceNo;
+                            if (saved.issueDate) inputIssueDate.value = saved.issueDate;
+                            if (saved.expiryDate) inputExpiryDate.value = saved.expiryDate;
+                            if (saved.vehicleClass) inputVehicleClass.value = saved.vehicleClass;
+                            if (saved.signatureText) inputSignatureText.value = saved.signatureText;
+                            if (saved.address) inputAddress.value = saved.address;
+                            if (saved.nid) inputNid.value = saved.nid;
+                            if (saved.conditions) inputConditions.value = saved.conditions;
+                            currentPhotoUrl = saved.photoDataUrl || sampleData.photoDataUrl;
+                            currentSignatureUrl = saved.signatureDataUrl || '';
+                        } else if (sessionUser) {
+                            if (sessionUser.name) inputFullName.value = sessionUser.name.toUpperCase();
+                            if (sessionUser.dob) inputDob.value = sessionUser.dob;
+                            if (sessionUser.id) inputLicenceNo.value = `BDBUS-${sessionUser.id}`;
+                            if (sessionUser.name) inputSignatureText.value = sessionUser.name;
+                            if (sessionUser.district || sessionUser.division) {
+                                inputAddress.value = `${sessionUser.district || ''}${sessionUser.district && sessionUser.division ? ', ' : ''}${sessionUser.division || ''}`;
+                            }
+                            if (sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
+                                currentPhotoUrl = sessionUser.avatar;
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error loading saved data:', err);
+                    }
+                    syncCardPreview(false);
+                }
+
+                window.refreshSmartLicenceView = function(sessionUser = null) {
+                    openCardPage();
+                    applyWatermarkLogo();
+                    loadSavedData(sessionUser);
+                };
+
+                window.syncSessionToSmartLicence = function(sessionUser) {
+                    if (!sessionUser) return;
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw && sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
+                        currentPhotoUrl = sessionUser.avatar;
+                        syncCardPreview(false);
+                    }
+                };
+
+                inputPhoto.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    if (file.size > MAX_FILE_SIZE_BYTES) {
+                        showToast('Driver photo must be under 2 MB!', 'চালকের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
+                        inputPhoto.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        currentPhotoUrl = event.target.result;
+                        syncCardPreview(true);
+                        showToast('Driver photo updated!', 'চালকের ছবি আপডেট করা হয়েছে!');
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                inputSignatureImg.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    if (file.size > MAX_FILE_SIZE_BYTES) {
+                        showToast('Signature image must be under 2 MB!', 'স্বাক্ষরের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
+                        inputSignatureImg.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        currentSignatureUrl = event.target.result;
+                        syncCardPreview(true);
+                        showToast('Signature image updated!', 'স্বাক্ষরের ছবি আপডেট করা হয়েছে!');
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                inputSignatureText.addEventListener('input', () => {
+                    currentSignatureUrl = '';
+                    inputSignatureImg.value = '';
+                    syncCardPreview(false);
+                });
+
+                const liveInputs = [
+                    inputFullName, inputParentName, inputDob,
+                    inputLicenceNo, inputIssueDate, inputExpiryDate, inputVehicleClass,
+                    inputAddress, inputNid, inputConditions
+                ];
+                liveInputs.forEach(el => {
+                    el.addEventListener('input', () => syncCardPreview(false));
+                    el.addEventListener('change', () => syncCardPreview(false));
+                });
+                bloodGroupRadios.forEach(radio => {
+                    radio.addEventListener('change', () => syncCardPreview(false));
+                });
+
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (!inputConfirmTick.checked) {
+                        showToast('Please tick the confirmation checkbox first!', 'অনুগ্রহ করে নিশ্চিতকরণ টিক মার্ক বক্সে টিক দিন!');
+                        return;
+                    }
+                    syncCardPreview(true);
+                    showToast('All details updated & saved successfully!', 'সকল তথ্য সফলভাবে আপডেট ও সংরক্ষণ হয়েছে!');
+                    openCardPage();
+                });
+
+                async function downloadCardSide(elementId, filename, prepareFn) {
+                    if (typeof html2canvas === 'undefined') {
+                        showToast('Download library is loading, please try again.', 'ডাউনলোড লাইব্রেরি লোড হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন।');
+                        return;
+                    }
+                    prepareFn();
+                    showToast('Generating image...', 'ছবি তৈরি হচ্ছে...');
+                    setTimeout(async () => {
+                        try {
+                            const target = root.querySelector(`#${elementId}`);
+                            const originalTransform = target.style.transform;
+                            target.style.transform = 'none';
+
+                            const canvas = await html2canvas(target, {
+                                scale: 3,
+                                useCORS: true,
+                                backgroundColor: null
+                            });
+
+                            target.style.transform = originalTransform;
+
+                            const link = document.createElement('a');
+                            link.download = filename;
+                            link.href = canvas.toDataURL('image/png');
+                            link.click();
+                            showToast(`${filename} downloaded!`, `${filename} ডাউনলোড সম্পন্ন হয়েছে!`);
+                        } catch (err) {
+                            console.error(err);
+                            showToast('Error downloading image.', 'ছবি ডাউনলোড করতে সমস্যা হয়েছে।');
+                        }
+                    }, 450);
+                }
+
+                root.querySelector('#dlBtnDownloadFront').addEventListener('click', () => {
+                    downloadCardSide('dlCardFrontCapture', 'Driving-Licence-Front.png', showFrontSide);
+                });
+
+                root.querySelector('#dlBtnDownloadBack').addEventListener('click', () => {
+                    downloadCardSide('dlCardBackCapture', 'Driving-Licence-Back.png', showBackSide);
+                });
+
+                applyWatermarkLogo();
+                loadSavedData(activeUserSession);
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', runInit);
+            } else {
+                runInit();
+            }
+        })();
+
+        window.onload = async () => {
             await verifyDatabaseStructureSeeding();
-            initRealtimeRoomSettingsListener();
             initialClockHeartbeatEngine();
+            initSearchableDropdownSystem();
             initBackgroundAutoSyncEngine();
             
-            let initialLang = localStorage.getItem('bdbus_lang') || 'en';
-            setLanguageSystem(initialLang);
+            setLanguageSystem(selectedLanguage);
 
-            initSearchableDropdownSystem();
+            const savedUserSession = localStorage.getItem('bdbus_active_session');
+            const savedScreenId = sessionStorage.getItem('bdbus_persistent_screen_id');
 
-            history.pushState(null, null, window.location.pathname);
-            const globalFooter = document.getElementById('main-global-footer');
+            if (savedUserSession) {
+                try {
+                    const userData = JSON.parse(savedUserSession);
+                    activeUserSession = userData;
+                    document.body.classList.add('logged-in');
+                    document.getElementById('header-nav-controls').style.display = 'flex';
+                    document.getElementById('header-empty-space').style.display = 'none';
+                    document.getElementById('main-global-footer').style.display = 'block';
+                    
+                    if(hasAnyAdminPanelPermission(userData)) {
+                        document.getElementById('admin-menu-link').style.display = 'flex';
+                    }
+                    
+                    document.getElementById('live-marquee-node').innerText = db.notices;
 
-            if(activeUserSession && !activeUserSession.isBanned) {
-                document.body.classList.add('logged-in');
-                document.getElementById('header-nav-controls').style.display = 'flex';
-                document.getElementById('header-empty-space').style.display = 'none';
-                if(globalFooter) globalFooter.style.display = 'block';
-                
-                if(hasAnyAdminPanelPermission(activeUserSession)) {
-                    document.getElementById('admin-menu-link').style.display = 'flex';
+                    if (savedScreenId && savedScreenId !== 'auth-screen') {
+                        navigatePage(savedScreenId, false);
+                    } else {
+                        navigatePage('home-screen', false);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse saved session", e);
+                    navigatePage('auth-screen', false);
                 }
-                
-                const savedScreenTargetPersistedId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
-                navigatePage(savedScreenTargetPersistedId);
             } else {
-                if(globalFooter) globalFooter.style.display = 'none'; 
-                navigatePage('auth-screen');
+                document.getElementById('header-nav-controls').style.display = 'none';
+                document.getElementById('header-empty-space').style.display = 'block';
+                document.getElementById('main-global-footer').style.display = 'none';
+                navigatePage('auth-screen', false);
             }
-        });
+
+            if(activeUserSession && (isLicenceUpdateSubViewOpen || internalNavigationHistoryArray.length > 1)) {
+                history.pushState(null, null, window.location.pathname);
+            }
+
+            const chatInputField = document.getElementById('chatInput');
+            if (chatInputField) {
+                chatInputField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendChatMessage();
+                    }
+                });
+            }
+        };
     </script>
 </body>
 </html>
