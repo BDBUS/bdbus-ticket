@@ -41,6 +41,9 @@
             if (typeof initRealtimeRoomSettingsListener === 'function') {
                 initRealtimeRoomSettingsListener();
             }
+            if (typeof window.syncLicenceFromFirebase === 'function') {
+                window.syncLicenceFromFirebase();
+            }
         } catch (error) {
             console.error("Firebase Initialization Error:", error);
         }
@@ -696,7 +699,6 @@
             font-family: 'Caveat', cursive;
         }
 
-        /* 3D Card Flip Container */
         #bd-smart-dl-system .perspective-container {
             perspective: 1400px;
             width: 100%;
@@ -730,7 +732,6 @@
             transform: rotateY(180deg);
         }
 
-        /* Security Backgrounds tuned to BDBUS Dark/Neon palette while keeping crisp card legibility */
         #bd-smart-dl-system .security-bg {
             background:
                 radial-gradient(circle at 85% 20%, rgba(0, 242, 254, 0.16) 0%, transparent 45%),
@@ -1098,7 +1099,7 @@
         </div>
     </div>
 
-    <!-- ==================== DRIVING LICENCE SCREEN (UPDATED DESIGN + UPDATE PAGE) ==================== -->
+    <!-- ==================== DRIVING LICENCE SCREEN (FIREBASE CONNECTED) ==================== -->
     <div id="licence-screen" class="page-screen">
         <div id="bd-smart-dl-system" style="padding: 10px 0 24px;">
             <!-- Toast Notification -->
@@ -1134,8 +1135,8 @@
                                         <span style="width: 14px; height: 14px; border-radius: 50%; background: #f42a41; margin-left: -2px; display: block;"></span>
                                     </div>
                                     <div>
-                                        <p class="font-en" style="font-size: 12px; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
-                                            BANGLADESH BUSSID UNIQUE SOCIETY
+                                        <p class="font-en" style="font-size: 9px; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.1;">
+                                            PEOPLE'S REPUBLIC OF BANGLADESH
                                         </p>
                                         <h3 style="font-size: 13px; font-weight: 800; color: #b91c1c; letter-spacing: -0.2px; line-height: 1.2;">
                                             DRIVING LICENCE <span style="font-size: 10px; font-weight: 600; color: #064e3b;">(স্মার্ট কার্ড)</span>
@@ -1144,7 +1145,7 @@
                                 </div>
                                 <div style="text-align: right;">
                                     <span class="font-en" style="display: inline-block; padding: 2px 8px; border-radius: 5px; background: #065f46; color: #ffffff; font-size: 9px; font-weight: 700; letter-spacing: 1px;">
-                                        BDBUS
+                                        BRTA
                                     </span>
                                     <p class="font-en" style="font-size: 8px; color: #475569; margin-top: 2px;">SMART CARD</p>
                                 </div>
@@ -1263,7 +1264,7 @@
                             </div>
 
                             <div class="microprint-strip font-en" style="position: relative; z-index: 10; color: rgba(6, 78, 59, 0.65); border-top: 1px solid rgba(6, 78, 59, 0.2); padding-top: 3px;">
-                                BANGLADESH ROAD TRANSPORT AUTHORITY • SMART CARD DRIVING LICENCE • SECURITY VERIFIED DOCUMENT • BDBUS •
+                                BANGLADESH ROAD TRANSPORT AUTHORITY • SMART CARD DRIVING LICENCE • SECURITY VERIFIED DOCUMENT • BRTA •
                             </div>
                         </div>
 
@@ -1346,11 +1347,11 @@
 
                             <div style="position: relative; z-index: 10; border-top: 1px solid #cbd5e1; padding-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 8.5px; color: #475569;">
                                 <div style="line-height: 1.25;">
-                                    <p style="font-weight: 600; color: #1e293b;" class="lang-node" data-en="Instruction: Carry this licence while driving. If lost, report to nearby police station & BRTA." data-bn="নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BDBUS-তে জানান।">
-                                        নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BDBUS-তে জানান।
+                                    <p style="font-weight: 600; color: #1e293b;" class="lang-node" data-en="Instruction: Carry this licence while driving. If lost, report to nearby police station & BRTA." data-bn="নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BRTA-তে জানান।">
+                                        নির্দেশনা: গাড়ি চালানোর সময় লাইসেন্সটি সাথে রাখুন। হারিয়ে গেলে নিকটস্থ থানায় ও BRTA-তে জানান।
                                     </p>
                                     <p class="font-en" style="font-size: 7.5px; color: #64748b;">
-                                        Issuing Authority: BDBUS • Digital Simulation / Sample Card Preview Only
+                                        Issuing Authority: BRTA • Digital Simulation / Sample Card Preview Only
                                     </p>
                                 </div>
                                 <div class="font-en" style="padding: 2px 7px; border-radius: 5px; background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; font-weight: 700; font-size: 8px; flex-shrink: 0;">
@@ -1362,7 +1363,7 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons (Matching BDBUS Neon/Dark Palette) -->
+                <!-- Action Buttons -->
                 <div class="dl-dark-panel" style="width: 100%; padding: 14px; margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
                     <button id="dlBtnShowFront" type="button" class="btn-premium lang-node" data-en="Show Front Side" data-bn="সামনের সাইট দেখুন" style="justify-content: center; border-radius: 12px; padding: 10px 14px; font-size: 13px;">
                         Show Front Side
@@ -1396,13 +1397,12 @@
                         <h2 style="font-size: 19px; font-weight: 700; color: var(--neon-blue);" class="lang-node" data-en="Update Driving Licence Information" data-bn="লাইসেন্সের তথ্য আপডেট করুন">
                             Update Driving Licence Information
                         </h2>
-                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Changes in the form below update the front and back of your licence card." data-bn="নিচের ফর্মে তথ্য পরিবর্তন করলে কার্ডের সামনের ও পিছনের সাইডে আপডেট দেখা যাবে।">
-                            Changes in the form below update the front and back of your licence card.
+                        <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Changes in the form below sync directly with Firebase and update your licence card." data-bn="নিচের ফর্মে তথ্য পরিবর্তন করলে তা ফায়ারবেজে সংরক্ষিত হবে এবং কার্ডে আপডেট দেখা যাবে।">
+                            Changes in the form below sync directly with Firebase and update your licence card.
                         </p>
                     </div>
 
                     <form id="dlLicenceForm" style="display: flex; flex-direction: column; gap: 20px;">
-                        <!-- Front Side Fields -->
                         <div style="background: rgba(0, 242, 254, 0.04); padding: 16px; border-radius: 14px; border: 1px solid rgba(0, 242, 254, 0.16); display: flex; flex-direction: column; gap: 14px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
                                 <h3 style="font-size: 13px; font-weight: 700; color: var(--neon-green); text-transform: uppercase; letter-spacing: 0.6px;" class="lang-node" data-en="1. Front Side Details" data-bn="১. সামনের সাইডের তথ্যসমূহ (Front Side)">
@@ -1413,19 +1413,19 @@
 
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
                                 <div>
-                                    <label for="dlInputPhoto" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="1. Upload Driver Photo (300×350 px, max 300 KB)" data-bn="১. চালকের রঙিন ছবি আপলোড করুন (300×350 px, সর্বোচ্চ ৩০০ KB)">
-                                        1. Upload Driver Photo (300×350 px, max 300 KB)
+                                    <label for="dlInputPhoto" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="1. Upload Driver Photo (300×350 px, max 2 MB)" data-bn="১. চালকের রঙিন ছবি আপলোড করুন (300×350 px, সর্বোচ্চ ২ MB)">
+                                        1. Upload Driver Photo (300×350 px, max 2 MB)
                                     </label>
                                     <input id="dlInputPhoto" type="file" accept="image/*" class="dl-dark-file" />
-                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×350 px | Max 300 KB" data-bn="নির্ধারিত সাইজ: 300×350 px | সর্বোচ্চ ৩০০ KB">Recommended: 300×350 px | Max 300 KB</p>
+                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×350 px | Max 2 MB" data-bn="নির্ধারিত সাইজ: 300×350 px | সর্বোচ্চ ২ MB">Recommended: 300×350 px | Max 2 MB</p>
                                 </div>
 
                                 <div>
-                                    <label for="dlInputSignatureImg" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="9. Signature Image (or type name below) (300×100 px, max 300 KB)" data-bn="৯. স্বাক্ষরের ছবি (অথবা নিচে নাম লিখুন) (300×100 px, সর্বোচ্চ ৩০০ KB)">
-                                        9. Signature Image (or type name below) (300×100 px, max 300 KB)
+                                    <label for="dlInputSignatureImg" style="display: block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px;" class="lang-node" data-en="9. Signature Image (or type name below) (300×100 px, max 2 MB)" data-bn="৯. স্বাক্ষরের ছবি (অথবা নিচে নাম লিখুন) (300×100 px, সর্বোচ্চ ২ MB)">
+                                        9. Signature Image (or type name below) (300×100 px, max 2 MB)
                                     </label>
                                     <input id="dlInputSignatureImg" type="file" accept="image/*" class="dl-dark-file" />
-                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×100 px | Max 300 KB" data-bn="নির্ধারিত সাইজ: 300×100 px | সর্বোচ্চ ৩০০ KB">Recommended: 300×100 px | Max 300 KB</p>
+                                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" class="lang-node" data-en="Recommended: 300×100 px | Max 2 MB" data-bn="নির্ধারিত সাইজ: 300×100 px | সর্বোচ্চ ২ MB">Recommended: 300×100 px | Max 2 MB</p>
                                 </div>
                             </div>
 
@@ -1530,7 +1530,6 @@
                             </div>
                         </div>
 
-                        <!-- Back Side Fields -->
                         <div style="background: rgba(79, 172, 254, 0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(79, 172, 254, 0.2); display: flex; flex-direction: column; gap: 14px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
                                 <h3 style="font-size: 13px; font-weight: 700; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 0.6px;" class="lang-node" data-en="2. Back Side Details" data-bn="২. পিছনের সাইডের তথ্যসমূহ (Back Side)">
@@ -1998,7 +1997,7 @@
             }
 
             if (text.includes("licence") || text.includes("license") || text.includes("লাইসেন্স") || text.includes("পারমিট")) {
-                return "After registration or login, you will find your 'Smart Driving Licence' in the menu. You can flip front/back, save images, or update details on the update page.";
+                return "After registration or login, you will find your 'Smart Driving Licence' in the menu. You can flip front/back, save images, or update details synced with Firebase.";
             }
             if (text.includes("wallet") || text.includes("bonus") || text.includes("বোনাস") || text.includes("টাকা") || text.includes("ব্যালেন্স") || text.includes("রিচার্জ")) {
                 return "You will get welcome and subscription bonuses in your new account. If wallet balance is insufficient, you can top up from the recharge options.";
@@ -2072,8 +2071,6 @@
         };
 
         let activeUserSession = JSON.parse(localStorage.getItem('bdbus_active_session')) || null;
-        
-        // Default language is always English unless changed by user
         let selectedLanguage = localStorage.getItem('bdbus_lang') || 'en';
         
         let currentlyChosenSeats = [];
@@ -2092,7 +2089,6 @@
             "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
         ];
 
-        // ================= TRIP-SPECIFIC SEAT KEY GENERATOR =================
         function getCurrentTripScopeKey() {
             const fromVal = (document.getElementById('route-from')?.value || '').trim().toLowerCase();
             const toVal = (document.getElementById('route-to')?.value || '').trim().toLowerCase();
@@ -2125,7 +2121,6 @@
 
             return `${fromStr} → ${toStr} | ${dateStr} | ${timeStr} | ${coachName} | Seat-${seatNo}`;
         }
-        // ===================================================================
 
         function getDefaultPermissions() {
             return {
@@ -2545,6 +2540,10 @@
             }
 
             document.getElementById('live-marquee-node').innerText = db.notices;
+
+            if (typeof window.syncLicenceFromFirebase === 'function') {
+                window.syncLicenceFromFirebase();
+            }
 
             triggerGlobalWelcomePopup(user);
             navigatePage('home-screen');
@@ -3871,6 +3870,10 @@
                         liveRoomSettings = roomSnap.data();
                         applyLiveRoomSettingsToTicketUI();
                     }
+
+                    if (typeof window.syncLicenceFromFirebase === 'function') {
+                        await window.syncLicenceFromFirebase();
+                    }
                 }
 
                 const activeScreen = document.querySelector('.page-screen.active');
@@ -3913,12 +3916,12 @@
         }
         // ===========================================================================
 
-                // ================= SMART DRIVING LICENCE + FIREBASE SYNC ====================
+        // ================= SMART DRIVING LICENCE + FIREBASE SYNC CONTROLLER ====================
         (function initSmartDrivingLicenceSystem() {
             const runInit = () => {
                 const BDBUS_WATERMARK_LOGO_DATA_URL = 'images/BDBUS Group Official Logo.png';
                 const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
-                const STORAGE_KEY = 'smart_driving_licence_data_v3';
+                const STORAGE_KEY_PREFIX = 'smart_driving_licence_data_v3_';
 
                 const sampleData = {
                     fullName: 'MD. ARIFUL ISLAM (মোঃ আরিফুল ইসলাম)',
@@ -3985,6 +3988,43 @@
                 let currentPhotoUrl = sampleData.photoDataUrl;
                 let currentSignatureUrl = sampleData.signatureDataUrl;
 
+                function getUserLicenceDocKey() {
+                    if (activeUserSession && activeUserSession.email) {
+                        return activeUserSession.email.trim().toLowerCase();
+                    }
+                    return 'guest_default';
+                }
+
+                function getLocalLicenceStorageKey() {
+                    return STORAGE_KEY_PREFIX + getUserLicenceDocKey();
+                }
+
+                function compressDataUrlForFirestore(dataUrl, maxWidth = 420, quality = 0.72) {
+                    return new Promise((resolve) => {
+                        if (!dataUrl || !dataUrl.startsWith('data:image/')) {
+                            resolve(dataUrl || '');
+                            return;
+                        }
+                        const img = new Image();
+                        img.onload = () => {
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > maxWidth) {
+                                h = Math.round((h * maxWidth) / w);
+                                w = maxWidth;
+                            }
+                            const canvas = document.createElement('canvas');
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, w, h);
+                            resolve(canvas.toDataURL('image/jpeg', quality));
+                        };
+                        img.onerror = () => resolve(dataUrl);
+                        img.src = dataUrl;
+                    });
+                }
+
                 function applyWatermarkLogo() {
                     const imgs = root.querySelectorAll('.dl-watermark-img');
                     const fallbacks = root.querySelectorAll('.dl-watermark-fallback');
@@ -4024,33 +4064,6 @@
                     }, 2800);
                 }
 
-                function compressImageToDataUrl(dataUrl, maxWidth = 420, maxHeight = 420, quality = 0.72) {
-                    return new Promise((resolve) => {
-                        if (!dataUrl || !dataUrl.startsWith('data:image')) {
-                            resolve(dataUrl || '');
-                            return;
-                        }
-                        const img = new Image();
-                        img.onload = () => {
-                            let width = img.width;
-                            let height = img.height;
-                            if (width > maxWidth || height > maxHeight) {
-                                const ratio = Math.min(maxWidth / width, maxHeight / height);
-                                width = Math.round(width * ratio);
-                                height = Math.round(height * ratio);
-                            }
-                            const canvas = document.createElement('canvas');
-                            canvas.width = width;
-                            canvas.height = height;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0, width, height);
-                            resolve(canvas.toDataURL('image/jpeg', quality));
-                        };
-                        img.onerror = () => resolve(dataUrl);
-                        img.src = dataUrl;
-                    });
-                }
-
                 function openUpdatePage() {
                     isLicenceUpdateSubViewOpen = true;
                     licenceCardPage.style.display = 'none';
@@ -4125,87 +4138,22 @@
                     }
                 }
 
-                function applyDataToInputsAndPreview(sourceData, saveLocal = false) {
-                    if (!sourceData) return;
-                    if (sourceData.fullName) inputFullName.value = sourceData.fullName;
-                    if (sourceData.parentName) inputParentName.value = sourceData.parentName;
-                    if (sourceData.dob) inputDob.value = sourceData.dob;
-                    if (sourceData.bloodGroup) setSelectedBloodGroup(sourceData.bloodGroup);
-                    if (sourceData.licenceNo) inputLicenceNo.value = sourceData.licenceNo;
-                    if (sourceData.issueDate) inputIssueDate.value = sourceData.issueDate;
-                    if (sourceData.expiryDate) inputExpiryDate.value = sourceData.expiryDate;
-                    if (sourceData.vehicleClass) inputVehicleClass.value = sourceData.vehicleClass;
-                    if (sourceData.signatureText) inputSignatureText.value = sourceData.signatureText;
-                    if (sourceData.address) inputAddress.value = sourceData.address;
-                    if (sourceData.nid) inputNid.value = sourceData.nid;
-                    if (sourceData.conditions) inputConditions.value = sourceData.conditions;
-                    currentPhotoUrl = sourceData.photoDataUrl || sampleData.photoDataUrl;
-                    currentSignatureUrl = sourceData.signatureDataUrl || '';
-
-                    syncCardPreview(saveLocal, false);
-                }
-
-                async function saveLicenceToFirebase(licencePayload) {
-                    const sessionEmail = (typeof activeUserSession !== 'undefined' && activeUserSession && activeUserSession.email)
-                        ? activeUserSession.email
-                        : null;
-
-                    if (!sessionEmail || !window.FirebaseDb || !window.FirebaseFirestore) {
-                        return false;
-                    }
-
-                    try {
-                        const safePhoto = await compressImageToDataUrl(licencePayload.photoDataUrl, 360, 420, 0.72);
-                        const safeSig = await compressImageToDataUrl(licencePayload.signatureDataUrl, 300, 100, 0.75);
-
-                        const cloudPayload = {
-                            ...licencePayload,
-                            photoDataUrl: safePhoto && safePhoto.length < 350000 ? safePhoto : sampleData.photoDataUrl,
-                            signatureDataUrl: safeSig && safeSig.length < 150000 ? safeSig : '',
-                            updatedAt: Date.now(),
-                            userEmail: sessionEmail,
-                            userId: activeUserSession.id || null
-                        };
-
-                        const userDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", sessionEmail);
-                        await window.FirebaseFirestore.setDoc(userDocRef, {
-                            drivingLicence: cloudPayload
-                        }, { merge: true });
-
-                        const dlDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "driving_licences", sessionEmail);
-                        await window.FirebaseFirestore.setDoc(dlDocRef, cloudPayload, { merge: true });
-
-                        activeUserSession.drivingLicence = cloudPayload;
-                        if (typeof syncSessionState === 'function') {
-                            syncSessionState(activeUserSession);
-                        }
-                        return true;
-                    } catch (err) {
-                        console.error("Firebase Driving Licence Save Error:", err);
-                        return false;
-                    }
-                }
-
-                async function fetchLicenceFromFirebase(sessionUser) {
-                    const email = sessionUser && sessionUser.email ? sessionUser.email : null;
-                    if (!email || !window.FirebaseDb || !window.FirebaseFirestore) return null;
-
-                    try {
-                        const dlDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "driving_licences", email);
-                        const dlSnap = await window.FirebaseFirestore.getDoc(dlDocRef);
-                        if (dlSnap.exists()) {
-                            return dlSnap.data();
-                        }
-
-                        const userDocRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", email);
-                        const userSnap = await window.FirebaseFirestore.getDoc(userDocRef);
-                        if (userSnap.exists() && userSnap.data().drivingLicence) {
-                            return userSnap.data().drivingLicence;
-                        }
-                    } catch (err) {
-                        console.error("Firebase Driving Licence Fetch Error:", err);
-                    }
-                    return null;
+                function populateInputsFromLicenceObj(data) {
+                    if (!data) return;
+                    if (data.fullName !== undefined) inputFullName.value = data.fullName;
+                    if (data.parentName !== undefined) inputParentName.value = data.parentName;
+                    if (data.dob !== undefined) inputDob.value = data.dob;
+                    if (data.bloodGroup !== undefined) setSelectedBloodGroup(data.bloodGroup);
+                    if (data.licenceNo !== undefined) inputLicenceNo.value = data.licenceNo;
+                    if (data.issueDate !== undefined) inputIssueDate.value = data.issueDate;
+                    if (data.expiryDate !== undefined) inputExpiryDate.value = data.expiryDate;
+                    if (data.vehicleClass !== undefined) inputVehicleClass.value = data.vehicleClass;
+                    if (data.signatureText !== undefined) inputSignatureText.value = data.signatureText;
+                    if (data.address !== undefined) inputAddress.value = data.address;
+                    if (data.nid !== undefined) inputNid.value = data.nid;
+                    if (data.conditions !== undefined) inputConditions.value = data.conditions;
+                    currentPhotoUrl = data.photoDataUrl || sampleData.photoDataUrl;
+                    currentSignatureUrl = data.signatureDataUrl || '';
                 }
 
                 function collectCurrentFormData() {
@@ -4227,7 +4175,7 @@
                     };
                 }
 
-                function syncCardPreview(saveToStorage = false, syncToCloud = false) {
+                function syncCardPreview(saveToLocal = false) {
                     const data = collectCurrentFormData();
 
                     previewPhoto.src = data.photoDataUrl;
@@ -4257,480 +4205,249 @@
 
                     renderQRCode(data);
 
-                    if (saveToStorage) {
+                    if (saveToLocal) {
                         try {
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                            localStorage.setItem(getLocalLicenceStorageKey(), JSON.stringify(data));
                         } catch (e) {
                             console.warn('LocalStorage limit reached for large image.');
                         }
                     }
+                    return data;
+                }
 
-                    if (syncToCloud) {
-                        saveLicenceToFirebase(data);
+                async function saveLicenceToFirebase(licenceData) {
+                    if (!window.FirebaseDb || !window.FirebaseFirestore) return false;
+                    try {
+                        const docKey = getUserLicenceDocKey();
+                        const compressedPhoto = await compressDataUrlForFirestore(licenceData.photoDataUrl, 360, 0.72);
+                        const compressedSig = await compressDataUrlForFirestore(licenceData.signatureDataUrl, 320, 0.72);
+
+                        const payload = Object.assign({}, licenceData, {
+                            photoDataUrl: compressedPhoto,
+                            signatureDataUrl: compressedSig,
+                            userEmail: activeUserSession ? activeUserSession.email : 'guest',
+                            memberId: activeUserSession ? activeUserSession.id : null,
+                            updatedAt: Date.now()
+                        });
+
+                        const dlRef = window.FirebaseFirestore.doc(window.FirebaseDb, "driving_licences", docKey);
+                        await window.FirebaseFirestore.setDoc(dlRef, payload, { merge: true });
+
+                        if (activeUserSession && activeUserSession.email) {
+                            const userRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", activeUserSession.email);
+                            await window.FirebaseFirestore.setDoc(userRef, { drivingLicence: payload }, { merge: true });
+                        }
+                        return true;
+                    } catch (err) {
+                        console.error("Firebase Driving Licence Save Error:", err);
+                        return false;
                     }
                 }
 
-                async function loadSavedData(sessionUser = null) {
+                window.syncLicenceFromFirebase = async function() {
+                    if (!window.FirebaseDb || !window.FirebaseFirestore) return;
                     try {
-                        const cloudData = await fetchLicenceFromFirebase(sessionUser);
-                        if (cloudData) {
-                            applyDataToInputsAndPreview(cloudData, true);
+                        const docKey = getUserLicenceDocKey();
+                        const dlRef = window.FirebaseFirestore.doc(window.FirebaseDb, "driving_licences", docKey);
+                        const dlSnap = await window.FirebaseFirestore.getDoc(dlRef);
+
+                        if (dlSnap.exists()) {
+                            const cloudData = dlSnap.data();
+                            populateInputsFromLicenceObj(cloudData);
+                            syncCardPreview(true);
                             return;
                         }
 
-                        if (sessionUser && sessionUser.drivingLicence) {
-                            applyDataToInputsAndPreview(sessionUser.drivingLicence, true);
-                            return;
-                        }
-
-                        const raw = localStorage.getItem(STORAGE_KEY);
-                        if (raw) {
-                            const saved = JSON.parse(raw);
-                            applyDataToInputsAndPreview(saved, false);
-                        } else if (sessionUser) {
-                            const prefetched = {
-                                ...sampleData,
-                                fullName: sessionUser.name ? sessionUser.name.toUpperCase() : sampleData.fullName,
-                                dob: sessionUser.dob || sampleData.dob,
-                                licenceNo: sessionUser.id ? `BDBUS-${sessionUser.id}` : sampleData.licenceNo,
-                                signatureText: sessionUser.name || sampleData.signatureText,
-                                address: (sessionUser.district || sessionUser.division)
-                                    ? `${sessionUser.district || ''}${sessionUser.district && sessionUser.division ? ', ' : ''}${sessionUser.division || ''}`
-                                    : sampleData.address,
-                                photoDataUrl: (sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150')
-                                    ? sessionUser.avatar
-                                    : sampleData.photoDataUrl
-                            };
-                            applyDataToInputsAndPreview(prefetched, false);
-                        } else {
-                            syncCardPreview(false, false);
+                        if (activeUserSession && activeUserSession.email) {
+                            const userRef = window.FirebaseFirestore.doc(window.FirebaseDb, "users", activeUserSession.email);
+                            const userSnap = await window.FirebaseFirestore.getDoc(userRef);
+                            if (userSnap.exists() && userSnap.data().drivingLicence) {
+                                populateInputsFromLicenceObj(userSnap.data().drivingLicence);
+                                syncCardPreview(true);
+                            }
                         }
                     } catch (err) {
-                        console.error('Error loading saved data:', err);
-                        syncCardPreview(false, false);
+                        console.error("Firebase Driving Licence Load Error:", err);
                     }
+                };
+
+                function handleImageFile(fileInput, onSuccess) {
+                    const file = fileInput.files && fileInput.files[0];
+                    if (!file) return;
+
+                    if (file.size > MAX_FILE_SIZE_BYTES) {
+                        alert('ফাইল সাইজ ২ MB-এর বেশি! অনুগ্রহ করে ২ MB-এর ছোট ছবি আপলোড করুন।\nFile size exceeds 2 MB limit!');
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        if (typeof event.target.result === 'string') {
+                            onSuccess(event.target.result);
+                            syncCardPreview(false);
+                        }
+                    };
+                    reader.readAsDataURL(file);
                 }
 
-                window.refreshSmartLicenceView = function(sessionUser = null) {
-                    openCardPage();
-                    applyWatermarkLogo();
-                    loadSavedData(sessionUser || activeUserSession);
-                };
-
-                window.syncSessionToSmartLicence = function(sessionUser) {
-                    if (!sessionUser) return;
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (!raw && !sessionUser.drivingLicence && sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
-                        currentPhotoUrl = sessionUser.avatar;
-                        syncCardPreview(false, false);
-                    }
-                };
-
-                inputPhoto.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    if (file.size > MAX_FILE_SIZE_BYTES) {
-                        showToast('Driver photo must be under 2 MB!', 'চালকের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
-                        inputPhoto.value = '';
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = async (event) => {
-                        currentPhotoUrl = await compressImageToDataUrl(event.target.result, 360, 420, 0.75);
-                        syncCardPreview(true, true);
-                        showToast('Driver photo updated & synced!', 'চালকের ছবি আপডেট ও ফায়ারবেজে সেভ হয়েছে!');
-                    };
-                    reader.readAsDataURL(file);
+                inputPhoto.addEventListener('change', () => {
+                    handleImageFile(inputPhoto, (dataUrl) => {
+                        currentPhotoUrl = dataUrl;
+                    });
                 });
 
-                inputSignatureImg.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    if (file.size > MAX_FILE_SIZE_BYTES) {
-                        showToast('Signature image must be under 2 MB!', 'স্বাক্ষরের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
-                        inputSignatureImg.value = '';
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = async (event) => {
-                        currentSignatureUrl = await compressImageToDataUrl(event.target.result, 300, 100, 0.78);
-                        syncCardPreview(true, true);
-                        showToast('Signature image updated & synced!', 'স্বাক্ষরের ছবি আপডেট ও ফায়ারবেজে সেভ হয়েছে!');
-                    };
-                    reader.readAsDataURL(file);
+                inputSignatureImg.addEventListener('change', () => {
+                    handleImageFile(inputSignatureImg, (dataUrl) => {
+                        currentSignatureUrl = dataUrl;
+                    });
                 });
 
                 inputSignatureText.addEventListener('input', () => {
-                    currentSignatureUrl = '';
-                    inputSignatureImg.value = '';
-                    syncCardPreview(false, false);
+                    if (inputSignatureText.value.trim() !== '') {
+                        currentSignatureUrl = '';
+                        inputSignatureImg.value = '';
+                    }
+                    syncCardPreview(false);
                 });
 
-                const liveInputs = [
-                    inputFullName, inputParentName, inputDob,
-                    inputLicenceNo, inputIssueDate, inputExpiryDate, inputVehicleClass,
+                [
+                    inputFullName, inputParentName, inputDob, inputLicenceNo,
+                    inputIssueDate, inputExpiryDate, inputVehicleClass,
                     inputAddress, inputNid, inputConditions
-                ];
-                liveInputs.forEach(el => {
-                    el.addEventListener('input', () => syncCardPreview(false, false));
-                    el.addEventListener('change', () => syncCardPreview(false, false));
+                ].forEach(el => {
+                    el.addEventListener('input', () => syncCardPreview(false));
                 });
+
                 bloodGroupRadios.forEach(radio => {
-                    radio.addEventListener('change', () => syncCardPreview(false, false));
+                    radio.addEventListener('change', () => syncCardPreview(false));
                 });
 
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
+
                     if (!inputConfirmTick.checked) {
-                        showToast('Please tick the confirmation checkbox first!', 'অনুগ্রহ করে নিশ্চিতকরণ টিক মার্ক বক্সে টিক দিন!');
+                        alert('অনুগ্রহ করে নিচের নিশ্চিতকরণ টিক চিহ্ন (Confirm Tick) দিন!\nPlease tick the confirmation checkbox before updating!');
+                        inputConfirmTick.focus();
                         return;
                     }
-                    const finalData = collectCurrentFormData();
-                    syncCardPreview(true, false);
-                    await saveLicenceToFirebase(finalData);
-                    showToast('All details updated & synced to Firebase!', 'সকল তথ্য আপডেট ও ফায়ারবেজে সংরক্ষণ হয়েছে!');
+
+                    const updatedData = syncCardPreview(true);
+                    await saveLicenceToFirebase(updatedData);
+                    inputConfirmTick.checked = false;
+
+                    showToast(
+                        'Information updated & synced with Firebase!',
+                        'তথ্য ফায়ারবেজে সংরক্ষিত ও আপডেট হয়েছে!'
+                    );
+
+                    showFrontSide();
                     openCardPage();
                 });
 
-                async function downloadCardSide(elementId, filename, prepareFn) {
-                    if (typeof html2canvas === 'undefined') {
-                        showToast('Download library is loading, please try again.', 'ডাউনলোড লাইব্রেরি লোড হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন।');
-                        return;
+                async function captureAndDownload(targetElement, fileName, restoreBackAfter) {
+                    const wasFlipped = flipper.classList.contains('is-flipped');
+                    const prevTransition = flipper.style.transition;
+
+                    flipper.style.transition = 'none';
+                    if (restoreBackAfter) {
+                        flipper.classList.add('is-flipped');
+                    } else {
+                        flipper.classList.remove('is-flipped');
                     }
-                    prepareFn();
-                    showToast('Generating image...', 'ছবি তৈরি হচ্ছে...');
-                    setTimeout(async () => {
-                        try {
-                            const target = root.querySelector(`#${elementId}`);
-                            const originalTransform = target.style.transform;
-                            target.style.transform = 'none';
+                    void flipper.offsetWidth;
 
-                            const canvas = await html2canvas(target, {
-                                scale: 3,
-                                useCORS: true,
-                                backgroundColor: null
-                            });
-
-                            target.style.transform = originalTransform;
-
-                            const link = document.createElement('a');
-                            link.download = filename;
-                            link.href = canvas.toDataURL('image/png');
-                            link.click();
-                            showToast(`${filename} downloaded!`, `${filename} ডাউনলোড সম্পন্ন হয়েছে!`);
-                        } catch (err) {
-                            console.error(err);
-                            showToast('Error downloading image.', 'ছবি ডাউনলোড করতে সমস্যা হয়েছে।');
+                    try {
+                        const canvas = await html2canvas(targetElement, {
+                            scale: 3,
+                            useCORS: true,
+                            allowTaint: true,
+                            backgroundColor: null
+                        });
+                        const link = document.createElement('a');
+                        link.download = fileName;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        showToast(`Saved ${fileName}`, `${fileName} ডাউনলোড হয়েছে`);
+                    } catch (err) {
+                        alert('ছবি সেভ করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    } finally {
+                        if (wasFlipped) {
+                            flipper.classList.add('is-flipped');
+                        } else {
+                            flipper.classList.remove('is-flipped');
                         }
-                    }, 450);
+                        void flipper.offsetWidth;
+                        flipper.style.transition = prevTransition;
+                    }
                 }
 
                 root.querySelector('#dlBtnDownloadFront').addEventListener('click', () => {
-                    downloadCardSide('dlCardFrontCapture', 'Driving-Licence-Front.png', showFrontSide);
+                    const licNo = (inputLicenceNo.value.trim() || sampleData.licenceNo).replace(/[^a-zA-Z0-9_-]/g, '');
+                    captureAndDownload(root.querySelector('#dlCardFrontCapture'), `Driving_Licence_Front_${licNo}.png`, false);
                 });
 
                 root.querySelector('#dlBtnDownloadBack').addEventListener('click', () => {
-                    downloadCardSide('dlCardBackCapture', 'Driving-Licence-Back.png', showBackSide);
+                    const licNo = (inputLicenceNo.value.trim() || sampleData.licenceNo).replace(/[^a-zA-Z0-9_-]/g, '');
+                    captureAndDownload(root.querySelector('#dlCardBackCapture'), `Driving_Licence_Back_${licNo}.png`, true);
                 });
 
-                applyWatermarkLogo();
-                loadSavedData(activeUserSession);
-            };
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', runInit);
-            } else {
-                runInit();
-            }
-        })();
-
-                function openUpdatePage() {
-                    isLicenceUpdateSubViewOpen = true;
-                    licenceCardPage.style.display = 'none';
-                    updateFormPage.style.display = 'block';
-                    if (typeof updateBackButtonVisibility === 'function') {
-                        updateBackButtonVisibility();
+                window.syncSessionToSmartLicence = function(sessionUser) {
+                    if (!sessionUser) return;
+                    const localSaved = localStorage.getItem(STORAGE_KEY_PREFIX + (sessionUser.email || '').trim().toLowerCase());
+                    if (localSaved) return;
+                    if (sessionUser.drivingLicence) {
+                        populateInputsFromLicenceObj(sessionUser.drivingLicence);
+                        syncCardPreview(true);
+                        return;
                     }
-                    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-
-                function openCardPage() {
-                    isLicenceUpdateSubViewOpen = false;
-                    updateFormPage.style.display = 'none';
-                    licenceCardPage.style.display = 'flex';
-                    if (typeof updateBackButtonVisibility === 'function') {
-                        updateBackButtonVisibility();
+                    if (sessionUser.name) {
+                        inputFullName.value = sessionUser.name;
                     }
-                    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-
-                window.closeLicenceUpdateSubView = openCardPage;
-                btnGoToUpdatePage.addEventListener('click', openUpdatePage);
-
-                function getSelectedBloodGroup() {
-                    const checked = root.querySelector('input[name="dlBloodGroup"]:checked');
-                    return checked ? checked.value : sampleData.bloodGroup;
-                }
-
-                function setSelectedBloodGroup(groupValue) {
-                    bloodGroupRadios.forEach(radio => {
-                        radio.checked = (radio.value === groupValue);
-                    });
-                }
-
-                function showFrontSide() {
-                    flipper.classList.remove('is-flipped');
-                    btnShowFront.style.background = 'var(--btn-gradient-1)';
-                    btnShowFront.style.color = '#000';
-                    btnShowFront.style.border = 'none';
-                    btnShowBack.style.background = '#1e293b';
-                    btnShowBack.style.color = 'var(--text-light)';
-                    btnShowBack.style.border = '1px solid rgba(255,255,255,0.12)';
-                }
-
-                function showBackSide() {
-                    flipper.classList.add('is-flipped');
-                    btnShowBack.style.background = 'var(--btn-gradient-1)';
-                    btnShowBack.style.color = '#000';
-                    btnShowBack.style.border = 'none';
-                    btnShowFront.style.background = '#1e293b';
-                    btnShowFront.style.color = 'var(--text-light)';
-                    btnShowFront.style.border = '1px solid rgba(255,255,255,0.12)';
-                }
-
-                btnShowFront.addEventListener('click', showFrontSide);
-                btnShowBack.addEventListener('click', showBackSide);
-
-                function renderQRCode(data) {
-                    qrcodeContainer.innerHTML = '';
-                    const qrPayload = `DL:${data.licenceNo}|NAME:${data.fullName}|DOB:${data.dob}|NID:${data.nid}|EXP:${data.expiryDate}`;
-                    try {
-                        new QRCode(qrcodeContainer, {
-                            text: qrPayload,
-                            width: 80,
-                            height: 80,
-                            colorDark: '#0f172a',
-                            colorLight: '#ffffff',
-                            correctLevel: QRCode.CorrectLevel.M
-                        });
-                    } catch (err) {
-                        qrcodeContainer.innerHTML = '<span class="font-en" style="font-size: 9px; color: #64748b;">QR READY</span>';
+                    if (sessionUser.dob) {
+                        inputDob.value = sessionUser.dob;
                     }
-                }
-
-                function syncCardPreview(saveToStorage = false) {
-                    const data = {
-                        fullName: inputFullName.value.trim() || sampleData.fullName,
-                        parentName: inputParentName.value.trim() || sampleData.parentName,
-                        dob: inputDob.value.trim() || sampleData.dob,
-                        bloodGroup: getSelectedBloodGroup(),
-                        licenceNo: (inputLicenceNo.value.trim() || sampleData.licenceNo).toUpperCase(),
-                        issueDate: inputIssueDate.value.trim() || sampleData.issueDate,
-                        expiryDate: inputExpiryDate.value.trim() || sampleData.expiryDate,
-                        vehicleClass: (inputVehicleClass.value.trim() || sampleData.vehicleClass).toUpperCase(),
-                        signatureText: inputSignatureText.value.trim() || sampleData.signatureText,
-                        address: inputAddress.value.trim() || sampleData.address,
-                        nid: inputNid.value.trim() || sampleData.nid,
-                        conditions: inputConditions.value.trim() || sampleData.conditions,
-                        photoDataUrl: currentPhotoUrl,
-                        signatureDataUrl: currentSignatureUrl
-                    };
-
-                    previewPhoto.src = data.photoDataUrl;
-                    previewFullName.textContent = data.fullName;
-                    previewParentName.textContent = data.parentName;
-                    previewDob.textContent = data.dob;
-                    previewBloodGroup.textContent = data.bloodGroup;
-                    previewLicenceNo.textContent = data.licenceNo;
-                    previewIssueDate.textContent = data.issueDate;
-                    previewExpiryDate.textContent = data.expiryDate;
-                    previewVehicleClass.textContent = data.vehicleClass;
-
-                    if (data.signatureDataUrl) {
-                        previewSignatureImg.src = data.signatureDataUrl;
-                        previewSignatureImg.style.display = 'block';
-                        previewSignatureText.style.display = 'none';
-                    } else {
-                        previewSignatureImg.style.display = 'none';
-                        previewSignatureText.style.display = 'inline-block';
-                        previewSignatureText.textContent = data.signatureText;
+                    if (sessionUser.district || sessionUser.division) {
+                        inputAddress.value = [sessionUser.district, sessionUser.division].filter(Boolean).join(', ');
                     }
+                    if (sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
+                        currentPhotoUrl = sessionUser.avatar;
+                    }
+                    syncCardPreview(false);
+                };
 
-                    previewAddress.textContent = data.address;
-                    previewNid.textContent = data.nid;
-                    previewConditions.textContent = data.conditions;
-                    previewBarcodeLabel.textContent = data.licenceNo.slice(0, 10);
-
-                    renderQRCode(data);
-
-                    if (saveToStorage) {
+                window.refreshSmartLicenceView = function(sessionUser) {
+                    applyWatermarkLogo();
+                    const saved = localStorage.getItem(getLocalLicenceStorageKey());
+                    if (saved) {
                         try {
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                            populateInputsFromLicenceObj(JSON.parse(saved));
                         } catch (e) {
-                            console.warn('LocalStorage limit reached for large image.');
+                            populateInputsFromLicenceObj(sampleData);
                         }
-                    }
-                }
-
-                function loadSavedData(sessionUser = null) {
-                    try {
-                        const raw = localStorage.getItem(STORAGE_KEY);
-                        if (raw) {
-                            const saved = JSON.parse(raw);
-                            if (saved.fullName) inputFullName.value = saved.fullName;
-                            if (saved.parentName) inputParentName.value = saved.parentName;
-                            if (saved.dob) inputDob.value = saved.dob;
-                            if (saved.bloodGroup) setSelectedBloodGroup(saved.bloodGroup);
-                            if (saved.licenceNo) inputLicenceNo.value = saved.licenceNo;
-                            if (saved.issueDate) inputIssueDate.value = saved.issueDate;
-                            if (saved.expiryDate) inputExpiryDate.value = saved.expiryDate;
-                            if (saved.vehicleClass) inputVehicleClass.value = saved.vehicleClass;
-                            if (saved.signatureText) inputSignatureText.value = saved.signatureText;
-                            if (saved.address) inputAddress.value = saved.address;
-                            if (saved.nid) inputNid.value = saved.nid;
-                            if (saved.conditions) inputConditions.value = saved.conditions;
-                            currentPhotoUrl = saved.photoDataUrl || sampleData.photoDataUrl;
-                            currentSignatureUrl = saved.signatureDataUrl || '';
-                        } else if (sessionUser) {
-                            if (sessionUser.name) inputFullName.value = sessionUser.name.toUpperCase();
+                    } else if (sessionUser && sessionUser.drivingLicence) {
+                        populateInputsFromLicenceObj(sessionUser.drivingLicence);
+                    } else {
+                        populateInputsFromLicenceObj(sampleData);
+                        if (sessionUser) {
+                            if (sessionUser.name) inputFullName.value = sessionUser.name;
                             if (sessionUser.dob) inputDob.value = sessionUser.dob;
-                            if (sessionUser.id) inputLicenceNo.value = `BDBUS-${sessionUser.id}`;
-                            if (sessionUser.name) inputSignatureText.value = sessionUser.name;
                             if (sessionUser.district || sessionUser.division) {
-                                inputAddress.value = `${sessionUser.district || ''}${sessionUser.district && sessionUser.division ? ', ' : ''}${sessionUser.division || ''}`;
+                                inputAddress.value = [sessionUser.district, sessionUser.division].filter(Boolean).join(', ');
                             }
                             if (sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
                                 currentPhotoUrl = sessionUser.avatar;
                             }
                         }
-                    } catch (err) {
-                        console.error('Error loading saved data:', err);
                     }
                     syncCardPreview(false);
-                }
-
-                window.refreshSmartLicenceView = function(sessionUser = null) {
-                    openCardPage();
-                    applyWatermarkLogo();
-                    loadSavedData(sessionUser);
-                };
-
-                window.syncSessionToSmartLicence = function(sessionUser) {
-                    if (!sessionUser) return;
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (!raw && sessionUser.avatar && sessionUser.avatar !== 'https://via.placeholder.com/150') {
-                        currentPhotoUrl = sessionUser.avatar;
-                        syncCardPreview(false);
+                    if (typeof window.syncLicenceFromFirebase === 'function') {
+                        window.syncLicenceFromFirebase();
                     }
                 };
-
-                inputPhoto.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    if (file.size > MAX_FILE_SIZE_BYTES) {
-                        showToast('Driver photo must be under 2 MB!', 'চালকের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
-                        inputPhoto.value = '';
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        currentPhotoUrl = event.target.result;
-                        syncCardPreview(true);
-                        showToast('Driver photo updated!', 'চালকের ছবি আপডেট করা হয়েছে!');
-                    };
-                    reader.readAsDataURL(file);
-                });
-
-                inputSignatureImg.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    if (file.size > MAX_FILE_SIZE_BYTES) {
-                        showToast('Signature image must be under 2 MB!', 'স্বাক্ষরের ছবি অবশ্যই ২ MB এর ভিতরে হতে হবে!');
-                        inputSignatureImg.value = '';
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        currentSignatureUrl = event.target.result;
-                        syncCardPreview(true);
-                        showToast('Signature image updated!', 'স্বাক্ষরের ছবি আপডেট করা হয়েছে!');
-                    };
-                    reader.readAsDataURL(file);
-                });
-
-                inputSignatureText.addEventListener('input', () => {
-                    currentSignatureUrl = '';
-                    inputSignatureImg.value = '';
-                    syncCardPreview(false);
-                });
-
-                const liveInputs = [
-                    inputFullName, inputParentName, inputDob,
-                    inputLicenceNo, inputIssueDate, inputExpiryDate, inputVehicleClass,
-                    inputAddress, inputNid, inputConditions
-                ];
-                liveInputs.forEach(el => {
-                    el.addEventListener('input', () => syncCardPreview(false));
-                    el.addEventListener('change', () => syncCardPreview(false));
-                });
-                bloodGroupRadios.forEach(radio => {
-                    radio.addEventListener('change', () => syncCardPreview(false));
-                });
-
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    if (!inputConfirmTick.checked) {
-                        showToast('Please tick the confirmation checkbox first!', 'অনুগ্রহ করে নিশ্চিতকরণ টিক মার্ক বক্সে টিক দিন!');
-                        return;
-                    }
-                    syncCardPreview(true);
-                    showToast('All details updated & saved successfully!', 'সকল তথ্য সফলভাবে আপডেট ও সংরক্ষণ হয়েছে!');
-                    openCardPage();
-                });
-
-                async function downloadCardSide(elementId, filename, prepareFn) {
-                    if (typeof html2canvas === 'undefined') {
-                        showToast('Download library is loading, please try again.', 'ডাউনলোড লাইব্রেরি লোড হচ্ছে, অনুগ্রহ করে আবার চেষ্টা করুন।');
-                        return;
-                    }
-                    prepareFn();
-                    showToast('Generating image...', 'ছবি তৈরি হচ্ছে...');
-                    setTimeout(async () => {
-                        try {
-                            const target = root.querySelector(`#${elementId}`);
-                            const originalTransform = target.style.transform;
-                            target.style.transform = 'none';
-
-                            const canvas = await html2canvas(target, {
-                                scale: 3,
-                                useCORS: true,
-                                backgroundColor: null
-                            });
-
-                            target.style.transform = originalTransform;
-
-                            const link = document.createElement('a');
-                            link.download = filename;
-                            link.href = canvas.toDataURL('image/png');
-                            link.click();
-                            showToast(`${filename} downloaded!`, `${filename} ডাউনলোড সম্পন্ন হয়েছে!`);
-                        } catch (err) {
-                            console.error(err);
-                            showToast('Error downloading image.', 'ছবি ডাউনলোড করতে সমস্যা হয়েছে।');
-                        }
-                    }, 450);
-                }
-
-                root.querySelector('#dlBtnDownloadFront').addEventListener('click', () => {
-                    downloadCardSide('dlCardFrontCapture', 'Driving-Licence-Front.png', showFrontSide);
-                });
-
-                root.querySelector('#dlBtnDownloadBack').addEventListener('click', () => {
-                    downloadCardSide('dlCardBackCapture', 'Driving-Licence-Back.png', showBackSide);
-                });
 
                 applyWatermarkLogo();
-                loadSavedData(activeUserSession);
+                window.refreshSmartLicenceView(activeUserSession);
             };
 
             if (document.readyState === 'loading') {
@@ -4739,62 +4456,65 @@
                 runInit();
             }
         })();
+        // =========================================================================
 
-        window.onload = async () => {
-            await verifyDatabaseStructureSeeding();
+        window.onload = async function() {
+            setLanguageSystem(selectedLanguage);
+            
+            let waitFirebase = setInterval(async () => {
+                if (window.FirebaseDb && window.FirebaseFirestore) {
+                    clearInterval(waitFirebase);
+                    await verifyDatabaseStructureSeeding();
+                    if (typeof window.syncLicenceFromFirebase === 'function') {
+                        await window.syncLicenceFromFirebase();
+                    }
+                }
+            }, 300);
+
             initialClockHeartbeatEngine();
             initSearchableDropdownSystem();
             initBackgroundAutoSyncEngine();
-            
-            setLanguageSystem(selectedLanguage);
 
-            const savedUserSession = localStorage.getItem('bdbus_active_session');
-            const savedScreenId = sessionStorage.getItem('bdbus_persistent_screen_id');
-
-            if (savedUserSession) {
-                try {
-                    const userData = JSON.parse(savedUserSession);
-                    activeUserSession = userData;
-                    document.body.classList.add('logged-in');
-                    document.getElementById('header-nav-controls').style.display = 'flex';
-                    document.getElementById('header-empty-space').style.display = 'none';
-                    document.getElementById('main-global-footer').style.display = 'block';
-                    
-                    if(hasAnyAdminPanelPermission(userData)) {
-                        document.getElementById('admin-menu-link').style.display = 'flex';
-                    }
-                    
-                    document.getElementById('live-marquee-node').innerText = db.notices;
-
-                    if (savedScreenId && savedScreenId !== 'auth-screen') {
-                        navigatePage(savedScreenId, false);
-                    } else {
-                        navigatePage('home-screen', false);
-                    }
-                } catch (e) {
-                    console.error("Failed to parse saved session", e);
-                    navigatePage('auth-screen', false);
+            if(activeUserSession) {
+                document.body.classList.add('logged-in');
+                document.getElementById('header-nav-controls').style.display = 'flex';
+                document.getElementById('header-empty-space').style.display = 'none';
+                document.getElementById('main-global-footer').style.display = 'block';
+                
+                if(hasAnyAdminPanelPermission(activeUserSession)) { 
+                    document.getElementById('admin-menu-link').style.display = 'flex'; 
+                } else { 
+                    document.getElementById('admin-menu-link').style.display = 'none'; 
                 }
+                
+                document.getElementById('live-marquee-node').innerText = db.notices;
+
+                if (typeof window.syncSessionToSmartLicence === 'function') {
+                    window.syncSessionToSmartLicence(activeUserSession);
+                }
+
+                const lastActiveScreenId = sessionStorage.getItem('bdbus_persistent_screen_id') || 'home-screen';
+                const savedNavHistory = JSON.parse(sessionStorage.getItem('bdbus_nav_history'));
+                if (savedNavHistory && Array.isArray(savedNavHistory) && savedNavHistory.length > 0) {
+                    internalNavigationHistoryArray = savedNavHistory;
+                } else {
+                    internalNavigationHistoryArray = [lastActiveScreenId];
+                }
+                navigatePage(lastActiveScreenId, false);
+                updateActiveUserHeartbeat();
             } else {
+                document.body.classList.remove('logged-in');
                 document.getElementById('header-nav-controls').style.display = 'none';
                 document.getElementById('header-empty-space').style.display = 'block';
                 document.getElementById('main-global-footer').style.display = 'none';
-                navigatePage('auth-screen', false);
+                navigatePage('auth-screen');
             }
 
-            if(activeUserSession && (isLicenceUpdateSubViewOpen || internalNavigationHistoryArray.length > 1)) {
-                history.pushState(null, null, window.location.pathname);
+            if (typeof initRealtimeRoomSettingsListener === 'function') {
+                initRealtimeRoomSettingsListener();
             }
 
-            const chatInputField = document.getElementById('chatInput');
-            if (chatInputField) {
-                chatInputField.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        sendChatMessage();
-                    }
-                });
-            }
+            history.pushState(null, null, window.location.pathname);
         };
     </script>
 </body>
