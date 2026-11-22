@@ -96,7 +96,7 @@
   .cam-btn.secondary { background: #ffffff; color: var(--brand-dark); border: 1.5px solid var(--brand-dark); }
   .cam-btn.secondary:hover { background: #e2f1ea; }
 
-  /* Locked Scan Container (Prevents layout overflow on mobile) */
+  /* Locked Scan Container */
   #scan-modal {
     display: none; background: #ffffff; border: 2px solid var(--brand-dark);
     border-radius: 14px; padding: 14px; margin: 14px 0;
@@ -186,7 +186,7 @@
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08); border: 1px solid var(--slate-200);
     margin-top: 24px; max-width: 100%; overflow-x: auto;
   }
-  .report-page { min-width: 1260px; background: #ffffff; }
+  .report-page { min-width: 1260px; background: #ffffff; position: relative; }
   .night-page-spacer { margin-top: 26px; }
 
   .rep-header {
@@ -232,13 +232,24 @@
   }
   .pct-row td { background: #ffffff; font-size: 8px; color: #475569; font-weight: 600; }
 
-  .rep-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
-  .rep-chart-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; background: #ffffff; }
+  .rep-charts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;
+    overflow: hidden;
+  }
+  .rep-chart-card {
+    border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px;
+    background: #ffffff; overflow: hidden; min-width: 0;
+  }
   .rep-chart-card h4 {
     margin: 0 0 4px 0; font-size: 10px; font-weight: 700;
     color: #334155; text-align: center; text-transform: uppercase;
   }
-  .canvas-wrap { height: 145px; position: relative; }
+  .canvas-wrap {
+    height: 145px; width: 100%; position: relative; overflow: hidden;
+  }
+  .canvas-wrap canvas {
+    display: block; width: 100% !important; height: 100% !important;
+  }
 
   .rep-footer {
     display: flex; justify-content: space-between; margin-top: 14px;
@@ -248,7 +259,7 @@
 
   /* ================= PRINT MODES (SINGLE SHIFT VS COMBINED 1-PAGE) ================= */
   @media print {
-    @page { size: A4 landscape; margin: 4mm; }
+    @page { size: A4 landscape; margin: 3.5mm; }
     html, body {
       width: 100%; height: auto; background: #fff !important;
       padding: 0 !important; margin: 0 !important;
@@ -261,10 +272,10 @@
       padding: 0 !important; margin: 0 !important; overflow: visible !important;
     }
 
-    /* Mode: Separate 1 Page for Day, 1 Page for Night (Enlarged to fill page nicely) */
+    /* Mode 1: Separate 1 Page for Day, 1 Page for Night (Fills A4 Landscape cleanly without overflow) */
     body.print-mode-separate .report-page {
       min-width: 100% !important; width: 100% !important;
-      margin: 0 !important; padding: 2px 0 !important;
+      margin: 0 !important; padding: 1px 0 !important;
       break-inside: avoid !important; page-break-inside: avoid !important;
     }
     body.print-mode-separate .night-page-spacer { margin-top: 0 !important; }
@@ -272,43 +283,49 @@
       display: block; break-before: page !important; page-break-before: always !important;
       height: 0; margin: 0; padding: 0;
     }
-    body.print-mode-separate .rep-header { padding-bottom: 6px; margin-bottom: 8px; }
-    body.print-mode-separate .rep-company h2 { font-size: 20px; }
-    body.print-mode-separate .kpi-strip { gap: 8px; margin-bottom: 8px; }
-    body.print-mode-separate .kpi-item { padding: 6px 9px; }
-    body.print-mode-separate .kpi-item .k-val { font-size: 13px; }
+    body.print-mode-separate .rep-header { padding-bottom: 5px; margin-bottom: 7px; }
+    body.print-mode-separate .rep-company h2 { font-size: 19px; }
+    body.print-mode-separate .kpi-strip { gap: 7px; margin-bottom: 7px; }
+    body.print-mode-separate .kpi-item { padding: 5px 8px; }
+    body.print-mode-separate .kpi-item .k-val { font-size: 12.5px; }
     body.print-mode-separate table.clean-rep-table th,
-    body.print-mode-separate table.clean-rep-table td { padding: 3.4px 2.5px; font-size: 9px; }
-    body.print-mode-separate .rep-charts { margin-top: 9px; gap: 12px; }
-    body.print-mode-separate .canvas-wrap { height: 150px !important; }
-    body.print-mode-separate .rep-footer { margin-top: 14px; }
+    body.print-mode-separate table.clean-rep-table td { padding: 2.8px 2px; font-size: 8.6px; }
+    body.print-mode-separate .rep-charts { margin-top: 7px; gap: 10px; }
+    body.print-mode-separate .canvas-wrap { height: 132px !important; max-height: 132px !important; }
+    body.print-mode-separate .rep-footer { margin-top: 10px; }
 
-    /* Mode: Day & Night Combined in 1 Single A4 Landscape Page (Like Image 6) */
+    /* Mode 2: Day & Night Combined in 1 Single A4 Landscape Page (No Chart Overlap, Fits 1 Page) */
     body.print-mode-combined .page-break { display: none !important; }
     body.print-mode-combined .report-page {
       min-width: 100% !important; width: 100% !important;
       margin: 0 !important; padding: 0 !important;
       break-inside: avoid !important; page-break-inside: avoid !important;
+      overflow: hidden !important;
     }
-    body.print-mode-combined .night-page-spacer { margin-top: 8px !important; padding-top: 6px; border-top: 1.5px dashed #94a3b8; }
-    body.print-mode-combined .rep-header { padding-bottom: 2px; margin-bottom: 3px; border-bottom-width: 1.5px; }
-    body.print-mode-combined .rep-company h2 { font-size: 12px; }
-    body.print-mode-combined .rep-company p { font-size: 8px; }
-    body.print-mode-combined .rep-title-box h3 { font-size: 10px; }
-    body.print-mode-combined .rep-title-box span { font-size: 8px; padding: 1px 6px; }
-    body.print-mode-combined .rep-logo img { max-height: 24px; }
-    body.print-mode-combined .kpi-strip { gap: 4px; margin-bottom: 3px; }
-    body.print-mode-combined .kpi-item { padding: 2px 5px; border-left-width: 2.5px; }
-    body.print-mode-combined .kpi-item .k-lbl { font-size: 6.5px; }
-    body.print-mode-combined .kpi-item .k-val { font-size: 8.5px; }
+    body.print-mode-combined .night-page-spacer {
+      margin-top: 5px !important; padding-top: 4px;
+      border-top: 1.5px dashed #94a3b8;
+    }
+    body.print-mode-combined .rep-header { padding-bottom: 1.5px; margin-bottom: 2.5px; border-bottom-width: 1.5px; }
+    body.print-mode-combined .rep-company h2 { font-size: 11px; }
+    body.print-mode-combined .rep-company p { font-size: 7.5px; margin-top: 1px; }
+    body.print-mode-combined .rep-title-box h3 { font-size: 9.5px; }
+    body.print-mode-combined .rep-title-box span { font-size: 7.5px; padding: 1px 6px; margin-top: 1px; }
+    body.print-mode-combined .rep-logo img { max-height: 22px; }
+    body.print-mode-combined .kpi-strip { gap: 4px; margin-bottom: 2.5px; }
+    body.print-mode-combined .kpi-item { padding: 1.5px 5px; border-left-width: 2.5px; }
+    body.print-mode-combined .kpi-item .k-lbl { font-size: 6px; }
+    body.print-mode-combined .kpi-item .k-val { font-size: 8px; margin-top: 0; }
     body.print-mode-combined table.clean-rep-table th,
-    body.print-mode-combined table.clean-rep-table td { padding: 1px 1.5px; font-size: 6.4px; line-height: 1.1; }
-    body.print-mode-combined .rep-charts { margin-top: 3px; gap: 6px; }
-    body.print-mode-combined .rep-chart-card { padding: 2px 5px; }
-    body.print-mode-combined .rep-chart-card h4 { font-size: 7.5px; margin-bottom: 1px; }
-    body.print-mode-combined .canvas-wrap { height: 54px !important; }
-    body.print-mode-combined .rep-footer { margin-top: 3px; padding-top: 2px; font-size: 7px; }
-    body.print-mode-combined .sig-line { width: 110px; padding-top: 1px; }
+    body.print-mode-combined table.clean-rep-table td {
+      padding: 0.7px 1.2px; font-size: 6px; line-height: 1.05;
+    }
+    body.print-mode-combined .rep-charts { margin-top: 2.5px; gap: 6px; }
+    body.print-mode-combined .rep-chart-card { padding: 2px 4px; }
+    body.print-mode-combined .rep-chart-card h4 { font-size: 7px; margin-bottom: 1px; }
+    body.print-mode-combined .canvas-wrap { height: 48px !important; max-height: 48px !important; }
+    body.print-mode-combined .rep-footer { margin-top: 2.5px; padding-top: 1.5px; font-size: 6.5px; }
+    body.print-mode-combined .sig-line { width: 105px; padding-top: 1px; }
   }
 </style>
 </head>
@@ -516,6 +533,7 @@ const DEPARTMENTS = [
 
 let currentActiveShift = 'day';
 let scannedRowsDraft = [];
+let currentPrintMode = 'separate';
 
 /* ================= AUTO CLEAR '0' ON FOCUS ================= */
 document.addEventListener('focusin', function(e) {
@@ -538,7 +556,6 @@ document.addEventListener('focusout', function(e) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && e.target && e.target.tagName === 'INPUT' && e.target.type === 'number' && !e.target.readOnly) {
     const id = e.target.id || '';
-    // Matches pattern like: day_mbar_0, night_rmg_3
     const match = id.match(/^(day|night)_([a-z0-9]+)_(\d+)$/);
     if (match) {
       e.preventDefault();
@@ -1003,23 +1020,48 @@ function createReportPageHtml(shiftLabel, dateStr, data, chartIdPrefix) {
   return html;
 }
 
-function renderBarChart(canvasId, labels, values, barColor) {
+function renderBarChart(canvasId, labels, values, barColor, isCompact = false) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   const chart = new Chart(ctx, {
     type: 'bar',
-    data: { labels, datasets: [{ data: values, backgroundColor: barColor, borderRadius: 3, barPercentage: 0.55 }] },
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: barColor,
+        borderRadius: isCompact ? 2 : 3,
+        barPercentage: 0.55
+      }]
+    },
     options: {
-      responsive: true, maintainAspectRatio: false, animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: {
+        padding: { top: isCompact ? 11 : 14, bottom: 0, left: 2, right: 2 }
+      },
       plugins: {
         legend: { display: false },
         datalabels: {
-          anchor: 'end', align: 'top', color: '#1e293b',
-          font: { size: 7.5, weight: '700' }, formatter: v => v > 0 ? v.toLocaleString() : ''
+          anchor: 'end',
+          align: 'top',
+          offset: isCompact ? 0 : 1,
+          clamp: true,
+          color: '#1e293b',
+          font: { size: isCompact ? 6.5 : 7.5, weight: '700' },
+          formatter: v => v > 0 ? v.toLocaleString() : ''
         }
       },
       scales: {
-        y: { display: false, beginAtZero: true, grace: '22%' },
-        x: { grid: { display: false }, ticks: { font: { size: 7.5, weight: '600' }, color: '#475569' } }
+        y: { display: false, beginAtZero: true, grace: isCompact ? '32%' : '22%' },
+        x: {
+          grid: { display: false },
+          ticks: {
+            padding: 1,
+            font: { size: isCompact ? 6 : 7.5, weight: '600' },
+            color: '#475569'
+          }
+        }
       }
     }
   });
@@ -1027,6 +1069,7 @@ function renderBarChart(canvasId, labels, values, barColor) {
 }
 
 function buildFinalReport(mode = 'separate') {
+  currentPrintMode = mode;
   document.body.classList.remove('print-mode-separate', 'print-mode-combined');
   document.body.classList.add(mode === 'combined' ? 'print-mode-combined' : 'print-mode-separate');
 
@@ -1047,23 +1090,41 @@ function buildFinalReport(mode = 'separate') {
 
   document.getElementById('report-container').style.display = 'block';
 
-  renderBarChart('day_gen', dayMetrics.rows.map(r => r.time), dayMetrics.rows.map(r => r.tLoad), '#14452f');
-  renderBarChart('day_dept', dayMetrics.deptSummary.map(d => d.label), dayMetrics.deptSummary.map(d => d.totCost), '#e86c1f');
-  renderBarChart('night_gen', nightMetrics.rows.map(r => r.time), nightMetrics.rows.map(r => r.tLoad), '#14452f');
-  renderBarChart('night_dept', nightMetrics.deptSummary.map(d => d.label), nightMetrics.deptSummary.map(d => d.totCost), '#e86c1f');
+  const isCompact = (mode === 'combined');
+  renderBarChart('day_gen', dayMetrics.rows.map(r => r.time), dayMetrics.rows.map(r => r.tLoad), '#14452f', isCompact);
+  renderBarChart('day_dept', dayMetrics.deptSummary.map(d => d.label), dayMetrics.deptSummary.map(d => d.totCost), '#e86c1f', isCompact);
+  renderBarChart('night_gen', nightMetrics.rows.map(r => r.time), nightMetrics.rows.map(r => r.tLoad), '#14452f', isCompact);
+  renderBarChart('night_dept', nightMetrics.deptSummary.map(d => d.label), nightMetrics.deptSummary.map(d => d.totCost), '#e86c1f', isCompact);
 
   document.getElementById('report-container').scrollIntoView({ behavior: 'smooth' });
 }
 
+function triggerCleanPrint(mode) {
+  buildFinalReport(mode);
+  // Force exact canvas resize before opening print dialog so Chart.js never overflows
+  requestAnimationFrame(() => {
+    activeCharts.forEach(c => c.resize());
+    setTimeout(() => {
+      activeCharts.forEach(c => c.resize());
+      window.print();
+    }, 250);
+  });
+}
+
 function printSeparatePages() {
-  buildFinalReport('separate');
-  setTimeout(() => window.print(), 150);
+  triggerCleanPrint('separate');
 }
 
 function printCombinedSinglePage() {
-  buildFinalReport('combined');
-  setTimeout(() => window.print(), 150);
+  triggerCleanPrint('combined');
 }
+
+// Re-render charts in normal preview size right after print dialog closes
+window.addEventListener('afterprint', () => {
+  if (document.getElementById('report-container').style.display === 'block') {
+    buildFinalReport('separate');
+  }
+});
 
 renderEntryGrid('day', DAY_HOURS);
 renderEntryGrid('night', NIGHT_HOURS);
