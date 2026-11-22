@@ -34,6 +34,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
     border-top: 5px solid var(--brand-dark);
     margin-bottom: 22px;
@@ -46,15 +47,16 @@
   }
   .logo-box {
     display: flex; align-items: center; justify-content: center; background: #ffffff;
-    border: 1px solid var(--slate-200); border-radius: 12px; padding: 8px 14px; min-width: 85px; min-height: 75px;
+    border: 1px solid var(--slate-200); border-radius: 12px; padding: 8px 14px;
+    width: 105px; height: 78px; flex-shrink: 0; overflow: hidden;
   }
-  .logo-box img { max-height: 62px; max-width: 110px; object-fit: contain; }
+  .logo-box img { max-height: 60px; max-width: 88px; object-fit: contain; }
 
   /* ================= CONTROLS & CAMERA BAR ================= */
   .control-card {
     background: #ffffff; border-radius: 14px; padding: 20px 24px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04); margin-bottom: 20px; border: 1px solid var(--slate-200);
-    width: 100%; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04); margin-bottom: 20px;
+    border: 1px solid var(--slate-200); overflow: hidden;
   }
   .top-controls {
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end;
@@ -92,71 +94,47 @@
   .cam-btn.secondary { background: #ffffff; color: var(--brand-dark); border: 1.5px solid var(--brand-dark); box-shadow: none; }
   .cam-btn.secondary:hover { background: #e2f1ea; }
 
-  /* Locked Scan Modal / Drawer (Prevents Layout Break) */
+  /* Locked Scan Modal / Drawer (Prevents Layout Overflow) */
   #scan-modal {
-    display: none;
-    width: 100%;
-    max-width: 100%;
-    background: #ffffff;
-    border: 2px solid var(--brand-dark);
-    border-radius: 14px;
-    padding: 18px;
-    margin: 16px 0;
-    box-shadow: 0 12px 32px rgba(15,23,42,0.12);
-    overflow: hidden;
+    display: none; background: #ffffff; border: 2px solid var(--brand-dark);
+    border-radius: 14px; padding: 18px; margin: 16px 0;
+    box-shadow: 0 12px 32px rgba(15,23,42,0.12); width: 100%; max-width: 100%; overflow: hidden;
   }
   .scan-grid {
-    display: grid;
-    grid-template-columns: 260px minmax(0, 1fr);
-    gap: 18px;
-    align-items: start;
-    width: 100%;
+    display: grid; grid-template-columns: 270px minmax(0, 1fr);
+    gap: 18px; align-items: start; width: 100%;
   }
-  @media (max-width: 860px) {
-    .scan-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 860px) { .scan-grid { grid-template-columns: 1fr; } }
+
   .preview-img-box {
-    width: 100%;
-    height: 250px;
-    border: 1px solid var(--slate-200);
-    border-radius: 10px;
-    padding: 8px;
-    background: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    border: 1px solid var(--slate-200); border-radius: 10px; padding: 10px;
+    background: #f8fafc; text-align: center; width: 100%; height: 260px;
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center; overflow: hidden;
   }
   .preview-img-box img {
-    max-width: 100%;
-    max-height: 190px;
-    width: auto;
-    height: auto;
-    border-radius: 6px;
-    object-fit: contain;
-    display: block;
+    width: 100%; height: 195px; border-radius: 6px; object-fit: contain;
+    background: #ffffff; border: 1px solid #e2e8f0;
   }
-  .scan-status { margin-top: 8px; font-size: 11.5px; font-weight: 700; color: var(--brand-accent); text-align: center; }
-
-  .parsed-right-col { min-width: 0; width: 100%; overflow: hidden; }
-  .scan-titles-hint {
-    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-    padding: 8px 12px; font-size: 11px; color: #334155; margin-bottom: 10px;
-    line-height: 1.5;
+  .scan-status {
+    margin-top: 6px; font-size: 11.5px; font-weight: 700; color: var(--brand-accent);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  }
+  .scan-controls-row {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px;
   }
   .parsed-table-wrap {
-    max-height: 280px;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    border: 1px solid var(--slate-200);
-    border-radius: 8px;
+    max-height: 280px; max-width: 100%; overflow: auto;
+    border: 1px solid var(--slate-200); border-radius: 8px;
   }
-  table.parsed-table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 680px; }
-  table.parsed-table th, table.parsed-table td { border: 1px solid #e2e8f0; padding: 4px; text-align: center; white-space: nowrap; }
-  table.parsed-table th { background: #f1f5f9; position: sticky; top: 0; z-index: 2; }
-  table.parsed-table input { width: 56px; padding: 3px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center; font-size: 11px; }
+  table.parsed-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  table.parsed-table th, table.parsed-table td {
+    border: 1px solid #e2e8f0; padding: 4px; text-align: center; white-space: nowrap;
+  }
+  table.parsed-table th { background: #f1f5f9; position: sticky; top: 0; z-index: 2; color: var(--slate-900); }
+  table.parsed-table input {
+    width: 56px; padding: 3px; border: 1px solid #cbd5e1; border-radius: 4px;
+    text-align: center; font-size: 11px;
+  }
 
   /* Summary Metrics Bar */
   .summary-grid {
@@ -174,7 +152,7 @@
   .metric-input-card input[readonly] { background: var(--brand-soft); color: var(--brand-dark); border-color: #b7dccb; }
 
   /* Data Entry Table */
-  .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid var(--slate-200); }
+  .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid var(--slate-200); max-width: 100%; }
   table.entry-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
   table.entry-grid th {
     background: var(--slate-900); color: #ffffff; font-weight: 600;
@@ -206,9 +184,9 @@
   .btn-outline { background: #ffffff; border: 1.5px solid var(--slate-200); color: var(--slate-700); }
   .btn-outline:hover { background: var(--slate-100); }
   .btn-primary { background: var(--brand-dark); color: #ffffff; }
-  .btn-primary:hover { background: #0d3221; }
+  .btn-primary:hover { background: #0e3322; }
   .btn-accent { background: var(--brand-accent); color: #ffffff; }
-  .btn-accent:hover { background: #c95812; }
+  .btn-accent:hover { background: #c95914; }
   .btn-navy { background: #1e293b; color: #ffffff; }
   .btn-navy:hover { background: #0f172a; }
 
@@ -227,33 +205,33 @@
 
   .rep-header {
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 2.5px solid var(--brand-dark); padding-bottom: 9px; margin-bottom: 11px;
+    border-bottom: 2.5px solid var(--brand-dark); padding-bottom: 8px; margin-bottom: 10px;
   }
-  .rep-company h2 { margin: 0; font-size: 19px; font-weight: 800; color: var(--brand-dark); }
-  .rep-company p { margin: 2px 0 0 0; font-size: 11.5px; color: var(--slate-500); font-weight: 500; }
+  .rep-company h2 { margin: 0; font-size: 18px; font-weight: 800; color: var(--brand-dark); }
+  .rep-company p { margin: 2px 0 0 0; font-size: 11px; color: var(--slate-500); font-weight: 500; }
   .rep-title-box { text-align: center; }
-  .rep-title-box h3 { margin: 0; font-size: 14px; font-weight: 800; color: var(--slate-900); text-transform: uppercase; }
+  .rep-title-box h3 { margin: 0; font-size: 13.5px; font-weight: 800; color: var(--slate-900); text-transform: uppercase; }
   .rep-title-box span {
     display: inline-block; margin-top: 3px; background: var(--brand-soft); color: var(--brand-dark);
-    padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;
+    padding: 2px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700;
   }
-  .rep-logo img { max-height: 46px; max-width: 90px; object-fit: contain; }
+  .rep-logo img { max-height: 44px; max-width: 85px; object-fit: contain; }
 
-  .kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; margin-bottom: 11px; }
+  .kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 10px; }
   .kpi-item {
     background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3.5px solid var(--brand-dark);
-    border-radius: 6px; padding: 6px 9px;
+    border-radius: 6px; padding: 5px 8px;
   }
   .kpi-item.orange { border-left-color: var(--brand-accent); }
-  .kpi-item .k-lbl { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; }
-  .kpi-item .k-val { font-size: 12.5px; font-weight: 800; color: #0f172a; margin-top: 2px; }
+  .kpi-item .k-lbl { font-size: 8.5px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+  .kpi-item .k-val { font-size: 12px; font-weight: 800; color: #0f172a; margin-top: 1px; }
 
-  table.clean-rep-table { width: 100%; border-collapse: collapse; font-size: 9.5px; text-align: center; }
-  table.clean-rep-table th, table.clean-rep-table td { border: 1px solid #cbd5e1; padding: 3.8px 3px; }
-  .grp-gen { background: #1e293b; color: #fff; font-weight: 700; font-size: 10px; }
-  .grp-cost { background: #334155; color: #fff; font-weight: 700; font-size: 10px; }
-  .grp-dept { background: #14452f; color: #fff; font-weight: 700; font-size: 10px; }
-  .grp-sum { background: #c2410c; color: #fff; font-weight: 700; font-size: 10px; }
+  table.clean-rep-table { width: 100%; border-collapse: collapse; font-size: 9px; text-align: center; }
+  table.clean-rep-table th, table.clean-rep-table td { border: 1px solid #cbd5e1; padding: 3px 2.5px; }
+  .grp-gen { background: #1e293b; color: #fff; font-weight: 700; font-size: 9.5px; }
+  .grp-cost { background: #334155; color: #fff; font-weight: 700; font-size: 9.5px; }
+  .grp-dept { background: #14452f; color: #fff; font-weight: 700; font-size: 9.5px; }
+  .grp-sum { background: #c2410c; color: #fff; font-weight: 700; font-size: 9.5px; }
 
   .sub-gen { background: #f1f5f9; color: #0f172a; font-weight: 700; }
   .sub-cost { background: #e2e8f0; color: #0f172a; font-weight: 700; }
@@ -266,28 +244,35 @@
     background: #f1f5f9; font-weight: 800; color: #0f172a;
     border-top: 2px solid #475569; border-bottom: 2px solid #475569;
   }
-  .pct-row td { background: #ffffff; font-size: 8.5px; color: #475569; font-weight: 600; }
+  .pct-row td { background: #ffffff; font-size: 8px; color: #475569; font-weight: 600; }
 
-  .rep-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
-  .rep-chart-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; background: #ffffff; }
+  .rep-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .rep-chart-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 10px; background: #ffffff; }
   .rep-chart-card h4 {
-    margin: 0 0 6px 0; font-size: 11px; font-weight: 700;
+    margin: 0 0 4px 0; font-size: 10px; font-weight: 700;
     color: #334155; text-align: center; text-transform: uppercase;
   }
-  .canvas-wrap { height: 165px; position: relative; }
+  .canvas-wrap { height: 145px; position: relative; }
 
   .rep-footer {
-    display: flex; justify-content: space-between; margin-top: 18px;
-    padding-top: 8px; font-size: 10px; color: #64748b;
+    display: flex; justify-content: space-between; margin-top: 14px;
+    padding-top: 6px; font-size: 9.5px; color: #64748b;
   }
-  .sig-line { border-top: 1px solid #94a3b8; width: 160px; text-align: center; padding-top: 3px; font-weight: 600; color: #334155; }
+  .sig-line { border-top: 1px solid #94a3b8; width: 155px; text-align: center; padding-top: 3px; font-weight: 600; color: #334155; }
 
-  /* ================= SINGLE-PAGE A4 LANDSCAPE PRINT (EXPANDED TO FILL PAGE) ================= */
+  /* Single-Shift Print Mode (e.g., Day Shift Only PDF like Image 6) */
+  body.print-day-only .night-page-wrapper,
+  body.print-day-only .page-break { display: none !important; }
+
+  body.print-night-only .day-page-wrapper,
+  body.print-night-only .page-break { display: none !important; }
+
+  /* ================= A4 LANDSCAPE PRINT OPTIMIZATION (NO BOTTOM GAP) ================= */
   @media print {
-    @page { size: A4 landscape; margin: 4mm; }
+    @page { size: A4 landscape; margin: 3.5mm; }
     html, body {
-      width: 289mm;
-      height: 202mm;
+      width: 100%;
+      height: auto;
       background: #fff !important;
       padding: 0 !important;
       margin: 0 !important;
@@ -307,21 +292,12 @@
     .report-page {
       min-width: 100% !important;
       width: 100% !important;
-      height: 198mm !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: space-between !important;
       margin: 0 !important;
-      padding: 1mm 0 !important;
+      padding: 0 !important;
       break-inside: avoid !important;
       page-break-inside: avoid !important;
     }
-    .report-page.hidden-for-print {
-      display: none !important;
-    }
-    .night-page-spacer {
-      margin-top: 0 !important;
-    }
+    .night-page-spacer { margin-top: 0 !important; }
     .page-break {
       display: block;
       break-before: page !important;
@@ -330,17 +306,18 @@
       margin: 0;
       padding: 0;
     }
-    .page-break.hidden-for-print {
-      display: none !important;
-    }
-    .rep-header { padding-bottom: 6px; margin-bottom: 6px; }
-    .kpi-strip { gap: 8px; margin-bottom: 6px; }
-    .kpi-item { padding: 5px 8px; }
-    table.clean-rep-table th, table.clean-rep-table td { padding: 4.2px 2.5px; font-size: 9px; }
-    .rep-charts { margin-top: 8px; gap: 12px; flex: 1; align-items: stretch; }
-    .rep-chart-card { padding: 6px 10px; display: flex; flex-direction: column; }
-    .canvas-wrap { height: 155px !important; flex: 1; }
-    .rep-footer { margin-top: 8px; padding-top: 4px; }
+    .rep-header { padding-bottom: 6px; margin-bottom: 8px; }
+    .rep-company h2 { font-size: 19px; }
+    .rep-title-box h3 { font-size: 14.5px; }
+    .kpi-strip { gap: 8px; margin-bottom: 8px; }
+    .kpi-item { padding: 6px 9px; }
+    .kpi-item .k-val { font-size: 13px; }
+    table.clean-rep-table th, table.clean-rep-table td { padding: 3.5px 2.5px; font-size: 9px; }
+    .rep-charts { margin-top: 10px; gap: 12px; }
+    .rep-chart-card { padding: 7px 10px; }
+    .rep-chart-card h4 { font-size: 11px; margin-bottom: 5px; }
+    .canvas-wrap { height: 155px !important; }
+    .rep-footer { margin-top: 16px; }
   }
 </style>
 </head>
@@ -403,7 +380,7 @@
       </div>
     </div>
 
-    <!-- LOCKED SCAN REVIEW & SECTION AUTO-FILL BOX -->
+    <!-- SCAN REVIEW & SECTION AUTO-FILL BOX -->
     <div id="scan-modal">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="margin:0; font-size:15px; color:var(--brand-dark);">Scanned Logsheet Preview & Section Auto-Fill</h3>
@@ -414,14 +391,11 @@
           <img id="scannedImgPreview" src="" alt="Scanned Sheet">
           <div class="scan-status" id="scanStatusText">Scanning image...</div>
         </div>
-        <div class="parsed-right-col">
-          <div class="scan-titles-hint">
-            <strong>স্ক্যানযোগ্য টাইটেলসমূহ:</strong> Time (9:00 AM–8:00 PM / 9:00 PM–8:00 AM), Gas Generator 1 (GG-1), Gas Generator 2 (GG-2), Gas Generator 3 (GG-3), Diesel Generator (DG), Total KW, Gas Pressure (PSI), M-Bar, Diesel, RMG Load, Utility Load, Dyeing Load, Finishing Load, AOP Load, Oval Load, Office Load, Knitting, Washing Load, Other Load, Total KWH, Total Gas Consumption (m³), Total Diesel Consumption।
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:10px;">
+        <div style="min-width:0;">
+          <div class="scan-controls-row">
             <label style="font-size:12px; font-weight:700;">কোন সেকশনে বসাবেন:</label>
-            <select id="scanTargetSection" style="padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1; font-size:12.5px; font-weight:600;" onchange="renderParsedReviewTable()">
-              <option value="gen">Generator & M-Bar Section (M-Bar → PSI Auto, GG-1, GG-2, GG-3, DG)</option>
+            <select id="scanTargetSection" onchange="renderParsedReviewTable()" style="padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1; font-size:12px; font-weight:600; max-width:100%;">
+              <option value="gen">Generator & Gas Section (M-Bar → PSI Auto, GG-1, GG-2, GG-3, DG-ETP, DG-Wash, DG-Rent)</option>
               <option value="dept">Department Load Section (RMG, Utility, Dyeing, Finishing, AOP, Oval, Office, Washing, Knitting, Other)</option>
             </select>
             <button type="button" class="btn btn-primary" style="padding:7px 14px; font-size:12px;" onclick="applyScannedDataToShift()">
@@ -430,7 +404,7 @@
           </div>
           <div class="parsed-table-wrap" id="parsedTableContainer"></div>
           <p style="font-size:11px; color:#64748b; margin:6px 0 0 0;">
-            * নোট: হাতের লেখা বা অস্পষ্ট সংখ্যার ক্ষেত্রে প্রয়োজন হলে এখানকার ঘরে সংখ্যা ঠিক করে তারপর "Auto-Fill Selected Section" চাপুন।
+            * নোট: হাতের লেখা বা অস্পষ্ট সংখ্যার ক্ষেত্রে টাইটেল অনুযায়ী মান যাচাই/সংশোধন করে "Auto-Fill Selected Section" চাপুন।
           </p>
         </div>
       </div>
@@ -445,7 +419,7 @@
         </div>
         <div class="metric-input-card">
           <label>Natural Gas Consumption (m³)</label>
-          <input type="number" step="any" id="day_ng_cons" value="3127">
+          <input type="number" step="any" id="day_ng_cons" value="0">
         </div>
         <div class="metric-input-card">
           <label>Diesel Generator kWh</label>
@@ -453,11 +427,11 @@
         </div>
         <div class="metric-input-card">
           <label>Gas Generator kWh</label>
-          <input type="number" step="any" id="day_gg_kwh" value="12712" oninput="updateTotalKwh('day')">
+          <input type="number" step="any" id="day_gg_kwh" value="0" oninput="updateTotalKwh('day')">
         </div>
         <div class="metric-input-card">
           <label>Total Shift kWh (Auto)</label>
-          <input type="number" id="day_total_kwh" value="12712" readonly>
+          <input type="number" id="day_total_kwh" value="0" readonly>
         </div>
       </div>
       <div class="table-wrapper" id="grid-day"></div>
@@ -472,7 +446,7 @@
         </div>
         <div class="metric-input-card">
           <label>Natural Gas Consumption (m³)</label>
-          <input type="number" step="any" id="night_ng_cons" value="2867">
+          <input type="number" step="any" id="night_ng_cons" value="0">
         </div>
         <div class="metric-input-card">
           <label>Diesel Generator kWh</label>
@@ -480,32 +454,40 @@
         </div>
         <div class="metric-input-card">
           <label>Gas Generator kWh</label>
-          <input type="number" step="any" id="night_gg_kwh" value="11451" oninput="updateTotalKwh('night')">
+          <input type="number" step="any" id="night_gg_kwh" value="0" oninput="updateTotalKwh('night')">
         </div>
         <div class="metric-input-card">
           <label>Total Shift kWh (Auto)</label>
-          <input type="number" id="night_total_kwh" value="11451" readonly>
+          <input type="number" id="night_total_kwh" value="0" readonly>
         </div>
       </div>
       <div class="table-wrapper" id="grid-night"></div>
     </div>
 
     <div class="btn-bar">
-      <button type="button" class="btn btn-outline" onclick="downloadExcelSheet()">Download Excel Sheet</button>
-      <button type="button" class="btn btn-primary" onclick="buildFinalReport()">Submit & Generate Report</button>
-      <button type="button" class="btn btn-navy" onclick="printSingleShift('day')">Day Shift PDF (1 Page)</button>
-      <button type="button" class="btn btn-accent" onclick="printAllShifts()">Download / Print PDF</button>
+      <button class="btn btn-outline" onclick="downloadExcelSheet()">
+        📊 Download Excel Sheet
+      </button>
+      <button class="btn btn-navy" onclick="printSingleShift('day')">
+        📄 Day Report PDF
+      </button>
+      <button class="btn btn-primary" onclick="buildFinalReport()">
+        Submit & Generate Report
+      </button>
+      <button class="btn btn-accent" onclick="printAllShifts()">
+        Download / Print PDF
+      </button>
     </div>
   </div>
 
   <!-- ================= REPORT SECTION ================= -->
   <div id="report-container">
     <div class="report-toolbar no-print">
-      <span style="font-weight:700; color:var(--brand-dark);">Report Preview Ready (Day Shift: 1 A4 Page | Night Shift: 1 A4 Page)</span>
+      <span style="font-weight:700; color:var(--brand-dark);">Report Preview Ready (A4 Landscape Single-Page Per Shift)</span>
       <div style="display:flex; flex-wrap:wrap; gap:8px;">
-        <button type="button" class="btn btn-navy" style="padding:7px 14px; font-size:12px;" onclick="printSingleShift('day')">Day Shift PDF</button>
-        <button type="button" class="btn btn-navy" style="padding:7px 14px; font-size:12px;" onclick="printSingleShift('night')">Night Shift PDF</button>
-        <button type="button" class="btn btn-accent" style="padding:7px 14px; font-size:12px;" onclick="printAllShifts()">Download / Print All PDF</button>
+        <button class="btn btn-navy" style="padding:8px 14px; font-size:12px;" onclick="printSingleShift('day')">Download Day Shift PDF</button>
+        <button class="btn btn-outline" style="padding:8px 14px; font-size:12px;" onclick="printSingleShift('night')">Download Night Shift PDF</button>
+        <button class="btn btn-accent" style="padding:8px 14px; font-size:12px;" onclick="printAllShifts()">Download Both Shifts PDF</button>
       </div>
     </div>
     <div id="report-output"></div>
@@ -522,7 +504,7 @@ function getLogoHtml(cssClass = "") {
   if (PN_LOGO_DATA_URL && PN_LOGO_DATA_URL !== "PN LOGO" && PN_LOGO_DATA_URL.startsWith("data:image")) {
     return `<img src="${PN_LOGO_DATA_URL}" alt="PN Logo" class="${cssClass}">`;
   }
-  return `<div style="font-weight:800; color:#14452f; font-size:13px; border:1.5px dashed #14452f; padding:8px 10px; border-radius:8px; text-align:center;">PN LOGO</div>`;
+  return `<div style="font-weight:800; color:#14452f; font-size:12px; border:1.5px dashed #14452f; padding:6px 8px; border-radius:8px; text-align:center;">PN LOGO</div>`;
 }
 
 document.getElementById("header-logo-container").innerHTML = getLogoHtml();
@@ -545,10 +527,12 @@ const DEPARTMENTS = [
   { key: 'other', label: 'Other' }
 ];
 
+const GEN_SCAN_FIELDS = ['M-Bar', 'GG-1', 'GG-2', 'GG-3', 'DG-ETP', 'DG-Wash', 'DG-Rent'];
+
 let currentActiveShift = 'day';
 let scannedRowsDraft = [];
 
-/* ================= AUTO CLEAR '0' ON FOCUS & ENTER MOVES DOWN ================= */
+/* ================= AUTO CLEAR '0' ON FOCUS ================= */
 document.addEventListener('focusin', function(e) {
   if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'number' && !e.target.readOnly) {
     if (e.target.value === '0' || e.target.value === '0.0') {
@@ -565,16 +549,20 @@ document.addEventListener('focusout', function(e) {
   }
 });
 
+/* ================= ENTER KEY MOVES DOWN TO NEXT ROW ================= */
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && e.target && e.target.tagName === 'INPUT' && e.target.type === 'number') {
-    const idParts = e.target.id.split('_');
-    if (idParts.length >= 3) {
-      const idx = parseInt(idParts[idParts.length - 1], 10);
-      const prefix = idParts.slice(0, -1).join('_');
-      const nextInput = document.getElementById(`${prefix}_${idx + 1}`);
-      if (nextInput && !nextInput.readOnly) {
-        e.preventDefault();
+  if (e.key === 'Enter' && e.target && e.target.matches('table.entry-grid input[type="number"]:not([readonly])')) {
+    e.preventDefault();
+    const cell = e.target.closest('td');
+    const row = e.target.closest('tr');
+    if (!cell || !row) return;
+    const colIndex = Array.from(row.children).indexOf(cell);
+    const nextRow = row.nextElementSibling;
+    if (nextRow && nextRow.children[colIndex]) {
+      const nextInput = nextRow.children[colIndex].querySelector('input[type="number"]:not([readonly])');
+      if (nextInput) {
         nextInput.focus();
+        nextInput.select();
       }
     }
   }
@@ -647,50 +635,28 @@ function switchShift(shift, btn) {
   document.getElementById('panel-night').style.display = shift === 'night' ? 'block' : 'none';
 }
 
-/* ================= CAMERA SCAN & ENHANCED OCR ================= */
+/* ================= CAMERA SCAN & PARSER ================= */
 function closeScanModal() {
   document.getElementById('scan-modal').style.display = 'none';
   document.getElementById('cameraInput').value = '';
   document.getElementById('galleryInput').value = '';
 }
 
-function enhanceImageForOcr(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const img = new Image();
-      img.onload = function() {
-        const canvas = document.createElement('canvas');
-        const scale = img.width < 1200 ? 1.5 : 1;
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.filter = 'grayscale(100%) contrast(160%) brightness(108%)';
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL('image/png'));
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
 async function handleImageScan(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const rawUrl = URL.createObjectURL(file);
-  document.getElementById('scannedImgPreview').src = rawUrl;
+  const imgUrl = URL.createObjectURL(file);
+  document.getElementById('scannedImgPreview').src = imgUrl;
   document.getElementById('scan-modal').style.display = 'block';
-  document.getElementById('scanStatusText').textContent = "ছবি প্রসেস ও স্ক্যান করা হচ্ছে...";
+  document.getElementById('scanStatusText').textContent = "ছবি স্ক্যান করা হচ্ছে...";
   document.getElementById('parsedTableContainer').innerHTML = "";
 
   const hours = currentActiveShift === 'day' ? DAY_HOURS : NIGHT_HOURS;
   scannedRowsDraft = hours.map(t => ({ time: t, nums: [] }));
 
   try {
-    const enhancedDataUrl = await enhanceImageForOcr(file);
-    const result = await Tesseract.recognize(enhancedDataUrl, 'eng', {
+    const result = await Tesseract.recognize(file, 'eng', {
       logger: m => {
         if (m.status === 'recognizing text') {
           document.getElementById('scanStatusText').textContent = `Scanning: ${Math.round(m.progress * 100)}%`;
@@ -701,9 +667,9 @@ async function handleImageScan(event) {
     const rawText = result.data.text || "";
     parseTextIntoHours(rawText, hours);
     renderParsedReviewTable();
-    document.getElementById('scanStatusText').textContent = "স্ক্যান সম্পন্ন! সেকশন দেখে Auto-Fill করুন।";
+    document.getElementById('scanStatusText').textContent = "স্ক্যান সম্পন্ন! টাইটেল মিলিয়ে Auto-Fill করুন।";
   } catch (err) {
-    document.getElementById('scanStatusText').textContent = "স্ক্যান অস্পষ্ট হলে নিচের ঘরে সংখ্যা বসিয়ে Auto-Fill করুন।";
+    document.getElementById('scanStatusText').textContent = "স্ক্যান করা যায়নি। নিচের টাইটেল ঘরে মান বসিয়ে Auto-Fill করুন।";
     renderParsedReviewTable();
   }
 }
@@ -720,7 +686,7 @@ function parseTextIntoHours(rawText, hours) {
     if (matchedIdx === -1) return;
 
     const cleaned = line
-      .replace(/\b(am|pm|kw|ltrs?|m3|start|stop)\b/gi, ' ')
+      .replace(/\b(am|pm)\b/gi, ' ')
       .replace(/\b(1[0-2]|[1-9])\s*[:.]\s*00\b/, ' ')
       .replace(/[—–-]/g, ' 0 ');
 
@@ -736,25 +702,23 @@ function parseTextIntoHours(rawText, hours) {
 
 function renderParsedReviewTable() {
   const section = document.getElementById('scanTargetSection').value;
-  const cols = section === 'gen'
-    ? ["M-Bar", "GG-1", "GG-2", "GG-3", "DG-ETP", "DG-Wash", "DG-Rent"]
-    : DEPARTMENTS.map(d => d.label);
+  const titles = section === 'gen' ? GEN_SCAN_FIELDS : DEPARTMENTS.map(d => d.label);
 
   let html = `<table class="parsed-table">
     <thead>
       <tr>
         <th>Time</th>
-        ${cols.map(c => `<th>${c}</th>`).join('')}
+        ${titles.map(title => `<th>${title}</th>`).join('')}
       </tr>
     </thead>
     <tbody>`;
 
   scannedRowsDraft.forEach((row, rIdx) => {
     html += `<tr><td><strong>${row.time}</strong></td>`;
-    for (let c = 0; c < cols.length; c++) {
-      const val = row.nums[c] !== undefined ? row.nums[c] : 0;
-      html += `<td><input type="number" step="any" value="${val}" onchange="updateDraftCell(${rIdx}, ${c}, this.value)"></td>`;
-    }
+    titles.forEach((_, cIdx) => {
+      const val = row.nums[cIdx] !== undefined ? row.nums[cIdx] : 0;
+      html += `<td><input type="number" step="any" value="${val}" onchange="updateDraftCell(${rIdx}, ${cIdx}, this.value)"></td>`;
+    });
     html += `</tr>`;
   });
 
@@ -790,54 +754,10 @@ function applyScannedDataToShift() {
     }
   });
 
-  alert(`${shift.toUpperCase()} Shift-এর ${section === 'gen' ? 'Generator & M-Bar' : 'Department Load'} সেকশনে ডেটা বসানো হয়েছে।`);
+  alert(`${shift.toUpperCase()} Shift-এর ${section === 'gen' ? 'Generator & Gas' : 'Department Load'} সেকশনে ডেটা বসানো হয়েছে।`);
 }
 
-/* ================= EXCEL (.CSV) EXPORT ================= */
-function downloadExcelSheet() {
-  const dateVal = document.getElementById('reportDate').value;
-  const dayData = computeShiftMetrics('day', DAY_HOURS);
-  const nightData = computeShiftMetrics('night', NIGHT_HOURS);
-
-  let csv = [];
-  csv.push(`P.N. COMPOSITE LTD. - Ambag, Kunabari, Gazipur - Date: ${dateVal}`);
-
-  function appendShiftCsv(label, data) {
-    csv.push(`\n${label}`);
-    const headers = [
-      "Time","Header PSI","NG M-Bar","GG-1","GG-2","GG-3","DG-ETP","DG-Wash","DG-Rent","Total kW",
-      "DG (Ltr)","DG Cost","NG (m3)","NG Cost","Total Cost",
-      ...DEPARTMENTS.map(d => d.label)
-    ];
-    csv.push(headers.join(","));
-
-    data.rows.forEach(r => {
-      csv.push([
-        `"${r.time}"`, r.psi, r.mbar, r.gg1, r.gg2, r.gg3, r.dgetp, r.dgwash, r.dgrent, r.tLoad,
-        r.dgCons, r.dgCost, r.ngCons, r.ngCost, r.totCost,
-        ...DEPARTMENTS.map(d => r.dVals[d.key])
-      ].join(","));
-    });
-
-    csv.push([
-      "TOTAL kWh","","",
-      data.sumGG1, data.sumGG2, data.sumGG3, data.sumDGEtp, data.sumDGWash, data.sumDGRent, data.sumTLoad,
-      data.totalDgCons, data.totalDgCost, data.totalNgCons, data.totalNgCost, data.grandCost,
-      ...DEPARTMENTS.map(d => data.deptSums[d.key])
-    ].join(","));
-  }
-
-  appendShiftCsv("DAY SHIFT", dayData);
-  appendShiftCsv("NIGHT SHIFT", nightData);
-
-  const blob = new Blob(["\uFEFF" + csv.join("\n")], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `PN_Composite_Load_Report_${dateVal}.csv`;
-  link.click();
-}
-
-/* ================= REPORT METRICS & RENDER ================= */
+/* ================= COMPUTATION & EXCEL EXPORT ================= */
 function computeShiftMetrics(shift, hours) {
   const ngRate = parseFloat(document.getElementById('ngRate').value) || 0;
   const dgRate = parseFloat(document.getElementById('dgRate').value) || 0;
@@ -864,12 +784,8 @@ function computeShiftMetrics(shift, hours) {
     const dgwash = parseFloat(document.getElementById(`${shift}_dgwash_${idx}`).value) || 0;
     const dgrent = parseFloat(document.getElementById(`${shift}_dgrent_${idx}`).value) || 0;
 
-    sumGG1 += gg1;
-    sumGG2 += gg2;
-    sumGG3 += gg3;
-    sumDGEtp += dgetp;
-    sumDGWash += dgwash;
-    sumDGRent += dgrent;
+    sumGG1 += gg1; sumGG2 += gg2; sumGG3 += gg3;
+    sumDGEtp += dgetp; sumDGWash += dgwash; sumDGRent += dgrent;
 
     const ggLoad = gg1 + gg2 + gg3;
     const dgLoad = dgetp + dgwash + dgrent;
@@ -923,6 +839,50 @@ function computeShiftMetrics(shift, hours) {
   };
 }
 
+function downloadExcelSheet() {
+  const dateVal = document.getElementById('reportDate').value;
+  const dayData = computeShiftMetrics('day', DAY_HOURS);
+  const nightData = computeShiftMetrics('night', NIGHT_HOURS);
+
+  const csvRows = [];
+  csvRows.push(["P.N. COMPOSITE LTD. - Ambag, Kunabari, Gazipur", `Date: ${dateVal}`]);
+
+  function pushShiftCsv(label, d) {
+    csvRows.push([]);
+    csvRows.push([`${label} HOURLY LOAD & COST`]);
+    csvRows.push([
+      "Time", "Header PSI", "M-Bar", "GG-1", "GG-2", "GG-3", "DG-ETP", "DG-Wash", "DG-Rent", "Total kW",
+      "DG Ltr", "DG Cost", "NG m3", "NG Cost", "Total Cost",
+      ...DEPARTMENTS.map(x => `${x.label} Load`)
+    ]);
+    d.rows.forEach(r => {
+      csvRows.push([
+        r.time, r.psi, r.mbar, r.gg1, r.gg2, r.gg3, r.dgetp, r.dgwash, r.dgrent, r.tLoad,
+        r.dgCons, r.dgCost, r.ngCons, r.ngCost, r.totCost,
+        ...DEPARTMENTS.map(x => r.dVals[x.key])
+      ]);
+    });
+    csvRows.push([
+      "TOTAL kWh", "", "", d.sumGG1, d.sumGG2, d.sumGG3, d.sumDGEtp, d.sumDGWash, d.sumDGRent, d.sumTLoad,
+      d.totalDgCons, d.totalDgCost, d.totalNgCons, d.totalNgCost, d.grandCost,
+      ...DEPARTMENTS.map(x => d.deptSums[x.key])
+    ]);
+  }
+
+  pushShiftCsv("DAY SHIFT", dayData);
+  pushShiftCsv("NIGHT SHIFT", nightData);
+
+  const csvContent = "\uFEFF" + csvRows.map(e => e.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `PN_Composite_Load_Report_${dateVal}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ================= REPORT RENDERING & PDF PRINTING ================= */
 let activeCharts = [];
 
 function createReportPageHtml(shiftLabel, dateStr, data, chartIdPrefix) {
@@ -1059,7 +1019,7 @@ function renderBarChart(canvasId, labels, values, barColor) {
   activeCharts.push(chart);
 }
 
-function buildFinalReport() {
+function buildFinalReport(shouldScroll = true) {
   activeCharts.forEach(c => c.destroy());
   activeCharts = [];
 
@@ -1070,9 +1030,9 @@ function buildFinalReport() {
   const nightMetrics = computeShiftMetrics('night', NIGHT_HOURS);
 
   document.getElementById('report-output').innerHTML = `
-    <div id="page-day" class="report-page">${createReportPageHtml('DAY SHIFT (9:00 AM - 8:00 PM)', formattedDate, dayMetrics, 'day')}</div>
-    <div id="page-break-sep" class="page-break"></div>
-    <div id="page-night" class="report-page night-page-spacer">${createReportPageHtml('NIGHT SHIFT (9:00 PM - 8:00 AM)', formattedDate, nightMetrics, 'night')}</div>
+    <div class="day-page-wrapper report-page">${createReportPageHtml('DAY SHIFT (9:00 AM - 8:00 PM)', formattedDate, dayMetrics, 'day')}</div>
+    <div class="page-break"></div>
+    <div class="night-page-wrapper report-page night-page-spacer">${createReportPageHtml('NIGHT SHIFT (9:00 PM - 8:00 AM)', formattedDate, nightMetrics, 'night')}</div>
   `;
 
   document.getElementById('report-container').style.display = 'block';
@@ -1082,49 +1042,34 @@ function buildFinalReport() {
   renderBarChart('night_gen', nightMetrics.rows.map(r => r.time), nightMetrics.rows.map(r => r.tLoad), '#14452f');
   renderBarChart('night_dept', nightMetrics.deptSummary.map(d => d.label), nightMetrics.deptSummary.map(d => d.totCost), '#e86c1f');
 
-  document.getElementById('report-container').scrollIntoView({ behavior: 'smooth' });
+  if (shouldScroll) {
+    document.getElementById('report-container').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function clearPrintMode() {
+  document.body.classList.remove('print-day-only', 'print-night-only');
+}
+
+function printSingleShift(shift) {
+  buildFinalReport(false);
+  clearPrintMode();
+  document.body.classList.add(shift === 'day' ? 'print-day-only' : 'print-night-only');
+  setTimeout(() => {
+    window.print();
+    setTimeout(clearPrintMode, 500);
+  }, 150);
 }
 
 function printAllShifts() {
-  if (document.getElementById('report-container').style.display !== 'block') {
-    buildFinalReport();
-  }
-  const pDay = document.getElementById('page-day');
-  const pNight = document.getElementById('page-night');
-  const sep = document.getElementById('page-break-sep');
-  if (pDay) pDay.classList.remove('hidden-for-print');
-  if (pNight) pNight.classList.remove('hidden-for-print');
-  if (sep) sep.classList.remove('hidden-for-print');
-  setTimeout(() => window.print(), 120);
-}
-
-function printSingleShift(targetShift) {
-  if (document.getElementById('report-container').style.display !== 'block') {
-    buildFinalReport();
-  }
-  const pDay = document.getElementById('page-day');
-  const pNight = document.getElementById('page-night');
-  const sep = document.getElementById('page-break-sep');
-
-  if (targetShift === 'day') {
-    if (pDay) pDay.classList.remove('hidden-for-print');
-    if (pNight) pNight.classList.add('hidden-for-print');
-    if (sep) sep.classList.add('hidden-for-print');
-  } else {
-    if (pNight) pNight.classList.remove('hidden-for-print');
-    if (pDay) pDay.classList.add('hidden-for-print');
-    if (sep) sep.classList.add('hidden-for-print');
-  }
-
+  buildFinalReport(false);
+  clearPrintMode();
   setTimeout(() => {
     window.print();
-    setTimeout(() => {
-      if (pDay) pDay.classList.remove('hidden-for-print');
-      if (pNight) pNight.classList.remove('hidden-for-print');
-      if (sep) sep.classList.remove('hidden-for-print');
-    }, 500);
-  }, 120);
+  }, 150);
 }
+
+window.addEventListener('afterprint', clearPrintMode);
 
 renderEntryGrid('day', DAY_HOURS);
 renderEntryGrid('night', NIGHT_HOURS);
